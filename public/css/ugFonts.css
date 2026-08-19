@@ -1,0 +1,57 @@
+.go-BreatherHeadingNew {
+    font-size: 64px;
+    line-height: 120%;
+    font-family: var(--go-regular);
+    font-weight: 400;
+    text-align: center;
+}
+
+.go-sectionHeading {
+    font-size: 30px;
+    line-height: 120%;
+    font-family: var(--go-regular);
+    font-weight: 400;
+}
+
+.go-Hero {
+    font-size: 42px;
+    line-height: 120%;
+    font-family: var(--go-regular);
+    font-weight: 400;
+}
+
+.fr-Hero-italic {
+    font-size: 50px;
+    line-height: 120%;
+    font-weight: 400;
+    font-style: italic;
+    font-family: "Fraunces", serif;
+}
+
+
+@media (max-width: 767px) {
+    .go-BreatherHeadingNew {
+        font-size: 28px;
+    }
+
+    .go-sectionHeading {
+        font-size: 22px;
+        line-height: 120%;
+        font-family: var(--go-regular);
+    }
+
+    .go-Hero {
+        font-size: 30px;
+        line-height: 120%;
+        font-family: var(--go-regular);
+        font-weight: 400;
+    }
+
+    .fr-Hero-italic {
+        font-size: 32px;
+        line-height: 120%;
+        font-weight: 400;
+        font-style: italic;
+        font-family: "Fraunces", serif;
+    }
+}

@@ -1,0 +1,264 @@
+<div class="popup bharatAutoPopup" id="bharatAutoPopup">
+    <div class="popupBody">
+        <div class="floatingClose" id="bharatPopupCloseBtn" style="display: none;">
+            <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg" alt="icon"
+                onclick="closeBharatAutoPopup();">
+        </div>
+
+        <div class="popupContent">
+            <h2 class="popupHeading"> Join Waitlist</h2>
+            <p class="popupText">Learn Business by travelling across cities of Bharat</p>
+
+            <div class="popupIframe">
+                <iframe id="4e2542d9-38f7-4609-9f1a-a7d4ad3f505e" width="100%" height="440px"></iframe>
+            </div>
+
+          
+        </div>
+    </div>
+</div>
+
+<style>
+    .bharatAutoPopup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+        pointer-events: none;
+    }
+
+    .bharatAutoPopup.active {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+    }
+
+    .bharatAutoPopup .popupBody {
+         background: #fff;
+    border-radius: 16px;
+    padding: 40px 40px 0;
+    max-width: 660px;
+    width: 90%;
+    max-height: 620px;
+    overflow-y: auto;
+    position: relative;
+    animation: slideDown 0.4s ease;
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    .bharatAutoPopup .floatingClose {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+
+    .bharatAutoPopup .floatingClose img {
+        filter: invert(1);
+    }
+
+    .bharatAutoPopup .popupContent {
+        text-align: center;
+    }
+
+    .bharatAutoPopup .popupHeading {
+        font-size: 28px;
+        font-weight: 700;
+        color: #090909;
+        margin-bottom: 12px;
+    }
+
+    .bharatAutoPopup .popupText {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 30px;
+        line-height: 1.5;
+    }
+
+    .bharatAutoPopup .popupIframe {
+        margin-bottom: 30px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .bharatAutoPopup .popupIframe iframe {
+        display: block;
+        border: none;
+        width: 100%;
+    }
+
+    .bharatAutoPopup .popupButtons {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .bharatAutoPopup .popupBtn {
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bharatAutoPopup .popupBtn.primary {
+        background: #090909;
+        color: #fff;
+    }
+
+    .bharatAutoPopup .popupBtn.primary:hover {
+        background: #333;
+        transform: translateY(-2px);
+    }
+
+    .bharatAutoPopup .popupBtn.secondary {
+        background: transparent;
+        color: #090909;
+        border: 2px solid #090909;
+    }
+
+    .bharatAutoPopup .popupBtn.secondary:hover {
+        background: #090909;
+        color: #fff;
+        transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+        .bharatAutoPopup .popupBody {
+            padding: 30px 20px;
+            max-height: 95vh;
+        }
+
+        .bharatAutoPopup .popupHeading {
+            font-size: 24px;
+        }
+
+        .bharatAutoPopup .popupText {
+            font-size: 14px;
+        }
+
+        .bharatAutoPopup .popupIframe iframe {
+            height: 400px;
+        }
+
+        .bharatAutoPopup .popupButtons {
+            flex-direction: column;
+        }
+
+        .bharatAutoPopup .popupBtn {
+            width: 100%;
+        }
+    }
+</style>
+
+<script>
+    (function () {
+        console.log('=== Bharat Popup Script Loaded ===');
+
+        let popupShown = false;
+
+        function showBharatAutoPopup() {
+            console.log('showBharatAutoPopup called');
+            const popup = document.getElementById('bharatAutoPopup');
+            console.log('Popup element:', popup);
+
+            if (popup && !popupShown) {
+                console.log('✓ Showing popup now!');
+                // Use setTimeout to ensure smooth transition
+                setTimeout(function () {
+                    popup.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }, 10);
+                popupShown = true;
+
+                // Store in sessionStorage
+                sessionStorage.setItem('bharatPopupShown', 'true');
+
+                // Show close button after 10 seconds
+                setTimeout(function () {
+                    const closeBtn = document.getElementById('bharatPopupCloseBtn');
+                    if (closeBtn) {
+                        closeBtn.style.display = 'flex';
+                        closeBtn.style.animation = 'fadeIn 0.3s ease';
+                        console.log('✓ Close button now visible');
+                    }
+                }, 10000);
+            } else if (!popup) {
+                console.error('✗ Popup element NOT found!');
+            } else if (popupShown) {
+                console.log('Popup already shown');
+            }
+        }
+
+        // Make close function globally available
+        window.closeBharatAutoPopup = function () {
+            console.log('Closing popup');
+            const popup = document.getElementById('bharatAutoPopup');
+            if (popup) {
+                popup.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        };
+
+        // Main initialization
+        function init() {
+            console.log('Initializing popup...');
+            console.log('⏱ Starting 4 second timer...');
+            setTimeout(function () {
+                console.log('⏱ 4 seconds elapsed, showing popup');
+                showBharatAutoPopup();
+            }, 7000);
+        }
+        // Wait for DOM to be ready
+        if (document.readyState === 'loading') {
+            console.log('Waiting for DOMContentLoaded...');
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            console.log('DOM already ready, initializing immediately');
+            init();
+        }
+    })();
+</script>

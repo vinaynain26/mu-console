@@ -1,0 +1,243 @@
+<main>
+    <div class="popupContainerOuter ApplyNow" id="ApplyNowPopUpNEW">
+
+        <div class="popupContainer">
+            <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_heading">Nextgen Skill Week
+                    Registration</h2>
+                <div class="flexend">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Icon" onclick="closeHsslRegisterPopup();">
+                </div>
+
+            </div>
+            <div class="PopupformWrapper" id="hssl_register_leadformContainer">
+                <div class="left mob-hide">
+                    <img src="https://files.mastersunion.link/resources/img/formleft.webp" alt="">
+                </div>
+                <div class="right">
+                    <div class="formContainer active">
+                        <div class="flexInput" id="formain">
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Full Name <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your name"
+                                    class="inputBox font-16 font-black1 font-medium " id="nameRegisterHSSL"
+                                    onblur="validateNameInput('nameRegisterHSSL', 'nameRegisterHSSLVal')">
+                                <p class="font-12 font-red font-regular warning" id="nameRegisterHSSLVal">Please Enter
+                                    Name</p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Email ID <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your email"
+                                    class="inputBox font-16 font-black1 font-medium " id="emailRegisterHSSL"
+                                    onblur="validateEmailInput('emailRegisterHSSL', 'emailRegisterHSSLVal')">
+                                <p class="font-12 font-red font-regular warning" id="emailRegisterHSSLVal">Please Enter
+                                    Valid
+                                    Email
+                                </p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Contact Number <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your mobile number" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                    class="inputBox font-16 font-black1 font-medium " id="numberRegisterHSSL"
+                                    maxlength="10"
+                                    onblur="validateMobileInput('numberRegisterHSSL', 'numberRegisterHSSLVal')">
+                                <p class="font-12 font-red font-regular warning" id="numberRegisterHSSLVal">Please Enter
+                                    Valid 10 Digits Contact
+                                    Number
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="consentCheckWrapper">
+    <div class="consentCheckRow">
+        <input type="checkbox" id="consentCheckMr">
+        <label for="consentCheckMr">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+    </div>
+    <p id="consentCheckErrorMr" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+</div>
+                    <div class="formFooter" id="submitbuttonreport">
+                        <div class="gradientButton whiteHover">
+                            <button class="button iconButton" onclick="handleHSSLRegistrationCLick()">
+                                Register
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="https://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                        fill="white"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="hssl_register_SuccessMessage" class="congrats-box hide" style="width: 100%;">
+                <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+
+                <h3 class="thankyouboxHeading mt-10">Got it</h3>
+                <p class="text-2">Our team will reach out to you shortly.</p>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    let selectedSchool = "";
+    function handleHSSLRegistrationCLick() {
+
+
+        // Validate functions
+        const validateNumber = (number) => /^\d{10}$/.test(number);
+        const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+        let name = $('#nameRegisterHSSL').val().trim();
+        let email = $('#emailRegisterHSSL').val().trim();
+        let number = $('#numberRegisterHSSL').val().trim();
+
+        let isValid = true;
+
+        isValid = validateNameInput('nameRegisterHSSL', 'nameRegisterHSSLVal') && isValid;
+        isValid = validateEmailInput('emailRegisterHSSL', 'emailRegisterHSSLVal') && isValid;
+        isValid = validateMobileInput('numberRegisterHSSL', 'numberRegisterHSSLVal') && isValid;
+
+        if (!document.getElementById('consentCheckMr')?.checked) { document.getElementById('consentCheckErrorMr').classList.remove('warning'); isValid = false; } else { document.getElementById('consentCheckErrorMr').classList.add('warning'); }
+
+        if (!isValid) return;
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const utmSource = params.utm_source || 'Website';
+        const utmMedium = params.utm_medium;
+        const utmCampaign = params.utm_campaign;
+        let url = window.location.pathname.substring(1);
+        let formname = "Register Your Team";
+        let medium = `Nextgen-Skills-Week-League - ${formname} Popup`;
+        let course = 'Under Graduate Program';
+
+        let device = 'PC';
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            device = "Mobile";
+        } else {
+            device = "Desktop";
+        }
+
+        const form_data = {
+            event_Id: '6718cafc2f54d38cf0b079eb',
+            eventName: "Nextgen Skills Week",
+            email: email,
+            name: name,
+            mobile: number,
+            mode: 'offline',
+            field_device_type: device,
+            source: utmSource || "Website",
+            medium: utmMedium,
+            campaign: utmCampaign || null,
+            course: course,
+            school: selectedSchool,
+            form_step: 1,
+            consentCheck: document.getElementById('consentCheckMr')?.checked || false,
+        };
+
+        $.ajax({
+            url: "{{apiBaseURL}}/api/registerForEvent",
+            type: "POST",
+            data: JSON.stringify(form_data),
+            contentType: 'application/json; charset=utf-8',
+        }).done(function (response) {
+            if (response.IsSuccess) {
+                document.querySelector("#hssl_register_SuccessMessage").classList.remove("hide");
+                document.querySelector("#hssl_register_leadformContainer").classList.add("hide");
+
+                $.ajax({
+                    url: "{{apiBaseURL}}/api/leads/pushToNPF_UG",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        field_device_type: device,
+                        email: email,
+                        name: name,
+                        mobile: number,
+                        linkedinProfile: "",
+                        medium: utmMedium || medium,
+                        campaign: utmCampaign || null,
+                        source: utmSource,
+                       // course: course,
+                        sendMail: false,
+                        field_utm_url: window.location.href,
+                        leadSource: medium,
+                        consentCheck: document.getElementById('consentCheckMr')?.checked || false,
+
+                    }),
+                    dataType: "json"
+                });
+                window.open(`/events/WinterWeek-Team-Registration-Form/${response.Data}`);
+            } else {
+                if (response.Message == "Already registered") {
+                    $('#numberRegisterHSSLVal').text('You have already registered for this event.');
+                    $("#numberRegisterHSSLVal").removeClass("warning");
+                    window.open(`/events/WinterWeek-Team-Registration-Form/${response.Data}`);
+                }
+            }
+        });
+
+
+
+
+
+    }
+
+    function validateInputBlur(fieldId, fieldName) {
+        const inputValue = $(`#${fieldId}`).val().trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const numberRegex = /^\d+$/;
+
+        if (inputValue === "") {
+            $(`#${fieldName}Val`).removeClass('warning');
+        } else {
+            $(`#${fieldName}Val`).addClass('warning');
+        }
+    }
+
+
+
+
+    function closeHsslRegisterPopup() {
+        let applyNowPopUp = document.getElementById("ApplyNowPopUpNEW");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+
+        resetHSSLRegistrationForm();
+
+    }
+
+    function resetHSSLRegistrationForm() {
+        $('#nameRegisterHSSLVal').addClass('warning');
+        $('#emailRegisterHSSLVal').addClass('warning');
+        $('#numberRegisterHSSLVal').addClass('warning');
+
+        $('#nameRegisterHSSL').val('');
+        $('#emailRegisterHSSL').val('');
+        $('#numberRegisterHSSL').val('');
+        $('#consentCheckMr').prop('checked', false);
+        $('#consentCheckErrorMr').addClass('warning');
+
+    }
+
+
+    function openHsslRegisterPopup(newSchool = '') {
+        selectedSchool = newSchool;
+        document.getElementById("ApplyNowPopUpNEW").classList.add("active");
+        document.querySelector("#hssl_register_SuccessMessage").classList.add("hide");
+        document.querySelector("#hssl_register_leadformContainer").classList.remove("hide");
+    }
+
+</script>

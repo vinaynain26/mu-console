@@ -1,0 +1,15 @@
+<script>
+    var pgpTab = "{{pgpTab}}";
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("PGPTAB", pgpTab);
+        if (pgpTab) {
+            const targetElement = document.querySelector(`[data-rel="${pgpTab}"]`);
+            console.log("TARGET", targetElement);
+            if (targetElement) {
+                setTimeout(() => {
+                    targetElement.click();
+                }, 1000);
+            }
+        }
+    });
+</script>

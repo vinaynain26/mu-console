@@ -1,0 +1,406 @@
+  .heroSection {
+      position: relative;
+      line-height: 0;
+      z-index: 9;
+      padding: 0 0 0;
+      overflow: hidden;
+
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        background: linear-gradient(to top, rgba(0, 0, 0, 1.7) 4%, rgba(0, 0, 0, 0.0) 30%);
+      }
+
+      .heroSectionContent .go-HeroSubtitle {
+          color: var(--grey4);
+      }
+
+
+
+      .heroSectionContent {
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translate(-50%, -30%);
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          text-align: center;
+          width: 70%;
+          z-index: 3;
+      }
+
+      .go-HeroSubtitle {
+          margin-top: 16px;
+
+          .textHighlight {
+              color: var(--white);
+          }
+      }
+
+      .heroSectionBtnWrap {
+          display: flex;
+          gap: 16px;
+          align-items: center;
+          margin-top: 24px;
+      }
+
+      .heroSectionImg>img {
+          height: 100vh;
+          object-fit: cover;
+          width: 100%;
+      }
+
+      .heroSectionImg {
+          height: 100vh;
+
+          .video-container {
+              max-width: 100%;
+
+              video {
+                  width: 100%;
+              }
+          }
+
+
+          .mobilevideo {
+              width: 100%;
+          }
+
+      }
+
+
+  }
+
+
+  .handyBook>img {
+      width: 100%;
+      max-height: 282px;
+  }
+
+  .svgDivi {
+      width: 100%;
+      height: 100%;
+      max-width: 34px;
+      max-height: 34px;
+      border-radius: 18px;
+      background: var(--white);
+      width: 34px;
+      height: 34px;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      bottom: 26%;
+      right: 15px;
+      opacity: 0;
+      transition: transform 0.4s ease
+  }
+
+  .icon-Download {
+      width: 100%;
+      height: 100%;
+      max-width: 20px;
+      max-height: 20px;
+  }
+
+  .handbookSection {
+      background: url('https://images.mastersunion.link/uploads/03022026/v1/Vector13511.svg'), var(--white);
+      background-repeat: no-repeat;
+      background-size: cover;
+      padding-block: 80px;
+
+      @media (max-width: 767px) {
+        padding-block: 60px;
+      }
+
+      .handbookHeadingWrapper {
+          display: flex;
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 12px;
+      }
+
+      .handbookPara {
+          font-size: 16px;
+          line-height: 150%;
+          font-family: var(--go-regular);
+          color: var(--black);
+      }
+
+      .handbookWrapper {
+          display: flex;
+          flex-wrap: wrap;
+          margin-top: 32px;
+          gap: 28px;
+      }
+
+      .handyBook {
+          border-radius: 10px;
+          width: 100%;
+          max-width: 225px;
+          position: relative;
+          overflow: hidden;
+          border: 1px solid var(--grey18);
+          background: var(--white);
+          /* ADD THIS */
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .handyBook:hover {
+          transform: scale(1.05);
+          box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+          /* scale effect */
+
+          .svgDivi {
+              opacity: 1;
+          }
+      }
+
+      .cardImage {
+          position: relative;
+      }
+
+
+
+      .handyName {
+          font-size: 10px;
+          line-height: 120%;
+          font-family: var(--go-medium);
+          color: var(--grey15);
+          text-transform: uppercase;
+      }
+
+      .handyInfo {
+          font-size: 14px;
+          font-family: var(--go-regular);
+          color: var(--black);
+          line-height: 120%;
+      }
+
+      .arrowSign {
+          width: 100%;
+          height: 100%;
+          max-width: 20px;
+          max-height: 20px;
+      }
+
+
+      .buttonCenter {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          margin-top: 52px;
+      }
+  }
+
+
+
+  .handyLinking {
+      background: var(--white);
+
+      border-top: unset;
+      border-radius: 10px;
+      border-radius: 0 0 8px 8px;
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+  }
+
+
+  .arrowDownload {
+      transform: translateY(2px);
+  }
+
+
+
+  .handbookSection.blackOne {
+      background: url('https://images.mastersunion.link/uploads/03022026/v1/Vector13512.svg'), var(--black);
+      background-repeat: no-repeat;
+      background-size: cover;
+
+      .handyBook {
+          border: 1px solid var(--grey3);
+          background: var(--black);
+      }
+
+      .handyBook:hover {
+          transform: scale(1.05);
+          box-shadow: 0 0 12px rgba(223, 222, 222, 0.2);
+          /* scale effect */
+
+          .svgDivi {
+              opacity: 1;
+          }
+      }
+
+      .handyLinking {
+          background: var(--black);
+
+          .handyInfo {
+              color: var(--white);
+          }
+
+          .handyName {
+              color: var(--grey18);
+          }
+      }
+  }
+
+  .loadWrapper.fade-in {
+      opacity: 1;
+      transform: translateY(0);
+  }
+
+  .loadWrapper.fade-out {
+      opacity: 0;
+      transform: translateY(-10px);
+  }
+
+  .loadWrapper {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      position: relative;
+      padding-bottom: 100px;
+      width: 100%;
+
+      .btnWhite {
+          position: absolute;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+      }
+  }
+
+  .handbookSection.whiteBackG {
+      .btnWhite {
+          color: var(--black);
+          border: 1px solid var(--black);
+      }
+  }
+
+  .hidden {
+      display: none;
+  }
+
+  .btnWhite svg {
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+  }
+
+  .btnWhite:hover svg {
+      transform: translateY(4px);
+  }
+
+  .handbookSection.whiteBackG {
+      .btnWhite.outline {
+          svg path {
+              fill: black;
+          }
+      }
+  }
+
+  .executiveBoxiParent:nth-child(2) {
+      margin-top: 40px;
+  }
+
+
+  @media (max-width: 767px) {
+      .heroSection {
+          background: #020202;
+          height: 100vh;
+
+          .heroSectionContent {
+              width: 100%;
+              padding: 0 12px;
+              transform: translate(-50%, -20%);
+              left: 50%;
+              bottom: 40px;
+          }
+
+          .heroSectionImg {
+              max-height: unset;
+              height: 100vh;
+          }
+
+          .go-HeroSubtitle {
+              margin-top: 8px;
+          }
+
+          .heroSectionBtnWrap {
+              margin-top: 24px;
+              width: 100%;
+              align-items: flex-start;
+              gap: 12px;
+              flex-direction: column;
+              padding: 0 16px;
+
+
+              a,
+              button {
+                  width: 100%;
+                  line-height: 0 !important;
+              }
+          }
+      }
+
+      .handbookSection {
+          .handbookWrapper {
+              row-gap: 12px;
+              overflow-y: hidden !important;
+              overflow-x: auto;
+              flex-wrap: nowrap;
+              column-gap: 12px;
+          }
+
+          .handyBook {
+              min-width: 212px;
+          }
+
+
+      }
+
+      .handyBook>img {
+          max-height: 265px;
+      }
+
+      .handyBook:hover {
+          transform: unset !important;
+          box-shadow: unset !important;
+      }
+
+      .svgDivi {
+          opacity: 1 !important;
+      }
+
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+      .handyBook {
+          opacity: 1;
+          transform: none;
+          transition: none;
+      }
+
+      .handyBook:hover,
+      .handyBook:focus-visible {
+          transform: none;
+          box-shadow: none;
+      }
+
+      .handyBook::after,
+      .handyLinking,
+      .arrowDownload {
+          transition: none;
+      }
+  }

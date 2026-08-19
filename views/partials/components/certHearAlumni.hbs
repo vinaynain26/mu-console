@@ -1,0 +1,112 @@
+<div class="container">
+    <div class="overlayedSwiper">
+        <div class="swiper hearFromAlumni mt30">
+
+            <div class="swiper-wrapper" id="almuniSwiper">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<script>
+    //almuni section
+    var index = 0;
+    var almunis = [
+        {
+            name: 'Learn Business by Doing Business',
+            designation: 'Growth Strategist,',
+            company: 'ZeroPe',
+            program: 'PGP TBM',
+            cohort: "Cohort '21",
+            linkedin: 'https://www.linkedin.com/in/danielnath/',
+            youtubeLink: 'IyMIGNBmRrg?',  // Rotated from the fifth position
+            thumbnail: 'https://images.mastersunion.link/uploads/27012025/v1/learnByDoing.webp',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/DanlelNath.gif'
+        },
+        {
+            name: 'How Masters Union UG Students Built Businesses while in college!',
+            designation: 'Growth Strategist,',
+            company: 'Jms One Root',
+            program: 'PGP TBM',
+            cohort: "Cohort '21",
+            linkedin: 'https://www.linkedin.com/in/danielnath/',
+            youtubeLink: '6323H27V1lY',  // Rotated from the fifth position
+            thumbnail: 'https://images.mastersunion.link/uploads/27012025/v1/homealumni2.webp',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/DanlelNath.gif'
+        },
+
+
+        {
+            name: '2 Cr+ revenue from E-commerce',
+            designation: "Founder's Office,",
+            company: "BluSmart",
+            program: 'PGP TBM',
+            cohort: "Cohort '23",
+            linkedin: 'https://www.linkedin.com/in/khyatee-g-61a682117/',
+            youtubeLink: 'vLUvx_QOBys',  // Rotated from the fourth position
+            thumbnail: 'https://images.mastersunion.link/uploads/27012025/v1/homeAlumni3.webp',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/AnuragBansal.gif'
+        },
+        {
+            name: 'The UG 1 Cr. Journey by Varun Mayya',
+            designation: "Co-founder,",
+            company: "Indigo",
+            program: 'PGP TBM',
+            cohort: "Cohort '22",
+            linkedin: 'https://www.linkedin.com/in/khyatee-g-61a682117/',
+            youtubeLink: 'K0ko_AUht0s',  // Rotated from the fourth position
+            thumbnail: 'https://images.mastersunion.link/uploads/27012025/v1/homeAlumni4.webp',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/DanlelNath.gif'
+
+        },
+
+       // {
+         //   name: 'Sabarna Jana',
+           // designation: 'Consultant , ',
+         //   program: 'PGP TBM',
+           // company: 'Epigamia',
+            //cohort: "Cohort '21",
+            //linkedin: 'https://www.linkedin.com/in/jeneesha-singh-a52a52134/',
+           // youtubeLink: 'UPQxZW3bSsQ',  // Rotated from the third position
+           // thumbnail: 'https://files.mastersunion.link/media/img/psy-slide-epigamia.png',
+           // thumbnailGif: 'https://images.mastersunion.link/assets/gifs/JeneeshaSingh.gif'
+       // },
+       // {
+        //    name: 'Roghan',
+       //     designation: 'Growth Strategist ,',
+       //     company: 'Basil',
+       //     program: 'PGP TBM',
+       //     cohort: "Cohort '21",
+        //    linkedin: 'https://www.linkedin.com/in/danielnath/',
+        //    youtubeLink: 'b-1xflqazpc',  // Rotated from the fifth position
+        //    thumbnail: 'https://files.mastersunion.link/media/img/psy-slide-basil.png',
+        //    thumbnailGif: 'https://images.mastersunion.link/assets/gifs/DanlelNath.gif'
+       // }
+    ];
+
+    almunis.map((data, index) => {
+        var html = `<div class="swiper-slide" id='alm-${index}'>
+                        <div class="masterImage">
+                            <img   src="${data.thumbnail}" alt=""  class="Icon">
+                         
+                            <div class="masterPlay" onclick="openPopup('${data.youtubeLink}');"><img  
+                                    src="https://files.mastersunion.link/resources/svg/homePlayIcon.svg" alt="Icon" ></div>
+                        </div>
+                        {{!-- <p class="alumniName"> 
+                            ${data.name} <span>${data.designation}</span>  <br>
+                             <span>${data.company}</span>
+                        </p> --}}
+
+                        <p class='alumniName ml10'>${data.name}</p>
+                        <div class="alumniDesgination hide">
+                         ${data.program}
+                             <img   src="https://files.mastersunion.link/resources/svg/darkCircle.svg" alt="icon"></img> ${data.cohort} 
+                        </div>
+                    </div>`
+        $('#almuniSwiper').append(html);
+    })
+
+</script>

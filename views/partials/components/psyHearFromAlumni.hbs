@@ -1,0 +1,109 @@
+    <div class="overlayedSwiper">
+        <div class="swiper hearFromAlumni mt30">
+
+            <div class="swiper-wrapper" id="almuniSwiper">
+            </div>
+        </div>
+
+    </div>
+
+
+
+<script>
+    //almuni section
+    var index = 0;
+    var almunis = [
+        {
+            name: 'Gyan Banjan',
+            designation: 'Growth Strategist,',
+            company: 'ZeroPe',
+            program: 'PGP TBM',
+            cohort: "Cohort '21",
+            linkedin: 'https://www.linkedin.com/in/danielnath/',
+            youtubeLink: '6JvSUwf49vA?',  // Rotated from the fifth position
+            thumbnail: 'https://files.mastersunion.link/media/img/ZeroPe(7).webp',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/DanlelNath.gif'
+        },
+        {
+            name: 'Meet Jain',
+            designation: 'Growth Strategist,',
+            company: 'Jms One Root',
+            program: 'PGP TBM',
+            cohort: "Cohort '21",
+            linkedin: 'https://www.linkedin.com/in/danielnath/',
+            youtubeLink: 'K-lHzLJNen4',  // Rotated from the fifth position
+            thumbnail: 'https://files.mastersunion.link/media/img/psy-meetJain.webp',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/DanlelNath.gif'
+        },
+
+
+        {
+            name: 'Dhruv Lakra',
+            designation: "Founder's Office,",
+            company: "BluSmart",
+            program: 'PGP TBM',
+            cohort: "Cohort '23",
+            linkedin: 'https://www.linkedin.com/in/khyatee-g-61a682117/',
+            youtubeLink: 'WIApHzq_zto',  // Rotated from the fourth position
+            thumbnail: 'https://files.mastersunion.link/media/img/psy-slide-bluesmart.png',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/AnuragBansal.gif'
+        },
+        {
+            name: 'Jeet Shah',
+            designation: "Co-founder,",
+            company: "Indigo",
+            program: 'PGP TBM',
+            cohort: "Cohort '22",
+            linkedin: 'https://www.linkedin.com/in/khyatee-g-61a682117/',
+            youtubeLink: 'IQjrw-movQc',  // Rotated from the fourth position
+            thumbnail: 'https://files.mastersunion.link/media/img/psy-slide-indigo.png',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/DanlelNath.gif'
+
+        },
+
+        {
+            name: 'Sabarna Jana',
+            designation: 'Consultant,',
+            program: 'PGP TBM',
+            company: 'Epigamia',
+            cohort: "Cohort '21",
+            linkedin: 'https://www.linkedin.com/in/jeneesha-singh-a52a52134/',
+            youtubeLink: 'UPQxZW3bSsQ',  // Rotated from the third position
+            thumbnail: 'https://files.mastersunion.link/media/img/psy-slide-epigamia.png',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/JeneeshaSingh.gif'
+        },
+        {
+            name: 'Roghan',
+            designation: 'Growth Strategist,',
+            company: 'Basil',
+            program: 'PGP TBM',
+            cohort: "Cohort '21",
+            linkedin: 'https://www.linkedin.com/in/danielnath/',
+            youtubeLink: 'b-1xflqazpc',  // Rotated from the fifth position
+            thumbnail: 'https://files.mastersunion.link/media/img/psy-slide-basil.png',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/DanlelNath.gif'
+        }
+    ];
+
+    almunis.map((data, index) => {
+        var html = `<div class="swiper-slide" id='alm-${index}'>
+                        <div class="masterImage">
+                            <img   src="${data.thumbnail}" alt="Icon"  class="">
+                         
+                            <div class="masterPlay" onclick="openPopup('${data.youtubeLink}');"><img  
+                                    src="https://files.mastersunion.link/resources/svg/homePlayIcon.svg" alt="Icon" ></div>
+                        </div>
+                        {{!-- <p class="alumniName"> 
+                            ${data.name} <span>${data.designation}</span>  <br> <span>${data.company}</span>
+                        </p> --}}
+
+                        <p class='alumniName ml10'>${data.name} | <span> ${data.company} </span></p>
+                        <div class="alumniDesgination hide">
+                         ${data.program}
+                             <img   src="https://files.mastersunion.link/resources/svg/darkCircle.svg" alt="icon"></img> ${data.cohort} 
+                        </div>
+                    </div>`
+        $('#almuniSwiper').append(html);
+    })
+
+</script>

@@ -1,0 +1,647 @@
+
+<div class="exploreDivi">
+    {{!-- <ul class="searchUl faqtabs">
+        <li class="cohordLi active" data-rel="class2027">
+            <p class="cohordText">Class of</p>
+            <p class="yearText">2027</p>
+        </li>
+
+        <li class="cohordLi" data-rel="class2028">
+            <p class="cohordText">Class of</p>
+            <p class="yearText">2028</p>
+        </li>
+
+         <li class="cohordLi" data-rel="class2029">
+            <p class="cohordText">Class of</p>
+            <p class="yearText">2029</p>
+        </li>
+    </ul> --}}
+
+    <ul class="searchUl faqtabs">
+
+  {{#if show2027}}
+  <li class="cohordLi active" data-rel="class2027">
+    <p class="cohordText">Class of</p>
+    <p class="yearText">2027</p>
+  </li>
+  {{/if}}
+
+  {{#if show2028}}
+  <li class="cohordLi {{#unless show2027}}active{{/unless}}" data-rel="class2028">
+    <p class="cohordText">Class of</p>
+    <p class="yearText">2028</p>
+  </li>
+  {{/if}}
+
+  {{#if show2029}}
+  <li class="cohordLi {{#unless show2027}}{{#unless show2028}}active{{/unless}}{{/unless}}" data-rel="class2029">
+    <p class="cohordText">Class of</p>
+    <p class="yearText">2029</p>
+  </li>
+  {{/if}}
+
+</ul>
+
+
+    <div class="dropdownWrapper">
+        <button class="exploreBtn">
+            Filter by Location
+            <svg class="dropdownIcon" xmlns="https://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                <path d="M6.49153 10.4237L10.4359 14.3681C10.5667 14.4988 10.744 14.5722 10.9289 14.5722C11.1139 14.5722 11.2912 14.4988 11.422 14.3681L15.3663 10.4237C15.4971 10.2929 15.5705 10.1156 15.5705 9.93066C15.5705 9.74574 15.4971 9.56838 15.3663 9.43762C15.2356 9.30686 15.0582 9.23347 14.8733 9.23347C14.6884 9.23347 14.511 9.30686 14.3802 9.43762L11.6261 12.1917L10.9289 12.8889L10.2317 12.1917L7.47762 9.43762C7.34686 9.30686 7.1695 9.23347 6.98458 9.23347C6.79965 9.23347 6.6223 9.30686 6.49153 9.43762C6.36077 9.56838 6.28738 9.74574 6.28738 9.93066C6.28738 10.1156 6.36077 10.2929 6.49153 10.4237Z" fill="#090909"/>
+            </svg>
+        </button>
+
+        <div class="cityWrapper">
+            <div class="search-wrapper" style="position: relative; display: inline-block;">
+                <input id="citySearch" type="text" class="searchBtn" placeholder="Search..." style="padding-left: 30px;" />
+
+                <svg xmlns="https://www.w3.org/2000/svg"
+                    width="20" height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    style="position: absolute; left: 18px; top: 50%; transform: translateY(-50%); pointer-events: none;">
+                    <path
+                    d="M17.9438 17.0575L14.0321 13.1466C15.1659 11.7854 15.7312 10.0395 15.6106 8.27214C15.4899 6.50475 14.6925 4.85192 13.3843 3.65748C12.076 2.46304 10.3576 1.81895 8.58657 1.8592C6.81553 1.89945 5.12818 2.62094 3.87554 3.87358C2.62289 5.12622 1.9014 6.81357 1.86115 8.58462C1.8209 10.3557 2.46499 12.074 3.65943 13.3823C4.85387 14.6906 6.5067 15.488 8.27409 15.6086C10.0415 15.7293 11.7874 15.1639 13.1485 14.0302L17.0595 17.9419C17.1175 17.9999 17.1865 18.046 17.2623 18.0774C17.3382 18.1089 17.4195 18.125 17.5016 18.125C17.5838 18.125 17.6651 18.1089 17.741 18.0774C17.8168 18.046 17.8858 17.9999 17.9438 17.9419C18.0019 17.8838 18.048 17.8149 18.0794 17.739C18.1108 17.6631 18.127 17.5818 18.127 17.4997C18.127 17.4176 18.1108 17.3363 18.0794 17.2604C18.048 17.1845 18.0019 17.1156 17.9438 17.0575ZM3.12664 8.74969C3.12664 7.63717 3.45654 6.54963 4.07463 5.62461C4.69271 4.69958 5.57121 3.97861 6.59905 3.55287C7.62688 3.12712 8.75788 3.01573 9.84903 3.23277C10.9402 3.44981 11.9424 3.98554 12.7291 4.77221C13.5158 5.55888 14.0515 6.56116 14.2686 7.65231C14.4856 8.74345 14.3742 9.87445 13.9485 10.9023C13.5227 11.9301 12.8018 12.8086 11.8767 13.4267C10.9517 14.0448 9.86416 14.3747 8.75164 14.3747C7.26031 14.373 5.83053 13.7799 4.77599 12.7253C3.72146 11.6708 3.1283 10.241 3.12664 8.74969Z"
+                    fill="#A3A3A3" />
+                </svg>
+            </div>
+
+            <div class="stateWrapper" id="cityContainer">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="content-section mt50">
+
+  {{#if show2027}}
+  <div class="content active" id="class2027">
+    <div class="cohortwrapper" id="UGProfiles"></div>
+    <div class="mt45 center">
+      <button class="downloadBroucherButton viewAllBtn" id="loadMoreProfile" data-page="1">
+        Loading...
+      </button>
+    </div>
+  </div>
+  {{/if}}
+
+  {{#if show2028}}
+  <div class="content {{#unless show2027}}active{{/unless}}" id="class2028">
+    <div class="cohortwrapper" id="UGProfiles2028"></div>
+    <div class="mt45 center">
+      <button class="downloadBroucherButton viewAllBtn" id="loadMoreProfile2028" data-page="1">
+        Loading...
+      </button>
+    </div>
+  </div>
+  {{/if}}
+
+  {{#if show2029}}
+  <div class="content {{#unless show2027}}{{#unless show2028}}active{{/unless}}{{/unless}}" id="class2029">
+    <div class="cohortwrapper" id="UGProfiles2029"></div>
+    <div class="mt45 center">
+      <button class="downloadBroucherButton viewAllBtn" id="loadMoreProfile2029" data-page="1">
+        Loading...
+      </button>
+    </div>
+  </div>
+  {{/if}}
+
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        let isVisible = false;
+
+        $('.exploreBtn').click(function (e) {
+            e.stopPropagation();
+
+            if (!isVisible) {
+                $('.cityWrapper').css({
+                    display: 'block',
+                    opacity: 0
+                }).animate({
+                    opacity: 1
+                }, 300);
+                isVisible = true;
+            } else {
+                $('.cityWrapper').animate({
+                    opacity: 0
+                }, 300, function () {
+                    $(this).css('display', 'none');
+                });
+                isVisible = false;
+            }
+        });
+
+        $(document).click(function () {
+            if (isVisible) {
+                $('.cityWrapper').animate({
+                    opacity: 0
+                }, 300, function () {
+                    $(this).css('display', 'none');
+                    isVisible = false;
+                });
+            }
+        });
+
+        $('.cityWrapper').click(function (e) {
+            e.stopPropagation();
+        });
+
+        $('.exploreBtn').on('click', function () {
+            $(this).find('.dropdownIcon').toggleClass('rotated');
+        });
+
+        $(".toCohortBox").click(function () {
+            scrollTab($(this))
+            let id = $(this).attr('data-rel')
+            $('#classprofile-menu').addClass('active').siblings().removeClass('active');
+            $(`#${id}`).addClass('active').siblings().removeClass('active');
+        });
+    });
+</script>
+
+<script>
+   $(document).ready(function(){
+        let searchCity = $('#citySearch').val();
+
+        const states = [
+                        "All",
+                        "Assam",
+                        "Bihar",
+                        "Chhattisgarh",
+                        "Delhi NCR",
+                        "Gujarat",
+                        "Haryana (excluding Gurugram & Faridabad)",
+                        "Jammu & Kashmir",
+                        "Jharkhand",
+                        "Karnataka",
+                        "Kerala",
+                        "Madhya Pradesh",
+                        "Maharashtra",
+                        "Odisha",
+                        "Punjab",
+                        "Rajasthan",
+                        "Tamil Nadu",
+                        "Telangana",
+                        "Uttar Pradesh (excluding Noida & Ghaziabad)",
+                        "Uttarakhand",
+                        "West Bengal",
+                        "International"
+                        ];
+
+
+        const container = document.getElementById("cityContainer");
+        const searchInput = document.getElementById('citySearch');
+
+        function renderStates(searchValue) {
+            container.innerHTML = ''; 
+            const filteredStates = states.filter(state => state.toLowerCase().includes(searchValue.toLowerCase()));
+            
+            if(filteredStates.length === 0){
+                const noState = document.createElement("p");
+                noState.textContent = "No State Found"
+                noState.className = "stateDivi";
+                container.appendChild(noState)
+            }
+            else{
+                filteredStates.forEach(state => {
+                    const stateDiv = document.createElement("div");
+                    stateDiv.className = "stateDivi";
+                    stateDiv.textContent = state;
+                    stateDiv.onclick = () => handleStateClick(state);
+                    container.appendChild(stateDiv);
+                });
+            }
+        }
+
+        searchInput.addEventListener('input', function() {
+            const searchValue = searchInput.value;
+            renderStates(searchValue);
+        });
+
+       function handleStateClick(currState) {
+  let displayState = currState;
+
+  if (displayState === "Haryana (excluding Gurugram & Faridabad)") displayState = "Haryana";
+  if (displayState === "Uttar Pradesh (excluding Noida & Ghaziabad)") displayState = "Uttar Pradesh";
+
+  if (displayState === "All") {
+    state = "";
+  } else {
+    state = encodeURIComponent(displayState);
+  }
+
+  $('.exploreBtn').html(`
+      ${displayState}
+      <svg xmlns="https://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+        <path d="M6.49153 10.4237L10.4359 14.3681C10.5667 14.4988 10.744 14.5722 10.9289 14.5722C11.1139 14.5722 11.2912 14.4988 11.422 14.3681L15.3663 10.4237C15.4971 10.2929 15.5705 10.1156 15.5705 9.93066C15.5705 9.74574 15.4971 9.56838 15.3663 9.43762C15.2356 9.30686 15.0582 9.23347 14.8733 9.23347C14.6884 9.23347 14.511 9.30686 14.3802 9.43762L11.6261 12.1917L10.9289 12.8889L10.2317 12.1917L7.47762 9.43762C7.34686 9.30686 7.1695 9.23347 6.98458 9.23347C6.79965 9.23347 6.6223 9.30686 6.49153 9.43762C6.36077 9.56838 6.28738 9.74574 6.28738 9.93066C6.28738 10.1156 6.36077 10.2929 6.49153 10.4237Z" fill="#090909"/>
+      </svg>
+  `);
+
+  function resetPaginationForActiveCohort() {
+    if (CURRENT_COHORT === "class2027") {
+      hasClickedLoadMore = false;
+      totalPages = 2;
+      isDataFetching = false;
+      loadMoreBtn.dataset.page = 1;
+      loadMoreBtn.classList.remove("hide");
+      $("#UGProfiles").empty();
+      showCohortProfile(1);
+    }
+
+    if (CURRENT_COHORT === "class2028") {
+      hasClickedLoadMore2028 = false;
+      totalPages2028 = 2;
+      isDataFetching2028 = false;
+      loadMoreBtn2028.dataset.page = 1;
+      loadMoreBtn2028.classList.remove("hide");
+      $("#UGProfiles2028").empty();
+      showCohortProfile2028(1);
+    }
+
+    if (CURRENT_COHORT === "class2029") {
+      hasClickedLoadMore2029 = false;
+      totalPages2029 = 2;
+      isDataFetching2029 = false;
+      loadMoreBtn2029.dataset.page = 1;
+      loadMoreBtn2029.classList.remove("hide");
+      $("#UGProfiles2029").empty();
+      showCohortProfile2029(1);
+    }
+  }
+
+  resetPaginationForActiveCohort();
+
+  $('#citySearch').val("");
+  renderStates('');
+  $('.cityWrapper').slideUp(100);
+}
+
+        renderStates('');
+
+
+        const btn2027 = document.querySelector(".cohordLi[data-rel='class2027']");
+        const btn2028 = document.querySelector(".cohordLi[data-rel='class2028']");
+        const btn2029 = document.querySelector(".cohordLi[data-rel='class2029']");
+        const download2027 = document.getElementById("download2027");
+        const download2028 = document.getElementById("download2028");
+        const download2029 = document.getElementById("download2029");
+        let state = '';
+
+        btn2027?.addEventListener("click", function () {
+            if(CURRENT_COHORT !== 'class2027'){
+                console.log('btn2027')
+                // Remove the display manipulation for dropdown elements
+                // download2027.style.display = "inline-block";
+                // download2028.style.display = "none";
+                CURRENT_COHORT = "class2027"
+                hasClickedLoadMore = false
+                $('#loadMoreProfile').removeClass('hide')
+                loadMoreBtn.dataset.page = 1;
+                totalPages = 2;
+                $('#UGProfiles').empty();
+                showCohortProfile(1)
+            }
+        });
+
+        btn2028?.addEventListener("click", function () {
+            if(CURRENT_COHORT !== 'class2028'){
+                console.log('btn2028')
+                // Remove the display manipulation for dropdown elements
+                // download2027.style.display = "none";
+                // download2028.style.display = "inline-block";
+                CURRENT_COHORT = "class2028"
+                hasClickedLoadMore2028 = false
+                $('#loadMoreProfile2028').removeClass('hide')
+                $('#UGProfiles2028').empty(); 
+                loadMoreBtn2028.dataset.page = 1;
+                totalPages2028 = 2;
+                showCohortProfile2028(1)
+            }
+        });
+
+         btn2029?.addEventListener("click", function () {
+            if(CURRENT_COHORT !== 'class2029'){
+                console.log('btn2029')
+                // Remove the display manipulation for dropdown elements
+                // download2027.style.display = "none";
+                // download2028.style.display = "inline-block";
+                CURRENT_COHORT = "class2029"
+                hasClickedLoadMore2029 = false
+                $('#loadMoreProfile2029').removeClass('hide')
+                $('#UGProfiles2029').empty(); 
+                loadMoreBtn2029.dataset.page = 1;
+                totalPages2029 = 2;
+                showCohortProfile2029(1)
+            }
+        });
+
+
+        let CURRENT_COHORT = null // Set default to 2027 since that's what was being auto-clicked
+        const PROGRAM_MODE = "{{programMode}}"; 
+
+        const loadMoreBtn = document.querySelector('#loadMoreProfile');
+        const loadMoreBtn2028 = document.querySelector('#loadMoreProfile2028');
+        const loadMoreBtn2029 = document.querySelector('#loadMoreProfile2029');
+        const has2027 = !!loadMoreBtn;
+       const has2028 = !!loadMoreBtn2028;
+       const has2029 = !!loadMoreBtn2029;
+
+        let hasClickedLoadMore = false;
+        let totalPages = 2;
+        let isDataFetching = false;
+        let isUGProfilesFetching = false;
+
+        let hasClickedLoadMore2028 = false;
+        let totalPages2028 = 2;
+        let isDataFetching2028 = false;
+        let isUGProfilesFetching2028 = false;
+
+        let hasClickedLoadMore2029 = false;
+        let totalPages2029 = 2;
+        let isDataFetching2029 = false;
+        let isUGProfilesFetching2029 = false;
+        
+        function showCohortProfile(page) {
+            console.log("showCohortProfile")
+            if (has2027) {
+                console.log(loadMoreBtn.dataset.page + " " + totalPages)
+            }
+
+            if (+loadMoreBtn.dataset.page >= totalPages) return;
+
+            isDataFetching = true;
+
+            fetch(`{{apiBaseURL}}/api/getUgProfiles?page=${page}&batch=2027&state=${state}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                .then(res => res.json())
+                .then(res => {
+                    const currentPage = res.Data.currentPage;
+                    totalPages = res.Data.totalPages;
+                    if(totalPages == 1) loadMoreBtn.classList.add("hide");
+                    const CDNBaseURL = "https://cdn.mastersunion.org/assets/img";
+                    const imageExtension = ".webp";
+                    const divEl = document.querySelector("#UGProfiles");
+                    if (res?.Data?.ugprofiles.length === 0) {
+                        const msg = document.createElement('p');
+                        msg.textContent = 'No Users';
+                        $('#loadMoreProfile').addClass('hide')
+                        divEl.appendChild(msg);
+                    }                    
+                    else {
+                        res?.Data?.ugprofiles.forEach(student => {
+                            console.log("student===", student)
+                            const img = new Image();
+                            img.src = student.profilePictureUrl;
+                            let school = student.schoolName.split(',')[0];
+                            let html = `
+                                <img   src=${student.profilePictureUrl} alt="user_img" onerror="this.onerror=null; this.src='https://cdn.mastersunion.org/assets/imgV2/avatar.jpg';">
+                                <div class="box test">
+                                    <div class="flexbox">
+                                        <p class="opprName font-12 font-regular font-grey2 flexbox">${student?.name ?? "---"}</p>
+                                        <div class="iconFlex">
+                                            ${student?.linkedinUrl ? `<a href=${student?.linkedinUrl ?? "https://linkedin.com"} target="_blank"><img   src="https://images.mastersunion.link/uploads/31072025/v1/Frame427321756.svg" alt="linkedin_icon"></a>` : ''}
+                                            {{!-- ${student?.email ? `<a href='mailto:${student.email}' target="_blank"><img   src="https://images.mastersunion.link/uploads/19052025/v1/gmail.svg" alt="email_icon"></a>` : ''} --}}
+                                            ${student?.email ? `<a href="https://mail.google.com/mail/?view=cm&fs=1&to=${student.email}" target="_blank"> <img  src="https://images.mastersunion.link/uploads/19052025/v1/gmail.svg" alt="email_icon" /></a>` : ''}
+                                            ${student?.resume_url ? `<a href=${student?.resume_url} target="_blank"><img   src="https://files.mastersunion.link/resources/img/cohortcv.png" alt="cv_icon"></a>` : ''}
+                                        </div>
+                                    </div>
+                                    <hr class="lineSpace">
+                                    <div>
+                                    <p class="cohortCompany">${school}, ${student.grade12_city} </p>
+                                    <p>${student.display_about}</p>
+                                    </div>
+                                </div>
+                            `;
+                        const el = document.createElement("div");
+                        el.classList.add("box2col")
+                        el.classList.add("gap15")
+                        el.innerHTML = html;
+                        divEl.appendChild(el);
+                        loadMoreBtn.innerHTML = `View All  <img
+                            src="https://images.mastersunion.link/uploads/28022025/v1/Frame13213165113.svg">`
+                        });
+                    }
+
+                    loadMoreBtn.dataset.page = page;
+                    isDataFetching = false;
+                }).catch(err => {
+                    isDataFetching = false;
+                });
+
+        }
+
+        $("#loadMoreProfile").on("click", function () {
+            hasClickedLoadMore = true;
+            showCohortProfile(+this.dataset.page + 1);
+            loadMoreBtn.classList.add("hide");
+        });
+
+        function showCohortProfile2028(page) {
+            console.log("showCohortProfile")
+            console.log(loadMoreBtn.dataset.page + " " + totalPages)
+
+            if (isDataFetching2028) return;
+            console.log(+loadMoreBtn2028.dataset.page + "  " +  totalPages2028)
+            if (+loadMoreBtn2028.dataset.page >= totalPages2028) return;
+
+            isDataFetching2028 = true;
+            fetch(`{{apiBaseURL}}/api/getUgProfiles?page=${page}&batch=2028&state=${state}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                .then(res => res.json())
+                .then(res => {
+                    const currentPage = res.Data.currentPage;
+                    totalPages2028 = res.Data.totalPages;
+                    if(totalPages2028 == 1) loadMoreBtn2028.classList.add("hide");
+                    const CDNBaseURL = "https://cdn.mastersunion.org/assets/img";
+                    const imageExtension = ".webp";
+                    const divEl = document.querySelector("#UGProfiles2028");
+
+                    if (res?.Data?.ugprofiles.length === 0) {
+                        const msg = document.createElement('p');
+                        msg.textContent = 'No Users';
+                        divEl.appendChild(msg);
+                        $('#loadMoreProfile2028').addClass('hide')
+                    }
+                    else {
+                        res?.Data?.ugprofiles.forEach(student => {
+                            const img = new Image();
+                            img.src = student.profilePictureUrl;
+                            let school = student.schoolName.split(',')[0];
+                            let html = `
+                                <img   src=${student.profilePictureUrl} alt="user_img" onerror="this.onerror=null; this.src='https://cdn.mastersunion.org/assets/imgV2/avatar.jpg';">
+                                <div class="box test">
+                                    <div class="flexbox">
+                                        <p class="opprName font-12 font-regular font-grey2 flexbox">${student?.name ?? "---"}</p>
+                                        <div class="iconFlex">
+                                            ${student?.linkedinUrl ? `<a href=${student?.linkedinUrl ?? "https://linkedin.com"} target="_blank"><img   src="https://images.mastersunion.link/uploads/31072025/v1/Frame427321756.svg" alt="linkedin_icon"></a>` : ''}
+                                            ${student?.email ? `<a href='mailto:${student.email}' target="_blank"><img   src="https://images.mastersunion.link/uploads/19052025/v1/gmail.svg" alt="email_icon"></a>` : ''}
+                                            ${student?.resume_url ? `<a href=${student?.resume_url} target="_blank"><img   src="https://files.mastersunion.link/resources/img/cohortcv.png" alt="cv_icon"></a>` : ''}
+                                    
+                                        </div>
+                                    </div>
+                                    <hr class="lineSpace">
+                                    <div>
+                                    <p class="cohortCompany">${school}, ${student.grade12_city}</p>
+                                    <p>${student.display_about}</p>
+                                    </div>
+                                </div>
+                            `;
+                            const el = document.createElement("div");
+                            el.classList.add("box2col")
+                            el.classList.add("gap15")
+                            el.innerHTML = html;
+                            divEl.appendChild(el);
+                              loadMoreBtn2028.innerHTML = `View All  <img
+                            src="https://images.mastersunion.link/uploads/28022025/v1/Frame13213165113.svg">`
+                        });
+                    }
+
+                    loadMoreBtn2028.dataset.page = page;
+                    isDataFetching2028 = false;
+                    if (!res.Data.hasMoreProfiles) {
+                        loadMoreBtn2028.classList.add("hide");
+                    }
+                }).catch(err => {
+                    isDataFetching2028 = false;
+                });
+
+        }
+
+        $("#loadMoreProfile2028").on("click", function () { 
+            hasClickedLoadMore2028 = true;
+            showCohortProfile2028(+this.dataset.page + 1);
+            loadMoreBtn2028.classList.add("hide");
+        });
+
+
+        function showCohortProfile2029(page) {
+            console.log("showCohortProfile2029")
+            console.log(loadMoreBtn2029.dataset.page + " " + totalPages2029)
+
+
+            if (isDataFetching2029) return;
+            console.log(+loadMoreBtn2029.dataset.page + "  " +  totalPages2029)
+            if (+loadMoreBtn2029.dataset.page >= totalPages2029) return;
+
+            isDataFetching2029 = true;
+            fetch(`{{apiBaseURL}}/api/getUgProfiles?page=${page}&batch=2029&state=${state}&program=${PROGRAM_MODE}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                .then(res => res.json())
+                .then(res => {
+                    const currentPage = res.Data.currentPage;
+                    totalPages2029 = res.Data.totalPages;
+                    if(totalPages2029 == 1) loadMoreBtn2029.classList.add("hide");
+                    const CDNBaseURL = "https://cdn.mastersunion.org/assets/img";
+                    const imageExtension = ".webp";
+                    const divEl = document.querySelector("#UGProfiles2029");
+
+                    if (res?.Data?.ugprofiles.length === 0) {
+                        const msg = document.createElement('p');
+                        msg.textContent = 'No Users';
+                        divEl.appendChild(msg);
+                        $('#loadMoreProfile2029').addClass('hide')
+                    }
+                    else {
+                        res?.Data?.ugprofiles.forEach(student => {
+                            const img = new Image();
+                            img.src = student.profilePictureUrl;
+                            let school = student.schoolName.split(',')[0];
+                            let html = `
+                                <img   src=${student.profilePictureUrl} alt="user_img" onerror="this.onerror=null; this.src='https://cdn.mastersunion.org/assets/imgV2/avatar.jpg';">
+                                <div class="box test">
+                                    <div class="flexbox">
+                                        <p class="opprName font-12 font-regular font-grey2 flexbox">${student?.name ?? "---"}</p>
+                                        <div class="iconFlex">
+                                            ${student?.linkedinUrl ? `<a href=${student?.linkedinUrl ?? "https://linkedin.com"} target="_blank"><img   src="https://images.mastersunion.link/uploads/31072025/v1/Frame427321756.svg" alt="linkedin_icon"></a>` : ''}
+                                            ${student?.email ? `<a href='mailto:${student.email}' target="_blank"><img   src="https://images.mastersunion.link/uploads/19052025/v1/gmail.svg" alt="email_icon"></a>` : ''}
+                                            ${student?.resume_url ? `<a href=${student?.resume_url} target="_blank"><img   src="https://files.mastersunion.link/resources/img/cohortcv.png" alt="cv_icon"></a>` : ''}
+                                    
+                                        </div>
+                                    </div>
+                                    <hr class="lineSpace">
+                                    <div>
+                                    <p class="cohortCompany">${school}, ${student.grade12_city}</p>
+                                    <p>${student.display_about}</p>
+                                    </div>
+                                </div>
+                            `;
+                            const el = document.createElement("div");
+                            el.classList.add("box2col")
+                            el.classList.add("gap15")
+                            el.innerHTML = html;
+                            divEl.appendChild(el);
+                              loadMoreBtn2029.innerHTML = `View All  <img
+                            src="https://images.mastersunion.link/uploads/28022025/v1/Frame13213165113.svg">`
+                        });
+                    }
+
+                    loadMoreBtn2029.dataset.page = page;
+                    isDataFetching2029 = false;
+                    if (!res.Data.hasMoreProfiles) {
+                        loadMoreBtn2029.classList.add("hide");
+                    }
+                }).catch(err => {
+                    isDataFetching2029 = false;
+                });
+
+        }
+
+        $("#loadMoreProfile2029").on("click", function () { 
+            hasClickedLoadMore2029 = true;
+            showCohortProfile2029(+this.dataset.page + 1);
+            loadMoreBtn2029.classList.add("hide");
+        });
+
+
+        window.addEventListener('scroll', function () {
+            const scrollTop = window.scrollY;
+            const scrollHeight = document.documentElement.scrollHeight;
+            const clientHeight = document.documentElement.clientHeight;
+            const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+
+            if (scrollPercentage >= 30 && hasClickedLoadMore && CURRENT_COHORT === "class2027" && !isDataFetching) {
+                showCohortProfile(+loadMoreBtn.dataset.page + 1);
+            } else if (scrollPercentage >= 30 && hasClickedLoadMore2028 && CURRENT_COHORT === "class2028" && !isDataFetching2028) {
+                showCohortProfile2028(+loadMoreBtn2028.dataset.page + 1);
+            }else if (scrollPercentage >= 30 && hasClickedLoadMore2029 && CURRENT_COHORT === "class2029" && !isDataFetching2029) {
+                showCohortProfile2029(+loadMoreBtn2029.dataset.page + 1);
+            }
+        });
+        // Remove automatic click to prevent hiding dropdown options
+        // btn2027.click();
+        
+        // Load initial data for 2027 cohort
+       const activeTab = document.querySelector('.cohordLi.active');
+
+if (activeTab) {
+  CURRENT_COHORT = activeTab.dataset.rel;
+
+  if (CURRENT_COHORT === 'class2027') showCohortProfile(1);
+  if (CURRENT_COHORT === 'class2028') showCohortProfile2028(1);
+  if (CURRENT_COHORT === 'class2029') showCohortProfile2029(1);
+}
+
+   })
+</script>
+
+

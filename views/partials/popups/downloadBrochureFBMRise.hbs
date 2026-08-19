@@ -1,0 +1,503 @@
+<main>
+    <div class="popupContainerOuter ApplyNow" id="ApplyNowPopUpNEW">
+
+        <div class="popupContainer">
+            <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_heading">Download Brochure</h2>
+                <div class="popUpCloseBtnWrap">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Icon" onclick="hideApplyNowPopUp();">
+
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="leadformContainer">
+                <div class="left mob-hide">
+                    {{!-- <img src="https://files.mastersunion.link/resources/img/formleft.webp" alt=""> --}}
+                    <img src="https://files.mastersunion.link/resources/img/pgpRisePopFbm.webp" alt="">
+                </div>
+                <div class="right">
+                    <div class="formContainer active">
+                        <div class="flexInput" id="formain">
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Full Name <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your name"
+                                    class="inputBox font-16 font-black1 font-medium " id="nameReport"
+                                    onblur="validateNameInput('nameReport', 'nameReportVal')">
+                                <p class="font-12 font-red font-regular warning" id="nameReportVal">Please Enter Valid
+                                    Name</p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Email ID <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your email"
+                                    class="inputBox font-16 font-black1 font-medium " id="emailReport"
+                                    onblur="validateEmailInput('emailReport', 'emailReportVal')">
+                                <p class="font-12 font-red font-regular warning" id="emailReportVal">Please Enter Valid
+                                    Email
+                                </p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Contact Number <span
+                                        class="font-red">*</span></label>
+                                <div class="phoneGroup mt-5">
+                                    <select class="inputBox phoneCode countryCodeIP" name="countryCode"
+                                        id="countryCodeUGDownloadbrochure">
+                                        <option value="91" data-iso="IN">91</option>
+                                    </select>
+                                    <div class="inputType">
+                                        <input type="text" placeholder="Enter your mobile number" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                            class="inputBox font-16 font-black1 font-medium " id="numberReport"
+                                            maxlength="10"
+                                            onblur="validateMobileInput('numberReport', 'numberReportVal')">
+                                    </div>
+                                </div>
+                                <p class="font-12 font-red font-regular warning" id="numberReportVal">Please Enter Valid
+                                    Number
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="consentCheckWrapper">
+                        <div class="consentCheckRow">
+                            <input type="checkbox" id="consentCheckFBMRise">
+                            <label for="consentCheckFBMRise">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+                        </div>
+                        <p id="consentCheckErrorFBMRise" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+                    </div>
+                    <div class="formFooter" id="submitbuttonreport">
+                        <div class="gradientButton whiteHover" onclick="onButtonClickSubmitReport()">
+                            <button class="button iconButton" id="gtmUgDwnBroPopId">
+                                Submit
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="https://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                        fill="white"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="SuccessMessage" class="congrats-box hide">
+                <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+
+                <h3 class="thankyouboxHeading mt-10">Got it</h3>
+                <p class="text-2">Your download will begin shortly.</p>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    async function loadCountriesForFBMRiseBrochure() {
+        const $countrySelect = $("#countryCodeUGDownloadbrochure");
+        if (!$countrySelect.length) return;
+
+        try {
+            const response = await fetch("https://api.mastersunion.org/api/geo/countries");
+            const payload = await response.json();
+            const countries = Array.isArray(payload) ? payload : (payload?.Data || []);
+
+            if (!countries.length) {
+                throw new Error("Countries list is empty");
+            }
+
+            $countrySelect.empty();
+            countries
+                .filter((country) => country?.phonecode)
+                .sort((a, b) => String(a.name || "").localeCompare(String(b.name || "")))
+                .forEach((country) => {
+                    const phoneCode = String(country.phonecode).trim();
+                    const iso2 = String(country.iso2 || "").toUpperCase();
+                    const optionLabel = `${phoneCode}`;
+                    const $option = $("<option></option>")
+                        .attr("value", phoneCode)
+                        .attr("data-iso", iso2)
+                        .text(optionLabel);
+                    if (phoneCode === "91" || iso2 === "IN") {
+                        $option.attr("selected", "selected");
+                    }
+                    $countrySelect.append($option);
+                });
+        } catch (error) {
+            console.error("Failed to load countries for FBM Rise popup:", error);
+            $countrySelect.empty().append('<option value="91" data-iso="IN">91</option>');
+        }
+    }
+
+    function openLeadGenFormBrochure(formTitle, destination, contactUs) {
+
+        const form = document.getElementById("ApplyNowPopUpNEW");
+        const h2 = document.querySelector("#form_heading");
+
+        form.classList.add("active");
+
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        const downloadBtn = document.getElementById("gtmUgDwnBroPopId");
+    downloadBtn.disabled = false;
+    downloadBtn.style.opacity = "1";
+    downloadBtn.style.cursor = "pointer";
+      downloadBtn.innerHTML = `Download 
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+    xmlns="https://www.w3.org/2000/svg">
+    <path
+        d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+        fill="white"></path>
+</svg>`;
+
+        document.querySelector("#SuccessMessage").classList.add("hide");
+        document.querySelector("#submitbuttonreport").classList.remove("hide");
+        document.querySelector("#leadformContainer").classList.remove("hide");
+        document.querySelector("#form_heading").classList.remove("hide");
+
+        // Disable scrolling when popup is open
+        document.body.style.overflow = 'hidden';
+
+        loadCountriesForFBMRiseBrochure();
+
+    }
+
+    // let name = $('#nameReport').val();
+    // let email = $('#emailReport').val();
+    // let number = $('#numberReport').val();
+    async function pushToNPF_pgp_rise(payload) {
+       const post_url = `{{apiBaseURL}}/api/leads/pushToNPF`; // for pgp rise leads only     
+
+       try {
+         const response = await fetch(post_url, {
+           method: "POST",
+           headers: {
+             "Content-Type": "application/json",
+           },
+           body: JSON.stringify(payload),
+         });     
+
+         const data = await response.json();
+         return {
+           status: response.status,
+           success: response.ok,
+           data,
+         };
+       } catch (error) {
+         console.error("Error in pushToNPF_PGP_TBM:", error.message);
+         return {
+           status: null,
+           success: false,
+           error: error.message,
+         };
+       }
+     }
+
+    function onButtonClickSubmitReport() {
+
+          
+        console.log('on submit');
+        const validateNumber = (number) => /^\d+$/.test(number);
+        const validateEmail = (email) => email.includes("@") && email.includes(".");
+
+         let name = $('#nameReport').val().trim();
+        name = name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : "";       
+        let nameParts = name.split(/\s+/);
+        let firstName = "";
+        let lastName = "";
+        if (nameParts.length === 1) {
+            firstName = nameParts[0];
+            lastName = "";
+            } 
+            else {
+                lastName = nameParts.pop();
+                firstName = nameParts.join(" ");
+                }
+        let email = $('#emailReport').val().trim();
+        let number = $('#numberReport').val().trim();
+        let country = $('#countryCodeUGDownloadbrochure').val().trim();
+
+        let isValid = true;
+
+        isValid = validateNameInput('nameReport', 'nameReportVal') && isValid;
+        isValid = validateEmailInput('emailReport', 'emailReportVal') && isValid;
+        isValid = validateMobileInput('numberReport', 'numberReportVal') && isValid;
+
+        if (!document.getElementById('consentCheckFBMRise')?.checked) { document.getElementById('consentCheckErrorFBMRise').classList.remove('warning'); isValid = false; } else { document.getElementById('consentCheckErrorFBMRise').classList.add('warning'); }
+
+        if (!isValid) return;
+
+        const downloadBtn = document.getElementById("gtmUgDwnBroPopId");
+    
+    // Disable the button immediately to prevent multiple clicks
+    downloadBtn.disabled = true;
+    downloadBtn.style.opacity = "0.7";
+    downloadBtn.style.cursor = "not-allowed"
+    downloadBtn.textContent = "Downloading...."
+    
+
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const utmSource = params.utm_source;
+        const utmMedium = params.utm_medium;
+        const utmCampaign = params.utm_campaign;
+        const gclid = params.gclid || "";
+        const fbclid = params.fbclid || "";
+        const utmTerm = params.utm_term || ""; 
+        const utmPlacement = params.utm_placement || "";
+        const utmContent = params.utm_content || "";
+        const utmCampaignId = params.utm_campaign_id || "";
+        const utmAdGroupId = params.utm_adgroup_id || "";
+        const utmCreativeId = params.utm_creative_id || "";
+
+        let url = window.location.pathname.substring(1);
+        let formname = document.querySelector("#ApplyNowPopUpNEW").getAttribute("data-title") || "Download Placement Report";
+        let medium = `PGP Rise: Owners and Promoters Management - Download Brochure  Popup`;
+        console.log(APIpushToNPFendPoint, "APIpushToNPFendPoint")
+        let course = 'PGP Rise: Owners and Promoters Management';
+        //  if (url.startsWith("pgp-rise")) {
+        //      course = 'PGP Rise - Family Business Management';
+        //      medium = `Consult with team - ${formname} Popup`;
+        //  } else if (url.startsWith("ug-")) {
+        //      course = 'Undergraduate Programme';
+        //      medium = `UG - ${formname} Popup`;
+        //  }
+
+        let device = 'PC';
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            device = "Mobile";
+        } else {
+            device = "Desktop";
+        }
+
+        // api for our Data base
+        var post_url = '{{apiBaseURL}}/api/courseRegister';
+        var request_method = 'POST'; //get form GET/POST method
+        $.ajax({
+            url: post_url,
+            type: request_method,
+            contentType: "application/json",
+            data: JSON.stringify({
+                "email": email.trim().toLowerCase(),
+                "name": name,
+                "mobile": number,
+                "courseName": course,
+                "country": country,
+                "full_utm_url": window.location.href || "N/A",
+                "leadSource": medium,
+                "medium": utmMedium || null,
+                "campaign": utmCampaign || null,
+                "source": utmSource || null,
+                "gclid" : gclid || null,
+                "fbclid" : fbclid || null,
+                "utmTerm" : utmTerm || null,
+                "utmPlacement" : utmPlacement || null,
+                "utmContent" : utmContent || null,
+                "utmCampaignId" : utmCampaignId || null,
+                "utmAdGroupId" : utmAdGroupId || null,
+                "utmCreativeId" : utmCreativeId || null,
+                "leadOrigin": medium|| "N/A",// for lead matrix
+                consentCheck: document.getElementById('consentCheckFBMRise')?.checked || false,
+                //"countryCode": `+${countryCode}`,
+
+            }),
+            dataType: "json",
+            success: function (result) {
+                console.log("Second api after first success")
+               const post_url = `{{apiBaseURL}}/api/leads/LeadMatrixCaptureLeads/pgp_rise_owners_promoters_management/download`;
+                // const post_url = `{{apiBaseURL}}/api/leads/${APIpushToNPFendPoint}`;
+                const request_method = 'POST';
+                const formData = {
+
+                     device: device,
+                        email: email.trim().toLowerCase(),
+                        name: name,
+                        mobile: number,
+                        //countryCode: `+${countryCode}`, 
+                        linkedinProfile: "",
+                        medium: utmMedium || null,
+                        campaign: utmCampaign || null,
+                        source: utmSource || null,
+                        course: course,
+                        gclid : gclid || null,
+                        fbclid : fbclid || null,
+                        utmTerm : utmTerm || null,
+                        utmPlacement : utmPlacement || null ,
+                        utmContent : utmContent || null,
+                        utmCampaignId :utmCampaignId || null,
+                        utmAdGroupId : utmAdGroupId || null,
+                        utmCreativeId : utmCreativeId || null,
+                        fullUrl: window.location.href,
+                        sendMail: false,
+                        // country: country,
+                        leadSource: medium,
+                        leadOrigin: medium|| "N/A",// for lead matrix
+
+                }
+                $.ajax({
+                    url: post_url,
+                    type: request_method,
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        device: device,
+                        email: email,
+                        name: name,
+                        mobile: number,
+                        medium: utmMedium || null ,
+                        campaign: utmCampaign || null,
+                        source: utmSource || null,
+                        course: course,
+                        gclid : gclid || null,
+                        fbclid : fbclid || null,
+                        utmTerm : utmTerm || null,
+                        utmPlacement : utmPlacement || null ,
+                        utmContent : utmContent || null,
+                        utmCampaignId :utmCampaignId || null,
+                        utmAdGroupId : utmAdGroupId || null,
+                        utmCreativeId : utmCreativeId || null,
+                        fullUrl: window.location.href,
+                        sendMail: false,
+                        country: country,
+                        leadSource: medium,
+                        leadOrigin: medium|| "N/A",// for lead matrix
+                        consentCheck: document.getElementById('consentCheckFBMRise')?.checked || false,
+
+
+                    }),
+                    dataType: "json",
+                    success: function (result) {
+
+                         window.dataLayer = window.dataLayer || [];
+              window.dataLayer.push({
+                  event: "formSubmitted",
+                  leadsUserData: {
+                      email: email,
+                      phone_number: `+${country}${number}`,
+                      first_name: firstName,
+                      last_name: lastName,
+                  }
+              });   
+
+                        document.querySelector("#SuccessMessage").classList.remove("hide");
+                        document.querySelector("#submitbuttonreport").classList.add("hide");
+                        document.querySelector("#leadformContainer").classList.add("hide");
+                        document.querySelector("#form_heading").classList.add("hide");
+
+                        // Re-enable scrolling when popup is closed
+                        document.body.style.overflow = 'auto';
+                        // thisrd api for npf as well only OPM
+                       // pushToNPF_pgp_rise(formData)
+                        setTimeout(()=>{
+                        window.open('https://files.mastersunion.link/OPM_Brochure_2026.pdf', '_self');
+                        },2000)
+                        console.log("Success", result);
+                    }
+                });
+
+            }
+        });
+
+        const form = document.getElementById("ApplyNowPopUpNEW");
+        if (form.getAttribute("data-isContactUsForm")) {
+
+            try {
+                var post_url = '{{apiBaseURL}}/api/contact-us-v2'
+                var request_method = 'POST';
+                var _payload = {
+                    email,
+                    name,
+                    mobile: `${country}${number}`,
+                    query: "PGP_RISE_FBM_CONSULT_WITH_TEAM",
+                };
+                $.ajax({
+                    url: post_url,
+                    type: request_method,
+                    data: JSON.stringify(_payload),
+                    contentType: 'application/json; charset=utf-8',
+                });
+
+
+            } catch (err) {
+                console.error('Error occurred during form submission:', err);
+            }
+        }
+
+       
+    }
+
+
+
+
+
+    function hideApplyNowPopUp() {
+        let applyNowPopUp = document.getElementById("ApplyNowPopUpNEW");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+
+        $('#nameReport').val("");
+        $('#nameReportVal').text("");
+        $('#emailReport').val("");
+        $('#emailReportVal').text("");
+        $('#numberReport').val("");
+        $('#numberReportVal').text("");
+        $('#consentCheckFBMRise').prop("checked", false);
+        $('#consentCheckErrorFBMRise').addClass("warning");
+        const form = document.getElementById("ApplyNowPopUpNEW");
+        form.removeAttribute("data-isContactUsForm");
+
+        // Re-enable scrolling when popup is closed
+        document.body.style.overflow = 'auto';
+
+    }
+
+
+
+    function validateInputBlurUGDownloadBrochure(inputId, inputType) {
+        var value = document.getElementById(inputId).value.trim(); // Get input value and trim whitespace
+        var isValid = false;
+        var errorMessage = "";
+        var warningElement = document.getElementById(inputId + 'Val');
+
+        // Define regex patterns for each input type
+        var regexPatterns = {
+            name: /^[a-zA-Z\s]+$/, // Allows only letters and spaces
+            email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Standard email regex pattern
+            number: /^\d{10}$/ // Allows exactly 10 digits (for phone numbers)
+        };
+
+        // Determine the validation logic based on input type
+        switch (inputType) {
+            case 'name':
+                isValid = regexPatterns.name.test(value);
+                errorMessage = "Please enter a valid name (letters and spaces only).";
+                break;
+            case 'email':
+                isValid = regexPatterns.email.test(value);
+                errorMessage = "Please enter a valid email address.";
+                break;
+            case 'number':
+                isValid = regexPatterns.number.test(value);
+                errorMessage = "Please enter a valid 10-digit contact number (numbers only).";
+                break;
+            default:
+                console.error("Invalid input type specified.");
+                return;
+        }
+
+        // Handle validation results
+        if (isValid) {
+            warningElement.classList.add('warning'); // Add warning class to hide the error message
+            warningElement.textContent = ""; // Clear any existing error message
+        } else {
+            warningElement.classList.remove('warning'); // Remove warning class to show the error message
+            warningElement.textContent = errorMessage; // Display the appropriate error message
+        }
+    }
+
+</script>

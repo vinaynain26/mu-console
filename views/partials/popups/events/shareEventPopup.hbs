@@ -1,0 +1,168 @@
+<main>
+    <div class="popupContainerOuter hsslLeaderboardSharePopup" id="shareEventPoupUp">
+
+        <div class="popupContainer">
+            <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_heading">Share Your Startup:</h2>
+                <div class="flexend align-center">
+                    <img  src="https://files.mastersunion.link/media/svg/dark-close-icon.svg" class="invert-img" alt=""
+                        onclick="closeShareEventPopup();">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="leadformContainer">
+
+                <div class="topFloaters">
+
+                    <div class="swiper shareEventSlider">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide">
+
+                                <a class="share-social-link" onclick = "share('whatsApp')" href="">
+                                    <img src="https://files.mastersunion.link/media/img/share-whatsapp.svg" alt="">
+                                    <span>WhatsApp</span>
+                                </a>
+
+                            </div>
+
+                            <div class="swiper-slide">
+                                <a class="share-social-link" onclick = "share('facebook')" href="">
+                                    <img src="https://files.mastersunion.link/media/img/share-fb.svg" alt="">
+                                    <span>Facebook</span>
+                                </a>
+                            </div>
+
+                            <div class="swiper-slide">
+                                <a class="share-social-link" onclick = "share('instagram')" href="">
+                                    <img src="https://files.mastersunion.link/media/img/share-insta.svg" alt="">
+                                    <span>Instagram</span>
+                                </a>
+                            </div>
+
+                            <div class="swiper-slide">
+                                <a class="share-social-link" onclick = "share('x')" href="">
+                                    <img src="https://files.mastersunion.link/media/img/share-x.svg" alt="">
+                                    <span>X</span>
+                                </a>
+                            </div>
+
+                            <div class="swiper-slide">
+                                <a class="share-social-link" onclick = "share('linkedIn')" href="">
+                                    <img src="https://files.mastersunion.link/media/img/share-linkdin.svg" alt="">
+                                    <span>LinkedIn</span>
+                                </a>
+                            </div>
+
+
+                            <div class="swiper-slide">
+                                <a class="share-social-link" onclick = "share('email')" href="">
+                                    <img src="https://files.mastersunion.link/media/img/share-email.svg" alt="">
+                                    <span>Email</span>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="copyEventLink">
+                    <div class="eventLink">
+                        <span class="linK" id="sharePageURL">https://youtu.be/TGxKkBC6L2k</span>
+                        
+                        <div class="copy-link-wrapper">
+                            <svg class="copy-link" width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="https://www.w3.org/2000/svg">
+                            <path
+                                d="M15.3996 7.25H8.19961C7.31595 7.25 6.59961 7.96634 6.59961 8.85V16.05C6.59961 16.9337 7.31595 17.65 8.19961 17.65H15.3996C16.2833 17.65 16.9996 16.9337 16.9996 16.05V8.85C16.9996 7.96634 16.2833 7.25 15.3996 7.25Z"
+                                stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M3.4 12.05H2.6C2.17565 12.05 1.76869 11.8815 1.46863 11.5814C1.16857 11.2813 1 10.8744 1 10.45V3.25002C1 2.82568 1.16857 2.41871 1.46863 2.11865C1.76869 1.8186 2.17565 1.65002 2.6 1.65002H9.8C10.2243 1.65002 10.6313 1.8186 10.9314 2.11865C11.2314 2.41871 11.4 2.82568 11.4 3.25002V4.05002"
+                                stroke="#222222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+
+                         <span class="tooltip">Copy Link</span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+
+    function closeShareEventPopup() {
+        let shareEventPopup = document.getElementById("shareEventPoupUp");
+        if (shareEventPopup) {
+            shareEventPopup.classList.remove("active")
+        }
+        document.body.classList.remove("no-scroll");
+    }
+
+
+    function openShareEventPopup(formTitle, destination) {
+        const form = document.getElementById("shareEventPoupUp");
+        const h2 = document.querySelector("#form_heading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        document.body.classList.add("no-scroll");
+
+        document.querySelector("#SuccessMessage").classList.add("hide");
+        document.querySelector("#leadformContainer").classList.remove("hide");
+
+    }
+function share(platform) {
+    const pageUrl = encodeURIComponent(window.location.href);
+    const pageTitle = encodeURIComponent(document.title);
+    const message = encodeURIComponent("Check out this amazing page!");
+
+    let shareUrl = '';
+    switch (platform.toLowerCase()) { // Ensure case-insensitivity
+        case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`;
+            break;
+        case 'instagram':
+            alert("Instagram does not support direct URL sharing via web. Please share manually.");
+            return;
+        case 'linkedin':
+            shareUrl = `https://www.linkedin.com/shareArticle?url=${pageUrl}&title=${pageTitle}`;
+            break;
+        case 'whatsapp':
+            shareUrl = `https://wa.me/?text=${message}%20${pageUrl}`;
+            break;
+        case 'x':
+            shareUrl = `https://twitter.com/intent/tweet?url=${pageUrl}&text=${pageTitle}`;
+            break;
+        case 'email':
+            shareUrl = `mailto:?subject=${pageTitle}&body=${message}%20${pageUrl}`;
+            break;
+        default:
+            console.error('Unsupported platform:', platform);
+            return;
+    }
+
+    // Open the share URL in a new window
+    window.open(shareUrl, '_blank');
+}
+
+    $(document).ready( function () {
+        const currentUrl = window.location.href;
+        const sharePageURL = document.getElementById('sharePageURL')
+
+        sharePageURL.innerHTML = currentUrl;
+
+
+
+        
+
+    })
+
+</script>

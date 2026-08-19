@@ -1,0 +1,416 @@
+<main>
+  <div class="popupContainerOuter introPopup pospop" id="extraCirricularPop">
+
+    <div class="popupContainer">
+
+      <div class="fromTophead">
+        <h2>Extra Curricular Activities & Achievements</h2>
+        <div class="pointer" onclick="closeExtraCirricular()">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0.5" y="0.5" width="31" height="31" rx="5.5" fill="white" />
+            <rect x="0.5" y="0.5" width="31" height="31" rx="5.5" stroke="#FAFAFA" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M11.0506 11.0499C11.3544 10.7462 11.8468 10.7462 12.1506 11.0499L20.9501 19.8495C21.2538 20.1532 21.2538 20.6457 20.9501 20.9494C20.6464 21.2531 20.1539 21.2531 19.8502 20.9494L11.0506 12.1499C10.7469 11.8461 10.7469 11.3537 11.0506 11.0499Z"
+              fill="#525252" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M20.9494 11.0499C21.2531 11.3537 21.2531 11.8461 20.9494 12.1499L12.1498 20.9494C11.8461 21.2531 11.3536 21.2531 11.0499 20.9494C10.7462 20.6457 10.7462 20.1532 11.0499 19.8495L19.8494 11.0499C20.1532 10.7462 20.6456 10.7462 20.9494 11.0499Z"
+              fill="#525252" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="PopupformWrapper" id="leadformContainer">
+        <form action="">
+
+          <div id="extracurricularsContainer"></div>
+
+        </form>
+
+        <div class="addAnother">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2.1875 7H11.8125" stroke="#E38330" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M7 2.1875V11.8125" stroke="#E38330" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          Add another entry
+        </div>
+
+        <div class="submitWrapper">
+          <div class="gradientButton whiteHover">
+            <button class="button iconButton" id="extracurricularsSubmitButton">
+              Save
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z" fill="#090909" />
+                <path
+                  d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z"
+                  fill="#090909" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</main>
+
+
+<script>
+  $(document).ready(function () {
+    const deletedExtracurricularIds = [];
+    const TITLE_CHAR_LIMIT = 50;
+    const TITLE_LIMIT_ERROR = `Maximum ${TITLE_CHAR_LIMIT} characters allowed`;
+    const POSITION_CHAR_LIMIT = 8;
+    const POSITION_LIMIT_ERROR = `Maximum ${POSITION_CHAR_LIMIT} characters allowed`;
+    const CATEGORY_CHAR_LIMIT = 20;
+    const CATEGORY_LIMIT_ERROR = `Maximum ${CATEGORY_CHAR_LIMIT} characters allowed`;
+    const EXTRACURRICULAR_ALLOWED_IMAGE_TYPES = ['jpg', 'jpeg', 'png', 'webp'];
+
+    function getCharacterLimitConfig(fieldId) {
+      if (!fieldId) return null;
+      if (fieldId.startsWith('title_')) {
+        return {
+          limit: TITLE_CHAR_LIMIT,
+          errorMessage: TITLE_LIMIT_ERROR
+        };
+      }
+      if (fieldId.startsWith('position_')) {
+        return {
+          limit: POSITION_CHAR_LIMIT,
+          errorMessage: POSITION_LIMIT_ERROR
+        };
+      }
+      if (fieldId.startsWith('category_')) {
+        return {
+          limit: CATEGORY_CHAR_LIMIT,
+          errorMessage: CATEGORY_LIMIT_ERROR
+        };
+      }
+      return null;
+    }
+
+    function updateCharacterCounter($field) {
+      if (!$field || !$field.length) return;
+
+      const fieldId = $field.attr('id');
+      if (!fieldId) return;
+
+      const $counter = $(`#${fieldId}Counter`);
+      if (!$counter.length) return;
+
+      const length = ($field.val() || '').toString().length;
+      const config = getCharacterLimitConfig(fieldId);
+      if (!config) return;
+      $counter.text(`${length}/${config.limit}`);
+    }
+
+    function enforceCharacterLimit($field) {
+      if (!$field || !$field.length) return;
+
+      const currentValue = ($field.val() || '').toString();
+      const fieldId = $field.attr('id');
+      const config = getCharacterLimitConfig(fieldId);
+      if (!config) return;
+
+      const trimmedValue = currentValue.slice(0, config.limit);
+      const wasTrimmed = currentValue.length > config.limit;
+      if (currentValue !== trimmedValue) {
+        $field.val(trimmedValue);
+      }
+
+      if (wasTrimmed) {
+        if (typeof showError === 'function') {
+          showError(fieldId, config.errorMessage);
+        }
+        updateCharacterCounter($field);
+        return;
+      } else if (typeof clearError === 'function') {
+        const errorElement = document.getElementById(`${fieldId}Error`);
+        if (errorElement && errorElement.textContent === config.errorMessage) {
+          clearError(fieldId);
+        }
+      }
+
+      updateCharacterCounter($field);
+    }
+
+    function applyCharacterLimitToFields($context) {
+      const $root = $context && $context.length ? $context : $('#extracurricularsContainer');
+      $root.find('input[id^="title_"], input[id^="position_"], input[id^="category_"]').each(function () {
+        enforceCharacterLimit($(this));
+      });
+    }
+
+    window.applyExtracurricularCharacterLimit = applyCharacterLimitToFields;
+
+    $('#extraCirricularPop').on('input', 'input[id^="title_"], input[id^="position_"], input[id^="category_"]', function () {
+      enforceCharacterLimit($(this));
+    });
+
+    $('#extraCirricularPop').on('blur', 'input[id^="title_"], input[id^="position_"], input[id^="category_"]', function () {
+      const $field = $(this);
+      const fieldId = $field.attr('id');
+      const config = getCharacterLimitConfig(fieldId);
+      if (!config) return;
+
+      if (($field.val() || '').toString().length < config.limit && typeof clearError === 'function') {
+        const errorElement = document.getElementById(`${fieldId}Error`);
+        if (errorElement && errorElement.textContent === config.errorMessage) {
+          clearError(fieldId);
+        }
+      }
+      updateCharacterCounter($field);
+    });
+
+    applyCharacterLimitToFields($('#extracurricularsContainer'));
+
+    $('#extraCirricularPop .addAnother').on('click', function () {
+      const newId = `new_${Date.now()}`;
+
+      const $newEntry = $(generateExtracurricularsHTML({
+        _id: newId,
+        photo: '',
+        title: '',
+        position: '',
+        category: ''
+      }));
+
+      $('#extracurricularsContainer').append($newEntry);
+      applyCharacterLimitToFields($newEntry);
+      checkExtracurricularEmptyState();
+
+      attachFieldValidation([
+        {
+          fieldId: `photo_${newId}`,
+          isRadio: false,
+          errorMessage: "Please upload a photo"
+        },
+        {
+          fieldId: `title_${newId}`,
+          errorMessage: "Please enter a title"
+        },
+        {
+          fieldId: `position_${newId}`,
+          errorMessage: "Please enter a position"
+        },
+        {
+            fieldId: `category_${newId}`,
+            errorMessage: "Please enter a category"
+        }
+      ]);
+    });
+
+    function checkExtracurricularEmptyState() {
+      const $container = $('#extracurricularsContainer');
+      const $addAnother = $('#extraCirricularPop .addAnother');
+      const entryCount = $container.find('.extracurricularItem').length;
+      
+      if (entryCount === 0) {
+        // Show empty state message
+        if ($container.find('.emptyStateMessage').length === 0) {
+          $container.append('<div class="emptyStateMessage" style="text-align: center; padding: 20px; color: #666; font-style: italic;">No entries added yet. Click "Add another entry" to get started.</div>');
+        }
+        // Ensure add another button is visible
+        $addAnother.show();
+      } else {
+        // Remove empty state message if entries exist
+        $container.find('.emptyStateMessage').remove();
+      }
+    }
+
+    $(document).on('click', '.extracurricularItem .removeEntryBtn', function () {
+      const $entry = $(this).closest('.extracurricularItem');
+      const entryId = $entry.data('id');
+
+      if (!entryId.toString().startsWith("new_")) {
+        deletedExtracurricularIds.push(entryId);
+      }
+      $entry.remove();
+      checkExtracurricularEmptyState();
+    });
+
+    $('#extracurricularsSubmitButton').on('click', async function (e) {
+      e.preventDefault();
+
+      const entries = $('.extracurricularItem');
+      const initialEntries = window.initialExtracurricularsData?.extracurriculars || [];
+      const actions = [];
+      let isValid = true;
+      const uploadQueue = [];
+
+      for (let i = 0; i < entries.length; i++) {
+        const $entry = $(entries[i]);
+        const entryId = $entry.data('id');
+
+        const photoId = `photo_${entryId}`;
+        const titleId = `title_${entryId}`;
+        const positionId = `position_${entryId}`;
+        const categoryId = `category_${entryId}`;
+
+        const initialEntry = initialEntries.find(entry => entry._id === entryId);
+        const isNew = !initialEntry;
+
+        const photoField = document.getElementById(photoId);
+        const hasPhotoFile = photoField?.files?.length > 0;
+
+        const photoValid = isNew
+          ? validateFileField(photoId, 50, EXTRACURRICULAR_ALLOWED_IMAGE_TYPES)
+          : (hasPhotoFile
+            ? validateFileField(photoId, 50, EXTRACURRICULAR_ALLOWED_IMAGE_TYPES, { required: false })
+            : true);
+        const titleValid = validateField(titleId, "Please enter a title");
+        const positionValid = validateField(positionId, "Please enter a position");
+        const categoryValid = validateField(categoryId, `Please enter a category`);
+
+        if (!photoValid || !titleValid || !positionValid || !categoryValid) {
+          isValid = false;
+          continue;
+        }
+
+        if (isNew) {
+          uploadQueue.push({ entryId, photoId });
+        }
+      }
+
+      if (!isValid) return;
+
+      const $submitBtn = $('.submitWrapper .button');
+      $submitBtn.prop('disabled', true).text('Submitting...');
+
+      for (let i = 0; i < entries.length; i++) {
+        const $entry = $(entries[i]);
+        const entryId = $entry.data('id');
+
+        const photoId = `photo_${entryId}`;
+        const titleId = `title_${entryId}`;
+        const positionId = `position_${entryId}`;
+        const categoryId = `category_${entryId}`;
+
+        const initialEntry = initialEntries.find(entry => entry._id === entryId);
+        const isNew = !initialEntry;
+
+        const title = $(`#${titleId}`).val().trim();
+        const position = $(`#${positionId}`).val().trim();
+        const category = $(`#${categoryId}`).val().trim();
+
+        let photo = initialEntry?.photo;
+
+        const { photoId: queuedPhotoId } = uploadQueue.find(q => q.entryId === entryId) || {};
+        if (isNew && queuedPhotoId) {
+          photo = await handleFilestackUpload(queuedPhotoId, initialEntry, 'photo');
+        } else {
+          const fileInput = document.getElementById(photoId);
+          if (fileInput && fileInput.files.length > 0) {
+            photo = await handleFilestackUpload(photoId, initialEntry, 'photo');
+          }
+        }
+
+        const isChanged = isNew || (
+          String(initialEntry.photo ?? '') !== photo ||
+          String(initialEntry.title ?? '') !== String(title) ||
+          String(initialEntry.position ?? '') !== String(position) ||
+          String(initialEntry.category ?? '') !== String(category)
+        );
+
+        if (isChanged) {
+          const actionObj = {
+            action: isNew ? 'add' : 'update',
+            data: {
+              title,
+              position,
+              category,
+              photo
+            }
+          };
+          if (!isNew) {
+            actionObj.targetId = entryId;
+          }
+          actions.push(actionObj);
+        }
+      }
+
+      deletedExtracurricularIds.forEach(deletedId => {
+        actions.push({
+          action: 'delete',
+          targetId: deletedId
+        });
+      });
+
+      // If all entries were deleted, delete all initial entries
+      if (entries.length === 0 && initialEntries.length > 0) {
+        initialEntries.forEach(entry => {
+          actions.push({ action: 'delete', targetId: entry._id });
+        });
+      }
+
+      if (actions.length === 0) {
+        alert("No changes detected");
+        $submitBtn.prop('disabled', false).html(`Save
+                <svg  
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z"
+                    fill="#090909"
+                  />
+                  <path
+                    d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z"
+                    fill="#090909"
+                  />
+                </svg>`
+        );
+        return;
+      }
+
+      try {
+        const userId = window.location.pathname.split('/').pop();
+        const requestPayload = {
+          section: 'extracurriculars',
+          actions
+        };
+
+        $.ajax({
+          url: `{{apiBaseURL}}/api/student-profile/${userId}/draft`,
+          type: 'POST',
+          data: JSON.stringify(requestPayload),
+          contentType: 'application/json',
+          success: function (res) {
+            deletedExtracurricularIds.length = 0;
+            renderProfile(res.draft)
+            closeExtraCirricular();
+          },
+          error: function (err) {
+            console.error('Submission failed', err);
+            alert(err?.responseJSON?.Message || 'Something went wrong');
+          }
+        });
+      } catch (error) {
+        console.error("Upload or submission failed:", error);
+        alert("Something went wrong during submission.");
+      } finally {
+        $submitBtn.prop('disabled', false).html(`Save
+                    <svg  
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    >
+                    <path
+                        d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z"
+                        fill="#090909"
+                    />
+                    <path
+                        d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z"
+                        fill="#090909"
+                    />
+                    </svg>`
+        );
+      }
+    });
+  });
+</script>

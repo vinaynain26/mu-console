@@ -1,0 +1,301 @@
+.footerNew {
+    position: relative;
+    background: url(https://files.mastersunion.link/resources/img/footerBG.webp);
+    background-size: cover;
+    border-top: 1px solid var(--black5);
+
+
+    .footerleftsidediv .addText {
+        max-width: 110%;
+        margin-top: 30px;
+        font-size: 10px;
+
+    }
+
+    .topFooter {
+        display: flex;
+        align-items: flex-start;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .footerDivi {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 42px 0 0 0;
+        gap: 60px;
+    }
+
+    .addressBoxiNew>svg {
+        max-width: 18px;
+        width: 100%;
+        position: relative;
+        top: 4px;
+    }
+
+    .footerProgram {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        width: 100%;
+        gap: 80px;
+        max-width: min-content;
+    }
+
+    .programName {
+        font-size: 0.875rem;
+        line-height: 160%;
+        font-family: 'go-regular';
+        color: var(--grey10);
+        text-transform: capitalize;
+        transition: 0.4s ease-in;
+        min-width: max-content;
+    }
+
+    .programHighlight {
+        margin-bottom: 12px;
+        font-size: 1.125rem;
+        font-family: "go-semibold";
+        line-height: 140%;
+        color: var(--white);
+    }
+
+    .programCol {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .programName:hover {
+        color: var(--white) !important;
+        transition: 0.4s ease-in;
+    }
+
+    .footerMuLogo {
+        align-items: flex-start !important;
+        max-height: fit-content;
+        max-width: 10%;
+
+        .scaling {
+            scale: 1.6;
+            padding-left: 13%;
+        }
+    }
+
+    .bottomFooter {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 25px;
+        width: 100%;
+    }
+
+    .bottomUpper {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .bottomBelow {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+        padding: 30px 0;
+        border-top: 1px solid var(--grey9);
+    }
+
+
+
+    .privacyLinksWrapNew {
+        align-items: center;
+        justify-content: flex-start;
+        gap: 16px;
+        display: flex;
+    }
+
+    .logoParent {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 20px;
+        max-width: min-content;
+    }
+
+    .logoBoxi {
+        display: flex;
+        gap: 40px;
+        width: 100%;
+        align-items: center;
+
+        img {
+            width: 100%;
+            max-width: 28%;
+            height: auto;
+            object-fit: contain;
+        }
+    }
+
+    .socialBoxi {
+        align-items: center;
+        justify-content: flex-start;
+        gap: 16px;
+        line-height: 0;
+        display: flex;
+
+        a {
+            transition: 0.4s ease-in-out;
+        }
+    }
+
+    .socialBoxi a:hover {
+        scale: 1.2;
+    }
+
+    .addressWrapper {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        flex-direction: column;
+        max-width: 45%;
+
+        @media (max-width: 767px) {
+            max-width: 100%;
+        }
+    }
+
+    .addressBoxiNew {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 12px;
+
+    }
+
+    .addText {
+        font-size: 0.875rem;
+        font-family: "go-regular";
+        line-height: 150%;
+        color: #999;
+    }
+
+    .addTextPrivacy {
+        color: var(--grey10);
+        text-transform: capitalize;
+        font-size: 0.875rem;
+        font-family: "go-regular";
+        line-height: 150%;
+    }
+
+
+
+    @media (max-width: 767px) {
+        background-repeat: no-repeat;
+        background-position: bottom;
+        backdrop-filter: blur(4px);
+
+        .addTextPrivacy {
+            font-size: 0.75rem;
+            text-transform: capitalize;
+
+        }
+
+        .addText {
+            font-size: 0.75rem;
+            color: var(--grey6) !important;
+            line-height: 160%;
+        }
+
+        .privacyLinksWrap {
+            gap: 10px;
+            justify-content: flex-start;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .footerLinkLeft {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .footerDivi {
+            padding: 40px 0 0 0;
+            gap: 40px;
+
+        }
+
+        .socialBoxi {
+            gap: 32px;
+        }
+
+        .programHighlight {
+            margin-bottom: 10px;
+            font: 1rem "go-medium";
+        }
+
+        .footerMuLogo {
+            width: 100%;
+            min-width: 100%;
+        }
+
+        .topFooter {
+            gap: 20px;
+            flex-direction: column;
+        }
+
+        .footerMuLogo .scaling {
+            max-width: 160px;
+            transform: translateX(-14px);
+            padding-left: 0;
+            scale: 1;
+        }
+
+        .footerProgram {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 40px;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .programCol:first-child {
+            width: 100%;
+            flex-wrap: wrap;
+            flex-direction: unset;
+
+            .programHighlight {
+                min-width: 48%;
+            }
+
+            .experiencesAnchor {
+                order: 3;
+            }
+
+        }
+
+        .bottomUpper {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--grey9);
+        }
+
+        .logoBoxi {
+            gap: 15px;
+        }
+
+        .bottomBelow {
+            flex-direction: column-reverse;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 30px 0;
+        }
+    }
+
+
+}

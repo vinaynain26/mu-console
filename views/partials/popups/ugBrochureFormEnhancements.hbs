@@ -1,0 +1,722 @@
+{{!--
+    Shared enhancements for the UG "Download Brochure" popups:
+
+      * Ug-Download-Brochure.hbs             (TBM)
+      * Ug-Download-Brochure-psychology.hbs  (PSM)
+      * Ug-data-Download-Brochure.hbs        (DSAI)
+
+    All three use the same container id (#UgdownloadBrochure) and the same
+    field ids, and no page ever loads two of them together, so one copy of the
+    styling and behaviour serves all of them.
+
+    Provides:
+      1. Popup layout — fixed height so the photo never resizes, with only the
+         field list scrolling.
+      2. A searchable dropdown that replaces the native option list on the
+         Graduating Year / Country / State / City selects. The real <select>
+         stays in the DOM as the value + validation source.
+      3. Country -> State -> City chaining off the geo API, revealing and
+         focusing each step as the previous one is answered.
+      4. scrollToBrochureError() — brings the first failed field into view on
+         submit, so a validation message is never left off-screen.
+
+    Each popup still owns its own field markup, submit payload and reset.
+--}}
+
+
+<style>
+    /* Only additions for this popup — the original layout/spacing is untouched.
+       1. .isHidden      : State/City appear after the previous step is chosen
+       2. .muSelect*     : searchable dropdown that replaces the native option list */
+
+    #UgdownloadBrochure .inputGroup.isHidden {
+        display: none;
+    }
+
+    /* ---- layout: heading + button stay put, only the field list scrolls ----
+       A fixed height (not max-height) is deliberate: it keeps the popup — and
+       therefore the photo — exactly the same size when State/City appear or a
+       validation message pushes the form taller. The extra height is absorbed
+       by the scrolling field list instead. */
+    #UgdownloadBrochure .popupContainer {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        height: min(calc(100vh - 100px), 640px);
+    }
+
+    #UgdownloadBrochure .PopupformWrapper {
+        flex: 1 1 auto;
+        min-height: 0;
+        align-items: stretch;
+    }
+
+    #UgdownloadBrochure .PopupformWrapper .left {
+        display: flex;
+        align-items: stretch;
+        min-height: 0;
+    }
+
+    #UgdownloadBrochure .ugPopUpImg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 12px;
+        display: block;
+    }
+
+    #UgdownloadBrochure .PopupformWrapper .right {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        min-height: 0;
+    }
+
+    #UgdownloadBrochure .PopupformWrapper .right .formContainer.active {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 12px;
+        /* animates the auto-advance to State/City; degrades to an instant
+           jump when the user prefers reduced motion */
+        scroll-behavior: smooth;
+        scrollbar-width: thin;
+        scrollbar-color: var(--grey4, #E5E5E5) transparent;
+    }
+
+    #UgdownloadBrochure .formContainer.active::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #UgdownloadBrochure .formContainer.active::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    #UgdownloadBrochure .formContainer.active::-webkit-scrollbar-thumb {
+        background: var(--grey4, #E5E5E5);
+        border-radius: 10px;
+    }
+
+    /* was 30px between every field — too airy with the extra fields */
+    #UgdownloadBrochure .PopupformWrapper .right .inputGroup {
+        margin-top: 14px;
+    }
+
+    #UgdownloadBrochure .PopupformWrapper .right .inputGroup:nth-child(1) {
+        margin-top: 0;
+    }
+
+    #UgdownloadBrochure .PopupformWrapper .right .formFooter {
+        flex: 0 0 auto;
+        margin-top: 18px;
+    }
+
+    /* the real <select> stays in the DOM as the value/validation source */
+    #UgdownloadBrochure .muSelectNative {
+        display: none !important;
+    }
+
+    #UgdownloadBrochure .muSelect {
+        position: relative;
+        width: 100%;
+    }
+
+    /* mirrors .inputBox + .safariFix so it is indistinguishable from the
+       native fields above it */
+    #UgdownloadBrochure .muSelectTrigger {
+        width: 100%;
+        height: 44px;
+        margin-top: 0;
+        padding: 12px 12px;
+        border: 1px solid var(--grey4, #E5E5E5);
+        border-radius: 4px;
+        background: var(--white, #fff);
+        font: 13px "go-medium", "DM Sans", sans-serif;
+        color: var(--black1, #090909);
+        text-align: left;
+        cursor: pointer;
+        transition: 0.4s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+
+    /* same gradient border the theme uses for .inputBox:focus — plain :focus
+       (not :focus-visible) so the auto-advance to State/City is visible */
+    #UgdownloadBrochure .muSelectTrigger:focus,
+    #UgdownloadBrochure .muSelect.isOpen .muSelectTrigger {
+        outline: none;
+        border: 1px solid transparent;
+        background: linear-gradient(var(--white) 0 0) padding-box,
+            var(--gradient) border-box;
+    }
+
+    #UgdownloadBrochure .muSelectTrigger .muSelectLabel {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    #UgdownloadBrochure .muSelectTrigger.isPlaceholder .muSelectLabel {
+        color: #9a9a9a;
+    }
+
+    #UgdownloadBrochure .muSelectTrigger .muSelectCaret {
+        flex: 0 0 auto;
+        width: 12px;
+        height: 12px;
+        background: url("https://files.mastersunion.link/resources/svg/caretDown.svg") no-repeat center/contain;
+        transition: transform .25s ease;
+    }
+
+    #UgdownloadBrochure .muSelect.isOpen .muSelectCaret {
+        transform: rotate(180deg);
+    }
+
+    /* Options panel — fixed so the popup's own overflow:auto cannot clip it.
+       JS sets top/left/width from the trigger's bounding rect. */
+    .muSelectPanel {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 260px;
+        z-index: 10050;
+        background: var(--white, #fff);
+        border: 1px solid var(--grey4, #E5E5E5);
+        border-radius: 4px;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, .12);
+        overflow: hidden;
+        display: none;
+    }
+
+    .muSelectPanel.isOpen {
+        display: block;
+    }
+
+    .muSelectSearchWrap {
+        padding: 10px;
+        border-bottom: 1px solid var(--grey4, #E5E5E5);
+        position: relative;
+    }
+
+    .muSelectSearch {
+        width: 100%;
+        height: 38px;
+        padding: 8px 12px 8px 34px;
+        border: 1px solid var(--grey4, #E5E5E5);
+        border-radius: 4px;
+        outline: none;
+        font: 13px "go-regular", "DM Sans", sans-serif;
+        color: var(--black1, #090909);
+        background: var(--white, #fff);
+        transition: 0.4s ease;
+    }
+
+    .muSelectSearch:focus {
+        border: 1px solid transparent;
+        background: linear-gradient(var(--white) 0 0) padding-box,
+            var(--gradient) border-box;
+    }
+
+    .muSelectSearchWrap::before {
+        content: "";
+        position: absolute;
+        left: 22px;
+        top: 50%;
+        width: 13px;
+        height: 13px;
+        margin-top: -7px;
+        border: 2px solid #9a9a9a;
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .muSelectSearchWrap::after {
+        content: "";
+        position: absolute;
+        left: 33px;
+        top: 50%;
+        width: 6px;
+        height: 2px;
+        margin-top: 4px;
+        background: #9a9a9a;
+        transform: rotate(45deg);
+        pointer-events: none;
+    }
+
+    .muSelectList {
+        list-style: none;
+        margin: 0;
+        padding: 6px;
+        max-height: 220px;
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #cfcfcf transparent;
+        overscroll-behavior: contain;
+    }
+
+    .muSelectList::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .muSelectList::-webkit-scrollbar-thumb {
+        background: #cfcfcf;
+        border-radius: 10px;
+    }
+
+    .muSelectOption {
+        position: relative;
+        padding: 10px 12px;
+        border-radius: 4px;
+        font: 13px "go-regular", "DM Sans", sans-serif;
+        color: var(--grey3, #404040);
+        cursor: pointer;
+        transition: background .15s ease, color .15s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* author-level display:flex above beats the UA rule for [hidden] */
+    .muSelectOption[hidden] {
+        display: none;
+    }
+
+    .muSelectOption:hover,
+    .muSelectOption.isActive {
+        background: #F5F5F5;
+        color: #090909;
+    }
+
+    /* selected row is marked with the MU gradient rather than a flat colour */
+    .muSelectOption.isSelected {
+        background: #FAFAFA;
+        color: #090909;
+        font-family: "go-medium", "DM Sans", sans-serif;
+        padding-left: 18px;
+    }
+
+    .muSelectOption.isSelected::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 6px;
+        bottom: 6px;
+        width: 3px;
+        border-radius: 3px;
+        background: var(--gradient);
+    }
+
+    .muSelectEmpty {
+        padding: 16px 12px;
+        text-align: center;
+        font: 13px "go-regular", "DM Sans", sans-serif;
+        color: #9a9a9a;
+        display: none;
+    }
+
+    .muSelectPanel.isEmpty .muSelectEmpty {
+        display: block;
+    }
+
+    .muSelectPanel.isEmpty .muSelectList {
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .muSelectList {
+            max-height: 180px;
+        }
+    }
+</style>
+
+<script>
+    /* ------------------------------------------------------------------
+       Searchable dropdown for the UG brochure popup.
+
+       The native <select> stays in the DOM and remains the single source of
+       truth, so validateSelectInput() and $('#id').val() keep working exactly
+       as before. This only replaces the visible option list.
+       ------------------------------------------------------------------ */
+    window.MuBrochureSelect = (function () {
+        var instances = {};
+
+        function create(selectId) {
+            var select = document.getElementById(selectId);
+            if (!select || instances[selectId]) return instances[selectId];
+
+            var errorId = selectId + 'Val';
+
+            var wrap = document.createElement('div');
+            wrap.className = 'muSelect';
+            wrap.innerHTML =
+                '<button type="button" class="muSelectTrigger">' +
+                '<span class="muSelectLabel"></span><span class="muSelectCaret"></span>' +
+                '</button>' +
+                '<div class="muSelectPanel">' +
+                '<div class="muSelectSearchWrap">' +
+                '<input type="text" class="muSelectSearch" autocomplete="off" placeholder="Search...">' +
+                '</div>' +
+                '<ul class="muSelectList"></ul>' +
+                '<div class="muSelectEmpty">No results found</div>' +
+                '</div>';
+
+            select.parentNode.insertBefore(wrap, select.nextSibling);
+
+            var trigger = wrap.querySelector('.muSelectTrigger');
+            var label = wrap.querySelector('.muSelectLabel');
+            var panel = wrap.querySelector('.muSelectPanel');
+            var search = panel.querySelector('.muSelectSearch');
+            var list = panel.querySelector('.muSelectList');
+            var activeIndex = -1;
+
+            // The overlay uses backdrop-filter, which makes it the containing
+            // block for position:fixed children — a panel left inside it would
+            // be mispositioned. Park it on <body> so fixed means viewport.
+            document.body.appendChild(panel);
+            panel.addEventListener('click', function (e) { e.stopPropagation(); });
+
+            function placeholderText() {
+                var first = select.options[0];
+                return (first && !first.value) ? first.text : 'Select an option';
+            }
+
+            function syncTrigger() {
+                var opt = select.options[select.selectedIndex];
+                var hasValue = !!select.value;
+                label.textContent = hasValue && opt ? opt.text : placeholderText();
+                trigger.classList.toggle('isPlaceholder', !hasValue);
+            }
+
+            function visibleItems() {
+                return list.querySelectorAll('.muSelectOption:not([hidden])');
+            }
+
+            function setActive(idx) {
+                var items = visibleItems();
+                activeIndex = idx;
+                for (var i = 0; i < items.length; i++) {
+                    items[i].classList.toggle('isActive', i === idx);
+                }
+                if (items[idx]) {
+                    items[idx].scrollIntoView({ block: 'nearest' });
+                }
+            }
+
+            function choose(value) {
+                $(select).val(value).trigger('change');
+                syncTrigger();
+                close(true);
+                // don't leave focus stranded inside the now-hidden panel
+                search.blur();
+                trigger.focus();
+                if (typeof validateSelectInput === 'function' && document.getElementById(errorId)) {
+                    validateSelectInput(selectId, errorId);
+                }
+            }
+
+            // Rebuild the visible list from the native select's current options
+            function refresh() {
+                list.innerHTML = '';
+                for (var i = 0; i < select.options.length; i++) {
+                    var o = select.options[i];
+                    if (!o.value) continue; // skip the placeholder
+                    var li = document.createElement('li');
+                    li.className = 'muSelectOption';
+                    li.textContent = o.text;
+                    li.setAttribute('data-value', o.value);
+                    li.setAttribute('data-search', o.text.toLowerCase());
+                    if (o.value === select.value) li.classList.add('isSelected');
+                    list.appendChild(li);
+                }
+                filter(search.value);
+                syncTrigger();
+            }
+
+            function filter(term) {
+                var q = (term || '').trim().toLowerCase();
+                var items = list.querySelectorAll('.muSelectOption');
+                var shown = 0;
+                for (var i = 0; i < items.length; i++) {
+                    var match = !q || items[i].getAttribute('data-search').indexOf(q) !== -1;
+                    items[i].hidden = !match;
+                    items[i].classList.remove('isActive');
+                    if (match) shown++;
+                }
+                panel.classList.toggle('isEmpty', shown === 0);
+                activeIndex = -1;
+            }
+
+            /* responsives.css applies `html { zoom: 90% }` at some widths.
+               getBoundingClientRect() reports post-zoom pixels while the
+               panel's own top/left are interpreted in its zoomed coordinate
+               space, so every value has to be divided back out. */
+            function zoomFactor() {
+                var z = 1, n = panel.parentElement;
+                while (n && n.nodeType === 1) {
+                    var v = parseFloat(window.getComputedStyle(n).zoom);
+                    if (v && !isNaN(v) && v > 0) z *= v;
+                    n = n.parentElement;
+                }
+                return z || 1;
+            }
+
+            // Panel is position:fixed, so anchor it to the trigger each time
+            function position() {
+                var z = zoomFactor();
+                var r = trigger.getBoundingClientRect();
+
+                panel.style.width = (r.width / z) + 'px';
+                panel.style.left = (r.left / z) + 'px';
+
+                var h = (panel.offsetHeight || 260) * z;   // to viewport px
+                var viewportH = window.innerHeight;
+                var top = (viewportH - r.bottom < h + 12 && r.top > h + 12)
+                    ? r.top - h - 6      // flip above the trigger
+                    : r.bottom + 6;
+
+                panel.style.top = (top / z) + 'px';
+            }
+
+            function open() {
+                closeAll();
+                wrap.classList.add('isOpen');
+                panel.classList.add('isOpen');
+                refresh();
+                position();
+                search.value = '';
+                filter('');
+                var sel = list.querySelector('.muSelectOption.isSelected');
+                if (sel) sel.scrollIntoView({ block: 'nearest' });
+                search.focus();
+            }
+
+            function close(skipValidate) {
+                if (!wrap.classList.contains('isOpen')) return;
+                wrap.classList.remove('isOpen');
+                panel.classList.remove('isOpen');
+                if (!skipValidate && typeof validateSelectInput === 'function' &&
+                    document.getElementById(errorId)) {
+                    validateSelectInput(selectId, errorId);
+                }
+            }
+
+            trigger.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                wrap.classList.contains('isOpen') ? close() : open();
+            });
+
+            search.addEventListener('input', function () { filter(this.value); });
+
+            search.addEventListener('keydown', function (e) {
+                var items = visibleItems();
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    setActive(Math.min(activeIndex + 1, items.length - 1));
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    setActive(Math.max(activeIndex - 1, 0));
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    var pick = items[activeIndex] || (items.length === 1 ? items[0] : null);
+                    if (pick) choose(pick.getAttribute('data-value'));
+                } else if (e.key === 'Escape') {
+                    close();
+                    trigger.focus();
+                }
+            });
+
+            list.addEventListener('click', function (e) {
+                var li = e.target.closest('.muSelectOption');
+                if (li) choose(li.getAttribute('data-value'));
+            });
+
+            wrap.addEventListener('click', function (e) { e.stopPropagation(); });
+
+            // keep the trigger label in sync with programmatic changes / resets
+            $(select).on('change', syncTrigger);
+
+            // options are loaded async (states, cities) — pick them up automatically
+            if (window.MutationObserver) {
+                new MutationObserver(function () {
+                    if (wrap.classList.contains('isOpen')) refresh();
+                    else syncTrigger();
+                }).observe(select, { childList: true });
+            }
+
+            instances[selectId] = {
+                refresh: refresh,
+                close: close,
+                position: position,
+                isOpen: function () { return wrap.classList.contains('isOpen'); }
+            };
+
+            refresh();
+            return instances[selectId];
+        }
+
+        function closeAll() {
+            Object.keys(instances).forEach(function (k) { instances[k].close(true); });
+        }
+
+        function repositionOpen() {
+            Object.keys(instances).forEach(function (k) {
+                if (instances[k].isOpen()) instances[k].position();
+            });
+        }
+
+        document.addEventListener('click', closeAll);
+        // capture phase so the popup's own scroll container is covered too
+        window.addEventListener('scroll', repositionOpen, true);
+        window.addEventListener('resize', repositionOpen);
+
+        return { create: create, closeAll: closeAll, get: function (id) { return instances[id]; } };
+    })();
+
+    $(document).ready(function () {
+        ['gradYearReport', 'countryReport', 'stateReport', 'cityReport']
+            .forEach(window.MuBrochureSelect.create);
+    });
+</script>
+
+<script>
+    // Country / State / City dropdowns for the UG brochure popup
+    $(document).ready(function () {
+
+        const GEO_BASE = '{{apiBaseURL}}/api/geo/countries';
+
+        function resetSelect(selector, placeholder) {
+            $(selector).empty().append($("<option value='' selected hidden></option>").text(placeholder));
+        }
+
+        function getAllCountriesUgBro() {
+            $.ajax({
+                url: GEO_BASE,
+                type: 'GET',
+                headers: { "Accept": "application/json" }
+            }).done(function (response) {
+                resetSelect('#countryReport', 'Select your country');
+                $.each(response, function (idx, country) {
+                    $('#countryReport').append($("<option></option>")
+                        .attr("value", country.name)
+                        .attr("data-iso", country.iso2)
+                        .text(country.name));
+                });
+
+                // no pre-selection: the user picks country first, which reveals State
+            });
+        }
+
+        function getAllStatesUgBro(countryIso) {
+            $.ajax({
+                url: `${GEO_BASE}/${countryIso}/states`,
+                type: 'GET',
+                headers: { "Accept": "application/json" }
+            }).done(function (response) {
+                resetSelect('#stateReport', 'Select your state');
+                $.each(response, function (idx, state) {
+                    $('#stateReport').append($("<option></option>")
+                        .attr("value", state.name)
+                        .attr("data-iso", state.iso2)
+                        .text(state.name));
+                });
+            });
+        }
+
+        function getCitiesUgBro(countryIso, stateIso) {
+            $.ajax({
+                url: `${GEO_BASE}/${countryIso}/states/${stateIso}/cities`,
+                type: 'GET',
+                headers: { "Accept": "application/json" }
+            }).done(function (response) {
+                resetSelect('#cityReport', 'Select your city');
+                $.each(response, function (idx, city) {
+                    $('#cityReport').append($("<option></option>")
+                        .attr("value", city.name)
+                        .text(city.name));
+                });
+            });
+        }
+
+        // Reveal the next step, scroll it into the field list and put the
+        // cursor on it, so Country -> State -> City flows without hunting.
+        function revealAndFocus(groupId, selectId) {
+            const group = document.getElementById(groupId);
+            if (!group) return;
+
+            group.classList.remove('isHidden');
+
+            const trigger = document.getElementById(selectId)
+                .parentNode.querySelector('.muSelectTrigger');
+
+            // Runs after the click that triggered this settles, so it wins over
+            // the focus the dropdown puts back on the field just chosen.
+            setTimeout(function () {
+                // smoothness comes from scroll-behavior on .formContainer
+                group.scrollIntoView({ block: 'nearest' });
+                // our own scroll above is the one we want, not the browser's
+                if (trigger) trigger.focus({ preventScroll: true });
+            }, 0);
+        }
+
+        $('#countryReport').on('change', function () {
+            const countryIso = $(this).find(':selected').data('iso');
+
+            // picking a new country invalidates whatever state/city were chosen
+            resetSelect('#stateReport', 'Select your state');
+            resetSelect('#cityReport', 'Select your city');
+            $('#stateReportGroup, #cityReportGroup').addClass('isHidden');
+
+            if (!countryIso) return;
+
+            getAllStatesUgBro(countryIso);
+            revealAndFocus('stateReportGroup', 'stateReport');
+        });
+
+        $('#stateReport').on('change', function () {
+            const countryIso = $('#countryReport').find(':selected').data('iso');
+            const stateIso = $(this).find(':selected').data('iso');
+
+            resetSelect('#cityReport', 'Select your city');
+            $('#cityReportGroup').addClass('isHidden');
+
+            if (!countryIso || !stateIso) return;
+
+            getCitiesUgBro(countryIso, stateIso);
+            revealAndFocus('cityReportGroup', 'cityReport');
+        });
+
+        getAllCountriesUgBro();
+    });
+</script>
+
+<script>
+
+    /* Brings the first failing field — and the error text under it — into the
+       scrolling field list, so a validation message is never left off-screen
+       after pressing Download. */
+    function scrollToBrochureError(fieldId) {
+        if (!fieldId) return;
+
+        const el = document.getElementById(fieldId);
+        if (!el) return;
+
+        // the real <select> is hidden; its custom trigger is what can take focus
+        const focusTarget = el.classList.contains('muSelectNative')
+            ? el.parentNode.querySelector('.muSelectTrigger')
+            : el;
+
+        // scroll the whole group so the message below the field is visible too
+        const group = el.closest('.inputGroup') || el.closest('.consentCheckWrapper') || focusTarget;
+
+        // deferred: the error text was just un-hidden, let layout settle first
+        setTimeout(function () {
+            if (group) group.scrollIntoView({ block: 'nearest' });
+            if (focusTarget) focusTarget.focus({ preventScroll: true });
+        }, 0);
+    }
+</script>

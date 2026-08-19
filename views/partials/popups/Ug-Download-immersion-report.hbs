@@ -1,0 +1,261 @@
+<main>
+    <div class="popupContainerOuter   ApplyNow" id="UgdownloadBrochureImmersionReport">
+
+        <div class="popupContainer">
+            <div class="fromTophead ">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="Ug_form_headingImmersion"> Download Programme
+                    Brochure </h2>
+                <div class="popUpCloseBtnWrap">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Icon" onclick="hideApplyNowPopUpImmersion();">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="leadformContainerImmersion">      
+                <div class="left mob-hide">
+                    <img class="ugPopUpImg" src="https://files.mastersunion.link/media/img/ug-brochure-image.webp" alt="">
+                </div>
+                <div class="right">
+                    <div class="formContainer active">
+                        <div class="flexInput" id="formain">
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Full Name <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your name"
+                                    class="inputBox font-16 font-black1 font-medium " id="nameReportImmersion"
+                                    onblur="validateNameInput('nameReportImmersion', 'nameReportImmersionVal')">
+                                <p class="font-12 font-red font-regular warning" id="nameReportImmersionVal">Please Check the
+                                    input</p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Email ID <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your email"
+                                    class="inputBox font-16 font-black1 font-medium " id="emailReportImmersion"
+                                    onblur="validateEmailInput('emailReportImmersion', 'emailReportImmersionVal')">
+                                <p class="font-12 font-red font-regular warning" id="emailReportImmersionVal">Please Enter Valid
+                                    Email
+                                </p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Contact Number <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your mobile number" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                    class="inputBox font-16 font-black1 font-medium " id="numberReportImmersion" maxlength="10"
+                                    onblur="validateMobileInput('numberReportImmersion', 'numberReportImmersionVal')">
+                                <p class="font-12 font-red font-regular warning" id="numberReportImmersionVal">Please Enter Valid
+                                    Number
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="consentCheckWrapper">
+                        <div class="consentCheckRow">
+                            <input type="checkbox" id="consentCheckImmersion">
+                            <label for="consentCheckImmersion">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+                        </div>
+                        <p id="consentCheckErrorImmersion" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+                    </div>
+                    <div class="formFooter" id="submitbuttonreportImmersion">
+                        <div class="gradientButton whiteHover" onclick="onButtonClickSubmitReportMainImmersion()">
+                            <button class="button iconButton gtmUgDwnBroPop" id="gtmUgDwnBroPopId">
+                                Download
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="https://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                        fill="white"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="SuccessMessageImersion" class="congrats-box text-center hide">
+                <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+
+                <h3 class="thankyouboxHeading mt-10 gtmUgDwnBroGotit" id="gtmUgDwnBroGotitId">Got it</h3>
+                <p class="text-2 gtmUgDwnBroGotPara" id="gtmUgDwnBroGotParaId">The Report will be downloaded shortly.
+                <p class="text-2"> Feel free to write to us at <a class="link-red"
+                        href="mailto:ugadmissions@mastersunion.org" target="_blank">ugadmissions@mastersunion.org</a>
+                </p>
+
+                <p class="text-2"> or call on <span class="font-bold">+91 76691 86660</span> in case of any queries.
+                </p>
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+
+
+    function UgdownloadBrochureImmersionReport(formTitle, destination) {
+        const form = document.getElementById("UgdownloadBrochureImmersionReport");
+        const h2 = document.querySelector("#Ug_form_headingImmersion");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        document.querySelector("#SuccessMessageImersion").classList.add("hide");
+        document.querySelector("#submitbuttonreportImmersion").classList.remove("hide");
+        document.querySelector("#leadformContainerImmersion").classList.remove("hide");
+        document.querySelector("#Ug_form_headingImmersion").classList.remove("hide");
+    }
+    // let name = $('#nameReportImmersion').val();
+    // let email = $('#emailReportImmersion').val();
+    // let number = $('#numberReportImmersion').val();
+    function onButtonClickSubmitReportMainImmersion() {
+        console.log('on submit top main 121');
+
+        // Validate functions
+        const validateNumber = (number) => /^\d+$/.test(number);
+        const validateEmail = (email) => email.includes("@") && email.includes(".");
+
+        let name = $('#nameReportImmersion').val().trim();
+        let email = $('#emailReportImmersion').val().trim();
+        let number = $('#numberReportImmersion').val().trim();
+        console.log('on submit top main after');
+
+
+        let isValid = true;
+
+        isValid = validateNameInput('nameReportImmersion', 'nameReportImmersionVal') && isValid;
+        isValid = validateEmailInput('emailReportImmersion', 'emailReportImmersionVal') && isValid;
+        isValid = validateMobileInput('numberReportImmersion', 'numberReportImmersionVal') && isValid;
+
+        if (!document.getElementById('consentCheckImmersion')?.checked) { document.getElementById('consentCheckErrorImmersion').classList.remove('warning'); isValid = false; } else { document.getElementById('consentCheckErrorImmersion').classList.add('warning'); }
+
+        if (!isValid) return;
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const utmSource = params.utm_source || 'Website';
+        const utmMedium = params.utm_medium;
+        const utmCampaign = params.utm_campaign;
+        let url = window.location.pathname.substring(1);
+        let formname = document.querySelector("#UgdownloadBrochureImmersionReport").getAttribute("data-title") || "Download Placement Report";
+        let medium = `UGP TBM Download Immersion Report - Popup`;
+        let formLocation = `UGP TBM Download Immersion Report - Popup`;
+
+        let course = 'UG Programme in TBM or PSM';
+       // if (url.startsWith("pgp-rise")) {
+       //     course = 'PGP Rise';
+       //     medium = `PGP Rise - ${formname} Popup`;
+       // } else if (url.startsWith("ug-")) {
+       //     course = 'Undergraduate Programme';
+       //     medium = `UG - ${formname} Popup`;
+       // }
+
+        let device = 'PC';
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            device = "Mobile";
+        } else {
+            device = "Desktop";
+        }
+
+        // api for our Data base
+        var post_url = '{{apiBaseURL}}/api/courseRegister';
+        var request_method = 'POST'; //get form GET/POST method
+        $.ajax({
+            url: post_url,
+            type: request_method,
+            contentType: "application/json",
+            data: JSON.stringify({
+                "email": email,
+                "name": name,
+                "mobile": number,
+                "courseName": course,
+                "medium": medium,
+                "full_utm_url":full_utm_url || "N/A",
+                "leadSource": formLocation,
+                consentCheck: document.getElementById('consentCheckImmersion')?.checked || false
+
+            }),
+            dataType: "json",
+            success: function (result) {
+                console.log("Second api after first success")
+                const post_url = '{{apiBaseURL}}/api/leads/pushToNPF_UG';
+                const request_method = 'POST';
+
+                $.ajax({
+                    url: post_url,
+                    type: request_method,
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        field_device_type: device,
+                        email: email,
+                        name: name,
+                        mobile: number,
+                        linkedinProfile: "",
+                        medium: utmMedium || medium,
+                        campaign: utmCampaign || null,
+                        source: utmSource,
+                        course: "course",
+                        Specialization: course,
+                        "Course Preference": "Psychology and Marketing",
+                        field_utm_url: window.location.href,
+                        sendMail: false,
+                        leadSource: formLocation,
+                        consentCheck: document.getElementById('consentCheckImmersion')?.checked || false
+                    }),
+                    dataType: "json",
+                    success: function (result) {
+
+
+                    }
+                });
+
+            }
+        });
+
+        const form = document.getElementById("UgdownloadBrochureImmersionReport");
+        const destination = form.getAttribute("data-destination") || "https://files.mastersunion.link/uploads/28042025/v1/ugbrochure2025.pdf";
+        setTimeout(() => {
+            window.open(destination, "_blank");
+        }, 3000);
+        document.querySelector("#SuccessMessageImersion").classList.remove("hide");
+        document.querySelector("#submitbuttonreportImmersion").classList.add("hide");
+        document.querySelector("#leadformContainerImmersion").classList.add("hide");
+        document.querySelector("#Ug_form_headingImmersion").classList.add("hide");
+
+
+    }
+
+    function validateInputBlur(fieldId, fieldName) {
+        const inputValue = $(`#${fieldId}`).val().trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const numberRegex = /^\d+$/;
+
+        if (inputValue === "") {
+            $(`#${fieldName}ReportVal`).removeClass('warning');
+        } else {
+            $(`#${fieldName}ReportVal`).addClass('warning');
+        }
+    }
+
+
+    function hideApplyNowPopUpImmersion() {
+        let applyNowPopUp = document.getElementById("UgdownloadBrochureImmersionReport");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+
+        $('#nameReportImmersion').val("");
+        $('#emailReportImmersion').val("");
+        $('#numberReportImmersion').val("");
+        document.getElementById('consentCheckImmersion').checked = false;
+        document.getElementById('consentCheckErrorImmersion').classList.add('warning');
+
+    }
+
+
+
+</script>

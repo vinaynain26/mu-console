@@ -1,0 +1,649 @@
+<div class="homepage"><section class="tetrStartupSection ">
+    <div class="container">
+        <div class="startUpWrapBlock">
+            <div class="leftWrapStartup">
+
+
+                <div class="swiper startupVideoSec">
+                    <div class="swiper-wrapper" id="name-list-startup"></div>
+
+                        <button class="btnBlack mob-visible" id="playActiveVideoMobile">
+
+                    <span class="arrowWrapper">
+
+                        <svg class="arrow arrowMain" width="22" height="23" viewBox="0 0 22 23" fill="none"
+                            xmlns="https://www.w3.org/2000/svg">
+                            <path d="M5.91691 5.56611L18.5625 18.1676L17.6719 19.0625L5.02633 6.46104L5.91691 5.56611Z"
+                                fill="white" />
+                            <path
+                                d="M4.77534 16.3021C7.37528 12.9931 7.57722 8.26954 5.15397 4.82159C5.20445 4.77107 4.35884 5.66779 4.37146 5.65516C7.76654 8.02957 12.4994 7.81486 15.7557 5.21311L14.6072 3.9375C12.247 6.67818 7.89275 6.75395 5.04038 4.69529C5.053 4.69529 4.19477 5.56675 4.25787 5.52886C6.68112 8.1685 6.40346 12.9047 3.4375 14.9886L4.78796 16.3147L4.77534 16.3021Z"
+                                fill="white" />
+                        </svg>
+
+                        <svg class="arrow arrowClone" width="22" height="23" viewBox="0 0 22 23" fill="none"
+                            xmlns="https://www.w3.org/2000/svg">
+                            <path d="M5.91691 5.56611L18.5625 18.1676L17.6719 19.0625L5.02633 6.46104L5.91691 5.56611Z"
+                                fill="white" />
+                            <path
+                                d="M4.77534 16.3021C7.37528 12.9931 7.57722 8.26954 5.15397 4.82159C5.20445 4.77107 4.35884 5.66779 4.37146 5.65516C7.76654 8.02957 12.4994 7.81486 15.7557 5.21311L14.6072 3.9375C12.247 6.67818 7.89275 6.75395 5.04038 4.69529C5.053 4.69529 4.19477 5.56675 4.25787 5.52886C6.68112 8.1685 6.40346 12.9047 3.4375 14.9886L4.78796 16.3147L4.77534 16.3021Z"
+                                fill="white" />
+                        </svg>
+
+                    </span>
+
+                    Hear Their Story
+                </button>
+                </div>
+
+                <script>
+                    let isAutoplayManuallyPaused = false;
+
+                    function isMobileDevice() {
+                        return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                    }
+
+                    function togglePlayPause(videoId, posterId, buttonId) {
+                        const video = document.getElementById(videoId);
+                        const poster = document.getElementById(posterId);
+                        const buttonIcon = document.getElementById(buttonId);
+
+                        if (video.paused || video.ended) {
+                            pauseAllVideos(); // Ensure only one video plays
+                            stopSwiperAutoplay(); // Stop Swiper autoplay
+
+                            // Show popup only on mobile, play inline on desktop
+                            if (isMobileDevice()) {
+                                showVideoPopup(video.querySelector('source').src);
+                            } else {
+                                // Desktop behavior - play video inline
+                                video.style.display = "block";
+                                poster.style.display = "none";
+                                video.play();
+                            }
+
+                            video.classList.add("playing");
+                            buttonIcon.src = "https://images.mastersunion.link/uploads/27062025/v1/MainButton4.svg";   //pausebtn
+
+                            // Resume autoplay when the video ends (for desktop)
+                            if (!isMobileDevice()) {
+                                video.onended = () => {
+                                    resetVideoState(video, poster, buttonIcon);
+                                    resumeSwiperAutoplay();
+                                };
+                            }
+                        } else {
+                            resetVideoState(video, poster, buttonIcon);
+                            if (isMobileDevice()) {
+                                closeVideoPopup();
+                            }
+                            resumeSwiperAutoplay();
+                        }
+                    }
+
+                    function showVideoPopup(videoUrl) {
+                        // Only show popup on mobile devices
+                        if (!isMobileDevice()) return;
+
+                        // Create a new popup specifically for videos
+                        let videoPopup = document.getElementById('videoPopup');
+
+                        if (!videoPopup) {
+                            // Create the video popup if it doesn't exist
+                            videoPopup = document.createElement('div');
+                            videoPopup.id = 'videoPopup';
+                            videoPopup.className = 'popup';
+                            videoPopup.innerHTML = `
+            <div class="popupBody">
+                <div class="floatingClose">
+                    <img  src="https://files.mastersunion.link/resources/svg/close.svg" alt="icon" onclick="closeVideoPopup();">
+                </div>
+                <div class="video-navigation">
+                    <div class="prev-video prev" id="prevVideo">
+                        <img src="https://images.mastersunion.link/uploads/20022025/v1/black_arrow.svg" class="" alt="Previous">
+                    </div>
+                    <div class="next-video" id="nextVideo">
+                        <img src="https://images.mastersunion.link/uploads/20022025/v1/black_arrow.svg" alt="Next">
+                    </div>
+                </div>
+                <div class="video-container-wrapper">
+                    <div class="custom-video-area" id="custom-video-player">
+                        <video class="iframeHero" controls autoplay playsinline>
+                            <source src="${videoUrl}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="video-transition-overlay"></div>
+                </div>
+            </div>
+        `;
+                            document.body.appendChild(videoPopup);
+
+                            // Add navigation button event listeners
+                            document.getElementById('prevVideo').addEventListener('click', function () {
+                                changeVideoWithAnimation('prev');
+                            });
+
+                            document.getElementById('nextVideo').addEventListener('click', function () {
+                                changeVideoWithAnimation('next');
+                            });
+                        } else {
+                            // Update existing popup with new video
+                            updatePopupVideo();
+                        }
+
+                        // Show the video popup
+                        $("#videoPopup").addClass("active");
+                        $("body").css("overflow", "hidden");
+
+                        // Add swipe functionality to popup
+                        addVideoPopupSwipeControls();
+                    }
+
+                    function changeVideoWithAnimation(direction) {
+                        // Only work on mobile devices
+                        if (!isMobileDevice()) return;
+
+                        // Don't do anything if we're already in the middle of an animation
+                        if (window.isVideoChanging) return;
+                        window.isVideoChanging = true;
+
+                        const videoContainer = document.querySelector('.video-container-wrapper');
+                        const overlay = videoContainer.querySelector('.video-transition-overlay');
+
+                        // Show overlay with fade in
+                        overlay.style.display = 'block';
+                        overlay.style.opacity = '0';
+
+                        // Use requestAnimationFrame for smoother animation
+                        requestAnimationFrame(() => {
+                            overlay.style.opacity = '1';
+
+                            // After overlay is fully visible, change the video
+                            setTimeout(() => {
+                                if (direction === 'next') {
+                                    swiperVideo.slideNext();
+                                } else {
+                                    swiperVideo.slidePrev();
+                                }
+
+                                updatePopupVideo();
+
+                                // After video is updated, fade out overlay
+                                setTimeout(() => {
+                                    overlay.style.opacity = '0';
+
+                                    // After overlay is fully hidden, remove it
+                                    setTimeout(() => {
+                                        overlay.style.display = 'none';
+                                        window.isVideoChanging = false;
+                                    }, 300);
+                                }, 100);
+                            }, 300);
+                        });
+                    }
+
+                    function updatePopupVideo() {
+                        // Only work on mobile devices
+                        if (!isMobileDevice()) return;
+
+                        const activeSlide = swiperVideo.slides[swiperVideo.activeIndex];
+                        const activeVideo = activeSlide.querySelector('.videoPlayLeft');
+                        if (activeVideo) {
+                            const videoUrl = activeVideo.querySelector('source').src;
+                            const videoContainer = document.getElementById('custom-video-player');
+                            if (videoContainer) {
+                                videoContainer.innerHTML = `
+                <video class="iframeHero" controls autoplay playsinline>
+                    <source src="${videoUrl}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            `;
+                            }
+                        }
+                    }
+
+                    function addVideoPopupSwipeControls() {
+                        // Only work on mobile devices
+                        if (!isMobileDevice()) return;
+
+                        const popup = document.getElementById('videoPopup');
+                        if (!popup) return;
+
+                        // Remove existing event listeners to prevent duplicates
+                        popup.removeEventListener('touchstart', handleTouchStart);
+                        popup.removeEventListener('touchmove', handleTouchMove);
+                        popup.removeEventListener('touchend', handleTouchEnd);
+
+                        // Add new event listeners
+                        popup.addEventListener('touchstart', handleTouchStart);
+                        popup.addEventListener('touchmove', handleTouchMove);
+                        popup.addEventListener('touchend', handleTouchEnd);
+                    }
+
+                    // Touch handling variables
+                    let xDown = null;
+                    let yDown = null;
+                    let xDiff = 0;
+                    let yDiff = 0;
+                    let touchStartTime = 0;
+
+                    function handleTouchStart(evt) {
+                        const firstTouch = evt.touches[0];
+                        xDown = firstTouch.clientX;
+                        yDown = firstTouch.clientY;
+                        touchStartTime = Date.now();
+                        xDiff = 0;
+                        yDiff = 0;
+                    }
+
+                    function handleTouchMove(evt) {
+                        if (!xDown || !yDown) return;
+
+                        const xUp = evt.touches[0].clientX;
+                        const yUp = evt.touches[0].clientY;
+
+                        xDiff = xDown - xUp;
+                        yDiff = yDown - yUp;
+
+                        // If horizontal swipe is more significant than vertical
+                        if (Math.abs(xDiff) > Math.abs(yDiff)) {
+                            // Prevent default to stop page scrolling
+                            evt.preventDefault();
+                        }
+                    }
+
+                    function handleTouchEnd(evt) {
+                        if (!xDown || !yDown) return;
+
+                        // Check if horizontal swipe is more significant than vertical and exceeds threshold
+                        if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 50) {
+                            const touchDuration = Date.now() - touchStartTime;
+
+                            // Only process swipe if it was fast enough (under 300ms)
+                            if (touchDuration < 300) {
+                                if (xDiff > 0) {
+                                    // Swipe left - next slide
+                                    changeVideoWithAnimation('next');
+                                } else {
+                                    // Swipe right - previous slide
+                                    changeVideoWithAnimation('prev');
+                                }
+                            }
+                        }
+
+                        // Reset values
+                        xDown = null;
+                        yDown = null;
+                    }
+
+                    function closeVideoPopup() {
+                        // Only work on mobile devices
+                        if (!isMobileDevice()) return;
+
+                        const videoPopup = document.getElementById('videoPopup');
+                        if (videoPopup) {
+                            const videoContainer = document.getElementById('custom-video-player');
+
+                            // Stop any playing video in popup
+                            const popupVideo = videoContainer.querySelector('video');
+                            if (popupVideo) {
+                                popupVideo.pause();
+                                popupVideo.currentTime = 0;
+                            }
+
+                            // Hide the video popup
+                            $("#videoPopup").removeClass("active");
+                            $("body").css("overflow", "visible");
+                        }
+
+                        // Reset all video states
+                        pauseAllVideos();
+                        resumeSwiperAutoplay();
+                    }
+
+                    function resetVideoState(video, poster, buttonIcon) {
+                        video.pause();
+                        video.currentTime = 0;
+                        video.style.display = "none";
+                        video.classList.remove("playing");
+                        poster.style.display = "block";
+                        buttonIcon.src = "https://images.mastersunion.link/uploads/16062025/v2/MainButton.svg";
+                    }
+
+                    function stopSwiperAutoplay() {
+                        swiperVideo.autoplay.stop();
+                        swiperVideo.params.autoplay.disableOnInteraction = true;
+                        isAutoplayManuallyPaused = true;
+                    }
+
+                    function resumeSwiperAutoplay() {
+                        swiperVideo.params.autoplay.disableOnInteraction = false;
+                        swiperVideo.autoplay.start();
+                        isAutoplayManuallyPaused = false;
+                    }
+
+                    function pauseAllVideos() {
+                        const videos = document.querySelectorAll(".videoPlayLeft");
+                        const posters = document.querySelectorAll(".videoPoster");
+                        const buttons = document.querySelectorAll(".playButton");
+
+                        videos.forEach((video) => {
+                            video.pause();
+                            video.currentTime = 0;
+                            video.style.display = "none";
+                            video.classList.remove("playing");
+                        });
+
+                        posters.forEach((poster) => {
+                            poster.style.display = "block";
+                        });
+
+                        buttons.forEach((button) => {
+                            button.src = "https://images.mastersunion.link/uploads/16062025/v2/MainButton.svg";
+                        });
+                    }
+
+                    // Make closeVideoPopup function available globally
+                    window.closeVideoPopup = closeVideoPopup;
+                    window.isVideoChanging = false;
+
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const names = [
+                            {
+                                name: "/17072025/v1/17",
+                                url: "https://files.mastersunion.link/mp4/18072025/v1/Testimonial1Revised_1.mp4",
+                            },
+                            {
+                                name: "/17072025/v1/28",
+                                url: "https://files.mastersunion.link/mp4/18072025/v1/Testimonial2Revised1_1.mp4",
+                            },
+                            {
+                                name: "/17072025/v1/34",
+                                url: "https://files.mastersunion.link/mp4/18072025/v1/Testimonial3V2_1.mp4",
+                            },
+                            {
+                                name: "/17072025/v1/42",
+                                url: "https://files.mastersunion.link/mp4/18072025/v1/ThaiKid_1.mp4",
+                            },
+                               {
+                                name: "/17072025/v1/17",
+                                url: "https://files.mastersunion.link/mp4/18072025/v1/Testimonial1Revised_1.mp4",
+                            },
+                            {
+                                name: "/17072025/v1/28",
+                                url: "https://files.mastersunion.link/mp4/18072025/v1/Testimonial2Revised1_1.mp4",
+                            },
+                            {
+                                name: "/17072025/v1/34",
+                                url: "https://files.mastersunion.link/mp4/18072025/v1/Testimonial3V2_1.mp4",
+                            },
+                            {
+                                name: "/17072025/v1/42",
+                                url: "https://files.mastersunion.link/mp4/18072025/v1/ThaiKid_1.mp4",
+                            },
+                          
+
+                        ];
+
+                        const mappedArray = names.map((item, index) => ({
+                            img: `https://images.mastersunion.link/uploads${item.name}.webp`,
+                            url: item.url,
+                            index,
+                        }));
+
+                        const nameList = document.getElementById("name-list-startup");
+
+                        mappedArray.forEach((item, index) => {
+                            const videoId = `videoPlay-${index}`;
+                            const posterId = `postervideo-${index}`;
+                            const buttonId = `buttonIcon-${index}`;
+
+                            const slide = document.createElement("div");
+                            slide.classList.add("swiper-slide");
+                            slide.innerHTML = `
+            <video playsinline class="videoPlayLeft" id="${videoId}" style="display: none;">
+                <source src="${item.url}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <img id="${posterId}" class="videoPoster" src="${item.img}" alt="">
+            <span class="floatingButton">
+                <img class="playButton" onclick="togglePlayPause('${videoId}', '${posterId}', '${buttonId}')" id="${buttonId}"
+                src="https://images.mastersunion.link/uploads/16062025/v2/MainButton.svg" alt="">
+            </span>
+        `;
+                            nameList.appendChild(slide);
+                        });
+
+                        window.swiperVideo = new Swiper(".startupVideoSec", {
+                            loop: true,
+                            centeredSlides: true,
+                            slidesPerView: 1.2,
+                            spaceBetween: 0,
+                            initialSlide: 3,
+                         
+                            on: {
+                                slideChange: () => {
+                                    pauseAllVideos();
+
+                                    // Update popup video if popup is open (only if not triggered by animation and on mobile)
+                                    const videoPopup = document.getElementById('videoPopup');
+                                    if (isMobileDevice() && videoPopup && videoPopup.classList.contains('active') && !window.isVideoChanging) {
+                                        updatePopupVideo();
+                                    }
+                                },
+                                touchEnd: () => {
+                                    const videoPopup = document.getElementById('videoPopup');
+                                    if (!isMobileDevice() || !videoPopup || !videoPopup.classList.contains('active')) {
+                                        resumeSwiperAutoplay();
+                                    }
+                                },
+                            },
+                        });
+
+                      document.getElementById("playActiveVideoMobile").addEventListener("click", function () {
+    const activeSlide = swiperVideo.slides[swiperVideo.activeIndex];
+    const video = activeSlide.querySelector(".videoPlayLeft");
+    const poster = activeSlide.querySelector(".videoPoster");
+    const buttonIcon = activeSlide.querySelector(".playButton");
+
+    // If no video or video is already playing, disable button functionality
+    if (video && video.paused) {
+        pauseAllVideos();
+        stopSwiperAutoplay();
+
+        // Show popup with active video (only on mobile)
+        if (isMobileDevice()) {
+            showVideoPopup(video.querySelector('source').src);
+        } else {
+            // Desktop behavior - play video inline
+            video.style.display = "block";
+            poster.style.display = "none";
+            video.play();
+
+            // Resume autoplay when the video ends
+            video.onended = () => {
+                resetVideoState(video, poster, buttonIcon);
+                resumeSwiperAutoplay();
+            };
+        }
+
+        video.classList.add("playing");
+        buttonIcon.src = "/"; // Adjust icon if required
+    } else {
+        // Optional: Disable button or give feedback
+        console.log("Video is already playing.");
+    }
+});
+
+                        // Add event listener for desktop button
+                        document.getElementById("playActiveVideo").addEventListener("click", function () {
+                            const activeSlide = swiperVideo.slides[swiperVideo.activeIndex];
+                            const video = activeSlide.querySelector(".videoPlayLeft");
+                            const poster = activeSlide.querySelector(".videoPoster");
+                            const buttonIcon = activeSlide.querySelector(".playButton");
+
+                            // If no video or video is already playing, disable button functionality
+                            if (video && video.paused) {
+                                pauseAllVideos();
+                                stopSwiperAutoplay();
+
+                                // Desktop behavior - play video inline
+                                video.style.display = "block";
+                                poster.style.display = "none";
+                                video.play();
+
+                                // Resume autoplay when the video ends
+                                video.onended = () => {
+                                    resetVideoState(video, poster, buttonIcon);
+                                    resumeSwiperAutoplay();
+                                };
+
+                                video.classList.add("playing");
+                                buttonIcon.src = "https://images.mastersunion.link/uploads/27062025/v1/MainButton4.svg"; //pausebtn
+                            } else {
+                                // Optional: Disable button or give feedback
+                                console.log("Video is already playing.");
+                            }
+                        });
+
+                        // Add CSS for navigation buttons and transition overlay (only for mobile)
+                        const style = document.createElement('style');
+                        style.textContent = `
+        @media (max-width: 768px) {
+            #videoPopup .video-navigation {
+                position: absolute;
+                width: 110%;
+                height: 100%;
+                top: 0;
+                left: -5%;
+                z-index: 10;
+                pointer-events: none;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            #videoPopup .prev-video,
+            #videoPopup .next-video {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                pointer-events: auto;
+                transition: all 0.3s ease;
+            }
+            
+           
+            
+            #videoPopup .prev-video img,
+            #videoPopup .next-video img {
+                width: 90%;
+                opacity: 0.8;
+            }
+            
+            #videoPopup .video-container-wrapper {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+            
+            #videoPopup .video-transition-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                display: none;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                z-index: 5;
+            }
+            
+            /* Add swipe hint animation */
+            @keyframes swipeHint {
+                0% { transform: translateX(0); opacity: 0.7; }
+                50% { transform: translateX(-20px); opacity: 1; }
+                100% { transform: translateX(0); opacity: 0.7; }
+            }
+            
+            #videoPopup .popupBody::after {
+                content: 'Swipe to navigate';
+                position: absolute;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                color: white;
+                padding: 8px 16px;
+                border-radius: 20px;
+                font-size: 14px;
+                opacity: 0.7;
+                animation: swipeHint 2s infinite;
+                pointer-events: none;
+                z-index: 20;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            #videoPopup {
+                display: none !important;
+            }
+        }
+    `;
+                        document.head.appendChild(style);
+
+                        // Handle window resize to close popup if switching from mobile to desktop
+                        window.addEventListener('resize', function () {
+                            if (!isMobileDevice()) {
+                                const videoPopup = document.getElementById('videoPopup');
+                                if (videoPopup && videoPopup.classList.contains('active')) {
+                                    closeVideoPopup();
+                                }
+                            }
+                        });
+                    });
+                </script>
+            </div>
+
+            <div class="rightWrapStartup">
+                <h2 class="go-HighlightHeading ">
+                     {{!-- <span class="greycrossAsset">Projects </span>  --}}
+                <span
+                        class="fr-HeadingItalic"> Hear from Peers Like You
+                        <br class="mob-visible"></span></h2>
+                <p>Listen to our U18 members share how this club opened doors to real industry experiences—and a head start!</p>
+                <button class="btnBlack mob-hide" id="playActiveVideo">
+
+                    <span class="arrowWrapper">
+
+                        <svg class="arrow arrowMain" width="22" height="23" viewBox="0 0 22 23" fill="none"
+                            xmlns="https://www.w3.org/2000/svg">
+                            <path d="M5.91691 5.56611L18.5625 18.1676L17.6719 19.0625L5.02633 6.46104L5.91691 5.56611Z"
+                                fill="white" />
+                            <path
+                                d="M4.77534 16.3021C7.37528 12.9931 7.57722 8.26954 5.15397 4.82159C5.20445 4.77107 4.35884 5.66779 4.37146 5.65516C7.76654 8.02957 12.4994 7.81486 15.7557 5.21311L14.6072 3.9375C12.247 6.67818 7.89275 6.75395 5.04038 4.69529C5.053 4.69529 4.19477 5.56675 4.25787 5.52886C6.68112 8.1685 6.40346 12.9047 3.4375 14.9886L4.78796 16.3147L4.77534 16.3021Z"
+                                fill="white" />
+                        </svg>
+
+                        <svg class="arrow arrowClone" width="22" height="23" viewBox="0 0 22 23" fill="none"
+                            xmlns="https://www.w3.org/2000/svg">
+                            <path d="M5.91691 5.56611L18.5625 18.1676L17.6719 19.0625L5.02633 6.46104L5.91691 5.56611Z"
+                                fill="white" />
+                            <path
+                                d="M4.77534 16.3021C7.37528 12.9931 7.57722 8.26954 5.15397 4.82159C5.20445 4.77107 4.35884 5.66779 4.37146 5.65516C7.76654 8.02957 12.4994 7.81486 15.7557 5.21311L14.6072 3.9375C12.247 6.67818 7.89275 6.75395 5.04038 4.69529C5.053 4.69529 4.19477 5.56675 4.25787 5.52886C6.68112 8.1685 6.40346 12.9047 3.4375 14.9886L4.78796 16.3147L4.77534 16.3021Z"
+                                fill="white" />
+                        </svg>
+
+                    </span>
+
+              Hear the Story
+                </button>
+
+            </div>
+        </div>
+    </div>
+</section>
+</div>

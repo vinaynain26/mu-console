@@ -1,0 +1,2506 @@
+  .studentProfiles{
+
+
+
+    .studentFilterWrapper {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .exp-filter .clear {
+      font-size: 14px;
+      width: 100%;
+      align-self: end;
+      display: flex;
+      justify-content: end;
+    }
+
+    /* Label and dropdown share one pill, matching .exp-filter .toggle in the layout
+       (12px/18px, 24px radius, white, 13px Inter) so the whole filter row reads as
+       one set of controls rather than two competing styles. */
+    .profileSelectGroup {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 18px;
+      border-radius: 24px;
+      background: var(--white);
+      font-family: Inter, sans-serif;
+      font-size: 13px;
+    }
+
+    .profileSelectLabel {
+      margin: 0;
+      font-size: 13px;
+      color: var(--grey10);
+      white-space: nowrap;
+    }
+
+    .profileSelect {
+      appearance: none;
+      -webkit-appearance: none;
+      border: none;
+      outline: none;
+      margin: 0;
+      padding: 0 22px 0 0;
+      max-width: 220px;
+      background-color: transparent;
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+      text-overflow: ellipsis;
+      /* Same chevron the Industry/Function toggles use. */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24'%3E%3Cpath d='M5 9l7 7 7-7' stroke='%23000' fill='none' stroke-width='2'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right center;
+      background-size: 16px;
+    }
+
+    .profileSelect:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+
+    .profileScrollStatus {
+      margin: 24px 0 0;
+      text-align: center;
+      font-size: 13px;
+      font-family: Inter, sans-serif;
+      color: var(--grey10);
+      min-height: 20px;
+    }
+
+    /* Zero-height trigger for the infinite scroll observer. */
+    #profileScrollSentinel {
+      height: 1px;
+    }
+
+  
+  .searchBtn {
+            width: 100%;
+            padding: 10px 14px;
+            margin: 0 12px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            align-items: flex-start;
+            border-radius: 48px;
+            background: var(--grey16);
+            border: 1px solid var(--grey4);
+            font-size: 14px;
+            font-family: var(--go-medium);
+            color: var(--grey10);
+            max-width: 92%;
+           
+        }
+
+        .studentFilterSearchWrapper{
+          display: flex;
+          justify-content: space-between;
+          margin-top: 24px;
+          /* Without this the search box stretches to the filter row's height once it
+             wraps to a second line, dragging its absolutely-centred icon below the
+             input. Keep it hugging its own height instead. */
+          align-items: flex-start;
+          gap: 16px;
+        }
+  }
+  .characterCount, .descriptionCounters, .charCounter , .character-counter{
+    text-align: right;
+  }
+  .studentProfileCardInfoItemBadge {
+    padding: 5px 6px;
+    border-radius: 40px;
+    font: 8px "go-regular";
+    background: var(--grey4);
+    max-width: fit-content;
+    text-transform: uppercase;
+}
+
+
+  .studentProfileCardsWrapper {
+    position: relative;
+    margin-top: 40px;
+
+    .studentProfileCardTitleWrapper{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .yearsBold{
+      font-size: 14px !important;
+      font-weight: 600;
+    }
+  
+   
+  
+    .studentProfileCardFlex {
+      display: flex;
+      align-items: stretch;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: 20px;
+      .studentProfileCard:hover {
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15), 0 1.5px 6px rgba(0,0,0,0.08);
+      }
+  
+      .studentProfileCard {
+        transition: box-shadow 0.2s ease;
+  
+        position: relative;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        flex-direction: column;
+        gap: 16px;
+        padding: 16px 16px;
+        border-radius: 16px;
+        border: 1px solid var(--Grey-70, #D4D4D4);
+        background: #FFF;
+        max-width: 400px;
+        width: 100%;
+        cursor: pointer;
+  
+        @media (max-width: 767px) {
+          max-width: 100%;
+          gap: 10px;
+        }
+  
+        .studentProfileCardImage {
+          max-width: 100%;
+          width: 100%;
+          max-height: 200px;
+          overflow: hidden;
+  
+          img {
+            border-radius: 8px;
+            max-width: 100%;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            object-fit: cover;
+          }
+        }
+  
+        .studentProfileCardContent {
+          position: relative;
+          max-width: 100%;
+          width: 100%;
+  
+          @media (max-width: 767px) {
+            max-width: 100%;
+      
+          }
+  
+          .studentProfileCardTitle {
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 26px;
+            color: var(--black);
+            font-family: var(--fr-semibold);
+          }
+  
+          .studentProfileCardDescription {
+            font-size: 9px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 26px;
+            color: var(--black5);
+            font-family: var(--go-regular);
+            /* margin-top: 4px; */
+  
+            span {
+              font-size: 20px;
+            }
+          }
+          .studentProfileCardDescriptionbottom {
+            font-size: 11px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: 150%;
+            color: var(--black5);
+            font-family: var(--go-regular);
+            /* margin-top: 4px; */
+  
+            span {
+              font-size: 20px;
+            }
+          }
+  
+          .studentProfileCardInfo {
+            position: relative;
+            margin-top: 10px;
+          }
+  
+          .studentProfileCardInfoItem {
+            &:not(:first-child) {
+              margin-top: 4px;
+            }
+  
+            .studentProfileCardInfoItemTitle {
+              color: var(--grey);
+              font-size: 10px;
+              font-weight: 400;
+              line-height: 150%;
+              letter-spacing: 1px;
+              text-transform: uppercase;
+              font-family: var(--go-regular);
+              display: block;
+              line-height: normal;
+            }
+  
+            .studentProfileCardInfoItemValue {
+              color: var(--black5);
+              font-family: var(--go-medium);
+              font-size: 12px;
+              line-height: 150%;
+              display: block;
+              line-height: normal;
+              display: flex;
+              flex-wrap: wrap;
+              gap: 8px;
+              max-height: 50px;
+              overflow: hidden;
+
+              &.tags{
+                margin-top: 10px;
+
+              }
+            }
+          }
+        }
+  
+        .studentProfileCardDetails {
+          position: relative;
+          width: 100%;
+          color: var(--grey);
+          font-family: var(--go-regular);
+          font-size: 11px;
+          font-weight: 400;
+          line-height: 150%;
+        }
+      }
+    }
+  }
+
+ 
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.blackButton {
+  background: var(--black);
+  border: 1px solid var(--black);
+}
+
+.invertImg {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+.editProfile {
+  position: relative;
+}
+
+.editProfile .editProfileButton {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 26px;
+}
+
+.editProfile .profileLeft {
+  position: sticky;
+  top: 70px;
+}
+
+
+
+
+.studentProfileUg .mainScrollableBoxReel.active .overlayVideobtn {
+  visibility: hidden;
+  transition: 0.4s ease;
+  opacity: 0;
+}
+
+.studentProfileUg .mainScrollableBoxReel.active:hover .overlayVideobtn {
+  visibility: visible;
+  opacity: 1;
+  transition: 0.4s ease;
+}
+
+
+.studentProfileUg {
+  .gradientButton:hover {
+
+    svg {
+      filter: brightness(40);
+
+    }
+  }
+
+  .swipperButtonWrapper {
+    justify-content: flex-end;
+    display: flex;
+    gap: 8px;
+  }
+
+  .curricularDiv {
+    max-width: 100%;
+    width: 100%;
+    overflow: hidden !important;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .curricularWrapper {
+    display: flex;
+    flex-wrap: wrap; 
+     gap: 16px;
+  }
+
+  .curricularBoxi {
+    background: var(--white);
+    border: 1px solid var(--white4);
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.05);
+    padding: 16px 16px 26px 16px;
+    width: 100%;
+    max-width: calc(50% - 10px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .curricularImageWrapper {
+    width: 100%;
+    max-width: 77px;
+    max-height: 77px;
+    overflow: hidden;
+    border-radius: 2px;
+    position: relative;
+   }
+
+  .curricularImageLink {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .curricularImageOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    color: #ffffff;
+    font-size: 10px;
+    text-align: center;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    pointer-events: none;
+  }
+
+  .curricularImageWrapper:hover .curricularImageOverlay,
+  .curricularImageLink:focus-visible .curricularImageOverlay {
+    opacity: 1;
+  }
+
+  .curricularImageWrapper:hover .curricularImage,
+  .curricularImageLink:focus-visible .curricularImage {
+    transform: scale(1.02);
+  }
+
+  .curricularImageWrapper::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-image: url("https://images.mastersunion.link/uploads/25032025/v1/image6.svg");
+    position: absolute;
+    left: 88%;
+    bottom: 46.4%;
+    background-repeat: no-repeat;
+    max-width: 8%;
+  }
+
+  .curricularImage {
+    object-fit: contain;
+    object-position: center;
+    max-height: 77px;
+    width: 100%;
+    min-height: unset !important;
+    font-size: 8px;
+    transition: transform 0.2s ease-in-out;
+  }
+
+  .curricularContentWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    align-items: flex-start;
+  }
+
+  .curricularBtnWrapper {
+    display: flex;
+    gap: 8px;
+  }
+
+  .positionBtn {
+    border-radius: 44px;
+    width: fit-content;
+    display: flex;
+    padding: 8px 10px;
+    align-items: center;
+    gap: 6px;
+    background: #E38330;
+    color: var(--white);
+    font-size: 10px;
+    line-height: 120%;
+
+    font-weight: 400;
+  }
+
+  .academicBtn {
+    border-radius: 44px;
+    width: fit-content;
+    display: flex;
+    padding: 8px 10px;
+    align-items: center;
+    gap: 6px;
+    background: var(--grey16);
+    color: var(--black);
+    font-size: 10px;
+    line-height: 120%;
+    font-weight: 400;
+  }
+  .extraCurricularSwiper{
+  
+
+    .swipperButtonWrapper{
+      display: none;
+    }
+  }
+
+
+  .secondPosition .positionBtn {
+    background: #e38330;
+  }
+  .profilePara.aboutPara{
+    font-size: 14px;
+  }
+  .secondPosition .curricularImageWrapper::after {
+    background-image: url("https://images.mastersunion.link/uploads/25032025/v1/image7.svg");
+  }
+
+  .projectsDivi {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .studentExp.leftside{
+    font-size: 13px;}
+
+  .projectsWrapper {
+    width: 100%;
+    display: flex;
+    gap: 16px;
+  }
+
+  .projectsBoxi {
+    width: 100%;
+    max-width: calc(50% - 8px);
+  }
+  .curricularImageWrapper.noafter::after{
+    display: none;
+  }
+
+  .projectsBoxi {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .projectsImageWrapper {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .projectsImage {
+    height: 154px;
+    width: 100%;
+    object-fit: contain;
+    object-position: top;
+  }
+
+  .projectText {
+    font-size: 18px;
+    line-height: 140%;
+    font-family: var(--go-regular);
+    color: var(--white3);
+  }
+
+  .projectContentWrapper {
+    display: none !important;
+    position: absolute;
+    bottom: 2%;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .hiddenProjectPara {
+    font-size: 13px;
+    line-height: 150%;
+    font-family: var(--go-regular);
+    color: var(--white3);
+    width: 100%;
+    opacity: 0.6;
+    display: none;
+  }
+
+  .arrowWrapper {
+    position: absolute;
+    top: 3%;
+    left: 85%;
+    width: 100%;
+    height: 100%;
+    max-width: 34px;
+    max-height: 34px;
+    border-radius: 360px;
+    backdrop-filter: blur(2.5px);
+    background: var(--black);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .arrowWrapper img {
+    transition: 0.3s;
+  }
+  
+     
+
+
+  .arrowWrapper:hover img {
+    content: url("https://images.mastersunion.link/uploads/25032025/v1/Frame13213165115.svg");
+    transform: translate(2px, -2px);
+  }
+
+  .projectBelowWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .courseText {
+    font-size: 14px;
+  }
+
+  .researchWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .viewMoreButton {
+    max-width: 100% !important;
+    justify-content: center;
+  }
+}
+
+.job-list {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  flex-direction: column;
+}
+
+.jobHeadingWrapper .studentHeading {
+  font-weight: 400;
+}
+
+.comingSoonWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 412px;
+  width: 100%;
+}
+
+.soonWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.soonContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.comingText {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 120%;
+  color: var(--grey3);
+  font-family: "Fraunces", serif;
+}
+
+.modesTab::-webkit-scrollbar-thumb {
+  display: none;
+}
+
+.ugTech {
+  .sectionHeading {
+    font-size: 30px;
+    font-family: "go-regular";
+    font-weight: 400;
+  }
+
+  .sectionGradientHead {
+    font-size: 32px;
+    font-family: "go-regular";
+  }
+
+  .integratedPgpTechWrap .sectionGradientHead {
+    font-size: 28px;
+  }
+
+  .sectionHeadingThin {
+    font-size: 28px;
+    font-family: "go-thin";
+  }
+
+  .sectionHeadingBold {
+    font-size: 30px;
+    font-family: "go-regular";
+  }
+
+  .techHighlight .exploreMoreButton {
+    font-size: 16px !important;
+    padding: 16px 24px;
+  }
+
+  .graduateReviews .alumniSpotlightWrap .alumniheroLeft .techTop p {
+    font-style: unset;
+    font-family: unset;
+  }
+
+  .techHighlight .newMasterDetailsWrap h4 {
+    font-family: unset;
+    font-style: unset;
+  }
+
+  .illinoisCurriculum .newMasterDetailsWrap h4 {
+    font-family: unset;
+    font-style: unset;
+  }
+
+  .illinoisTech {
+    padding: 80px 0px !important;
+  }
+
+  .graduateReviews .masterPlay {
+    width: 8%;
+    left: 46%;
+  }
+
+  .industryImmersionTech {
+    background: var(--black);
+  }
+
+  .headingRight {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 8px;
+  }
+
+  .techClassProfile .cardContentHeading {
+    font-family: unset !important;
+  }
+
+  .techClassProfile .techContentDivi p span {
+    font-style: unset;
+  }
+
+  .industryImmersionTech .cardContentHeading {
+    background: linear-gradient(92deg,
+        #39b6d8 7.6%,
+        #f7d344 53.43%,
+        #e38330 99.26%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .industryImmersionTech .cardSubContent {
+    color: var(--white);
+    font-size: 18px;
+    line-height: 130%;
+    font-family: var(--go-regular);
+  }
+
+  .lifeAtMU .industryPara {
+    align-items: unset;
+  }
+}
+
+
+.studentProfilePage {
+
+
+  .curricularImageWrapper.noafter{
+    max-width: 100%;
+    max-height: unset;
+    border: 1px solid var(--grey10);
+    padding: 4px;
+    margin-bottom: 8px;
+
+    .projectsImage{
+      object-position: center;
+    }
+  }
+
+  .gradientButton:hover {
+
+    svg {
+      filter: brightness(40);
+
+    }
+  }
+
+  .curricularBoxiv{
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 20px 15px;
+    border: 1px solid var(--grey10);
+    border-radius: 6px;
+    max-width: 48.5%;
+    width: 100%;
+  } 
+
+  
+  .companyLocation .profilePara {
+    text-transform: uppercase;
+   }
+
+  .content-section .content {
+    display: none !important;
+  }
+
+  .content-section .content.active {
+    display: flex !important;
+  }
+
+  .aboutDiv {
+    display: flex;
+    flex-direction: column;
+  }
+
+
+
+
+}
+
+.studentProfilePage {
+  p {
+    word-wrap: break-word;
+  }
+
+  .profileParent {
+    background: url(https://files.mastersunion.link/resources/img/oppertunityBG.webp),
+      var(--white3);
+    background-position: top;
+    background-repeat: no-repeat;
+    position: relative;
+    background-position-x: left;
+    padding: 160px 0 58px;
+  }
+
+  .studentImageParent {
+    overflow: hidden;
+  }
+
+  .eduParent {
+    flex: 1;
+    width: 100%;
+    max-width: fit-content;
+  }
+
+  .studentName {
+    font-family: "Fraunces", serif;
+    color: var(--black);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 26px;
+  }
+  .studentYear.cardnew{
+    font-size: 13px;
+  }
+
+  .profilePara {
+    font-size: 12px;
+    line-height: 120%;
+    font-family: var(--go-regular);
+    color: var(--grey21);
+    max-width: fit-content;
+    width: 100%;
+  }
+  .workExperienceLogoTextWrapper{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .companyMidWrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .studentHeading,
+  .studentHeading-update {
+    color: var(--black);
+    font-family: "Fraunces", serif;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 26px;
+  }
+
+  .studentNameParent .consultingPara {
+    color: var(--grey3);
+    line-height: 150%;
+    font-size: 14px;
+  }
+
+  .studentNameParent {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .studentProfileWrapper {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+  }
+
+  .profileLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 386px;
+  }
+
+  .nameEdu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: var(--white);
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  .nameEdu .studentProfileImage {
+    object-fit: cover;
+    max-height: 209px;
+    object-position: top;
+  }
+
+  .profileRight {
+    width: 100%;
+    max-width: calc(100% - 402px);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .studentNameContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .socialExperience {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .experience {
+    display: flex;
+    gap: 40px;
+  }
+
+  .studentExp {
+    font-size: 14px;
+    line-height: 140%;
+    /* 19.6px */
+    font-family: var(--go-regular);
+    color: var(--grey21);
+  }
+
+  .studentInternshipsWrapperCol{
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .studentYear {
+    font-size: 16px;
+    line-height: 120%;
+    font-family: var(--go-medium);
+    color: var(--black);
+  }
+  .studentYearFont{
+       font-size: 12px;
+    line-height: 120%;
+    font-family: var(--go-medium);
+    color: var(--black);
+  }
+  .studentWorkExperiences{
+    display: flex;
+    flex-direction: column;
+    gap: 24px
+  }
+
+  .socialButtons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .socialLinksStudent {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .socialLinksStudent a {
+    cursor: pointer;
+    max-width: 35px;
+  }
+
+  .alumniBtn {
+    width: fit-content;
+    border-radius: 44px;
+    padding: 2px 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    background: var(--green2);
+  }
+
+  .academiaText {
+    font-size: 13px;
+    line-height: 140%;
+    font-family: var(--go-regular);
+    color: var(--white);
+  }
+
+  .responsibilityParent {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .responsibilityParent>h2 {
+    margin-bottom: 16px;
+    font-size: 18px;
+  }
+  .flex-between>h2 {
+    margin-bottom: 16px;
+    font-size: 18px;
+  }
+
+  .financeBox {
+    border-bottom: 1px solid var(--grey22);
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    width: 100%;
+padding-bottom: 16px;
+    img{
+      max-width: 35px;
+
+
+    }
+  }
+
+  .financeBox:last-child {
+    border: none;
+    padding-bottom: 0;
+padding-top: 16px;
+  }
+
+
+
+  .financeDiv {
+    width: 100%;
+    max-width: 85%;
+  }
+
+  .financeDiv .financePara {
+    font-size: 14px;
+    line-height: 150%;
+    color: var(--black);
+    font-family: var(--go-medium);
+  }
+
+  .gradientEffectWhite {
+    overflow: hidden;
+    border-radius: 16px;
+    border-bottom: 3px solid transparent;
+    padding: 20px;
+    background: linear-gradient(var(--white) 0 0) padding-box,
+      linear-gradient(90deg, #39b6d8 6.41%, #f7d344 51.47%, #e38330 96.52%) border-box;
+  }
+
+  .gradientEffectBlack {
+    border-radius: 16px;
+    padding: 30px;
+    border-bottom: 3px solid transparent;
+    background: linear-gradient(var(--black) 0 0) padding-box,
+      linear-gradient(90deg, #39b6d8 6.41%, #f7d344 51.47%, #e38330 96.52%) border-box;
+  }
+
+
+  .studentAboutParent {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--grey22);
+  }
+
+  .studentScholarship {
+    padding-top: 20px;
+    display: flex;
+    gap: 20px;
+    
+  }
+  .challengeHeadingSubheadingWrapper{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .challengeSubheading{
+    font: 14px "go-regular";
+    line-height: 100%;
+    color: var( --grey3);
+    max-width: 628px;
+    width: 100%;
+  }
+
+  .scholarshipName {
+    width: 100%;
+    max-width: 340px;
+    align-items: flex-start;
+  }
+
+  .scholarshipCourse {
+    width: 100%;
+    max-width: calc(100% - 360px);
+    align-items: flex-start;
+  }
+
+  .experienceParent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .expBoxiParent {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+.expBoxiParent .expBoxi:only-child {
+  max-width: 100%;
+}
+
+  .expBoxi {
+    font-size: 15px;
+    line-height: 150%;
+    color: var(--grey21);
+    font-family: var(--go-regular);
+    max-width: calc(50% - 10px);
+    padding: 12px;
+    border: 1px solid var(--white4);
+    background: var(--white3);
+    display: flex;
+    gap: 10px;
+    border-radius: 6px;
+    align-items: flex-start;
+    width: 100%;
+
+    img{
+      max-width: 35px;
+    }
+  }
+  /* Holds multiple highlight points as ONE flex item beside the icon —
+     as bare siblings each point would become its own column in the row. */
+  .expDetailsGroup {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .headingTag{
+    font: 12px "go-medium";
+    /* line-height: 120%; */
+    background: var(--grey4);
+    padding: 4px 12px;
+    color: var(--black);
+    border-radius:40px ;
+    max-width: fit-content;
+  }
+  .challengeHeadingWrapper{
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .workExperience {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+
+    .logoOfCompany {
+      width: 100%;
+      width: 48px;
+    }
+  }
+
+  .associateParent {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .workDiv {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--grey22);
+  }
+
+  .companyNameParent {
+    display: flex;
+    /* justify-content: space-between; */
+    gap: 16px ;
+  }
+
+  .companyName {
+    font-size: 16px;
+    line-height: 150%;
+    font-family: var(--go-medium);
+    color: var(--black);
+
+  }
+
+  .companyLocation,
+  .duration {
+    display: flex;
+    gap: 10px;
+  }
+
+  /* Both levels grow: without them the column is shrink-to-fit, so an entry
+     with no description collapses and the space-between date lands flush
+     against the designation. */
+  .associateParent > .internshipBelow {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .associateRight {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .associateParent:not(:first-of-type) {
+    border-top: 1px solid var(--grey22);
+    padding: 16px 0;
+  }
+
+
+
+  .studentProfileList {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .studentProfileList li {
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+  }
+  .studentListPara::first-letter {
+    text-transform: uppercase;
+  }
+
+  .studentProfileList li .studentListPara {
+    font-size: 13px;
+    line-height: 150%;
+    color: var(--grey21);
+    font-family: var(--go-regular);
+  }
+
+  .expBoxi .expDetails {
+    line-height: 150%;
+    width: 100%;
+    max-width: 100%;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    line-clamp: 7;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13px;
+  }
+
+  .associateRight .companyName {
+    width: 100%;
+    /* max-width: 50%; */
+  }
+
+  .courseHighlights {
+    display: flex;
+    /* display: none !important; */
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .courseRatioParent {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .studentGradientText {
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 103%;
+    background: var(--Linear,
+        linear-gradient(90deg, #39b6d8 6.41%, #f7d344 51.47%, #e38330 96.52%));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: "Fraunces", serif;
+  }
+
+  .amountText {
+    line-height: 103%;
+    color: var(--white);
+    font-family: var(--go-regular);
+    font-size: 20px;
+    display: none;
+  }
+
+
+  .placePara {
+    font-size: 14px;
+    line-height: 150%;
+    font-family: var(--go-regular);
+    color: var(--grey3);
+  }
+
+  .courseRatioBox {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    width: 100%;
+    background:#F5F5F5 ;
+    padding: 24px;
+    border-radius: 6px;
+  }
+
+  /* .courseRatioBox:not(:last-child) {
+    border-right: 1px solid var(--grey15);
+   padding-right: 20px;
+
+  } */
+  /* .courseRatioBox:not(:first-child) {
+   padding-left: 20px;
+  } */
+
+  .dropshippingDiv {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .dropshippingParent {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .dropShippingLeft {
+    max-width: 200px;
+    border: 1px solid var(--grey4);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+
+
+  .dropshippingRight {
+    max-width: calc(100% - 356px);
+  }
+
+  .profitParent {
+    display: flex;
+    gap: 10px;
+    padding-bottom: 16px;
+    align-items: center;
+
+  }
+
+  .profitParent .profitAmount {
+    font-size: 20px;
+    color: var(--black);
+    font-weight: 400;
+    font-family: "Fraunces", serif;
+  }
+
+  .dropshippingProduct {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    row-gap: 20px;
+    column-gap: 80px;
+    border-top: 1px solid var(--grey22);
+    padding-top: 16px;
+
+
+    .studentYear{
+      font-size: 13px;
+    }
+  }
+
+  .social a {
+    cursor: pointer;
+    line-height: 0;
+  }
+
+  .social {
+    display: flex;
+    gap: 6px;
+    align-items: self-start;
+  }
+
+  .product {
+    max-width: calc(50% - 20px);
+    align-items: flex-start;
+    min-width: 150px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .creatorWrapper .decodingHeading {
+    width: 100%;
+    max-width: 39%;
+  }
+
+  .productHeading {
+    font-size: 12px;
+    line-height: 120%;
+    font-family: var(--go-regular);
+    color: var(--grey);
+  }
+
+  .creatorChallenge {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    overflow: hidden;
+  }
+
+  .creatorChallengeLeft {
+    width: 100%;
+    max-width: 146px;
+    overflow: hidden;
+  }
+
+  .creatorChallengeLeft .muLogo {
+    object-fit: cover;
+    max-height: 146px;
+  }
+
+  .creatorChallengeRight {
+    width: 100%;
+    max-width: calc(100% - 166px);
+  }
+
+  .creatorChallengeRight {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .brandingDecoding {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--grey22);
+  }
+  .internshipNoImageText{
+    font-size: 12px;
+  }
+  .followersParent {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    max-width: 61%;
+    flex-wrap: wrap;
+  }
+
+  .creatorRightUpper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .vipChallenge .dropshippingProduct {
+    flex-wrap: nowrap;
+  }
+
+  .vipChallenge {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .postDiv {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .decodingHeading {
+    font-size: 18px;
+  }
+
+  .creatorWrapper {
+    display: flex;
+    gap: 20px;
+  }
+
+  .postHeading {
+    font-size: 20px;
+    line-height: 120%;
+    color: var(--black);
+    font-family: var(--go-regular);
+  }
+
+  .brandingPara {
+    line-height: 140%;
+    font-size: 12px;
+    font-family: var(--go-regular);
+    color: var(--grey21);
+  }
+
+  .btnText {
+    font-family: var(--go-medium) !important;
+    font-weight: 500 !important;
+    padding: 6px 12px !important;
+    gap: 4px;
+  }
+
+  .vipDeckWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .deckWrapper {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .deckBox {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+    max-width: 66px;
+  }
+
+  .docWrapper {
+    display: flex;
+    gap: 2px;
+  }
+
+  .docText {
+    font-size: 13px;
+    color: var(--black);
+    line-height: 140%;
+    text-decoration-line: underline;
+    font-family: var(--go-medium);
+  }
+
+  .participationDiv {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .technologyWrapper {
+    display: flex;
+    gap: 20px;
+    overflow: scroll;
+  }
+
+  .technologyBox {
+    border-radius: 6px;
+    background: var(--white3);
+    border: 1px solid var(--white4);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px 10px 0 10px;
+    width: 100%;
+    justify-content: space-between;
+    min-width: 350px;
+  }
+
+  .techBoxContent {
+    padding: 0 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .companyLogo {
+    max-width: 40px;
+    max-height: 40px;
+  }
+
+  .techWorkshop {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .techImageWrapper {
+    overflow: hidden;
+    max-height: 139px;
+  }
+
+  .techImage {
+    object-fit: cover;
+    object-position: top;
+    display: none;
+  }
+
+  .internshipWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .internshipImage {
+      max-width: 80px;
+      border: 1xp solid var(--grey22);
+      border-radius: 6px;
+      overflow: hidden;
+      object-fit: cover;
+      object-position: top;
+      width: 100%;
+    }
+  }
+
+  .internshipBelow {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .internshipTextWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .youngDiv {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+  }
+
+  .youngDivText {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: fit-content ;
+    align-items: flex-start;
+  }
+
+
+
+  .vipChallenge .dropshippingRight {
+    max-width: calc(100% - 402px);
+  }
+
+  .internshipImageBox  {
+    display: flex;
+    gap: 10px;
+    border: 1px solid var(--grey4);
+    border-radius: 4px;
+    overflow: hidden;
+    padding:  4px 4px 2px;
+    max-width: 52px;
+    min-width: 52px;
+    height: 52px;
+    align-items: center;
+  }
+
+  .internshipImageBox {
+    width: 100%;
+  }
+
+  .peerstunitie {
+    background: url(https://files.mastersunion.link/resources/img/oppertunityBG.webp),
+      var(--white);
+    background-position: top;
+    background-repeat: no-repeat;
+    position: relative;
+    background-position-x: left;
+
+    .peerstunitieWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .lightMuVector {
+      filter: brightness(3.7);
+    }
+  }
+}
+
+
+/* css for popups */
+
+.checboxWrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.checboxWrap input {
+  width: auto;
+}
+
+.submitWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 10px;
+  margin-top: 32px !important;
+}
+
+.twoFields {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.twoFields .formField {
+  max-width: calc(50% - 5px);
+  width: 100%;
+}
+
+.exceptionField {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+
+.exp-filter .menu li label{
+  font-family: var(--go-regular) !important;
+  font-weight: 400;
+  font-size: 12px !important;
+}
+
+.exp-filter .menu li:not(:first-child) {
+  padding: 10px 0 !important;
+}
+
+.exp-filter .menu li {
+ padding-bottom: 10px !important;
+}
+.exp-filter .menu li + li{
+  margin-top: 0 !important;
+}
+
+.exceptionField.isImp label::after {
+  content: '*';
+  position: relative;
+  color: var(--red);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 160%;
+  font-family: var(--go-regular);
+  font-weight: 400;
+  text-transform: capitalize;
+}
+
+.exceptionField label {
+  position: relative;
+  width: 100%;
+  color: var(--grey17);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 160%;
+  font-family: var(--go-regular);
+  font-weight: 400;
+  text-transform: capitalize;
+}
+
+.exceptionField .formField {
+  max-width: calc(50% - 5px);
+  width: 100%;
+}
+
+.profilePopup .popupContainer {
+  padding: 0;
+  max-width: 560px;
+  width: 100%;
+}
+
+.profilePopup .popupContainer .fromTophead {
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.profilePopup .popupContainer .fromTophead h2 {
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 26px;
+  font-family: var(--fr-regular);
+  font-weight: 400;
+}
+
+.profilePopup .PopupformWrapper {
+  position: relative;
+  padding: 20px 20px;
+  padding-top: 0;
+  margin: 0;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-height: calc(100vh - 416px);
+  height: 100vh;
+  overflow: auto;
+}
+
+.profilePopup .PopupformWrapper .profileButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--grey4);
+  background: var(--white);
+  padding: 12px 20px;
+  color: var(--grey15);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 160%;
+  font-family: var(--go-regular);
+  cursor: pointer;
+  text-align: left;
+}
+
+.introPopup .popupContainer {
+  padding: 15px 20px;
+  max-width: 830px;
+  width: 100%;
+}
+
+.introPopup .PopupformWrapper {
+  display: block;
+  position: relative;
+
+  .experienceEntries,
+  .workExperienceEntry {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  label {
+    font: 12px "go-medium";
+  }
+
+  .experienceEntry {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border: 1px solid #d4d4d4;
+    padding: 10px;
+    border-radius: 4px;
+
+  }
+}
+
+.introPopup .PopupformWrapper form>div:not(:first-child) {
+  margin-top: 16px;
+}
+
+.coursePopup .PopupformWrapper form>div:not(:first-child) {
+  margin-top: 6px;
+}
+
+.formField {
+  max-width: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formField.isImp>label::after {
+  content: '*';
+  position: relative;
+  color: var(--red);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 160%;
+  font-family: var(--go-regular);
+  font-weight: 400;
+  text-transform: capitalize;
+}
+
+.formField label {
+  position: relative;
+  color: var(--grey17);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 160%;
+  font-family: var(--go-regular);
+  font-weight: 400;
+  text-transform: capitalize;
+}
+
+.formField input,
+.formField textarea,
+.formField .dropdown-selected {
+  border-radius: 4px;
+  border: 1px solid var(--grey18);
+  background: var(--white);
+  padding: 10px 12px;
+
+  color: var(--grey10);
+  font-family: var(--go-regular);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 160%;
+  text-transform: capitalize;
+}
+
+
+.formField input,
+.formField textarea,
+.formField .dropdown-selected:not(:placeholder-shown) {
+  color: black;
+}
+
+.formField .dropdown-selected {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.formField .dropdown-selected::after {
+  background: url('https://images.mastersunion.link/uploads/18062025/v1/CaretDown.svg');
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-position: center;
+  width: 40px;
+  height: 100%;
+  background-repeat: no-repeat;
+  object-fit: contain;
+  transition: 0.4s;
+  transform: rotate(0deg);
+}
+
+.formField .dropdown-selected.active::after {
+  transition: 0.4s;
+  transform: rotate(180deg);
+}
+
+.formField-upload {
+  width: 100%;
+  border: solid 1px #E5E5E5;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 100%;
+  padding: 16px;
+  border-radius: 10px;
+}
+
+.formField-upload .label {
+  position: relative;
+  color: var(--grey17);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 160%;
+  font-family: var(--go-regular);
+  font-weight: 400;
+  text-transform: capitalize;
+}
+
+.formField-upload.isImp .label::after {
+  content: '*';
+  position: relative;
+  color: var(--red);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 160%;
+  font-family: var(--go-regular);
+  font-weight: 400;
+  text-transform: capitalize;
+}
+
+.formField-upload .file-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.formField-upload .file-input-wrapper .chooseButton {
+  padding: 12px 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font: 14px "go-regular";
+  cursor: pointer;
+  min-width: 120px;
+}
+
+input:focus {
+  border: 1px solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(91.25deg, #39B5D7 1.8%, #F7D544 50.99%, #E38330 99.75%);
+  border-radius: 4px;
+  color: black;
+}
+
+textarea:focus {
+  border: 1px solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(91.25deg, #39B5D7 1.8%, #F7D544 50.99%, #E38330 99.75%);
+  border-radius: 4px;
+  color: black;
+}
+
+.noFile {
+  color: var(--black);
+  font-family: var(--go-regular);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 150%;
+}
+
+.formField-upload input[type="file"] {
+  display: none;
+}
+
+.formField-upload .file-hint {
+  font-size: 12px;
+  color: var(--grey15);
+  font-family: var(--go-regular);
+  font-weight: 400;
+  line-height: 150%;
+  text-transform: capitalize;
+}
+
+.selectIcon {
+  position: relative;
+  cursor: pointer;
+}
+
+.selectIcon input {
+  display: none;
+}
+
+.selectIcon input:checked~svg circle {
+  fill: var(--grey4);
+}
+
+.introPopup .PopupformWrapper form {
+  border-radius: 10px;
+  border: 1px solid var(--grey4);
+  padding: 16px 16px;
+  max-height: calc(100vh - 350px);
+  overflow: auto;
+}
+
+.otherPopup .PopupformWrapper form,
+.vipPopup .PopupformWrapper form,
+.creatorPopup .PopupformWrapper form,
+.dropShippingPop .PopupformWrapper form {
+  /* height: 60vh; */
+  border-radius: 0;
+  border: none;
+  padding: 0;
+}
+
+.formBox {
+  border-radius: 10px;
+  border: 1px solid var(--grey4);
+  padding: 16px 16px;
+}
+
+.formBox .addAnother {
+  justify-content: flex-start;
+}
+
+/* custom dropdown */
+
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+  user-select: none;
+}
+
+.dropdown-selected {
+  cursor: pointer;
+  width: 100%;
+}
+
+.dropdown-options {
+  /* position: absolute; */
+  top: 100%;
+  left: 0;
+  right: 0;
+  display: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #ccc;
+  border-top: none;
+  background: #fff;
+  list-style: none;
+  z-index: 10;
+  /* max-height: 100px; */
+  overflow: auto;
+}
+
+.dropdown-options li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.dropdown-options li:hover {
+  background-color: #f0f0f0;
+}
+
+.addAnother {
+  color: #E38330;
+  font-family: var(--go-medium);
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 150%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+/* toggle swithc */
+
+.togglerSwitch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 21px;
+}
+
+.togglerSwitch input {
+  display: none;
+}
+
+.togglerSwitch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.togglerSwitch .slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.togglerSwitch input:checked+.slider {
+  background-color: #e97f32;
+}
+
+.togglerSwitch input:checked+.slider:before {
+  transform: translateX(14px);
+}
+
+.popupContainerOuter {
+
+  .deleteSocialBtn {
+    background: none;
+    padding-block: 8px;
+    background: none;
+  }
+}
+
+.companyLocation,
+.duration {
+  display: flex;
+  gap: 10px;
+  /* flex-direction: row-reverse; */
+  justify-content: start;
+}
+
+.other-social-entry {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .otherSocialWrapper {
+    margin-top: 8px;
+    max-width: 90%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+
+}
+
+
+@media (max-width: 767px) {
+
+  .studentProfiles {
+    .studentFilterSearchWrapper {
+      flex-direction: column;
+      gap: 16px;
+    }
+  }
+
+  .studentProfilePage{
+
+    .curricularBoxiv{
+      max-width: 100% ;
+      padding-inline: 10px !important;
+    }
+    .workExperienceLogoTextWrapper{
+      flex-direction: column;
+    }
+    .companyName {
+      font-size: 16px;
+    }
+    .product {
+      min-width: 100px;
+    }
+    .responsibilityParent>h2{
+      margin-bottom: 12px;
+    }
+    .profilePara.aboutPara{
+      font-size: 12px;
+    }
+    .dropShippingLeft{
+      border: 1px solid var(--grey4);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .internshipBelow:not(:first-child) {
+      border-top: 1px solid var(--grey4);
+      padding-top: 20px;
+    }
+    .associateParent:not(:first-of-type){
+      padding-top: 16px;
+      padding-bottom: 0;
+    }
+    .studentWorkExperiences{
+      gap: 16px;
+    }
+    .internshipBelow{
+      flex-direction: column; 
+      gap: 10px;
+    }
+    .nameEdu{
+      gap: 8px;
+    }
+    .financeBox:last-child{
+      padding-top: 10px;
+    }
+    .financeBox{
+      padding-bottom: 10px;
+
+    }
+    .studentAboutParent{
+      padding-bottom: 12px;
+    }
+    .studentScholarship{
+      padding-top: 12px;
+    }
+  }
+
+
+
+
+
+
+  .editProfile .studentProfileWrapper {
+    flex-wrap: wrap;
+  }
+
+  .editProfile .studentProfileWrapper .profileLeft {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .editProfile .studentProfileWrapper .profileRight {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .editProfile .profileLeft {
+    position: relative;
+    top: 0;
+  }
+
+  .editProfile .editProfileButton {
+    flex-wrap: nowrap;
+  }
+
+  .editProfile .editProfileButton button {
+    font-size: 13px;
+  }
+
+  .editProfile .editProfileButton {
+    justify-content: center;
+    margin-top: 12px;
+    margin-bottom: 16px;
+  }
+
+  .projectsBoxi {
+    max-width: unset !important;
+  }
+  .challengeHeadingWrapper{
+    width: 100%;
+    justify-content: space-between;
+  }
+  .dropshippingDiv{
+    gap: 24px;
+  }
+
+  .experienceParent {
+    .expBoxiParent {
+      flex-wrap: nowrap;
+      flex-direction: column;
+
+      .expBoxi {
+        max-width: 100%;
+        flex-direction: column;
+      }
+    }
+  }
+
+  .associateRight {
+    max-width: 100% !important;
+  }
+
+
+  .courseRatioParent {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+  }
+  /* .courseRatioBox:not(:last-child){
+    border-right: none !important;
+    padding-right: 0 !important;
+    border-bottom: 1px solid var(--grey15);
+    padding-bottom: 16px;
+  } */
+  /* .courseRatioBox:not(:first-child){
+    padding-top: 16px !important;
+    padding-left: 0 !important;
+  } */
+  .courseHighlights{
+    gap: 16px !important;
+  }
+  .courseRatioBox {
+    padding: 16px !important;
+    gap: 4px !important;
+  }
+
+
+  .courseRatioBox:nth-child(2)::after {
+    /* display: none !important; */
+    transform: rotate(90deg);
+
+    top: -70px !important;
+
+    height: 348px !important;
+    left: -24px;
+
+  }
+
+  .dropshippingParent {
+    flex-direction: column;
+    align-items: center;
+    align-items: normal !important;
+
+    .dropshippingRight {
+      max-width: 100%;
+    }
+  }
+
+  .dropShippingLeft {
+    max-width: 100% !important;
+  }
+
+  .vipChallenge .dropshippingRight {
+    max-width: 100% !important;
+  }
+
+  .technologyWrapper {
+    flex-direction: column;
+  }
+
+  .technologyBox {
+    max-width: 100% !important;
+  }
+
+  .curricularDiv,
+  .projectsDivi {
+    overflow: hidden !important;
+  }
+
+  .studentScholarship {
+    flex-direction: row !important;
+  }
+}
+
+.curricularImage {
+  max-height: 166px !important;
+  min-height: 166px !important;
+  overflow: hidden;
+  width: 100%;
+}
+
+
+
+.removeEntryBtn {
+  margin-right: 8px;
+}
+
+
+
+/* Creator challlenge form below */
+
+.creatorChallengeReelsWrapper {
+  padding: 16px;
+  border: solid 1px #E5E5E5;
+  border-radius: 10px;
+  display: flex;
+  gap: 10px;
+
+}
+
+.creatorChallengeThumbnailSection,
+.creatorChallengeReelLinkWrapper {
+  max-width: 362px;
+  width: 100%;
+}
+
+.chooseButton {
+  padding: 12px 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font: 14px "go-regular";
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.formField-upload input[type="file"] {
+  display: none;
+}
+
+.creatorChallengeThumbnailWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}

@@ -1,0 +1,256 @@
+<main>
+    <div class="popupContainerOuter   ApplyNow" id="UgdownloadBrochure">
+
+        <div class="popupContainer">
+            <div class="fromTophead ">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="Ug_form_heading"> Download Programme
+                    Brochure </h2>
+                <div class="popUpCloseBtnWrap">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Icon" onclick="hideApplyNowPopUp();">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="leadformContainer">
+                <div class="left mob-hide">
+                    <img class="ugPopUpImg" src="https://files.mastersunion.link/media/img/ug-brochure-image.webp" alt="">
+                </div>
+                <div class="right">
+                    <div class="formContainer active">
+                        <div class="flexInput" id="formain">
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Full Name <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your name"
+                                    class="inputBox font-16 font-black1 font-medium " id="nameReport"
+                                    onblur="validateNameInput('nameReport', 'nameReportVal')">
+                                <p class="font-12 font-red font-regular warning" id="nameReportVal">Please Check the
+                                    input</p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Email ID <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your email"
+                                    class="inputBox font-16 font-black1 font-medium " id="emailReport"
+                                    onblur="validateEmailInput('emailReport', 'emailReportVal')">
+                                <p class="font-12 font-red font-regular warning" id="emailReportVal">Please Enter Valid
+                                    Email
+                                </p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Contact Number <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your mobile number" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                    class="inputBox font-16 font-black1 font-medium " id="numberReport" maxlength="10"
+                                    onblur="validateMobileInput('numberReport', 'numberReportVal')">
+                                <p class="font-12 font-red font-regular warning" id="numberReportVal">Please Enter Valid
+                                    Number
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="consentCheckWrapper">
+                        <div class="consentCheckRow">
+                            <input type="checkbox" id="consentCheckugPlac">
+                            <label for="consentCheckugPlac">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+                        </div>
+                        <p id="consentCheckErrorugPlac" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+                    </div>
+                    <div class="formFooter" id="submitbuttonreport">
+                        <div class="gradientButton whiteHover" onclick="onButtonClickSubmitReport()">
+                            <button class="button iconButton gtmUgDwnBroPop" id="gtmUgDwnBroPopId">
+                                Download
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="https://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                        fill="white"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="SuccessMessage" class="congrats-box text-center hide">
+                <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+
+                <h3 class="thankyouboxHeading mt-10 gtmUgDwnBroGotit" id="gtmUgDwnBroGotitId">Got it</h3>
+                <p class="text-2 gtmUgDwnBroGotPara" id="gtmUgDwnBroGotParaId">The brochure will be downloaded shortly.
+                <p class="text-2"> Feel free to write to us at <a class="link-red"
+                        href="mailto:ugadmissions@mastersunion.org" target="_blank">ugadmissions@mastersunion.org</a>
+                </p>
+
+                <p class="text-2"> or call on <span class="font-bold">+91 76691 86660</span> in case of any queries.
+                </p>
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+
+
+    function openCareerReportPopup(formTitle, destination) {
+        const form = document.getElementById("UgdownloadBrochure");
+        const h2 = document.querySelector("#Ug_form_heading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        document.querySelector("#SuccessMessage").classList.add("hide");
+        document.querySelector("#submitbuttonreport").classList.remove("hide");
+        document.querySelector("#leadformContainer").classList.remove("hide");
+        document.querySelector("#Ug_form_heading").classList.remove("hide");
+    }
+    // let name = $('#nameReport').val();
+    // let email = $('#emailReport').val();
+    // let number = $('#numberReport').val();
+    function onButtonClickSubmitReport() {
+        console.log('on submit');
+
+        // Validate functions
+        const validateNumber = (number) => /^\d+$/.test(number);
+        const validateEmail = (email) => email.includes("@") && email.includes(".");
+
+        let name = $('#nameReport').val().trim();
+        let email = $('#emailReport').val().trim();
+        let number = $('#numberReport').val().trim();
+
+
+        let isValid = true;
+
+        isValid = validateNameInput('nameReport', 'nameReportVal') && isValid;
+        isValid = validateEmailInput('emailReport', 'emailReportVal') && isValid;
+        isValid = validateMobileInput('numberReport', 'numberReportVal') && isValid;
+
+        if (!document.getElementById('consentCheckugPlac')?.checked) { document.getElementById('consentCheckErrorugPlac').classList.remove('warning'); isValid = false; } else { document.getElementById('consentCheckErrorugPlac').classList.add('warning'); }
+
+        if (!isValid) return;
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const utmSource = params.utm_source || 'Website';
+        const utmMedium = params.utm_medium;
+        const utmCampaign = params.utm_campaign;
+        let url = window.location.pathname.substring(1);
+        let formname = document.querySelector("#UgdownloadBrochure").getAttribute("data-title") || "Download Placement Report";
+        let medium = `UG Programme in Technology & Business Management - Popup`;
+
+        let course = 'UG Programme in TBM or PSM';
+     //  if (url.startsWith("pgp-rise")) {
+     //      course = 'PGP Rise';
+     //      medium = `PGP Rise - ${formname} Popup`;
+     //  } else if (url.startsWith("ug-")) {
+     //      course = 'Undergraduate Programme';
+     //      medium = `UG - ${formname} Popup`;
+     //  }
+
+        let device = 'PC';
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            device = "Mobile";
+        } else {
+            device = "Desktop";
+        }
+
+        // api for our Data base
+        var post_url = '{{apiBaseURL}}/api/courseRegister';
+        var request_method = 'POST'; //get form GET/POST method
+        $.ajax({
+            url: post_url,
+            type: request_method,
+            contentType: "application/json",
+            data: JSON.stringify({
+                "email": email,
+                "name": name,
+                "mobile": number,
+                "courseName": course,
+                "medium": medium,
+                consentCheck: document.getElementById('consentCheckugPlac')?.checked || false
+            }),
+            dataType: "json",
+            success: function (result) {
+                console.log("Second api after first success")
+                const post_url = '{{apiBaseURL}}/api/leads/pushToNPF_UG';
+                const request_method = 'POST';
+
+                $.ajax({
+                    url: post_url,
+                    type: request_method,
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        "field_device_type": device,
+                        "email": email,
+                        "name": name,
+                        "mobile": number,
+                        "linkedinProfile": "",
+                        "medium": utmMedium || medium,
+                        "campaign": utmCampaign || null,
+                        "source": utmSource,
+                        //"course": course,
+                        "course": "course",
+                        "Specialization": course,
+                        "Course Preference": "Technology & Business Management",
+                        "field_utm_url": window.location.href,
+                        "sendMail": false,
+                        consentCheck: document.getElementById('consentCheckugPlac')?.checked || false
+                    }),
+                    dataType: "json",
+                    success: function (result) {
+
+
+                    }
+                });
+
+            }
+        });
+
+        const form = document.getElementById("UgdownloadBrochure");
+        const destination = form.getAttribute("data-destination") || "https://files.mastersunion.link/assets/1/Placement_Report_25.pdf";
+        setTimeout(() => {
+            window.open(destination, "_blank");
+        }, 3000);
+        document.querySelector("#SuccessMessage").classList.remove("hide");
+        document.querySelector("#submitbuttonreport").classList.add("hide");
+        document.querySelector("#leadformContainer").classList.add("hide");
+        document.querySelector("#Ug_form_heading").classList.add("hide");
+
+
+    }
+
+    function validateInputBlur(fieldId, fieldName) {
+        const inputValue = $(`#${fieldId}`).val().trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const numberRegex = /^\d+$/;
+
+        if (inputValue === "") {
+            $(`#${fieldName}ReportVal`).removeClass('warning');
+        } else {
+            $(`#${fieldName}ReportVal`).addClass('warning');
+        }
+    }
+
+
+    function hideApplyNowPopUp() {
+        let applyNowPopUp = document.getElementById("UgdownloadBrochure");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+
+        $('#nameReport').val("");
+        $('#emailReport').val("");
+        $('#numberReport').val("");
+        document.getElementById('consentCheckugPlac').checked = false;
+        document.getElementById('consentCheckErrorugPlac').classList.add('warning');
+
+    }
+
+
+
+</script>

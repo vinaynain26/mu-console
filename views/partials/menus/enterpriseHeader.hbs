@@ -1,0 +1,1598 @@
+<link rel="stylesheet" href="/assets/css/menu.css">
+
+<style>
+    .enterList {
+        padding: 10px 8px;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--grey17);
+        cursor: pointer;
+        transition: 0.4s ease;
+
+        img {
+            transition: 0.4s ease;
+            max-width: 16px;
+        }
+    }
+
+    .enterList:hover {
+        img {
+            transform: translate(4px, -4px);
+
+        }
+    }
+
+    .shapeText {
+        font-size: 14px;
+        line-height: 120%;
+        font-family: var(--go-regular);
+        color: var(--grey4);
+
+    }
+
+    .enterDrop {
+        padding:8px;
+        background: var(--black);
+        border-radius: 12px;
+        width: 100%;
+        max-width: 182px;
+        border: 1px solid var(--grey3);
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .menuDown::after {
+        background: unset;
+    }
+
+    .topHeader {
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.5) 30%, rgba(0, 0, 0, 0.4) 55%, rgba(0, 0, 0, 0.0) 100%);
+    }
+
+    .menuDown {
+        background: unset;
+    }
+
+    .enterDrop {
+        position: absolute;
+        right: 23%;
+    }
+
+    .enterDrop2 {
+        position: absolute;
+        right: 15%;
+    }
+
+    @media (min-width: 1220px) and (max-width: 1500px) {
+        .enterDrop {
+            right: 18%;
+        }
+
+        .enterDrop2 {
+            right: 6%;
+        }
+    }
+    @media (min-width: 1500px) and (max-width: 1920px) {
+        .enterDrop {
+            right: 26%;
+        }
+        .enterDrop2 {
+            right: 17%;
+        }
+    }
+
+    .navMenu {
+
+        gap: 32px;
+        .megaLink.active {
+            .dropdownItems {
+                color: #E38330;
+            }
+
+            .dropdownItems::after {
+                background: var(--grey3) !important;
+                transform: scaleX(1);
+            }
+
+            .dropdownItems .dropdown-icon path {
+                stroke: #E38330;
+            }
+        }
+    }
+
+    .mu-home-countdown {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(0, 0, 0, 0.4);
+        /* very light background for white banner */
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+        padding: 4px 10px;
+    }
+
+    .dropImage {
+        display: none;
+        transition: 0.4s ease;
+    }
+
+    .dropdownItems {
+        position: relative;
+        padding: 0 8px;
+    }
+
+
+    .dropdownItems.active::after {
+        transform: scaleX(1);
+    }
+
+
+    .navMenu .megaLink.menu-open>.dropdownItems.droEvent::after {
+        background: var(--grey3) !important;
+        transform: scaleX(1);
+    }
+
+    .navMenu .megaLink>.dropdownItems.droEvent .dropdown-icon {
+        transform: rotate(0deg);
+        transition: transform 0.6s ease;
+    }
+
+    .navMenu .megaLink.menu-open>.dropdownItems.droEvent .dropdown-icon {
+        transform: rotate(180deg);
+    }
+
+    .topHeader.shrikIt {
+        top: 0px !important;
+        border-bottom: unset;
+    }
+
+    .navMenu .dropdownItems:hover {
+        color: #E38330;
+        font-family: "go-medium";
+        font-weight: 600;
+
+    }
+
+    .navMenu .dropdownItems.active {
+        color: #E38330;
+        font-family: "go-medium";
+        font-weight: 600;
+
+        .dropImage {
+            display: block;
+        }
+    }
+
+    body.enterprise-nav-loading {
+        cursor: progress;
+    }
+
+    body.enterprise-nav-loading .navMenu .dropdownItems {
+        pointer-events: none;
+    }
+
+    .belowHeader {
+        padding: 4.5px 0;
+    }
+
+    .mu-time-item {
+        display: flex;
+        align-items: baseline;
+        gap: 2px;
+    }
+
+    .navMenu .dropdownItems {
+        font-size: 14px;
+        font-family: var(--go-medium);
+        color: var(--grey4);
+        text-transform: capitalize;
+        transition: 0.4s ease all;
+    }
+
+    .mu-time-item span:first-child {
+        font-size: 13px;
+        font-weight: 700;
+        font-feature-settings: "tnum";
+        font-variant-numeric: tabular-nums;
+        color: white;
+    }
+
+    .mu-time-lbl {
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--grey10, #666);
+    }
+
+    .mu-colon {
+        font-weight: 700;
+        color: var(--grey10, #666);
+        position: relative;
+        top: -1px;
+    }
+
+    .topHeader .menuLogo {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        max-width: fit-content;
+    }
+
+    .homeDirect {
+        width: 100%;
+        max-width: 20px;
+    }
+
+    .enterLinking {
+        width: 100%;
+        max-width: 206px;
+    }
+
+    @media (max-width: 480px) {
+        .mu-home-countdown {
+            padding: 3px 6px;
+            gap: 4px;
+        }
+
+        .mu-time-item span:first-child {
+            font-size: 11px;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .mobileMenu .menuLogo {
+            width: 100%;
+            gap: 0px;
+        }
+
+        .mobileMenu .hamburgerParent {
+            padding: 10px 0;
+        }
+
+        .mobileMenu .heading {
+            text-transform: capitalize;
+        }
+
+
+        .mobileMenu .mobMenuHeader .logo {
+            width: 60%;
+        }
+
+
+    }
+</style>
+
+
+
+<header class="topHeader forhomepage">
+    <div class="container">
+
+
+        <div class="belowHeader">
+
+            <div class="menuLogo">
+                <a href="/" class="homeDirect">
+                    <img src="https://images.mastersunion.link/uploads/21042026/v1/Vector.svg" alt="Icon">
+                </a>
+
+                <a href="/enterprise-home" class="enterLinking">
+                    <img loading="lazy" src="https://images.mastersunion.link/uploads/22042026/v1/MUEnterpriseLD5.gif"
+                        alt="MU Logo" />
+                </a>
+            </div>
+
+            <ul class="navMenu">
+                <li class="navList">
+                    <a class="dropdownItems" href="/enterprise-home" data-menu-slug="home">
+                        {{!-- <svg xmlns="http://www.w3.org/2000/svg" class="dropImage" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M21 11.2503V20.2503C21 20.4492 20.921 20.64 20.7803 20.7806C20.6397 20.9213 20.4489 21.0003 20.25 21.0003H15C14.8011 21.0003 14.6103 20.9213 14.4697 20.7806C14.329 20.64 14.25 20.4492 14.25 20.2503V15.3753C14.25 15.2758 14.2105 15.1804 14.1402 15.1101C14.0698 15.0398 13.9745 15.0003 13.875 15.0003H10.125C10.0255 15.0003 9.93016 15.0398 9.85983 15.1101C9.78951 15.1804 9.75 15.2758 9.75 15.3753V20.2503C9.75 20.4492 9.67098 20.64 9.53033 20.7806C9.38968 20.9213 9.19891 21.0003 9 21.0003H3.75C3.55109 21.0003 3.36032 20.9213 3.21967 20.7806C3.07902 20.64 3 20.4492 3 20.2503V11.2503C3.00018 10.8525 3.15834 10.4711 3.43969 10.19L10.9397 2.68997C11.221 2.40888 11.6023 2.25098 12 2.25098C12.3977 2.25098 12.779 2.40888 13.0603 2.68997L20.5603 10.19C20.8417 10.4711 20.9998 10.8525 21 11.2503Z"
+                                fill="white" />
+                        </svg> --}}
+                        Home
+
+                    </a>
+                </li>
+                <li class="navList">
+                    <a href="/enterprise-courses" class="dropdownItems" data-menu-slug="courses">
+                        {{!-- <svg xmlns="http://www.w3.org/2000/svg" class="dropImage" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M21.75 4.5H15.75C14.9544 4.5 14.1913 4.81607 13.6287 5.37868C13.0661 5.94129 12.75 6.70435 12.75 7.5V15.7247C12.7526 15.9182 12.6818 16.1056 12.5519 16.2491C12.422 16.3926 12.2425 16.4816 12.0497 16.4981C11.9471 16.5049 11.8442 16.4906 11.7474 16.456C11.6506 16.4213 11.5619 16.3672 11.4869 16.2968C11.4119 16.2265 11.3522 16.1415 11.3115 16.0471C11.2707 15.9527 11.2498 15.8509 11.25 15.7481V7.5C11.25 6.70435 10.9339 5.94129 10.3713 5.37868C9.80871 4.81607 9.04565 4.5 8.25 4.5H2.25C2.05109 4.5 1.86032 4.57902 1.71967 4.71967C1.57902 4.86032 1.5 5.05109 1.5 5.25V18.75C1.5 18.9489 1.57902 19.1397 1.71967 19.2803C1.86032 19.421 2.05109 19.5 2.25 19.5H9C9.59576 19.5 10.1672 19.7363 10.589 20.157C11.0108 20.5778 11.2485 21.1486 11.25 21.7444C11.247 21.8975 11.2915 22.0478 11.3775 22.1746C11.4635 22.3013 11.5866 22.3983 11.73 22.4522C11.8438 22.4961 11.9666 22.5116 12.0878 22.4973C12.209 22.483 12.3248 22.4394 12.4253 22.3702C12.5258 22.3011 12.6079 22.2084 12.6645 22.1003C12.721 21.9923 12.7504 21.872 12.75 21.75C12.75 21.1533 12.9871 20.581 13.409 20.159C13.831 19.7371 14.4033 19.5 15 19.5H21.75C21.9489 19.5 22.1397 19.421 22.2803 19.2803C22.421 19.1397 22.5 18.9489 22.5 18.75V5.25C22.5 5.05109 22.421 4.86032 22.2803 4.71967C22.1397 4.57902 21.9489 4.5 21.75 4.5ZM19.5 15.75H15.7753C15.5818 15.7526 15.3944 15.6818 15.2509 15.5519C15.1074 15.422 15.0184 15.2425 15.0019 15.0497C14.9951 14.9471 15.0094 14.8442 15.044 14.7474C15.0787 14.6506 15.1328 14.5619 15.2032 14.4869C15.2735 14.4119 15.3585 14.3522 15.4529 14.3115C15.5473 14.2707 15.6491 14.2498 15.7519 14.25H19.4766C19.6701 14.2474 19.8575 14.3182 20.001 14.4481C20.1445 14.578 20.2334 14.7575 20.25 14.9503C20.2568 15.0529 20.2425 15.1558 20.2078 15.2526C20.1732 15.3494 20.119 15.4381 20.0487 15.5131C19.9784 15.5881 19.8934 15.6478 19.799 15.6885C19.7046 15.7293 19.6028 15.7502 19.5 15.75ZM19.5 12.75H15.7753C15.5818 12.7526 15.3944 12.6818 15.2509 12.5519C15.1074 12.422 15.0184 12.2425 15.0019 12.0497C14.9951 11.9471 15.0094 11.8442 15.044 11.7474C15.0787 11.6506 15.1328 11.5619 15.2032 11.4869C15.2735 11.4119 15.3585 11.3522 15.4529 11.3115C15.5473 11.2707 15.6491 11.2498 15.7519 11.25H19.4766C19.6701 11.2474 19.8575 11.3182 20.001 11.4481C20.1445 11.578 20.2334 11.7575 20.25 11.9503C20.2568 12.0529 20.2425 12.1558 20.2078 12.2526C20.1732 12.3494 20.119 12.4381 20.0487 12.5131C19.9784 12.5881 19.8934 12.6478 19.799 12.6885C19.7046 12.7293 19.6028 12.7502 19.5 12.75ZM19.5 9.75H15.7753C15.5814 9.75308 15.3936 9.68252 15.2497 9.55255C15.1058 9.42258 15.0166 9.24288 15 9.04969C14.9932 8.9471 15.0075 8.8442 15.0422 8.74739C15.0768 8.65059 15.131 8.56193 15.2013 8.48694C15.2716 8.41194 15.3566 8.35221 15.451 8.31145C15.5454 8.27069 15.6472 8.24977 15.75 8.25H19.4747C19.6686 8.24692 19.8564 8.31748 20.0003 8.44745C20.1442 8.57742 20.2334 8.75713 20.25 8.95031C20.2568 9.0529 20.2425 9.1558 20.2078 9.25261C20.1732 9.34942 20.119 9.43807 20.0487 9.51306C19.9784 9.58806 19.8934 9.64779 19.799 9.68855C19.7046 9.72931 19.6028 9.75023 19.5 9.75Z"
+                                fill="white" />
+                        </svg> --}}
+                        Courses
+
+                    </a>
+                </li>
+                <li class="navList">
+                    <a class="dropdownItems" href="/enterprise-case-studies" data-menu-slug="success-stories">
+                        {{!-- <svg xmlns="http://www.w3.org/2000/svg" class="dropImage" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M21.75 6H19.5V4.5C19.5 4.30109 19.421 4.11032 19.2803 3.96967C19.1397 3.82902 18.9489 3.75 18.75 3.75H5.25C5.05109 3.75 4.86032 3.82902 4.71967 3.96967C4.57902 4.11032 4.5 4.30109 4.5 4.5V6H2.25C1.85218 6 1.47064 6.15804 1.18934 6.43934C0.908035 6.72064 0.75 7.10218 0.75 7.5V9C0.75 9.99456 1.14509 10.9484 1.84835 11.6517C2.19657 11.9999 2.60997 12.2761 3.06494 12.4645C3.51991 12.653 4.00754 12.75 4.5 12.75H4.84219C5.28398 14.1501 6.12634 15.39 7.26516 16.3166C8.40398 17.2431 9.78933 17.8157 11.25 17.9634V20.25H9C8.80109 20.25 8.61032 20.329 8.46967 20.4697C8.32902 20.6103 8.25 20.8011 8.25 21C8.25 21.1989 8.32902 21.3897 8.46967 21.5303C8.61032 21.671 8.80109 21.75 9 21.75H15C15.1989 21.75 15.3897 21.671 15.5303 21.5303C15.671 21.3897 15.75 21.1989 15.75 21C15.75 20.8011 15.671 20.6103 15.5303 20.4697C15.3897 20.329 15.1989 20.25 15 20.25H12.75V17.9606C15.7444 17.6578 18.2288 15.5569 19.1325 12.75H19.5C20.4946 12.75 21.4484 12.3549 22.1516 11.6517C22.8549 10.9484 23.25 9.99456 23.25 9V7.5C23.25 7.10218 23.092 6.72064 22.8107 6.43934C22.5294 6.15804 22.1478 6 21.75 6ZM4.5 11.25C3.90326 11.25 3.33097 11.0129 2.90901 10.591C2.48705 10.169 2.25 9.59674 2.25 9V7.5H4.5V10.5C4.5 10.75 4.51219 11 4.53656 11.25H4.5ZM21.75 9C21.75 9.59674 21.5129 10.169 21.091 10.591C20.669 11.0129 20.0967 11.25 19.5 11.25H19.4531C19.4839 10.9729 19.4995 10.6944 19.5 10.4156V7.5H21.75V9Z"
+                                fill="white" />
+                        </svg> --}}
+                        Success Stories
+
+                    </a>
+                </li>
+                <li class="navList">
+                    <a class="dropdownItems" href="/enterprise-faculty" data-menu-slug="faculty">
+                        {{!-- <svg xmlns="http://www.w3.org/2000/svg" class="dropImage" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M20.25 3.75H3.75C3.35218 3.75 2.97064 3.90804 2.68934 4.18934C2.40804 4.47064 2.25 4.85218 2.25 5.25V18.75C2.25 19.1478 2.40804 19.5294 2.68934 19.8107C2.97064 20.092 3.35218 20.25 3.75 20.25H5.00531C5.14726 20.25 5.2863 20.2098 5.40628 20.134C5.52627 20.0581 5.62227 19.9498 5.68313 19.8216C6.04783 19.0516 6.62363 18.4009 7.34357 17.9453C8.06351 17.4897 8.898 17.2478 9.75 17.2478C10.602 17.2478 11.4365 17.4897 12.1564 17.9453C12.8764 18.4009 13.4522 19.0516 13.8169 19.8216C13.8777 19.9498 13.9737 20.0581 14.0937 20.134C14.2137 20.2098 14.3527 20.25 14.4947 20.25H20.25C20.6478 20.25 21.0294 20.092 21.3107 19.8107C21.592 19.5294 21.75 19.1478 21.75 18.75V5.25C21.75 4.85218 21.592 4.47064 21.3107 4.18934C21.0294 3.90804 20.6478 3.75 20.25 3.75ZM9.75 15.75C9.15666 15.75 8.57664 15.5741 8.08329 15.2444C7.58994 14.9148 7.20542 14.4462 6.97836 13.8981C6.7513 13.3499 6.69189 12.7467 6.80764 12.1647C6.9234 11.5828 7.20912 11.0482 7.62868 10.6287C8.04824 10.2091 8.58279 9.9234 9.16473 9.80764C9.74667 9.69189 10.3499 9.7513 10.8981 9.97836C11.4462 10.2054 11.9148 10.5899 12.2444 11.0833C12.5741 11.5766 12.75 12.1567 12.75 12.75C12.75 13.5456 12.4339 14.3087 11.8713 14.8713C11.3087 15.4339 10.5456 15.75 9.75 15.75ZM20.25 18.75H14.9466C14.6196 18.1862 14.2029 17.6796 13.7128 17.25H18C18.1989 17.25 18.3897 17.171 18.5303 17.0303C18.671 16.8897 18.75 16.6989 18.75 16.5V7.5C18.75 7.30109 18.671 7.11032 18.5303 6.96967C18.3897 6.82902 18.1989 6.75 18 6.75H6C5.80109 6.75 5.61032 6.82902 5.46967 6.96967C5.32902 7.11032 5.25 7.30109 5.25 7.5V16.5C5.24992 16.6663 5.30513 16.828 5.40696 16.9595C5.50878 17.091 5.65145 17.185 5.8125 17.2266C5.31114 17.6609 4.88563 18.1758 4.55344 18.75H3.75V5.25H20.25V18.75Z"
+                                fill="white" />
+                        </svg> --}}
+                        Faculty
+
+                    </a>
+                </li>
+                <li class="navList megaLink" data-rel="enterprise" data-submenu-target="enterprise4">
+                    <a class="dropdownItems droEvent" href="#" data-menu-slug="industries">
+                        Industries
+                        <svg width="16" height="17" class="dropdown-icon" viewBox="0 0 16 17" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 6.49976L8 11.4998L3 6.49976" stroke="white" stroke-width="1.33333"
+                                stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </a>
+                </li>
+
+                <li class="navList megaLink" data-rel="enterpriseOrg" data-submenu-target="enterprise5">
+                    <a class="dropdownItems droEvent" href="#" id="nav__faculty" data-menu-slug="organizations">
+                        Organizations
+
+                        <svg width="16" height="17" class="dropdown-icon" viewBox="0 0 16 17" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 6.49976L8 11.4998L3 6.49976" stroke="white" stroke-width="1.33333"
+                                stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </a>
+                </li>
+
+
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="menuDown academicsDiv enterpriseDivi" id="enterprise">
+        <div class="enterDrop">
+            <a href="/enterprise-healthcare" class="enterList">
+                <p class="shapeText">Healthcare</p>
+                <img src="https://images.mastersunion.link/uploads/21042026/v1/MUArrowMain3.svg" alt="Icon">
+            </a>
+
+            <a href="/enterprise-bfsi" class="enterList">
+                <p class="shapeText">BFSI</p>
+                <img src="https://images.mastersunion.link/uploads/21042026/v1/MUArrowMain3.svg" alt="Icon">
+            </a>
+
+            <a href="/enterprise-technology" class="enterList">
+                <p class="shapeText">Technology</p>
+                <img src="https://images.mastersunion.link/uploads/21042026/v1/MUArrowMain3.svg" alt="Icon">
+            </a>
+
+            <a href="/enterprise-manufacturing" class="enterList">
+                <p class="shapeText">Manufacturing</p>
+                <img src="https://images.mastersunion.link/uploads/21042026/v1/MUArrowMain3.svg" alt="Icon">
+            </a>
+
+            <a href="/enterprise-retail" class="enterList">
+                <p class="shapeText">Retail</p>
+                <img src="https://images.mastersunion.link/uploads/21042026/v1/MUArrowMain3.svg" alt="Icon">
+            </a>
+        </div>
+    </div>
+
+    <div class="menuDown academicsDiv enterpriseDivi" id="enterpriseOrg">
+        <div class="enterDrop enterDrop2">
+            <a href="/enterprise-government" class="enterList">
+                <p class="shapeText">Government</p>
+                <img src="https://images.mastersunion.link/uploads/21042026/v1/MUArrowMain3.svg" alt="Icon">
+            </a>
+
+            <a href="/enterprise-university" class="enterList">
+                <p class="shapeText">Universities</p>
+                <img src="https://images.mastersunion.link/uploads/21042026/v1/MUArrowMain3.svg" alt="Icon">
+            </a>
+
+            <a href="/enterprise-startups" class="enterList">
+                <p class="shapeText">Startups</p>
+                <img src="https://images.mastersunion.link/uploads/21042026/v1/MUArrowMain3.svg" alt="Icon">
+            </a>
+
+            <a href="/enterprise-sme" class="enterList">
+                <p class="shapeText">SMEs</p>
+                <img src="https://images.mastersunion.link/uploads/21042026/v1/MUArrowMain3.svg" alt="Icon">
+            </a>
+
+            <a href="/enterprise-large-enterprise" class="enterList">
+                <p class="shapeText">Large Enterprises</p>
+                <img src="https://images.mastersunion.link/uploads/21042026/v1/MUArrowMain3.svg" alt="Icon">
+            </a>
+        </div>
+    </div>
+</header>
+
+
+
+<div class="blurScreen" onclick="closeMenu()"></div>
+
+<div class="mobileMenu">
+    <header class="mobileHeader">
+        <div class="container">
+            <div class="hamburgerParent">
+                <div class="menuLogo">
+                    <a href="/" class="homeDirect">
+                        <img src="https://images.mastersunion.link/uploads/21042026/v1/Vector.svg" alt="Icon">
+                    </a>
+
+                    <a href="/enterprise-home" class="enterLinking">
+                        <img loading="lazy"
+                            src="https://images.mastersunion.link/uploads/22042026/v1/MUEnterpriseLD5.gif"
+                            alt="MU Logo" />
+                    </a>
+                </div>
+                <div class="hamburger" id="mobileHamburgerBtn" tabindex="0" aria-label="Open menu" role="button">
+                    <img loading="lazy" src="https://files.mastersunion.link/resources/svg/hamburger.svg"
+                        alt="Open menu" />
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobileHeaderContent" id="mobileHeaderContent">
+        <div class="headerContentMob">
+            <div class="mobMenuHeader">
+                <div class="menuLogo">
+                    <a href="/" class="homeDirect">
+                        <img src="https://images.mastersunion.link/uploads/21042026/v1/Vector.svg" alt="Icon">
+                    </a>
+
+                    <a href="/enterprise-home" class="enterLinking">
+                        <img loading="lazy"
+                            src="https://images.mastersunion.link/uploads/22042026/v1/MUEnterpriseLD5.gif"
+                            alt="MU Logo" />
+                    </a>
+                </div>
+                <div class="closeIcon" id="mobileMenuCloseBtn" tabindex="0" aria-label="Close menu" role="button">
+                    <img loading="lazy" src="https://files.mastersunion.link/resources/svg/menuCloseIcon.svg"
+                        alt="Close menu" />
+                </div>
+            </div>
+
+            <div class="mobMenuBody">
+                <a href="/enterprise-home" class="directMobLinks">
+                    <p class="heading">Home</p>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.0156 7.06066L5.56066 13.5156L4.5 12.455L10.9549 6H5.26561V4.5H13.5156V12.75H12.0156V7.06066Z"
+                            fill="white"></path>
+                    </svg>
+                </a>
+
+                <a href="/enterprise-courses" class="directMobLinks">
+                    <p class="heading">Courses</p>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.0156 7.06066L5.56066 13.5156L4.5 12.455L10.9549 6H5.26561V4.5H13.5156V12.75H12.0156V7.06066Z"
+                            fill="white"></path>
+                    </svg>
+                </a>
+
+                <a href="/enterprise-case-studies" class="directMobLinks">
+                    <p class="heading">Success Stories</p>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.0156 7.06066L5.56066 13.5156L4.5 12.455L10.9549 6H5.26561V4.5H13.5156V12.75H12.0156V7.06066Z"
+                            fill="white"></path>
+                    </svg>
+                </a>
+
+                <a href="/enterprise-faculty" class="directMobLinks">
+                    <p class="heading">Faculty</p>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.0156 7.06066L5.56066 13.5156L4.5 12.455L10.9549 6H5.26561V4.5H13.5156V12.75H12.0156V7.06066Z"
+                            fill="white"></path>
+                    </svg>
+                </a>
+                <div class="mobMenuItem">
+                    <div class="mobMenuItemHeader">
+                        <p class="heading">Industries</p>
+                        <img loading="lazy" src="https://files.mastersunion.link/resources/svg/menutoggler.svg"
+                            alt="Icon" class="togglerDown" />
+                    </div>
+                    <div class="mobMenuItemBody">
+                        <div class="mobMenuParent">
+                            <a href="/enterprise-healthcare" class="link">
+                                <p class="linkText">Healthcare</p>
+                            </a>
+                            <a href="/enterprise-bfsi" class="link">
+                                <p class="linkText">BFSI</p>
+                            </a>
+
+                            <a href="/enterprise-technology" class="link">
+                                <p class="linkText">Technology</p>
+                            </a>
+
+                            <a href="/enterprise-manufacturing" class="link">
+                                <p class="linkText">Manufacturing</p>
+                            </a>
+
+                            <a href="/enterprise-retail" class="link">
+                                <p class="linkText">Retail</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mobMenuItem">
+                    <div class="mobMenuItemHeader">
+                        <p class="heading">Organizations </p>
+                        <img loading="lazy" src="https://files.mastersunion.link/resources/svg/menutoggler.svg"
+                            alt="Icon" class="togglerDown" />
+                    </div>
+                    <div class="mobMenuItemBody">
+                        <div class="mobMenuParent">
+                            <a href="/enterprise-government" class="link">
+                                <p class="linkText">Government</p>
+                            </a>
+
+                            <a href="/enterprise-university" class="link">
+                                <p class="linkText">Universities</p>
+                            </a>
+                            <a href="/enterprise-startups" class="link">
+                                <p class="linkText">Startups</p>
+                            </a>
+
+                            <a href="/enterprise-sme" class="link">
+                                <p class="linkText">SMEs</p>
+                            </a>
+
+                            <a href="/enterprise-large-enterprise" class="link">
+                                <p class="linkText">Large Enterprises</p>
+                            </a>
+
+                            {{!-- <a href="https://muds.mastersunion.org/" class="link">
+                                <p class="linkText">UG Programme in Design</p>
+                            </a> --}}
+
+                        </div>
+                    </div>
+                </div>
+
+
+                {{! <a href="/enterprise-home" class="directMobLinks">
+                    <p class="heading">
+                        Enterprise
+                    </p>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.0156 7.06066L5.56066 13.5156L4.5 12.455L10.9549 6H5.26561V4.5H13.5156V12.75H12.0156V7.06066Z"
+                            fill="white"></path>
+                    </svg>
+                </a> }}
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    (function () {
+        const hamburger = document.getElementById("mobileHamburgerBtn");
+        const mobileMenu = document.getElementById("mobileHeaderContent");
+        const closeBtn = document.getElementById("mobileMenuCloseBtn");
+
+        function openMobileMenu() {
+            if (mobileMenu) {
+                mobileMenu.classList.add("active");
+                document.body.style.overflow = "hidden";
+            }
+        }
+        function closeMobileMenu() {
+            if (mobileMenu) {
+                mobileMenu.classList.remove("active");
+                document.body.style.overflow = "";
+            }
+        }
+
+        if (hamburger) {
+            hamburger.addEventListener("click", openMobileMenu);
+            hamburger.addEventListener("keydown", function (e) {
+                if (e instanceof KeyboardEvent && (e.key === "Enter" || e.key === " "))
+                    openMobileMenu();
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener("click", closeMobileMenu);
+            closeBtn.addEventListener("keydown", function (e) {
+                if (e instanceof KeyboardEvent && (e.key === "Enter" || e.key === " "))
+                    closeMobileMenu();
+            });
+        }
+
+        document.addEventListener("mousedown", function (e) {
+            const target = e.target;
+            if (
+                mobileMenu &&
+                mobileMenu.classList.contains("active") &&
+                !mobileMenu.contains(target instanceof Node ? target : null) &&
+                !(hamburger && hamburger.contains(target instanceof Node ? target : null))
+            ) {
+                closeMobileMenu();
+            }
+        });
+
+        document.addEventListener("keydown", function (e) {
+            if (
+                e instanceof KeyboardEvent &&
+                e.key === "Escape" &&
+                mobileMenu &&
+                mobileMenu.classList.contains("active")
+            ) {
+                closeMobileMenu();
+            }
+        });
+
+        function closeAllMobMenuItems(except = null) {
+            const allItems = document.querySelectorAll(".mobMenuItem");
+            allItems.forEach((item) => {
+                if (!(item instanceof HTMLElement)) return;
+                const body = item.querySelector(".mobMenuItemBody");
+                const header = item.querySelector(".mobMenuItemHeader");
+
+                if (item !== except) {
+                    if (body && body instanceof HTMLElement) {
+                        body.style.overflow = "hidden";
+                        body.style.transition =
+                            "max-height 0.45s cubic-bezier(0.4,0,0.2,1)";
+
+                        if (!body.classList.contains("open")) {
+                            body.style.setProperty("max-height", "0px", "important");
+                            body.classList.remove("open");
+                        } else {
+                            body.style.maxHeight = body.scrollHeight + "px";
+                            void body.offsetHeight;
+                            body.style.setProperty("max-height", "0px", "important");
+
+                            const removeOpen = function () {
+                                body.classList.remove("open");
+                                body.removeEventListener("transitionend", removeOpen);
+                            };
+                            body.addEventListener("transitionend", removeOpen);
+                        }
+                    }
+                    if (header && header instanceof HTMLElement) {
+                        header.classList.remove("active");
+                    }
+                    item.classList.remove("active");
+                }
+            });
+        }
+
+        function activateMobMenuItemSmoothly(item) {
+            const body = item.querySelector(".mobMenuItemBody");
+            const header = item.querySelector(".mobMenuItemHeader");
+            if (!body || !header) return;
+
+            closeAllMobMenuItems(item);
+
+            if (body instanceof HTMLElement) {
+                body.style.overflow = "hidden";
+                body.style.transition =
+                    "max-height 0.45s cubic-bezier(0.4,0,0.2,1)";
+                if (body.classList.contains("open")) return;
+
+                body.style.setProperty("max-height", "0px", "important");
+                void body.offsetHeight;
+
+                body.classList.add("open");
+                body.style.maxHeight = body.scrollHeight + "px";
+            }
+
+            header.classList.add("active");
+            item.classList.add("active");
+        }
+
+        function deactivateMobMenuItemSmoothly(item) {
+            const body = item.querySelector(".mobMenuItemBody");
+            const header = item.querySelector(".mobMenuItemHeader");
+            if (!body || !header) return;
+
+            if (body instanceof HTMLElement) {
+                body.style.overflow = "hidden";
+                body.style.transition =
+                    "max-height 0.45s cubic-bezier(0.4,0,0.2,1)";
+                body.style.maxHeight = body.scrollHeight + "px";
+                void body.offsetHeight;
+                body.style.setProperty("max-height", "0px", "important");
+
+                const removeOpen = function () {
+                    body.classList.remove("open");
+                    body.removeEventListener("transitionend", removeOpen);
+                };
+                body.addEventListener("transitionend", removeOpen);
+            }
+
+            header.classList.remove("active");
+            item.classList.remove("active");
+        }
+
+        function toggleMobMenuItem(item) {
+            const body = item.querySelector(".mobMenuItemBody");
+            if (!body) return;
+
+            if (body.classList.contains("open")) {
+                deactivateMobMenuItemSmoothly(item);
+            } else {
+                activateMobMenuItemSmoothly(item);
+            }
+        }
+
+        document.querySelectorAll(".mobMenuItem").forEach((item) => {
+            if (!(item instanceof HTMLElement)) return;
+            const header = item.querySelector(".mobMenuItemHeader");
+            const body = item.querySelector(".mobMenuItemBody");
+
+            if (header && body) {
+                body.style.overflow = "hidden";
+                body.style.transition =
+                    "max-height 0.45s cubic-bezier(0.4,0,0.2,1)";
+                body.style.setProperty("max-height", "0px", "important");
+                body.classList.remove("open");
+
+                const toggler = header.querySelector(".togglerDown");
+                if (toggler) {
+                    toggler.style.cursor = "pointer";
+                    toggler.addEventListener("click", function (e) {
+                        e.stopPropagation();
+                        toggleMobMenuItem(item);
+                    });
+                }
+
+                header.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    toggleMobMenuItem(item);
+                });
+            }
+        });
+
+        if (closeBtn) {
+            closeBtn.addEventListener("click", function () {
+                closeAllMobMenuItems();
+            });
+        }
+    })();
+</script>
+
+
+<script>
+    // menu scroller
+
+    $(document).ready(function () {
+        const currentPath = window.location.pathname;
+        const deviceWidth = window.innerWidth;
+        // Disable scroll-based shrikIt movement on mobile, but keep banner offset sync
+        if (deviceWidth <= 767) {
+            $("header").css({ "position": "fixed", "width": "100%", "z-index": "9999" });
+            $("#ugBanner").css({ "top": "0", "position": "fixed", "width": "100%", "z-index": "1001" });
+
+            function updateMobileHeaderTop() {
+                var st = $(window).scrollTop() || 0;
+                var offset = 0;
+                const heroBanner = document.getElementById('heroBanner');
+                if (heroBanner && heroBanner.classList.contains('active')) {
+                    offset += heroBanner.offsetHeight;
+                }
+
+                var currentOffset = Math.max(0, offset - st);
+                $("header").css("top", currentOffset + "px");
+
+                const mobileHeaderContent = document.getElementById("mobileHeaderContent");
+                if (mobileHeaderContent) {
+                    mobileHeaderContent.style.top = currentOffset + "px";
+                }
+            }
+
+            $(window).scroll(function () {
+                updateMobileHeaderTop();
+            });
+            updateMobileHeaderTop();
+
+            return;
+        }
+        if (deviceWidth >= 768 && deviceWidth <= 822) return;
+
+        var lastScrollTop = 0;
+        var $menu = $("header");
+        var menuHeight = $menu.height() - 60;
+        var windowHeight = $(window).height();
+        var sectionHeight = $(".highlightsec").height();
+        var documentHeight = $(document).scrollTop();
+
+        // Function to get banner offset
+        function getBannerOffset() {
+            let offset = 0;
+
+            // Account for ugBanner if visible
+            const banner = document.getElementById('ugBanner');
+            if (banner && banner.classList.contains('ug-banner--visible')) {
+                const rect = banner.getBoundingClientRect();
+                offset += rect.height;
+            }
+
+            // Also account for hero banner if visible
+            const heroBanner = document.getElementById('heroBanner');
+            if (heroBanner && heroBanner.classList.contains('active')) {
+                offset += heroBanner.offsetHeight;
+            }
+
+            return offset;
+        }
+
+        $(window).scroll(function () {
+            var st = $(this).scrollTop();
+            var bannerOffset = getBannerOffset();
+            var currentOffset = Math.max(0, bannerOffset - st);
+
+            // Remove shrikIt if we reach top 80px or less
+            if (st <= 80) {
+                $menu.css("top", currentOffset + "px");
+                $menu.removeClass("shrikIt");
+                lastScrollTop = st;
+                return;
+            }
+
+            if ($(".highlightsec").length > 0) {
+                if (st < $(".highlightsec").height()) {
+                    if (st > lastScrollTop) {
+                        // Scrolling down
+                        if (st > menuHeight && st + windowHeight < $(document).height()) {
+                            $menu.css("top", -menuHeight + "px");
+                            $menu.addClass("shrikIt");
+                        }
+                    } else {
+                        // Scrolling up
+                        // Only unshrink if at the top 80px
+                        if (st <= 80) {
+                            $menu.css("top", currentOffset + "px");
+                            $menu.removeClass("shrikIt");
+                        }
+                        // Otherwise, keep it shrunk
+                    }
+                    lastScrollTop = st;
+                }
+            } else {
+                if (st > lastScrollTop) {
+                    // Scrolling down
+                    if (st > menuHeight && st + windowHeight < $(document).height()) {
+                        $menu.css("top", -menuHeight + "px");
+                        $menu.addClass("shrikIt");
+                    }
+                } else {
+                    // Scrolling up
+                    // Only unshrink if at the top 80px
+                    if (st <= 80) {
+                        $menu.css("top", currentOffset + "px");
+                        $menu.removeClass("shrikIt");
+                    }
+                    // Otherwise, keep it shrunk
+                }
+                lastScrollTop = st;
+            }
+        });
+
+        if (documentHeight > sectionHeight) {
+            $menu.css("top", -menuHeight + "px");
+            $menu.addClass("darkHeader");
+        } else {
+            // Set initial position based on banner visibility (includes hero banner)
+            var bannerOffset = getBannerOffset();
+            if (bannerOffset > 0) {
+                $menu.css("top", bannerOffset + "px");
+            }
+        }
+    });
+</script>
+
+<script>
+    // Mobile-only subParent dropdown toggle functionality
+    (function () {
+        // Check if mobile (typically 768px or below)
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
+
+        // Toggle subDropContent visibility
+        function toggleSubDropContent(subParent) {
+            const subDropContent = subParent.querySelector(".subDropContent");
+            if (!subDropContent) return;
+
+            const isVisible = subDropContent.style.display === "block";
+            subDropContent.style.display = isVisible ? "none" : "block";
+
+            // Optional: toggle active class on subDropdown for styling
+            const subDropdown = subParent.querySelector(".subDropdown");
+            if (subDropdown) {
+                subDropdown.classList.toggle("active", !isVisible);
+            }
+        }
+
+        // Initialize event listeners for all subParent elements
+        function initSubParentDropdowns() {
+            if (!isMobile()) return;
+
+            document.querySelectorAll(".subParent").forEach((subParent) => {
+                const subDropdown = subParent.querySelector(".subDropdown");
+                const subDropContent = subParent.querySelector(".subDropContent");
+
+                if (!subDropdown || !subDropContent) return;
+
+                // Ensure subDropContent is hidden initially
+                subDropContent.style.display = "none";
+
+                // Add click event to subDropdown
+                subDropdown.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    toggleSubDropContent(subParent);
+                });
+
+                // Make subDropdown keyboard accessible
+                subDropdown.setAttribute("tabindex", "0");
+                subDropdown.style.cursor = "pointer";
+                subDropdown.addEventListener("keydown", function (e) {
+                    if (
+                        e instanceof KeyboardEvent &&
+                        (e.key === "Enter" || e.key === " ")
+                    ) {
+                        e.preventDefault();
+                        toggleSubDropContent(subParent);
+                    }
+                });
+            });
+        }
+
+        // Initialize on page load
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initSubParentDropdowns);
+        } else {
+            initSubParentDropdowns();
+        }
+
+        // Re-initialize on window resize (in case user switches between mobile/desktop)
+        let resizeTimer;
+        window.addEventListener("resize", function () {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                // Re-initialize to handle mobile/desktop switch
+                if (isMobile()) {
+                    initSubParentDropdowns();
+                } else {
+                    // Reset on desktop - remove event listeners and show content
+                    document.querySelectorAll(".subParent").forEach((subParent) => {
+                        const subDropContent = subParent.querySelector(".subDropContent");
+                        if (subDropContent) {
+                            subDropContent.style.display = "";
+                        }
+                        const subDropdown = subParent.querySelector(".subDropdown");
+                        if (subDropdown) {
+                            subDropdown.classList.remove("active");
+                        }
+                    });
+                }
+            }, 250);
+        });
+    })();
+</script>
+
+<script>
+    // Show/hide dropdowns on click for top nav only
+    function showMenu(id) {
+        $(".menuDown").removeClass("active");
+        if (id) {
+            $("#" + id).addClass("active");
+            $("header").addClass("menuActive");
+            $(".blurScreen").addClass("active");
+            $("body").css("overflow", "hidden");
+        }
+    }
+    function hideMenu() {
+        $(".menuDown").removeClass("active");
+        $("header").removeClass("menuActive");
+        $(".blurScreen").removeClass("active");
+        $("body").css("overflow", "auto");
+    }
+
+    const ENTERPRISE_ACTIVE_MENU_KEY = "enterpriseActiveMenuSlug";
+    const MEGA_MENU_OPEN_CLASS = "menu-open";
+    const PAGE_ACTIVE_CLASS = "page-active";
+    const NON_PERSISTENT_MENU_SLUGS = new Set(["industries", "organizations"]);
+    const $topMenuItems = $(".navMenu > .navList");
+    const $topMenuLinks = $topMenuItems.find("> .dropdownItems");
+
+    function isPersistableMenuSlug(slug) {
+        return !!slug && !NON_PERSISTENT_MENU_SLUGS.has(slug);
+    }
+
+    function setTopMenuActive(slug) {
+        $topMenuItems.removeClass(`active ${PAGE_ACTIVE_CLASS}`);
+        $topMenuLinks.removeClass(`active ${PAGE_ACTIVE_CLASS}`);
+        if (!slug) return;
+        const $activeLink = $topMenuLinks.filter(`[data-menu-slug="${slug}"]`).first();
+        $activeLink.addClass(`active ${PAGE_ACTIVE_CLASS}`);
+        $activeLink.closest(".navList").addClass(`active ${PAGE_ACTIVE_CLASS}`);
+    }
+
+    function normalizePath(pathname) {
+        const normalizedPath = (pathname || "/").toLowerCase().replace(/\/+$/, "");
+        return normalizedPath || "/";
+    }
+
+    function getSlugFromPath(pathname) {
+        const path = normalizePath(pathname);
+
+        if (path === "/" || path === "/enterprise-home") return "home";
+        if (path === "/enterprise-courses") return "courses";
+        if (path === "/enterprise-case-studies") return "success-stories";
+        if (path === "/enterprise-faculty") return "faculty";
+
+        if ([
+            "/enterprise-healthcare",
+            "/enterprise-bfsi",
+            "/enterprise-technology",
+            "/enterprise-manufacturing",
+            "/enterprise-retail"
+        ].includes(path)) {
+            return "industries";
+        }
+
+        if ([
+            "/enterprise-government",
+            "/enterprise-university",
+            "/enterprise-startups",
+            "/enterprise-sme",
+            "/enterprise-large-enterprise"
+        ].includes(path)) {
+            return "organizations";
+        }
+
+        return "";
+    }
+
+    function persistMenuSlug(slug) {
+        if (!isPersistableMenuSlug(slug)) return;
+        try {
+            localStorage.setItem(ENTERPRISE_ACTIVE_MENU_KEY, slug);
+        } catch (e) {
+            // Ignore storage failures in private mode or restricted environments.
+        }
+    }
+
+    function getInitialMenuSlug() {
+        const slugFromPath = getSlugFromPath(window.location.pathname);
+        if (slugFromPath) return slugFromPath;
+
+        try {
+            const storedSlug = localStorage.getItem(ENTERPRISE_ACTIVE_MENU_KEY) || "";
+            return isPersistableMenuSlug(storedSlug) ? storedSlug : "";
+        } catch (e) {
+            return "";
+        }
+    }
+
+    function restorePersistentMenuActiveState() {
+        setTopMenuActive(getInitialMenuSlug());
+    }
+
+    function activateEnterpriseSubtab(tabId) {
+        if (!tabId) return;
+        const $enterpriseMenu = $("#enterprise");
+        const $secondaryTab = $enterpriseMenu.find(".tabSecondary").first();
+        if (!$secondaryTab.length) return;
+
+        $secondaryTab.find(".aboutTabs .aboutItems").removeClass("active");
+        $secondaryTab.find(`.aboutTabs .aboutItems[data-rel="${tabId}"]`).first().addClass("active");
+        $secondaryTab.find(".sub-academic-content").removeClass("active");
+        $secondaryTab.find("#" + tabId).addClass("active");
+    }
+
+    restorePersistentMenuActiveState();
+
+    // Remove hover events for top nav
+    $(".megaLink").off("mouseenter mouseleave");
+
+    $(".navMenu > .navList:not(.megaLink) .dropdownItems")
+        .off("click")
+        .on("click", function () {
+            const slug = $(this).attr("data-menu-slug");
+            persistMenuSlug(slug);
+            hideMenu();
+            $(".megaLink").removeClass(MEGA_MENU_OPEN_CLASS);
+            $("body").addClass("enterprise-nav-loading");
+        });
+
+    // Top nav: open/close menu on click only
+    $(".megaLink").off("click");
+    $(".megaLink").on("click", function (e) {
+        e.preventDefault();
+        const $menuLink = $(this).find(".dropdownItems").first();
+        const slug = $menuLink.attr("data-menu-slug");
+        const id = $(this).attr("data-rel");
+        const submenuTarget = $(this).attr("data-submenu-target");
+        if (!id) return;
+        if ($(this).hasClass(MEGA_MENU_OPEN_CLASS)) {
+            hideMenu();
+            $(".megaLink").removeClass(MEGA_MENU_OPEN_CLASS);
+            restorePersistentMenuActiveState();
+        } else {
+            $(".megaLink").removeClass(MEGA_MENU_OPEN_CLASS);
+            // Hide persistent page highlight while dropdown menu is open.
+            setTopMenuActive("");
+            $(this).addClass(MEGA_MENU_OPEN_CLASS);
+            showMenu(id);
+            activateEnterpriseSubtab(submenuTarget);
+        }
+    });
+
+    // Academic tab switching: hover only (no click)
+    $(".academicTabs .aboutItems")
+        .off("mouseenter click")
+        .on("mouseenter", function (e) {
+            // Only switch tab on hover, not on click
+            const id = $(this).attr("data-rel");
+            if (!id) return;
+            $(this).addClass("active").siblings().removeClass("active");
+            const $tabAcademic = $(this).closest(".tabAcademic");
+            $tabAcademic.find(".academic-content").removeClass("active");
+            $tabAcademic.find("#" + id).addClass("active");
+        });
+
+    // Sub-tabs inside academic tab: hover only (no click)
+    $(".tabSecondary .aboutTabs .aboutItems")
+        .off("mouseenter click")
+        .on("mouseenter", function (e) {
+            // Only switch sub-tab on hover, not on click
+            const id = $(this).attr("data-rel");
+            if (!id) return;
+            $(this).addClass("active").siblings().removeClass("active");
+            const $tabSecondary = $(this).closest(".tabSecondary");
+            $tabSecondary.find(".sub-academic-content").removeClass("active");
+            $tabSecondary.find("#" + id).addClass("active");
+        });
+
+    // Ensure program links inside academic tab redirect on click
+    // Remove e.preventDefault() from program links
+    // This is handled by not binding click events to .tabSecondary .aboutTabs .aboutItems > a
+
+    // Clicking blurScreen closes menu
+    function closeMenu() {
+        hideMenu();
+        $(".megaLink").removeClass(MEGA_MENU_OPEN_CLASS);
+        restorePersistentMenuActiveState();
+    }
+
+    // Clicking on menuDown closes menu
+    $(".menuDown")
+        .off("click")
+        .on("click", function (e) {
+            // Only close if user clicks directly on menuDown, not on its children
+            if (e.target === this) {
+                closeMenu();
+            }
+        });
+
+    // Prevent menuDown from closing when interacting inside
+    $(".menuDown")
+        .off("mousedown")
+        .on("mousedown", function (e) {
+            e.stopPropagation();
+        });
+
+    // Prevent menuDown from closing on mouseleave
+    $(".menuDown").off("mouseleave");
+
+    // Clicking anywhere outside menuDown or nav closes menu
+    $(document).on("mousedown", function (e) {
+        if (
+            !$(e.target).closest(".menuDown").length &&
+            !$(e.target).closest(".megaLink").length &&
+            !$(e.target).closest(".navMenu").length &&
+            $(".menuDown.active").length
+        ) {
+            closeMenu();
+        }
+    });
+
+    // Keep top nav active state in sync with current URL on page load.
+    function setActiveClassHeader() {
+        const slugFromPath = getSlugFromPath(window.location.pathname);
+        if (slugFromPath) {
+            setTopMenuActive(slugFromPath);
+            persistMenuSlug(slugFromPath);
+            return;
+        }
+
+        const persistedSlug = getInitialMenuSlug();
+        if (persistedSlug) {
+            setTopMenuActive(persistedSlug);
+            return;
+        }
+
+        const currentPath = normalizePath(window.location.pathname).split("/")[1];
+        const legacyElem = document.querySelector(`#nav__${currentPath}`);
+        if (legacyElem) {
+            legacyElem.classList.add("active");
+            const parentLi = legacyElem.closest(".navList");
+            if (parentLi) {
+                parentLi.classList.add("active");
+            }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", setActiveClassHeader);
+
+    function prefetchEnterpriseTopNavLinks() {
+        const prefetchedHrefSet = new Set();
+        $(".navMenu > .navList:not(.megaLink) .dropdownItems").each(function () {
+            const href = $(this).attr("href");
+            if (!href || href === "#" || prefetchedHrefSet.has(href)) return;
+
+            prefetchedHrefSet.add(href);
+            const prefetchLink = document.createElement("link");
+            prefetchLink.rel = "prefetch";
+            prefetchLink.href = href;
+            prefetchLink.as = "document";
+            document.head.appendChild(prefetchLink);
+        });
+    }
+
+    if ("requestIdleCallback" in window) {
+        requestIdleCallback(prefetchEnterpriseTopNavLinks);
+    } else {
+        setTimeout(prefetchEnterpriseTopNavLinks, 400);
+    }
+
+    // Header shrink on scroll logic with smooth transition
+    (function () {
+        const $menu = $("header.topHeader");
+        let lastScrollTop = 0;
+        const menuHeight = safeNumber($menu.outerHeight());
+        const windowHeight = safeNumber($(window).height());
+
+        function getBannerOffset() {
+            // If you have a banner above header, return its height, else 0
+            const $banner = $(".bannerTop");
+            const bannerHeight = $banner.length ? safeNumber($banner.outerHeight()) : 0;
+
+            // Also account for hero banner if visible
+            const $heroBanner = $("#heroBanner");
+            const heroBannerHeight = ($heroBanner.length && $heroBanner.hasClass("active"))
+                ? safeNumber($heroBanner.outerHeight())
+                : 0;
+
+            return bannerHeight + heroBannerHeight;
+        }
+
+        $(window).on("scroll", function () {
+            const stRaw = $(this).scrollTop();
+            const st = safeNumber(stRaw);
+            const bannerOffset = getBannerOffset();
+            const currentOffset = Math.max(0, bannerOffset - st);
+
+            // Remove shrikIt if we reach top 80px or less
+            if (st <= 80) {
+                $menu.css("top", currentOffset + "px");
+                $menu.removeClass("shrikIt");
+                // Remove custom -2.25rem top if present
+                if ($menu.css("top") === "-2.25rem") {
+                    $menu.css("top", currentOffset + "px");
+                }
+                lastScrollTop = st;
+                return;
+            }
+
+            const $highlight = $(".highlightsec");
+            const highlightHeight = $highlight.length
+                ? safeNumber($highlight.height())
+                : 0;
+
+            if ($highlight.length > 0) {
+                if (st < highlightHeight) {
+                    if (st > lastScrollTop) {
+                        // Scrolling down
+                        if (
+                            st > menuHeight &&
+                            st + windowHeight < safeNumber($(document).height())
+                        ) {
+                            $menu.css("top", "-2.25rem");
+                            $menu.addClass("shrikIt");
+                        }
+                    } else {
+                        // Scrolling up
+                        // Only unshrink if at the top 80px
+                        if (st <= 80) {
+                            $menu.css("top", currentOffset + "px");
+                            $menu.removeClass("shrikIt");
+                        }
+                        // Otherwise, keep it shrunk
+                    }
+                    lastScrollTop = st;
+                }
+            } else {
+                if (st > lastScrollTop) {
+                    // Scrolling down
+                    if (
+                        st > menuHeight &&
+                        st + windowHeight < safeNumber($(document).height())
+                    ) {
+                        $menu.css("top", "-2.25rem");
+                        $menu.addClass("shrikIt");
+                    }
+                } else {
+                    // Scrolling up
+                    // Only unshrink if at the top 80px
+                    if (st <= 80) {
+                        $menu.css("top", currentOffset + "px");
+                        $menu.removeClass("shrikIt");
+                    }
+                    // Otherwise, keep it shrunk
+                }
+                lastScrollTop = st;
+            }
+        });
+    })();
+
+    // Note: For PGP Rise extended nav, ensure data-rel and menuDown id match exactly in HTML.
+</script>
+
+<style>
+    header.topHeader {
+        transition: background 0.6s ease;
+    }
+</style>
+
+
+<script>
+    // This script enables tab switching for the "Other Tabs" section (used in Student Life, Innovation, etc.)
+    // It works for any .tabMenuOther with .otherTabs > .aboutItems and .otherSecondaryContent siblings
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // For each .tabMenuOther on the page (handles multiple, e.g. Student Life, Innovation, etc.)
+        document.querySelectorAll(".tabMenuOther").forEach(function (tabMenu) {
+            // Get all tab items and content panels within this tabMenuOther
+            const tabList = tabMenu.querySelectorAll(".otherTabs .aboutItems");
+            const contents = tabMenu.querySelectorAll(".otherSecondaryContent");
+
+            // Helper: Remove all active classes and hide all contents
+            function clearActive() {
+                tabList.forEach(function (li) {
+                    li.classList.remove("active");
+                });
+                contents.forEach(function (c) {
+                    c.classList.remove("active");
+                    // Fix: Check if c is an HTMLElement before accessing style
+                    if (c instanceof HTMLElement) {
+                        c.style.display = "none";
+                    }
+                });
+            }
+
+            // Helper: Show content for target
+            function showContent(target) {
+                contents.forEach(function (c) {
+                    if (c.id === target) {
+                        c.classList.add("active");
+                        // Fix: Check if c is an HTMLElement before accessing style
+                        if (c instanceof HTMLElement) {
+                            c.style.display = "";
+                        }
+                    }
+                });
+            }
+
+            // Set initial state: first tab and content active/visible
+            let firstTab = tabList[0];
+            if (firstTab) {
+                clearActive();
+                firstTab.classList.add("active");
+                showContent(firstTab.getAttribute("data-target"));
+            }
+
+            tabList.forEach(function (li) {
+                // Hover: switch active tab and content
+                li.addEventListener("mouseenter", function () {
+                    clearActive();
+                    li.classList.add("active");
+                    showContent(li.getAttribute("data-target"));
+                });
+
+                // Click: go to the link
+                li.addEventListener("click", function (e) {
+                    const link = li.querySelector("a");
+                    if (link && link.href) {
+                        window.location.href = link.href;
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+<style>
+    /* Hero Banner Styles */
+    .heroBanner {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        background: rgb(41, 107, 255);
+        z-index: 10000;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .heroBanner.active {
+        display: block;
+    }
+
+    .heroBannerContent {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
+
+    .heroBannerText {
+        color: white;
+        font-family: 'go-medium';
+        font-size: 13px;
+        line-height: 1.5;
+        margin: 0;
+        letter-spacing: 0.02em;
+    }
+
+    .heroBannerLink {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        /* color: var(--darkOrange, #E38330); */
+        color: #fff;
+        text-decoration: none;
+        font-family: 'go-medium';
+        font-size: 12px;
+        line-height: 1.5;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .heroBannerLink:hover {
+        /* color: var(--darkOrange, #E38330); */
+        color: #fff;
+        gap: 12px;
+    }
+
+    .heroBannerLink svg {
+        width: 18px;
+        height: 18px;
+        transition: transform 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .heroBannerLink:hover svg {
+        transform: translate(2px, -2px);
+    }
+
+    .heroBannerLink span {
+        position: relative;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 767px) {
+        .heroBanner {
+            padding: 8px 0;
+            position: absolute;
+        }
+
+        .heroBannerContent {
+            flex-direction: row;
+            gap: 4px;
+            text-align: flex-start;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: unset;
+
+            .heroBannerLink {
+                width: 100%;
+                max-width: fit-content;
+            }
+        }
+
+        .heroBannerText {
+            font-size: 12px;
+            justify-content: center;
+            max-width: 75%;
+        }
+
+        .heroBannerLink {
+            font-size: 13px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .heroBannerText {
+            font-size: 11px;
+        }
+
+        .heroBannerLink {
+            font-size: 12px;
+        }
+    }
+</style>
+
+<script>
+    // Show hero banner only on homepage
+    (function () {
+        const heroBanner = document.getElementById('heroBanner');
+        if (!heroBanner) return;
+
+        function checkAndShowBanner() {
+            const currentPath = window.location.pathname;
+            // Show only on homepage "/"
+            if (currentPath === '/' || currentPath === '') {
+                heroBanner.classList.add('active');
+
+                // Trigger scroll event to recalculate header position
+                // This ensures the existing scroll logic accounts for the banner
+                setTimeout(function () {
+                    $(window).trigger('scroll');
+                }, 100);
+            } else {
+                heroBanner.classList.remove('active');
+
+                // Trigger scroll event to recalculate header position
+                setTimeout(function () {
+                    $(window).trigger('scroll');
+                }, 100);
+            }
+        }
+
+        // Check on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', checkAndShowBanner);
+        } else {
+            checkAndShowBanner();
+        }
+
+        // Check on navigation (for SPA-like behavior if applicable)
+        window.addEventListener('popstate', checkAndShowBanner);
+
+        // Also check when location changes (for frameworks that use pushState)
+        let lastPath = window.location.pathname;
+        setInterval(function () {
+            if (window.location.pathname !== lastPath) {
+                lastPath = window.location.pathname;
+                checkAndShowBanner();
+            }
+        }, 100);
+    })();
+</script>

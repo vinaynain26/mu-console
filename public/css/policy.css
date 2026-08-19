@@ -1,0 +1,149 @@
+.heroSection {
+    position: relative;
+    line-height: 0;
+    z-index: 9;
+    padding: 0px 0 0;
+    overflow: hidden;
+    min-height: 100vh;
+    background: #020202;
+
+
+    .heroSectionContent .go-HeroSubtitle {
+        color: var(--white);
+    }
+
+    .heroSectionContent {
+        position: absolute;
+        bottom: 100px;
+        left: 50%;
+        transform: translate(-50%, -30%);
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        width: 100%;
+    }
+
+    .go-HeroSubtitle {
+        margin-top: 16px;
+
+        .textHighlight {
+            color: var(--white);
+        }
+    }
+
+    .heroSectionBtnWrap {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        margin-top: 24px;
+    }
+
+
+}
+
+.policyBlack {
+    background: url("https://images.mastersunion.link/uploads/28082025/v1/Vector1351.webp"), var(--black);
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .arrowWrap {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.policyWhite {
+    background: url("https://images.mastersunion.link/uploads/28082025/v1/Vector13511.webp"), var(--white);
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .arrowWrap {
+        width: 24px;
+        height: 24px;
+    }
+
+}
+
+.policyHeadingWrap {
+    font: 30px 'go-regular';
+    line-height: 120%;
+    color: var(--black);
+
+    p {
+        font: 16px 'go-semibold';
+        line-height: 150%;
+        color: var(--black);
+        margin-top: 12px;
+    }
+}
+
+.policyBlack .policyHeadingWrap {
+    color: var(--white);
+
+    p {
+        font: 16px 'go-semibold';
+        line-height: 150%;
+        color: var(--white);
+    }
+}
+
+
+.policyboxWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.policyBox {
+    padding: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 8px;
+    border: 1px solid var(--grey10);
+    color: var(--white);
+    max-width: 32.45%;
+    width: 100%;
+
+    p {
+        font: 18px 'go-regular';
+        line-height: 120%;
+        max-width: 90%;
+    }
+}
+
+.policyWhite .policyBox {
+    background-color: var(--white);
+    color: var(--black);
+    border: 1px solid var(--grey4);
+
+}
+
+.policyWhite .policyBox svg path {
+    fill: var(--black);
+}
+
+
+
+.policyBlack .arrowWrap img {
+    filter: invert(1);
+    width: 24px;
+    height: 24px;
+}
+
+
+
+@media (max-width: 767px) {
+    
+    .policyboxWrapper{
+        flex-direction: column;
+
+        .policyBox{
+            max-width: 100%;
+        }
+    }
+
+}

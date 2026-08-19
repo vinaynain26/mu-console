@@ -1,0 +1,545 @@
+<section class="dashboard">
+    <div class="container">
+        <div class="grid">
+            <div class="card" id="recruiters-card">
+                <div class="card-header">
+                    <h2 class="card-title">148</h2>
+                    <p class="card-subtitle">Number of Recruiters</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="recruiters-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="card" id="salary-card">
+                <div class="card-header">
+                    <h2 class="card-title">₹61.80 <span
+                            style="font-size: 1.5rem; font-weight: 300; font-style: normal;">Lakhs</span></h2>
+                    <p class="card-subtitle">Highest Salary</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="salary-chart"></canvas>
+                </div>
+            </div>
+
+            <div class="card" id="jump-card">
+                <div class="card-header">
+                    <h2 class="card-title">3.03x</h2>
+                    <p class="card-subtitle">Salary Jump from Pre-MBA Level</p>
+                </div>
+                <div class="chart-container">
+                    <canvas id="jump-chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+<script>
+    // Intersection Observer to detect when elements enter viewport
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const card = entry.target;
+                card.classList.add('visible');
+
+                // Get the chart ID from the card ID
+                const chartId = card.id.replace('card', 'chart');
+
+                // Initialize the appropriate chart
+                if (chartId === 'recruiters-chart') {
+                    initRecruitersChart();
+                } else if (chartId === 'salary-chart') {
+                    initSalaryChart();
+                } else if (chartId === 'jump-chart') {
+                    initJumpChart();
+                }
+
+                // Unobserve after animation
+                observer.unobserve(card);
+            }
+        });
+    }, observerOptions);
+
+    // Observe all cards
+    document.querySelectorAll('.card').forEach(card => {
+        observer.observe(card);
+    });
+
+    // Recruiters Chart
+    function initRecruitersChart() {
+        const canvas = document.getElementById('recruiters-chart');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas dimensions
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
+
+        // Data
+        const data = [
+            { year: "2022", value: 58 },
+            { year: "2023", value: 137 },
+            { year: "2024", value: 148 },
+        ];
+
+        const maxValue = 160; // Fixed max value as shown in the design
+        const barHeight = 12; // Thinner bars to match the design
+        const chartHeight = rect.height - 40; // Leave space for x-axis
+        const chartWidth = rect.width - 60; // Leave space for y-axis
+        const leftMargin = 40;
+        const topMargin = 20;
+
+        // Animation function
+        let progress = 0;
+        const animationDuration = 1500; // ms
+        const startTime = performance.now();
+
+        function animate(currentTime) {
+            const elapsed = currentTime - startTime;
+            progress = Math.min(elapsed / animationDuration, 1);
+
+            // Clear canvas
+            ctx.clearRect(0, 0, rect.width, rect.height);
+
+            // Draw grid lines
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 0.5;
+
+            // Vertical grid lines
+            const gridPoints = [0, 50, 100, 150];
+            gridPoints.forEach(point => {
+                const x = leftMargin + (point / maxValue) * chartWidth;
+                ctx.beginPath();
+                ctx.moveTo(x, topMargin);
+                ctx.lineTo(x, topMargin + chartHeight);
+                ctx.stroke();
+            });
+
+            // Draw x-axis labels
+            ctx.fillStyle = '#666';
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'center';
+
+            gridPoints.forEach(point => {
+                const x = leftMargin + (point / maxValue) * chartWidth;
+                ctx.fillText(point.toString(), x, topMargin + chartHeight + 15);
+            });
+
+            // Draw "No. of Recruiters" label
+            ctx.fillText("No. of Recruiters", leftMargin + chartWidth / 2, topMargin + chartHeight + 30);
+
+            // Draw y-axis label
+            ctx.save();
+            ctx.translate(15, topMargin + chartHeight / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.textAlign = 'center';
+            ctx.fillText("Years", 0, 0);
+            ctx.restore();
+
+            // Draw bars - reversed order to match the image (2022 at bottom, 2024 at top)
+            data.forEach((item, index) => {
+                // Calculate position - reverse the index to put 2022 at the bottom
+                const reversedIndex = data.length - 1 - index;
+                const y = topMargin + reversedIndex * (chartHeight / (data.length)) + (chartHeight / (data.length * 2)) - barHeight / 2;
+                const barWidth = (item.value / maxValue) * chartWidth * progress;
+
+                // Draw year label
+                ctx.fillStyle = '#aaa';
+                ctx.textAlign = 'right';
+                ctx.font = '11px sans-serif';
+                ctx.fillText(item.year, leftMargin - 10, y + barHeight / 2 + 4);
+
+                // Draw bar background (dark gray)
+                ctx.fillStyle = '#222';
+                ctx.fillRect(leftMargin, y, chartWidth, barHeight);
+
+                // Draw gradient bar
+                const gradient = ctx.createLinearGradient(leftMargin, y, leftMargin + barWidth, y);
+                gradient.addColorStop(0, '#3b82f6'); // Blue
+                gradient.addColorStop(1, '#f59e0b'); // Amber
+                ctx.fillStyle = gradient;
+                ctx.fillRect(leftMargin, y, barWidth, barHeight);
+
+                // Draw value label if animation is complete
+                if (progress === 1) {
+                    ctx.fillStyle = '#fff';
+                    ctx.textAlign = 'left';
+                    ctx.font = '10px sans-serif';
+                    ctx.fillText(`${item.value}`, leftMargin + barWidth + 5, y + barHeight / 2 + 3);
+
+                    ctx.fillStyle = '#888';
+                    ctx.font = '8px sans-serif';
+                    ctx.fillText('Recruiters', leftMargin + barWidth + 5 + ctx.measureText(`${item.value}`).width + 3, y + barHeight / 2 + 3);
+                }
+            });
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    // Salary Chart
+    function initSalaryChart() {
+        const canvas = document.getElementById('salary-chart');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas dimensions
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
+
+        // Data
+        const data = [
+            { label: "Median CTC", value: 27.66, color: "#e67e22", pattern: "horizontal" },
+            { label: "Average CTC", value: 28.52, color: "#3498db", pattern: "none" },
+            { label: "Highest CTC", value: 61.80, color: "#f1c40f", pattern: "diagonal" },
+        ];
+
+        const maxValue = 70; // Slightly higher than the max value for visual spacing
+        const chartHeight = rect.height - 60; // Leave space for labels
+        const barWidth = rect.width / 3;
+        const barSpacing = rect.width / 100;
+
+        // Animation function
+        let progress = 0;
+        const animationDuration = 1500; // ms
+        const startTime = performance.now();
+
+        function animate(currentTime) {
+            const elapsed = currentTime - startTime;
+            progress = Math.min(elapsed / animationDuration, 1);
+
+            // Clear canvas
+            ctx.clearRect(0, 0, rect.width, rect.height);
+
+            // Draw bars
+            data.forEach((item, index) => {
+                const x = barSpacing + index * (barWidth + barSpacing);
+                const barHeight = (item.value / maxValue) * chartHeight * progress;
+                const y = chartHeight - barHeight;
+
+                // Draw bar
+                ctx.fillStyle = item.color;
+                ctx.fillRect(x, y, barWidth, barHeight);
+
+                // Apply pattern
+                if (item.pattern !== "none") {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(x, y, barWidth, barHeight);
+                    ctx.clip();
+
+                    ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+                    ctx.lineWidth = 1;
+
+                    if (item.pattern === "diagonal") {
+                        // Diagonal stripes
+                        const stripeSpacing = 8;
+                        for (let i = -barWidth - barHeight; i < barWidth + barHeight; i += stripeSpacing) {
+                            ctx.beginPath();
+                            ctx.moveTo(x + i, y + barHeight);
+                            ctx.lineTo(x + i + barHeight, y);
+                            ctx.stroke();
+                        }
+                    } else if (item.pattern === "horizontal") {
+                        // Horizontal stripes
+                        const stripeSpacing = 8;
+                        for (let i = y; i < y + barHeight; i += stripeSpacing) {
+                            ctx.beginPath();
+                            ctx.moveTo(x, i);
+                            ctx.lineTo(x + barWidth, i);
+                            ctx.stroke();
+                        }
+                    }
+
+                    ctx.restore();
+                }
+
+                // Draw value label if animation is complete
+                if (progress === 1) {
+                    ctx.fillStyle = '#fff';
+                    ctx.textAlign = 'center';
+                    ctx.font = '10px sans-serif';
+                    ctx.fillText(`₹${item.value} Lakhs`, x + barWidth / 2, y - 15);
+
+                    ctx.fillStyle = '#888';
+                    ctx.font = '9px sans-serif';
+                    ctx.fillText(item.label, x + barWidth / 2, y - 5);
+                }
+            });
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+
+    // Salary Jump Chart
+    function initJumpChart() {
+        const canvas = document.getElementById('jump-chart');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas dimensions
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = rect.width * dpr;
+        canvas.height = rect.height * dpr;
+        ctx.scale(dpr, dpr);
+        canvas.style.width = `${rect.width}px`;
+        canvas.style.height = `${rect.height}px`;
+
+        // Chart dimensions
+        const chartHeight = rect.height - 40; // Leave space for labels
+        const chartWidth = rect.width - 60; // Leave space for y-axis
+        const leftMargin = 40;
+        const topMargin = 20;
+
+        // Generate data points for the curve - modified to match the second image
+        const generatePoints = () => {
+            const points = [];
+            const numPoints = 100;
+            const transitionPoint = Math.floor(numPoints * 0.35); // Where dotted line becomes solid
+
+            for (let i = 0; i < numPoints; i++) {
+                const x = i / (numPoints - 1);
+                let y;
+
+                if (i < numPoints * 0.15) {
+                    // Initial steep rise (dotted part)
+                    y = 0.2 + (i / (numPoints * 0.15)) * 1.3;
+                } else if (i < numPoints * 0.35) {
+                    // Slower rise to plateau (dotted part)
+                    const progress = (i - numPoints * 0.15) / (numPoints * 0.2);
+                    y = 1.5 + progress * 0.5;
+                } else if (i < numPoints * 0.7) {
+                    // Plateau with slight dip (solid part)
+                    const progress = (i - numPoints * 0.35) / (numPoints * 0.35);
+                    // Create a slight dip in the middle of the plateau
+                    y = 2.0 - Math.sin(progress * Math.PI) * 0.1;
+                } else {
+                    // Final steep rise to 3.03 (solid part)
+                    const progress = (i - numPoints * 0.7) / (numPoints * 0.3);
+                    y = 1.9 + progress * 1.13;
+                }
+
+                points.push({ x, y, isDotted: i < transitionPoint });
+            }
+
+            return points;
+        };
+
+        const points = generatePoints();
+
+        // Animation function
+        let progress = 0;
+        const animationDuration = 1500; // ms
+        const startTime = performance.now();
+
+        function animate(currentTime) {
+            const elapsed = currentTime - startTime;
+            progress = Math.min(elapsed / animationDuration, 1);
+
+            // Clear canvas
+            ctx.clearRect(0, 0, rect.width, rect.height);
+
+            // Draw horizontal grid lines (dashed)
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 0.5;
+
+            for (let i = 1; i <= 4; i++) {
+                const y = topMargin + (4 - i) * (chartHeight / 4);
+
+                ctx.beginPath();
+                ctx.setLineDash([2, 2]);
+                ctx.moveTo(leftMargin, y);
+                ctx.lineTo(rect.width, y);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Add y-axis labels
+                ctx.fillStyle = '#666';
+                ctx.font = '10px sans-serif';
+                ctx.textAlign = 'right';
+                ctx.fillText(i.toString(), leftMargin - 5, y + 3);
+            }
+
+            // Draw vertical bars
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+            const barWidth = 1;
+            const barSpacing = 4;
+            const numBars = Math.floor(chartWidth / (barWidth + barSpacing));
+
+            for (let i = 0; i < numBars; i++) {
+                const x = leftMargin + i * (barWidth + barSpacing);
+                ctx.fillRect(x, topMargin, barWidth, chartHeight);
+            }
+
+            // Draw x-axis labels
+            ctx.fillStyle = '#666';
+            ctx.font = '10px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText("Pre MBA", leftMargin + 20, rect.height - 10);
+            ctx.fillText("Post MBA", rect.width - 40, rect.height - 10);
+
+            // Draw y-axis label
+            ctx.save();
+            ctx.translate(15, rect.height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.textAlign = 'center';
+            ctx.fillText("Salary Jump Multiplier", 0, 0);
+            ctx.restore();
+
+            // Draw line up to current progress
+            const visiblePoints = points.filter((_, i) => i <= points.length * progress);
+
+            if (visiblePoints.length > 1) {
+                // Separate dotted and solid parts
+                const dottedPoints = visiblePoints.filter(p => p.isDotted);
+                const solidPoints = visiblePoints.filter(p => !p.isDotted);
+
+                // Draw dotted line
+                if (dottedPoints.length > 1) {
+                    ctx.strokeStyle = 'rgba(255, 255, 0, 0.7)';
+                    ctx.lineWidth = 2;
+                    ctx.setLineDash([3, 3]);
+                    ctx.beginPath();
+
+                    const firstPoint = dottedPoints[0];
+                    ctx.moveTo(
+                        leftMargin + firstPoint.x * chartWidth,
+                        topMargin + (4 - firstPoint.y) * (chartHeight / 4)
+                    );
+
+                    for (let i = 1; i < dottedPoints.length; i++) {
+                        const point = dottedPoints[i];
+                        ctx.lineTo(
+                            leftMargin + point.x * chartWidth,
+                            topMargin + (4 - point.y) * (chartHeight / 4)
+                        );
+                    }
+
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+
+                // Draw solid line
+                if (solidPoints.length > 0) {
+                    ctx.strokeStyle = '#f0c040';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+
+                    // If we have dotted points, connect from the last dotted point
+                    if (dottedPoints.length > 0) {
+                        const lastDottedPoint = dottedPoints[dottedPoints.length - 1];
+                        ctx.moveTo(
+                            leftMargin + lastDottedPoint.x * chartWidth,
+                            topMargin + (4 - lastDottedPoint.y) * (chartHeight / 4)
+                        );
+                    } else {
+                        // Otherwise start from the first solid point
+                        const firstSolidPoint = solidPoints[0];
+                        ctx.moveTo(
+                            leftMargin + firstSolidPoint.x * chartWidth,
+                            topMargin + (4 - firstSolidPoint.y) * (chartHeight / 4)
+                        );
+                    }
+
+                    for (let i = 0; i < solidPoints.length; i++) {
+                        const point = solidPoints[i];
+                        ctx.lineTo(
+                            leftMargin + point.x * chartWidth,
+                            topMargin + (4 - point.y) * (chartHeight / 4)
+                        );
+                    }
+
+                    ctx.stroke();
+                }
+
+                // Draw final point with highlight if we're at the end
+                if (progress === 1) {
+                    const lastPoint = points[points.length - 1];
+                    const x = leftMargin + lastPoint.x * chartWidth;
+                    const y = topMargin + (4 - lastPoint.y) * (chartHeight / 4);
+
+                    // Draw highlight circle
+                    ctx.fillStyle = 'white';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 6, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = '#f0c040';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Draw tooltip - positioned to match the second image
+                    ctx.fillStyle = 'white';
+                    ctx.strokeStyle = '#333';
+                    ctx.lineWidth = 1;
+
+                    const tooltipWidth = 70;
+                    const tooltipHeight = 40;
+                    const tooltipX = x - tooltipWidth - 10; // Position to the left of the point
+                    const tooltipY = y - tooltipHeight / 2;
+
+                    // Draw tooltip box with rounded corners
+                    ctx.beginPath();
+                    const radius = 4;
+                    ctx.moveTo(tooltipX + radius, tooltipY);
+                    ctx.lineTo(tooltipX + tooltipWidth - radius, tooltipY);
+                    ctx.quadraticCurveTo(tooltipX + tooltipWidth, tooltipY, tooltipX + tooltipWidth, tooltipY + radius);
+                    ctx.lineTo(tooltipX + tooltipWidth, tooltipY + tooltipHeight - radius);
+                    ctx.quadraticCurveTo(tooltipX + tooltipWidth, tooltipY + tooltipHeight, tooltipX + tooltipWidth - radius, tooltipY + tooltipHeight);
+                    ctx.lineTo(tooltipX + radius, tooltipY + tooltipHeight);
+                    ctx.quadraticCurveTo(tooltipX, tooltipY + tooltipHeight, tooltipX, tooltipY + tooltipHeight - radius);
+                    ctx.lineTo(tooltipX, tooltipY + radius);
+                    ctx.quadraticCurveTo(tooltipX, tooltipY, tooltipX + radius, tooltipY);
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.stroke();
+
+                    // Draw "UP TO" text
+                    ctx.fillStyle = '#666';
+                    ctx.font = '10px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('UP TO', tooltipX + tooltipWidth / 2, tooltipY + 15);
+
+                    // Draw "3.03x" text
+                    ctx.fillStyle = '#000';
+                    ctx.font = 'bold 16px sans-serif';
+                    ctx.fillText('3.03x', tooltipX + tooltipWidth / 2, tooltipY + 32);
+                }
+            }
+
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            }
+        }
+
+        requestAnimationFrame(animate);
+    }
+</script>

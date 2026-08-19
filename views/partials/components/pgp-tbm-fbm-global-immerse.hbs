@@ -1,0 +1,299 @@
+<section class="WhiteTabs  teaching pgp-tbm-DriveReal tbm-fbm-TeachingFixex">
+    <div class="container">
+        <div class="headingWrap mb40 stickyhead tbm-fbm-StickyHead">
+
+            <p class="headingSmall">
+                <img src="https://files.mastersunion.link/resources/svg/star.svg" alt="Icon">
+                HANDS-ON & INDUSTRY-DRIVEN
+
+
+            </p>
+
+            <h2 class="sectionHeading whiteBgHead">
+                Visit International Trade Fairs to Learn the Business of<br class="mob-hide">
+                Manufacturing, Supply-Chains, and <span class="vectorOnWhite">Global Commerce</span>
+            </h2>
+
+        </div>
+        <div class="flexbox justify-between mob-col">
+
+            <div class="learningLeft mob-hide">
+
+                <div class="navigationBox tbm-fbm-navigationFix " id="nav">
+                    <span class="courseName active hide" data-rel="teaching1a">
+                        <img src="https://files.mastersunion.link/resources/svg/circleArrow.svg" alt="">
+                        Witness the Family Business Lab
+                    </span>
+                    <span class="courseName active" data-rel="globalTeaching2a">
+                        <img src="https://files.mastersunion.link/resources/svg/circleArrow.svg" alt="">
+                        China’s Canton Fair
+                    </span>
+                    <span class="courseName" data-rel="globalTeaching3a">
+                        <img src="https://files.mastersunion.link/resources/svg/circleArrow.svg" alt="">
+                        Network in the GCC Region
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="learningRight">
+
+                <div class="box hide" id="teaching1a">
+
+                    <div class="tabinnerleft">
+                        <h3 class="black2"> <span class="gradientUnderline">Witness the Family Business Lab
+
+                            </span> </h3>
+                        <img src="https://files.mastersunion.link/media/img/Legacy-tbm/legacy-learn-1.webp" alt=""
+                            class="mob-visible mt-15">
+                        <p class="subText mb20">50% of the entire PGP in Family Business Management is about <b>fixing
+                                your own family business. </b> Each term, you will work on one capstone project with
+                            your own family business team, aided by professional facilitators. You will identify
+                            challenges and goals, creating actionable plans tailored to your family enterprise. </p>
+                        {{!-- <div class="box2col gap5 align-start">
+                            <img src="https://files.mastersunion.link/resources/svg/star.svg" alt="Icon">
+                            <p class="tabtext">Top family business owners and successors</p>
+                        </div> --}}
+
+                    </div>
+
+                    <div class="masterImage mob-hide tab-hide">
+                        <img src="https://files.mastersunion.link/media/img/Legacy-tbm/legacy-learn-1.webp" alt="">
+                    </div>
+                </div>
+
+                <div class="box active" id="globalTeaching2a">
+                    <div class="tabinnerleft">
+
+                        <h3 class="black2"> Exhibit at the World's Largest Trade Event-China's
+
+                            <span class="gradientUnderline"> Canton Fair</span>
+                        </h3>
+                        <div class="masterImage mob-visible mt15">
+                            <img src="https://images.mastersunion.link/uploads/20122024/chinaCantonFair.webp" alt="">
+                            {{!-- <div class="masterPlay" onclick="openPopup('vLUvx_QOBys');"><img
+                                    src="https://files.mastersunion.link/resources/svg/homePlayIcon.svg" alt="icon">
+                            </div> --}}
+                        </div>
+                        <p class="subText mb20">Visit the epicentre of global trade, meet <b> 10 lakh+ customers and
+                                suppliers</b> from more than
+                            150 countries, and strike deals to increase your profitability.</p>
+
+
+                    </div>
+                    <div class="masterImage mob-hide tab-hide">
+                        <img src="https://images.mastersunion.link/uploads/20122024/chinaCantonFair.webp" alt="">
+                        {{!-- <div class="masterPlay" onclick="openPopup('vLUvx_QOBys');"><img
+                                src="https://files.mastersunion.link/resources/svg/homePlayIcon.svg" alt="icon"></div>
+                        --}}
+                    </div>
+                </div>
+
+                <div class="box" id="globalTeaching3a">
+                    <div class="tabinnerleft">
+
+                        <h3 class="black2"> Explore Global Giants in the <span class="gradientUnderline"> GCC Region
+                            </span></h3>
+                        <div class="masterImage mob-visible mt15">
+                            <img src="https://images.mastersunion.link/uploads/20122024/exploreFortune.webp" alt="">
+                            {{!-- <div class="masterPlay" onclick="openPopup('K0ko_AUht0s');"><img
+                                    src="https://files.mastersunion.link/resources/svg/homePlayIcon.svg" alt="icon">
+                            </div> --}}
+                        </div>
+                        <p class="subText mb20">Discover how <b>Fortune 500 companies </b> and start-ups
+                            are reshaping the GCC region. Visit giants like Emirates and Aramco, and engage with
+                            executives driving innovation. </p>
+                        <div class="flexbox gap15 wrap photoList hide">
+
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="masterImage mob-hide tab-hide">
+                        <img src="https://images.mastersunion.link/uploads/20122024/exploreFortune.webp" alt="">
+                        {{!-- <div class="masterPlay" onclick="openPopup('J6Ub--52ceM');"><img
+                                src="https://files.mastersunion.link/resources/svg/homePlayIcon.svg" alt="icon"></div>
+                        --}}
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+
+    $(document).ready(function () {
+        let isInitialized = false;
+        function isMobile() {
+            return window.matchMedia("(max-width: 767px)").matches;
+        }
+
+        function initialize() {
+            function getScrollOffset() {
+                if (window.matchMedia("(max-width: 1023px)").matches) {
+                    return 225;
+                } else if (window.matchMedia("(min-width: 1440px)").matches) {
+                    return 320;
+                } else {
+                    return 210;
+                }
+            }
+
+            function scrollToElement(id) {
+                let targetElement = $(`#${id}`);
+                if (targetElement.length) {
+                    let scrollOffset = getScrollOffset();
+                    $('html, body').animate({
+                        scrollTop: targetElement.offset().top - scrollOffset
+                    }, 1000);
+                }
+            }
+
+            $(".navigationBox .courseName").off('click').on('click', function () {
+                let id = $(this).attr('data-rel');
+                $(this).addClass('active').siblings().removeClass('active');
+                $(`#${id}`).addClass('active').siblings().removeClass('active');
+                scrollToElement(id);
+            });
+
+            const boxes = document.querySelectorAll('.box');
+            const options = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 1
+            };
+
+            const handleIntersection = (entries) => {
+                entries.forEach(entry => {
+                    const boxId = entry.target.id;
+                    const navLink = document.querySelector(`[data-rel="${boxId}"]`);
+
+                    if (entry.isIntersecting) {
+                        if (navLink) {
+                            document.querySelectorAll("#nav .courseName").forEach(sib => {
+                                if (sib !== navLink) {
+                                    sib.classList.remove("active");
+                                }
+                            });
+                            navLink.classList.add('active');
+                        }
+                    } else {
+                        if (navLink) {
+                            navLink.classList.remove('active');
+                        }
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(handleIntersection, options);
+            boxes.forEach(box => {
+                observer.observe(box);
+            });
+
+            isInitialized = true;
+        }
+        if (!isMobile()) {
+            initialize();
+        }
+        $(window).resize(function () {
+            if (!isMobile() && !isInitialized) {
+                initialize();
+            }
+        });
+    });
+
+
+    /*
+        $(document).ready(function () {
+            // Function to get the scroll offset based on screen size
+            function getScrollOffset() {
+                if (window.matchMedia("(max-width: 1023px)").matches) {
+                    return 225;  // Offset for screens smaller than 1024px
+                } else if (window.matchMedia("(min-width: 1440px)").matches) {
+                    return 320;  // Custom offset for screens 1440px and above
+                } else {
+                    return 210;  // Default offset for other screens
+                }
+            }
+    
+            // Function to handle scrolling to the target element
+            function scrollToElement(id) {
+                let scrollOffset = getScrollOffset();
+                $('html, body').animate({
+                    scrollTop: $(`#${id}`).offset().top - scrollOffset
+                }, 1000);
+            }
+    
+            $(".navigationBox .courseName").click(function () {
+                // Get the data-rel value of the clicked .courseName
+                let id = $(this).attr('data-rel');
+    
+                // Add 'active' class to the clicked .courseName and remove it from siblings
+                $(this).addClass('active').siblings().removeClass('active');
+    
+                // Add 'active' class to the corresponding box and remove it from siblings
+                $(`#${id}`).addClass('active').siblings().removeClass('active');
+    
+                // Scroll the corresponding box into view
+                scrollToElement(id);
+            });
+    
+            const boxes = document.querySelectorAll('.box');
+            const options = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 1
+            };
+    
+            const handleIntersection = (entries) => {
+                entries.forEach(entry => {
+                    const boxId = entry.target.id;
+                    const navLink = document.querySelector(`[data-rel="${boxId}"]`);
+    
+                    if (entry.isIntersecting) {
+                        if (navLink) {
+                            // Remove 'active' class from all other links
+                            document.querySelectorAll("#nav .courseName").forEach(sib => {
+                                if (sib !== navLink) {
+                                    sib.classList.remove("active");
+                                }
+                            });
+                            // Add 'active' class to the corresponding nav link
+                            navLink.classList.add('active');
+                        }
+                    } else {
+                        if (navLink) {
+                            navLink.classList.remove('active');
+                        }
+                    }
+                });
+            };
+    
+            const observer = new IntersectionObserver(handleIntersection, options);
+            boxes.forEach(box => {
+                observer.observe(box);
+            });
+    
+            // Adjust scroll on window resize
+            $(window).resize(function () {
+                let scrollOffset = getScrollOffset();
+    
+                // Update scroll offset if needed when resizing the window
+                if ($('.box.active').length) {
+                    scrollToElement($('.box.active').attr('id'));
+                }
+            });
+        });
+    
+    */
+</script>

@@ -1,0 +1,221 @@
+<main>
+    <div class="popupContainerOuter ApplyNow" id="startup-weekend-brochurePopup">
+
+        <div class="popupContainer">
+            <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="hssl_db_formHeading">Download Brochure
+                </h2>
+                <div class="flexend">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Icon" onclick="closeHsslBrochurePopup();">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="hssh_db_formContainer">
+                <div class="left mob-hide">
+                    <img src="https://files.mastersunion.link/resources/img/formleft.webp" alt="">
+                </div>
+                <div class="right">
+                    <div class="formContainer active">
+                        <div class="flexInput">
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Full Name <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your name"
+                                    class="inputBox font-16 font-black1 font-medium " id="nameReportDownload"
+                                    onblur="validateNameInput('nameReportDownload', 'nameReportDownloadVal')">
+                                <p class="font-12 font-red font-regular warning" id="nameReportDownloadVal">Please Enter
+                                    Valid
+                                    Name</p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Email ID <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your email"
+                                    class="inputBox font-16 font-black1 font-medium " id="emailReportDownload"
+                                    onblur="validateEmailInput('emailReportDownload', 'emailReportDownloadVal')">
+                                <p class="font-12 font-red font-regular warning" id="emailReportDownloadVal">Please
+                                    Enter Valid
+                                    Email
+                                </p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Contact Number <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your mobile number" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                    class="inputBox font-16 font-black1 font-medium " id="numberReportDownload"
+                                    maxlength="10"
+                                    onblur="validateMobileInput('numberReportDownload', 'numberReportDownloadVal')">
+                                <p class="font-12 font-red font-regular warning" id="numberReportDownloadVal">Please
+                                    Enter Valid
+                                    Number
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="consentCheckWrapper">
+    <div class="consentCheckRow">
+        <input type="checkbox" id="consentCheckLb">
+        <label for="consentCheckLb">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+    </div>
+    <p id="consentCheckErrorLb" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+</div>
+                    <div class="formFooter">
+                        <div class="gradientButton whiteHover">
+                            <button class="button iconButton"
+                                onclick="handleHSSLBrochureDownload('Download Brochure', 'https://cdn.mastersunion.org/assets/imgV2/Mastermind-The-Student-StartUp-Symposium.pdf')">
+                                Download
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="https://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                        fill="white"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="hssl_successBox" class="congrats-box hide" style="width: 100%">
+                <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+
+                <h3 class="thankyouboxHeading mt-10">Got it</h3>
+                <p class="text-2">Our team will reach out to you shortly.</p>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    // let name = $('#nameReportDownload').val();
+    // let email = $('#emailReportDownload').val();
+    // let number = $('#numberReportDownload').val();
+    function handleHSSLBrochureDownload(formTitle, destination) {
+        console.log('on submit', formTitle, destination);
+
+        // Validate functions
+        const validateNumber = (number) => /^\d{10}$/.test(number);
+        const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+        let name = $('#nameReportDownload').val().trim();
+        let email = $('#emailReportDownload').val().trim();
+        let number = $('#numberReportDownload').val().trim();
+
+        let isValid = true;
+
+        isValid = validateNameInput('nameReportDownload', 'nameReportDownloadVal') && isValid;
+        isValid = validateEmailInput('emailReportDownload', 'emailReportDownloadVal') && isValid;
+        isValid = validateMobileInput('numberReportDownload', 'numberReportDownloadVal') && isValid;
+
+        if (!document.getElementById('consentCheckLb')?.checked) { document.getElementById('consentCheckErrorLb').classList.remove('warning'); isValid = false; } else { document.getElementById('consentCheckErrorLb').classList.add('warning'); }
+
+        if (!isValid) return;
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const utmSource = params.utm_source || 'Website';
+        const utmMedium = params.utm_medium;
+        const utmCampaign = params.utm_campaign;
+        let url = window.location.pathname.substring(1);
+        let formname = formTitle || "Download Brochure";
+        let medium = `Mastermind The Student Startup Symposium - ${formname} Popup`;
+        let course = 'Certification in Entrepreneurship';
+
+
+        let device = 'PC';
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            device = "Mobile";
+        } else {
+            device = "Desktop";
+        }
+
+        $.ajax({
+            url: "{{apiBaseURL}}/api/leads/pushToNPF",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                field_device_type: device,
+                email: email,
+                name: name,
+                mobile: number,
+                linkedinProfile: "",
+                medium: utmMedium || medium,
+                campaign: utmCampaign || null,
+                source: utmSource,
+                course: course,
+                sendMail: false,
+                field_utm_url: window.location.href,
+                leadSource: medium,
+                consentCheck: document.getElementById('consentCheckLb')?.checked || false,
+            }),
+            dataType: "json"
+        });
+
+        if (destination) {
+            setTimeout(() => {
+                window.open(destination, "_blank");
+            }, 3000);
+        }
+        document.querySelector("#hssl_successBox").classList.remove("hide");
+        document.querySelector("#hssh_db_formContainer").classList.add("hide");
+    }
+
+    function validateInputBlur(fieldId, fieldName) {
+        const inputValue = $(`#${fieldId}`).val().trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const numberRegex = /^\d+$/;
+
+        if (inputValue === "") {
+            $(`#${fieldName}Val`).removeClass('warning');
+        } else {
+            $(`#${fieldName}Val`).addClass('warning');
+        }
+    }
+
+
+
+
+    function closeHsslBrochurePopup() {
+        console.log("Closing");
+        let applyNowPopUp = document.getElementById("startup-weekend-brochurePopup");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+
+        resetDownloadBrochureForm();
+    }
+
+
+    function resetDownloadBrochureForm() {
+        $('#nameReportDownloadVal').addClass('warning');
+        $('#emailReportDownloadVal').addClass('warning');
+        $('#numberReportDownloadVal').addClass('warning');
+
+        $("#nameReportDownload").val("");
+        $("#emailReportDownload").val("");
+        $("#numberReportDownload").val("");
+        $('#consentCheckLb').prop('checked', false);
+        $('#consentCheckErrorLb').addClass('warning');
+
+        console.log(document.querySelectorAll("#nameReportDownload"));
+    }
+
+
+    function openHsslBrochurePopup(formTitle, destination) {
+        console.log("SW_ Not opened");
+        const form = document.getElementById("startup-weekend-brochurePopup");
+        const h2 = document.querySelector("#hssl_db_formHeading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+        document.querySelector("#hssl_successBox").classList.add("hide");
+        document.querySelector("#hssh_db_formContainer").classList.remove("hide");
+    }
+
+</script>

@@ -1,0 +1,666 @@
+<main>
+    <div class="popupContainerOuter   ApplyNow newHomePagePopup capthaForm  techDsaiHomePage new" id="ApplyNowPopUpNEW">
+        <div id="leadformContainer" class="popupContainer">
+            <div>
+                <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_heading">
+                    Fill out your Information
+                </h2>
+
+                <div class="popUpCloseBtnWrap homeCrossfix">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Icon" onclick="hideApplyNowPopUp();">
+                </div>
+                </div>
+                <div class="PopupformWrapper" >
+                    <div class="left mob-hide">
+                        <img src="https://images.mastersunion.link/uploads/15052025/v1/P10237831.webp"
+                            alt="MU Students">
+                    </div>
+                    <div class="right">
+                        <ul class="campusButtonDivi faqtabs">
+                            <button onclick="setUserType('workingProfessional')" class="withoutArrowWhiteBgBtn active" id="workingProfessional">
+                                Working Professional
+                            </button>
+                            <button onclick="setUserType('student')" class="withoutArrowWhiteBgBtn" id="student">
+                                Student
+                            </button>
+                        </ul>
+
+                        <div class="content-section">
+                            <div class="content active" id="workingprofessional">
+                                <div class="inputGroup">
+                                    <label class="font-14 font-medium font-black1">Full Name <span class="required">*</span></label>
+                                    <input type="text" id="getPrepFullname" placeholder="Enter Your Full Name" class="inputBox font-16 font-black1 font-medium">
+                                    <span id="getPrepFullnameError" class="error-message required font-12"></span>
+                                </div>
+<div class="formflex">
+                                <div class="inputGroup">
+                                    <label class="label">Email <span class="required">*</span></label>
+                                    <div class="flexWrap emailWrapper">
+                                        <div class="input-wrapper">
+                                            <input type="text" id="getPrepEmail" placeholder="Enter Your Email Address" class="inputBox">
+                                            <span id="getPrepEmailError" class="error-message required font-12"></span>
+                                        </div>
+                                        {{!-- <span class="verifyLink" onclick="showOtp()">Verify?</span> --}}
+                                    </div>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label class="label">Phone Number <span class="required">*</span></label>
+                                    <div class="flexWrap phoneWrapper">
+                                        <div class="input-wrapper">
+                                            <input type="text" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" id="getPrepPhone" placeholder="Enter Your Phone Number" class="inputBox">
+                                            <span id="getPrepPhoneError" class="error-message required font-12"></span>
+                                        </div>
+                                     
+
+                                        <div id="otpBox" class="otpSection">
+                                            <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="1" class="otpBox">
+                                            <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="1" class="otpBox">
+                                            <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="1" class="otpBox">
+                                            <input type="text" oninput="this.value = this.value.replace(/[^0-9]/g, '')" maxlength="1" class="otpBox">
+                                            <span class="timerText">00:59 sec</span>
+                                            <button onclick="showOtp()" class="resendLink" disabled>Resend</button>
+                                            <br>
+                                            <span id="otpBoxError" class="error-message required font-12"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+</div>
+                                   <span class="verifyLink mt20" onclick="showOtp()">Verify?</span>
+
+                                <div class="inputGroup">
+                                    <label class="font-14 font-medium font-black1">Company Name <span class="required">*</span></label>
+                                    <input type="text" id="getPrepCompanyOrCollege" placeholder="Enter Your Company Name" class="inputBox font-16 font-black1 font-medium">
+                                    <span id="getPrepCompanyOrCollegeError" class="error-message required font-12"></span>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label class="font-14 font-medium font-black1">Designation <span class="required">*</span></label>
+                                    <input type="text" id="getPrepDesignationOrQualification" placeholder="Enter Your Designation" class="inputBox font-16 font-black1 font-medium">
+                                    <span id="getPrepDesignationOrQualificationError" class="error-message required font-12"></span>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label class="font-14 font-medium font-black1">Years of Experience <span class="required">*</span></label>
+                                    <select id="getPrepYearOfExperience" class="inputBox safariFix">
+                                        <option disabled selected>Select The Option</option>
+                                        <option value="0-1">Less than a year</option>
+                                        <option value="1-2">1-2 Years</option>
+                                        <option value="3-5">3-5 Years</option>
+                                        <option value="5-10">5-10 Years</option>
+                                        <option value="10+">More than 10 years</option>
+                                    </select>
+                                    <span id="getPrepYearOfExperienceError" class="error-message required font-12"></span>
+                                </div>
+
+                                <div class="inputGroup hide">
+                                    <label class="font-14 font-medium font-black1">Current Year <span class="required">*</span></label>
+                                    <input type="text" id="getPrepCurrentYear" placeholder="Enter Your Current Year" class="inputBox font-16 font-black1 font-medium">
+                                    <span id="getPrepCurrentYearError" class="error-message required font-12"></span>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label class="font-14 font-medium font-black1">LinkedIn Profile URL</label>
+                                    <input type="text" id="getPrepLinkedIn" placeholder="Enter Your LinkedIn Profile URL" class="inputBox font-16 font-black1 font-medium">
+                                    <span id="getPrepLinkedInError" class="error-message required font-12"></span>
+                                </div>
+
+                                <div class="formFooter">
+                                    <div class="gradientButton whiteHover">
+                                        <button onclick="submitForm()" id="getPrepSubmit" class="button iconButton">Submit Now</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="SuccessMessage" class="congrats-box hide">
+            <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+
+            <h3 class="thankyouboxHeading mt-10 gtmUgDwnBroGotit" id="gtmUgDwnBroGotitId">Thank
+                You
+            </h3>
+            <p class="text-2 gtmUgDwnBroGotPara" id="gtmUgDwnBroGotParaId">You've successfully registered.</p>
+            <p class="text-2">For any queries please contact us at <a class="font-red"
+                    href="mailto:admissions@mastersunion.org">admissions@mastersunion.org</a>
+            </p>
+        </div>
+    </div>
+</main>
+
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+
+    let userType = 'workingProfessional';
+    let isVerified = false;
+
+    function setUserType(type){
+        if(userType === type) return;
+
+        $(".inputGroup input").val("");
+        $(".inputGroup select").prop("selectedIndex", 0);
+        $("span.error-message").text("");
+        $("#getPrepSubmit").html('Submit').prop('disabled', false)
+        $(`.verifyLink`).show();
+        $('#otpBox').hide();
+        userType = type;
+
+        const isProfessional = userType === "workingProfessional";
+
+        $('#getPrepCompanyOrCollege').closest(".inputGroup").find("label").html( isProfessional ? "Company Name <span class='required'>*</span>" : "College Name <span class='required'>*</span>");
+        $('#getPrepCompanyOrCollege').attr('placeholder', isProfessional ? "Enter Your Company Name" : "Enter Your College Name");
+        $('#getPrepDesignationOrQualification').closest(".inputGroup").find("label").html( isProfessional ? "Designation <span class='required'>*</span>" : "Qualification <span class='required'>*</span>");
+        $('#getPrepDesignationOrQualification').attr('placeholder', isProfessional ? "Enter Your Profession" : "Enter Your Qualification");
+
+        if(isProfessional){
+            $('#student').removeClass('active');
+            $('#workingProfessional').addClass('active');
+            $("#getPrepYearOfExperience").closest(".inputGroup").removeClass('hide')
+            $("#getPrepCurrentYear").closest(".inputGroup").addClass('hide')
+        }
+        else{
+            $('#student').addClass('active');
+            $('#workingProfessional').removeClass('active');
+            $("#getPrepYearOfExperience").closest(".inputGroup").addClass('hide')
+            $("#getPrepCurrentYear").closest(".inputGroup").removeClass('hide')
+        }
+    }
+
+    function isValidEmail(email) {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        return emailRegex.test(email);
+    }
+
+    function isValidPhone(phone) {
+        const phoneRegex = /^\d{10}$/;
+        return phoneRegex.test(phone);
+    }
+
+    function isValidYear(year) {
+        const yearNum = parseInt(year);
+        return !isNaN(yearNum) && yearNum >= 1 && yearNum <= 5;
+    }
+
+    function isValidLinkedInUrl(url) {
+        if (!url) return true; 
+        const linkedinRegex = /^(https?:\/\/)?(www\.)?linkedin\.com\/(in|company)\/[a-zA-Z0-9-]+\/?$/;
+       console.log('isValied==', linkedinRegex.test(url));
+        return linkedinRegex.test(url);
+    }
+
+    function showError(id, message) {
+        $(`#${id}Error`).text(message)
+    }
+
+
+    function hideError(id) {
+       $(`#${id}Error`).text("")
+    }
+
+    function showOtp(type, idType) {
+
+        const nameInput = $('#getPrepFullname').val()
+        const emailInput = $('#getPrepEmail').val()
+        const phoneInput = $('#getPrepPhone').val()
+
+        let hasError = false;
+
+        if(!nameInput ){
+            showError('getPrepFullname', 'Please enter your full name');
+            hasError = true;
+        }
+
+        if (!isValidEmail(emailInput)) {
+            showError('getPrepEmail', 'Please enter a valid email address');
+            hasError = true;
+        }
+
+        if (!isValidPhone(phoneInput)) {
+            showError('getPrepPhone', 'Please enter a valid 10-digit phone number');
+            hasError = true;
+        }
+
+        if (hasError) return;
+
+        hideError('getPrepEmail');
+        hideError('getPrepPhone');
+        hideError('getPrepFullname');
+        
+        fetch('https://apiv3.getprepped.in/api/sendOtp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Api-Key' : 'QmFzZT/Y0RW5jb2RlZEl/eQ'
+            },
+            body: JSON.stringify({
+                "name" : $('#getPrepFullname').val(),
+                "email" : $('#getPrepEmail').val(),
+                "phone" : $('#getPrepPhone').val()
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('data==>', data)
+            if (!data.IsSuccess) {
+                if(data.Message === "Email already exists! Please login to continue."){
+                    $('#getPrepEmailError').html("Email already exists! Please <a style='text-decoration: underline;' href='https://app.getprepped.in/login' target='_blank'>login</a> to continue.")
+                }
+                else if(data.Message === "Phone already exists! Please login to continue."){
+                    $('#getPrepPhoneError').html("Phone already exists! Please <a style='text-decoration: underline;' href='https://app.getprepped.in/login' target='_blank'>login</a> to continue.")
+                }
+            }
+            else{
+                clearOtpBoxes();
+                $(`.verifyLink`).hide();
+                $('#otpBox').show();
+                startOTPTimer();
+            }
+        })
+        .catch(error => {
+            console.error('Error sending OTP:', error);
+            showError('getPrepEmail', 'Something went wrong. Please try again.');
+        });
+        
+    }
+
+    function verifyOtp(type) {
+        const wrapper = document.querySelector(`.${type}Wrapper`);
+        const otpBoxes = wrapper.querySelectorAll('.otpBox');
+        let otp = '';
+        
+        otpBoxes.forEach(box => {
+            otp += box.value;
+        });
+
+        fetch('https://apiv3.getprepped.in/api/verifyOtp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Api-Key' : 'QmFzZT/Y0RW5jb2RlZEl/eQ'
+            },
+            body: JSON.stringify({
+                "otp" : otp,
+                "email" : $('#getPrepEmail').val(),
+                "phone" : $('#getPrepPhone').val()
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('data==>', data)
+            if (!data.IsSuccess) {
+                showError('otpBox', data.Message || 'Failed to verify');
+            }
+            else{
+                isVerified = true;
+                $('#otpBox').hide();
+                hideError('otpBox');
+            }
+        })
+        .catch(error => {
+            console.error('Error sending OTP:', error);
+            showError('otpBox', 'Something went wrong. Please try again.');
+        });
+    }
+
+    function clearOtpBoxes() {
+        document.querySelectorAll('.otpBox').forEach(box => {
+            box.value = '';
+        });
+    }
+
+    let otpCountdownInterval;
+
+    function startOTPTimer() {
+        const duration = 120;
+        let timer = duration;
+        const timerText = document.querySelector('.timerText');
+        const resendButton = document.querySelector('.resendLink');
+
+        if (otpCountdownInterval) clearInterval(otpCountdownInterval);
+
+        resendButton.disabled = true;
+        resendButton.classList.add('disabled');
+        timerText.textContent = '02:00 sec'; 
+
+        otpCountdownInterval = setInterval(() => {
+            const minutes = String(Math.floor(timer / 60)).padStart(2, '0');
+            const seconds = String(timer % 60).padStart(2, '0');
+            timerText.textContent = `${minutes}:${seconds} sec`;
+
+            timer--;
+
+            if (timer < 0) {
+                clearInterval(otpCountdownInterval);
+                timerText.textContent = '';
+                resendButton.disabled = false;
+                resendButton.classList.remove('disabled');
+            }
+        }, 1000);
+    }
+
+
+    function validateForm() {
+        let isValid = true;
+        
+        const formData = {
+            name: $('#getPrepFullname'),
+            email: $('#getPrepEmail'),
+            phone: $('#getPrepPhone'),
+            designation: $('#getPrepDesignationOrQualification'),
+            company: $('#getPrepCompanyOrCollege'),
+            linkedin: $('#getPrepLinkedIn'),
+            title : userType === 'student' ? 'student' : 'work',
+            yrsOfExp : userType === 'student' ? $('#getPrepCurrentYear').val() : $('#getPrepYearOfExperience').val()
+        };
+
+        $("span.error-message").text("");
+
+        if (!formData.name.val()) {
+            showError('getPrepFullname', 'Please enter your full name');
+            isValid = false;
+        }
+
+        if (!formData.email.val()) {
+            showError('getPrepEmail', 'Please enter your email address');
+            isValid = false;
+        } else if (!isValidEmail(formData.email.val())) {
+            showError('getPrepEmail', 'Please enter a valid email address');
+            isValid = false;
+        } else if (!isVerified) {
+            showError('getPrepEmail', 'Please verify your email address');
+            isValid = false;
+        }
+
+        if (!formData.phone.val()) {
+            showError('getPrepPhone', 'Please enter your phone number');
+            isValid = false;
+        } else if (!isValidPhone(formData.phone.val())) {
+            showError('getPrepPhone', 'Please enter a valid 10-digit phone number');
+            isValid = false;
+        } else if (!isVerified) {
+            showError('getPrepPhone', 'Please verify your phone number');
+            isValid = false;
+        }
+
+        if (!formData.company.val()) {
+            showError('getPrepCompanyOrCollege', `Please enter your ${formData.title === 'Student' ? 'college name' : 'company name'}`);
+            isValid = false;
+        }
+
+        if (!formData.designation.val()) {
+            showError('getPrepDesignationOrQualification', `Please enter your ${formData.title === 'Student' ? 'qualification' : 'designation'}`);
+            isValid = false;
+        }
+
+        if (formData.title === 'Student') {
+            if (!formData.yrsOfExp) {
+                showError('getPrepCurrentYear', 'Please enter your current year');
+                isValid = false;
+            }
+        } else {
+            if (!formData.yrsOfExp || formData.yrsOfExp === 'Select The Option') {
+                showError('getPrepYearOfExperience', 'Please select your years of experience');
+                isValid = false;
+            }
+        }
+
+        if (formData.linkedin.val() && !isValidLinkedInUrl(formData.linkedin.val())) {
+            showError('getPrepLinkedIn', 'Please enter a valid LinkedIn profile URL');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function submitForm() {
+       
+        if (!validateForm()) {
+            console.log(`Form ${userType} validation failed`);
+            return;
+        }
+ 
+        $('#getPrepSubmit').html('Submitting...').prop('disabled', true)
+        
+        const formData = {
+            name: $('#getPrepFullname').val(),
+            email: $('#getPrepEmail').val(),
+            number: $('#getPrepPhone').val(),
+            designation: $('#getPrepDesignationOrQualification').val(),
+            company: $('#getPrepCompanyOrCollege').val(),
+            linkedin: $('#getPrepLinkedIn').val(),
+            title : userType === 'student' ? 'Student' : 'workingprofessional',
+            yrsOfExp : userType === 'student' ? $('#getPrepCurrentYear').val() : $('#getPrepYearOfExperience').val()
+        };
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+            const params = Object.fromEntries(urlSearchParams.entries());
+            const utmSource = params.utm_source || "Website";
+            const utmMedium = params.utm_medium;
+            const utmCampaign = params.utm_campaign;
+            const utmTerm = params.utm_term;
+            const utmContent = params.utm_content;
+
+            const deviceType = window.matchMedia("(max-width: 768px)").matches
+                ? "Mobile"
+                : "Desktop";
+
+            fetch('https://apiv3.getprepped.in/api/registerAndBookSlot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': 'QmFzZT/Y0RW5jb2RlZEl/eQ'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+            
+                if (data.IsSuccess) {
+
+                    $('#SuccessMessage').removeClass('hide');
+                    $('#leadformContainer').addClass('hide');
+
+                    var form_dataNPF = {
+                        course: "Course",
+                        campaign: utmCampaign || null,
+                        email: formData.email,
+                        field_device_type: deviceType,
+                        medium: utmMedium || `GetPrepped-V2 Book Now CTA`,
+                        mobile: formData.number,
+                        name: formData.name,
+                        source: utmSource || 'Website',
+                        state: null,
+                        city: null,
+                        field_utm_url: window.location.href,
+                        event_payload: formData,
+                        leadSource: `GetPrepped V2 Book Now Form`,
+                        field_current_total_work_experience: formData.yrsOfExp,
+                        linkedinProfile: formData.linkedin    
+                    };
+
+                    fetch(`{{apiBaseURL}}/api/leads/pushToNPF_PGP_TBM`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(form_dataNPF),
+                    });
+                } 
+                else {
+                    console.log(data.Message)
+                    console.log(data.Message === "User already exists! Please login to continue.")
+                    if(data.Message === "User already exists! Please login to continue."){
+                        showError(`getPrepEmail`,'Already Registered');     
+                        $(`#getPrepEmail`).focus();
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                
+            })
+            .finally(() => {
+                $('#getPrepSubmit').html('Submit').prop('disabled', false)
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        $('#otpBox').hide();
+        // Add tab switching functionality
+        document.querySelectorAll('.campusButtonDivi li').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                document.querySelectorAll('.campusButtonDivi li').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Hide all content sections
+                document.querySelectorAll('.content-section .content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                // Show selected content
+                document.getElementById(this.dataset.rel).classList.add('active');
+                userType = this.dataset.rel;
+            });
+        });
+
+        $('#getPrepPhone').on('change', function(){
+                isVerified = false
+                $(`.verifyLink`).show();
+                $('#otpBox').hide();
+        })
+
+        $('#getPrepEmail').on('change', function(){
+                isVerified = false
+                $(`.verifyLink`).show();
+                $('#otpBox').hide();
+        })
+
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('blur', function () {
+                const id = this.id;
+                const value = this.value.trim();
+
+                console.log("id=", id);
+                console.log("value=", value);
+
+                if (id === 'getPrepFullname' && value === '') {
+                    showError(id, 'Full name is required');
+                }
+
+                if (id === 'getPrepEmail') {
+                    if(!isValidEmail(value)){
+                         showError(id, 'Please enter a valid email address');
+                    }
+                }
+
+                if (id === 'getPrepPhone') {
+                    if(!isValidPhone(value)){
+                        showError(id, 'Please enter a valid 10-digit phone number');
+                    }
+                }
+
+                if (id === 'getPrepCompanyOrCollege' && value === '') {
+                    showError(id, `Please enter your ${userType === 'student' ? 'college' : 'company'} name`);
+                }
+
+                if (id === 'getPrepDesignationOrQualification' && value === '') {
+                    showError(id, `Please enter your ${userType === 'student' ? 'qualification' : 'designation'}`);
+                }
+
+                if (id === 'getPrepLinkedIn' && !isValidLinkedInUrl(value)) {
+                    showError(id, 'Please enter a valid LinkedIn profile URL');
+                }
+
+                if (id === 'getPrepCurrentYear') {
+                    const currentYear = new Date().getFullYear();
+                    const yearValue = parseInt(value.trim(), 10);
+
+                    if (value.trim() === '') {
+                        showError(id, 'Please enter your current year');
+                    } else if (isNaN(yearValue) || yearValue < 1900 || yearValue > currentYear) {
+                        showError(id, 'Please enter a valid year');
+                    }
+                }
+
+
+
+            });
+
+            input.addEventListener('focus', function () {
+                hideError(this.id);
+            });
+        });
+
+        document.querySelectorAll('select').forEach(select => {
+            select.addEventListener('blur', function () {
+                const id = this.id;
+                const value = this.value.trim();
+
+                console.log("id=", id);
+                console.log("value=", value);
+
+                if (id === 'getPrepYearOfExperience' && value === 'Select The Option') {
+                    showError(id, 'Please select your years of experience');
+                }
+                else{
+                    hideError(id)
+                }
+            });
+            select.addEventListener('focus', function () {
+                hideError(this.id);
+            });
+        });
+
+        // Add OTP input event listeners
+        document.querySelectorAll('.otpBox').forEach(box => {
+            box.addEventListener('input', function() {
+                if (this.value.length === 1) {
+                    const nextBox = this.nextElementSibling;
+                    if (nextBox && nextBox.classList.contains('otpBox')) {
+                        nextBox.focus();
+                    } else {
+                        verifyOtp(this.closest('.otpSection').classList.contains('emailOtp') ? 'email' : 'phone');
+                    }
+                }
+            });
+        });
+    });
+
+    function pgpPlacementReport(formTitle, destination) {
+        const form = document.getElementById("ApplyNowPopUpNEW");
+        const h2 = document.querySelector("#form_heading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        {{!-- document.querySelector("#SuccessMessage").classList.add("hide");
+        document.querySelector("#submitbuttonreport").classList.remove("hide");
+        document.querySelector("#leadformContainer").classList.remove("hide");
+        document.querySelector("#form_heading").classList.remove("hide"); --}}
+    }
+
+    function hideApplyNowPopUp() {
+        let applyNowPopUp = document.getElementById("ApplyNowPopUpNEW");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active");
+        }
+
+        $(".inputGroup input").val("");
+        $(".inputGroup select").prop("selectedIndex", 0);
+        $("span.error-message").text("");
+        $("#getPrepSubmit").html('Submit').prop('disabled', false)
+        $(`.verifyLink`).show();
+        $('#otpBox').hide();
+    }
+</script>

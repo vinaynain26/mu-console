@@ -1,0 +1,850 @@
+.awards {
+
+.MUVheroSection {
+position: relative;
+padding: 0px 0 0;
+background: #020202;
+
+
+.heroSectionContent .go-HeroSubtitle {
+color: var(--white);
+}
+
+.heroSectionContent {
+position: absolute;
+bottom: 22vh;
+display: flex;
+align-items: flex-start;
+flex-direction: column;
+text-align: center;
+width: 50%;
+gap: 40px;
+}
+
+.heroTag {
+display: flex;
+gap: 8px;
+align-items: center;
+padding: 12px 24px;
+border-radius: 40px;
+background: var(--grey17);
+backdrop-filter: blur(2px);
+border: 1px solid var(--black5);
+font-size: 13px;
+font-family: var(--go-medium);
+font-weight: 500;
+text-transform: uppercase;
+line-height: 120%;
+color: var(--grey4);
+letter-spacing: 0.65px;
+max-width: max-content;
+
+}
+
+.ventureHeroHeading {
+text-align: left;
+font-size: 102px;
+line-height: 100%;
+font-family: var(--go-semibold);
+font-weight: 600;
+color: var(--white);
+}
+
+.heroRotatingWordWrap {
+display: inline-block;
+min-width: 14ch;
+vertical-align: bottom;
+}
+
+.heroRotatingWord {
+display: inline-block;
+transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+
+.heroRotatingWord.is-changing {
+opacity: 0;
+transform: translateY(6px);
+}
+
+.ventureSubTitle {
+font-size: 18px;
+color: var(--grey10);
+line-height: 120%;
+font-family: var(--go-regular);
+font-weight: 400;
+text-align: start;
+}
+
+
+.boldTitle {
+color: var(--grey18);
+font-family: var(--go-semibold);
+font-weight: 600;
+font-size: 18px;
+line-height: 120%;
+}
+
+.go-HeroSubtitle {
+margin-top: 16px;
+text-align: start;
+
+.textHighlight {
+color: var(--white);
+}
+}
+
+.heroSectionBtnWrap {
+display: flex;
+gap: 16px;
+align-items: flex-start;
+width: 100%;
+justify-content: flex-start;
+}
+
+.ventureSubheading {
+font: 52px "go-regular";
+color: #FFFFFF;
+line-height: 100%;
+}
+
+.heroSectionContentWrapper {
+display: flex;
+flex-direction: column;
+align-items: start;
+}
+
+.heroSectionTextWrapper {
+display: flex;
+flex-direction: column;
+gap: 20px;
+}
+
+}
+
+.accreditationSection {
+background: var(--grey16) url("https://images.mastersunion.link/uploads/19022026/v1/Vector1374.webp") no-repeat center center;
+background-size: cover;
+
+.accreditationWrapper {
+display: flex;
+flex-direction: column;
+gap: 40px;
+}
+
+.accreditationHeadingWrapper {
+display: flex;
+flex-direction: column;
+gap: 8px;
+text-align: center;
+}
+
+.accreditationHeading {
+font-family: "fraunces", serif;
+font-size: 60px;
+font-weight: 600;
+line-height: 120%;
+color: var(--black);
+}
+
+.accreditationSubheading {
+font: 20px "go-regular";
+line-height: 120%;
+color: var(--black5);
+
+}
+
+.accreditationCardsWrapper {
+display: flex;
+gap: 20px;
+justify-content: center;
+}
+
+.accreditationCardImg {
+max-width: 242px;
+max-height: 109px;
+overflow: hidden;
+}
+
+.accreditationCard {
+background: var(--white);
+display: flex;
+flex-direction: column;
+gap: 20px;
+padding: 12px;
+min-height: 358px;
+max-width: 266px;
+border-radius: 16px;
+}
+
+.textBold {
+font: 15px "go-semibold";
+color: var(--black);
+}
+
+.accreditationText {
+font: 14px "go-regular";
+color: var(--grey3);
+line-height: 150%;
+}
+
+.accreditationCardContent {
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+}
+
+.rankingSection {
+position: relative;
+background: var(--black);
+overflow: hidden;
+
+.rankingWrapper {
+position: relative;
+z-index: 9;
+display: flex;
+gap: 40px;
+flex-direction: column;
+}
+
+.rankingHeadingWrapper {
+display: flex;
+flex-direction: column;
+gap: 8px;
+text-align: center;
+}
+
+.rankingHeading {
+font: 60px "fraunces", serif;
+font-weight: 600;
+line-height: 120%;
+color: var(--white);
+}
+
+.rankingSubheading {
+font: 20px "go-regular";
+line-height: 120%;
+color: var(--grey16);
+}
+
+.rankingCardsWrapper {
+display: flex;
+gap: 40px;
+justify-content: center;
+flex-direction: column;
+}
+
+
+.rankingCard {
+padding: 26px 32px;
+max-width: 100%;
+width: 100%;
+display: flex;
+gap: 32px;
+border-radius: 20px;
+border: 1px solid var(--Grey-20, #262626);
+background-color: rgb(23 23 23 / 15%);
+justify-content: space-between;
+backdrop-filter: blur(6px);
+position: relative; /* anchor for pseudo‑element */
+transition: background-color 0.2s ease; /* only background fades smoothly */
+overflow: hidden; /* keep pseudo inside rounded corners */
+}
+
+/* Left highlight border on hover */
+.rankingCard::before {
+content: '';
+position: absolute;
+left: 0;
+top: 0;
+bottom: 0;
+width: 0; /* hidden by default */
+background-color: #E38330;
+border-radius: 20px 0 0 20px; /* match left side curvature */
+transition: width 0.2s ease; /* smooth appearance */
+}
+
+.rankingCard:hover::before {
+width: 3px; /* or 2px, whichever you prefer */
+}
+
+.rankingCard:hover {
+background-color: var(--grey17);
+/* border stays 1px solid, no change → no reflow */
+/* optionally, change border color for extra effect, but keep width */
+border-color: transparent; /* optional: hides the original border on hover */
+}
+
+.rankingCardUpperWrapper {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap:24px;
+}
+
+.rankingText {
+font: 24px "go-regular";
+line-height: 120%;
+color: var(--white);
+max-width: 334px;
+width: 100%;
+}
+
+.rankingNumber {
+font: 80px "fraunces", serif;
+
+line-height: 100%;
+color: var(--white);
+}
+
+.rankingCardBelowWrapper {
+display: flex;
+gap: 24px;
+align-items: center;
+max-width: 456px;
+width: 100%;
+}
+
+.rankingLogo {
+max-width: 190px;
+width: 100%;
+}
+
+.rankingName {
+font: 20px "go-regular";
+line-height: 120%;
+color: var(--grey16);
+}
+
+.rankingYear {
+font: 20px "go-semiBold";
+line-height: 120%;
+color: var(--grey16);
+}
+
+.rankingScratchLeft {
+position: absolute;
+left: -400px;
+top: -360px;
+z-index: 1;
+pointer-events: none;
+scale: 0.6;
+}
+
+.rankingScratchRight {
+position: absolute;
+right: -230px;
+top: -380px;
+z-index: 1;
+pointer-events: none;
+scale: 0.6;
+}
+
+.gradientBlur {
+position: absolute;
+right: -180px;
+top: -160px;
+z-index: 1;
+pointer-events: none;
+background: linear-gradient(60deg, #39b5d7 18.74%, #f7d544 104.82%);
+filter: blur(180px);
+/* backdrop-filter: blur(48.75px); */
+width: 500px;
+height: 500px;
+border-radius: 50%;
+}
+
+
+
+}
+
+.awardsScrollSection {
+
+.awardsScrollWrapper {
+display: flex;
+flex-direction: column;
+gap: 32px;
+}
+
+.awardsScrollHeadingWrapper {
+display: flex;
+flex-direction: column;
+gap: 8px;
+text-align: center;
+position: sticky;
+top: 60px;
+}
+
+.awardsScrollHeading {
+font: 60px "fraunces", serif;
+font-weight: 600;
+line-height: 120%;
+color: var(--black);
+}
+
+.awardsScrollSubheading {
+font: 20px "go-regular";
+line-height: 120%;
+color: var(--black5);
+}
+
+.awardsScrollCardsWrapper {
+display: flex;
+flex-direction: column;
+gap: 60px;
+justify-content: center;
+}
+
+.awardsScrollCard {
+background: var(--black);
+background-image: url("https://images.mastersunion.link/uploads/19022026/v1/Vector1351.png");
+padding: 30px;
+display: flex;
+justify-content: space-between;
+border-radius: 24px;
+position: sticky;
+border: 1px solid var(--grey3);
+}
+
+.awardsScrollCard:nth-child(1) {
+top: 180px;
+}
+
+.awardsScrollCard:nth-child(2) {
+top: 200px;
+}
+
+.awardsScrollCard:nth-child(3) {
+top: 220px;
+}
+
+.awardsScrollCard:nth-child(4) {
+top: 240px;
+}
+
+.awardsScrollCard:nth-child(5) {
+top: 260px;
+}
+
+.awardsScrollCard:nth-child(6) {
+top: 280px;
+}
+.awardsScrollCard:nth-child(7) {
+top: 300px;
+}
+.awardsScrollCard:nth-child(8) {
+top: 320px;
+}
+
+.awardsScrollCard:nth-child(even) {
+flex-direction: row-reverse;
+
+.awardsScrollBottomWrapper {
+align-items: flex-end;
+}
+
+.awardsScrollLogoTextWrapper {
+display: flex;
+align-items: flex-end;
+flex-direction: column;
+}
+}
+
+@media (max-width: 600px) {
+.awardsScrollCard:nth-child(even) {
+flex-direction: column-reverse !important;
+}
+
+.awardsScrollCard:nth-child(even) .awardsScrollBottomWrapper {
+align-items: flex-start;
+}
+
+.awardsScrollCard:nth-child(even) .awardsScrollLogoTextWrapper {
+align-items: flex-start;
+}
+}
+
+.awardsScrollCardImg {
+max-width: 494px;
+width: 100%;
+}
+
+.awardsScrollCardTextWrapper {
+padding-top: 8px;
+max-width: 592px;
+width: 100%;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+}
+
+.awardsScrollCardText {
+font: 24px "go-regular";
+line-height: 120%;
+color: var(--white);
+}
+
+.awardsScrollLogoText {
+font: 16px "go-regular";
+line-height: 120%;
+color: var(--grey10);
+}
+
+.awardsScrollLogoDetail {
+font: 20px "go-semiBold";
+line-height: 120%;
+color: var(--grey10);
+}
+
+.awardsScrollCardLogo {
+max-width: 126px;
+width: 100%;
+}
+
+.awardsScrollBottomWrapper {
+display: flex;
+flex-direction: column;
+gap: 18px;
+}
+
+
+
+}
+
+.muJourney {
+background: url(https://images.mastersunion.link/uploads/19012026/v1/Vector1712.webp) left, url(https://images.mastersunion.link/uploads/19012026/v1/Vector1710.webp) right, var(--white);
+background-repeat: no-repeat;
+background-size: contain;
+
+.journeyWrapper {
+display: flex;
+flex-direction: column;
+gap: 40px;
+align-items: center;
+}
+
+
+.fr-HeadingItalic {
+text-align: right;
+width: 100%;
+max-width: 858px;
+}
+
+.journeyBtn {
+width: 100%;
+display: flex;
+justify-content: center;
+
+.btnBlack {
+width: 237px;
+}
+}
+
+.headingAlign {
+display: flex;
+flex-direction: column;
+width: 100%;
+}
+
+.go-HighlightHeading {
+text-align: center;
+}
+
+.journeyUpper {
+display: flex;
+flex-direction: column;
+gap: 32px;
+align-items: center;
+width: 100%;
+}
+
+.journeyBottom {
+display: flex;
+align-items: center;
+gap: 60px;
+padding: 24px 80px;
+}
+
+.journeyLinks {
+display: flex;
+align-self: center;
+gap: 8px;
+font-size: 16px;
+color: var(--black);
+line-height: 150%;
+font-family: var(--go-regular);
+text-decoration: underline;
+}
+
+
+}
+
+
+
+
+@media (max-width: 767px) {
+
+.MUVheroSection {
+padding-top: 0 !important;
+padding-bottom: 0 !important;
+max-height: 100vh !important;
+overflow: hidden;
+
+.heroSectionContent {
+width: 100%;
+/* padding: 0 12px; */
+bottom: 190px;
+left: 40px;
+gap: 24px;
+}
+
+.heroSectionBtnWrap {
+width: 100%;
+align-items: flex-start;
+gap: 12px;
+flex-direction: column;
+margin-top: unset;
+
+a {
+width: 100%;
+}
+}
+
+.heroSectionImg {
+height: 100vh;
+padding-top: 40px;
+}
+
+.ventureHeroHeading {
+font-size: 40px;
+
+align-items: center;
+margin-bottom: 0;
+}
+
+.ventureSubTitle {
+text-align: center;
+max-width: 358px;
+}
+
+.ventureSubheading {
+font: 30px "go-regular";
+line-height: 120%;
+}
+
+.heroSectionContentWrapper {
+align-items: unset;
+}
+
+.heroSectionTextWrapper {
+display: flex;
+flex-direction: column;
+gap: 16px;
+}
+
+.heroTag {
+align-self: center;
+}
+}
+
+.accreditationSection {
+
+.accreditationWrapper {
+gap: 34px;
+}
+
+.accreditationCardsWrapper {
+flex-direction: column;
+}
+
+.accreditationCard {
+max-width: unset;
+width: 100%;
+min-height: unset;
+padding-bottom: 22px;
+}
+
+.accreditationCardImg {
+max-width: unset;
+width: 100%;
+max-height: unset;
+}
+
+.accreditationHeading {
+font: 32px "fraunces", serif;
+}
+
+.accreditationSubheading {
+font: 16px "go-regular";
+}
+
+.textBold {
+font: 14px "go-semibold";
+}
+
+.accreditationText {
+font: 12px "go-regular";
+}
+
+.accreditationCardContent {
+gap: 16px;
+}
+}
+
+.rankingSection {
+background-image: url("https://images.mastersunion.link/uploads/19022026/v1/Vector1712.webp");
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+
+.rankingCardsWrapper {
+flex-direction: column;
+gap:24px;
+}
+
+.rankingHeading {
+font: 32px "fraunces", serif;
+}
+
+.rankingSubheading {
+font: 16px "go-regular";
+}
+
+.rankingText {
+font: 14px "go-regular";
+}
+
+.rankingNumber {
+font: 52px "fraunces", serif;
+}
+
+.rankingCard {
+padding: 32px;
+gap: 26px;
+flex-direction: column;
+}
+
+.rankingLogo {
+max-width: 112px;
+}
+
+.rankingName {
+font: 12px "go-regular";
+}
+
+.rankingYear {
+font: 12px "go-regular";
+}
+
+.rankingWrapper {
+gap: 40px;
+}
+
+
+}
+
+.awardsScrollSection {
+.awardsScrollHeading {
+font: 32px "fraunces", serif;
+}
+
+.awardsScrollSubheading {
+font: 16px "go-regular";
+}
+
+.awardsScrollCard {
+flex-direction: column-reverse !important;
+padding: 20px 24px;
+gap: 20px;
+min-height: 500px;
+}
+
+.awardsScrollCardText {
+font: 14px "go-regular";
+}
+
+.awardsScrollCardLogo {
+max-width: 78px;
+width: 100%;
+}
+
+.awardsScrollLogoText {
+font: 10px "go-regular";
+}
+
+.awardsScrollLogoDetail {
+font: 12px "go-regular";
+}
+
+.awardsScrollCardTextWrapper {
+gap: 20px;
+}
+
+.awardsScrollCard:nth-child(1) {
+top: 200px;
+}
+
+.awardsScrollCard:nth-child(2) {
+top: 220px;
+}
+
+.awardsScrollCard:nth-child(3) {
+top: 240px;
+}
+
+.awardsScrollCard:nth-child(4) {
+top: 260px;
+}
+
+.awardsScrollCard:nth-child(5) {
+top: 280px;
+}
+
+.awardsScrollCard:nth-child(6) {
+top: 300px;
+}
+.awardsScrollCard:nth-child(7) {
+top: 320px;
+}
+.awardsScrollCard:nth-child(8) {
+top: 340px;
+}
+
+.awardsScrollHeadingWrapper {
+top: 90px;
+}
+
+
+
+
+}
+
+
+.muJourney {
+
+background: url(https://images.mastersunion.link/uploads/20012026/v1/VectorMob.webp) left, url(https://images.mastersunion.link/uploads/20012026/v1/vectorMob2.webp) right, var(--white);
+background-repeat: no-repeat;
+background-size: contain;
+
+.journeyBottom {
+flex-direction: column;
+gap: 24px;
+}
+
+.journeyWrapper {
+gap: 24px;
+}
+
+.journeyUpper {
+gap: 24px;
+width: 100%;
+}
+}
+
+
+
+
+
+}
+
+}

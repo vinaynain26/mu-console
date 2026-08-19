@@ -1,0 +1,17 @@
+{
+  "name": "mu-console",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-page.mjs",
+    "start": "node server.js",
+    "reset": "rm -f data/content.db && node server.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.117.1",
+    "express": "^4.21.2",
+    "express-handlebars": "^8.0.1",
+    "openai": "^7.5.0",
+    "zod": "^4.4.3"
+  }
+}

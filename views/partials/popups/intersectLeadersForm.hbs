@@ -1,0 +1,520 @@
+<main>
+    <div class="popupContainerOuter ApplyNow scrollPopup intersectForms"
+        id="intersectLeadersForm">
+        <div class="popupContainer">
+            <div class="fromTophead">
+                <h2 class="font-56 font-bold font-black1 letter-spacing1" id="form_heading">
+                    Join our exclusive, invite-only Intersect community
+                </h2>
+                <button class="popUpCloseBtnWrap homeCrossfix" onclick="hideLeadersForm()" aria-label="Close">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Close">
+                </button>
+            </div>
+            <div class="toggle-buttons">
+                <button id="academiaBtn" onclick="setLeadersType('Academia')" style="border-radius: 20px; padding: 10px 20px; border: none; background-color: black; color: white; font-size: 16px; font-weight: semibold; cursor: pointer; margin-top:10px;">Academia Leaders</button>
+                <button id="industryBtn" onclick="setLeadersType('Industry')" style="border-radius: 20px; padding: 10px 20px; border: 2px solid lightgray; background-color: white; color: black; font-size: 16px; font-weight: semibold; cursor: pointer; margin-top:10px;">Industry Leaders</button>
+            </div>
+            <div class="PopupformWrapper" id="publicationFormContainer">
+                <div class="right">
+                    <div class="formContainer active">
+                        <div class="flexInput" id="formain">
+                            <div class="formtwoRow">
+                                <div class="inputGroup">
+                                    <label for="fullName" class="font-14 font-medium font-black1">Full Name <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter Your Full Name"
+                                        class="inputBox font-16 font-black1 font-medium" id="leadersFullName" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="email" class="font-14 font-medium font-black1">Email <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter Your Professional Email Address"
+                                        class="inputBox font-16 font-black1 font-medium" id="leadersEmail" oninput="clearError(this)">
+                                </div>
+
+                                {{!-- <div class="inputGroup">
+                                    <label for="password" class="font-14 font-medium font-black1">Password <span class="font-red">*</span></label>
+                                    <input type="password" placeholder="Enter Your Password" class="inputBox font-16 font-black1 font-medium" id="leadersPassword">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="confirmPassword" class="font-14 font-medium font-black1">Confirm Password <span class="font-red">*</span></label>
+                                    <input type="password" placeholder="Re-enter Your Password" class="inputBox font-16 font-black1 font-medium" id="leadersConfirmPassword">
+                                </div> --}}
+
+
+                                <div class="inputGroup">
+                                    <label for="phone" class="font-14 font-medium font-black1">Enter Phone Number <span
+                                            class="font-red">*</span></label>
+                                    <input type="tel" placeholder="Enter Your Phone Number"
+                                        class="inputBox font-16 font-black1 font-medium" id="leadersPhone" maxlength="10" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="organisation" class="font-14 font-medium font-black1">School/Institution Name
+                                        <span class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter your School name"
+                                        class="inputBox font-16 font-black1 font-medium" id="leadersOrganisationOrSchool" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="role" class="font-14 font-medium font-black1">Role/Designation <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter Your Current Role Or Designation"
+                                        class="inputBox font-16 font-black1 font-medium" id="leadersRoleDesignation" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="orgType" class="font-14 font-medium font-black1">School Type <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Education, Finance, Technology, etc. "
+                                        class="inputBox font-16 font-black1 font-medium" id="leadersType" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="location" class="font-14 font-medium font-black1">Location <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter Your Current City/State/Country"
+                                        class="inputBox font-16 font-black1 font-medium" id="leadersLocation" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="organisation" class="font-14 font-medium font-black1" >Years of Experience In Education Industry<span class="font-red">*</span></label>
+                                    <input type="number" placeholder="Enter Years Of Work Experience"
+                                        class="inputBox font-16 font-black1 font-medium" id="leadersYearsOfExperience" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="linkedin" class="font-14 font-medium font-black1">LinkedIn profile <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter your LinkedIn Profile Link"
+                                        class="inputBox font-16 font-black1 font-medium" id="leaderslinkedin" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="leadersProfessionalPicture" class="font-14 font-medium font-black1">
+                                        Attach your professional picture <span class="font-red">*</span>
+                                    </label>
+                                    <input type="file" accept="image/*" class="inputBox font-16 font-black1 font-medium" id="leadersProfessionalPicture" oninput="clearError(this)">
+                                    <p id="fileChosenText" class="font-14 font-medium font-black1" style="margin-top: 5px; color: green;"></p>
+                                </div>
+
+                            </div>
+                            
+                            <div class="inputGroup">
+                                <label class="font-14 font-medium font-black1">
+                                    Have you attended past Intersect events? <span class="font-red">*</span>
+                                </label>
+                                <div class="multi-select-container" id="leadersPastEventsAttended-container">
+                                    <div class="multi-select-box inputBox select-form-arrow" id="leadersPastEventsAttended-box">
+                                        <span class="placeholder">Select options</span>
+                                    </div>
+                                    <div class="multi-select-options hide" id="leadersPastEventsAttended-options">
+                                        <div class="multi-select-option" data-value="Intersect 1.0">Intersect 1.0</div>
+                                        <div class="multi-select-option" data-value="Intersect 2.0">Intersect 2.0</div>
+                                        <div class="multi-select-option" data-value="Intersect 3.0">Intersect 3.0</div>
+                                        <div class="multi-select-option" data-value="Intersect 4.0">Intersect 4.0</div>
+                                        <div class="multi-select-option" data-value="School Leaders Round Table">School Leaders Round Table</div>
+                                        <div class="multi-select-option" data-value="None">None</div>
+                                    </div>
+                                    <input type="hidden" name="leadersPastEventsAttended" id="leadersPastEventsAttended">
+                                </div>
+                            </div>
+
+                            <div class="inputGroup">
+                                <label for="reason" class="font-14 font-medium font-black1">Why do you want to join the intersect community? <span class="font-red">*</span> </label>
+                                <textarea type="text" placeholder="Tell Us Why You Want To Be Part Of Our Network And What Value You Can Bring."
+                                    class="inputBox font-16 font-black1 font-medium" id="leadersReasonToJoin" oninput="clearError(this)"></textarea>
+                            </div>
+
+                            <div class="inputGroup">
+                                <label for="query" class="font-14 font-medium font-black1">Query/comments, if
+                                    any</label>
+                                <textarea type="text"
+                                    class="inputBox font-16 font-black1 font-medium" id="leadersComments"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="formFooter" id="submitbuttonreport">
+                        <div class="gradientButton whiteHover" onclick="submitLeadersForm()">
+                            <button class="button iconButton gtmUgDwnBroPop" id="leaderFormSubmitButton">
+                                Submit Application
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="https://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                        fill="white"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <p id="serverErrorMessage" style="text-align: center;" class="msg-error hide"></p>
+                </div>
+            </div>
+        </div>
+        <div id="SuccessMessage" class="congrats-box hide">
+            <button class="popUpCloseBtnWrap homeCrossfix" onclick="hideThanksPage()" aria-label="Close">
+                <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg" class="invert-img" alt="Close">
+            </button>
+            <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="">
+
+            <h3 class="thankyouboxHeading mt-10 gtmUgDwnBroGotit" id="gtmUgDwnBroGotitId">Thank You</h3>
+            <p class="text-2 gtmUgDwnBroGotPara" id="gtmUgDwnBroGotParaId">We've successfully received your application to join the Intersect community. Our team will get back to you, if your application is shortlisted. </p>
+            <p class="text-2">For any queries please contact us at <a class="font-red"
+                    href="mailto:pummy.ralli@mastersunion.org">pummy.ralli@mastersunion.org</a></p>
+        </div>
+    </div>
+</main>
+
+<script>
+    
+    let leadersType = 'Academia';
+    let selectedFile = null;
+    let uploadedFileUrl = ''
+    const fileStackClient = filestack.init('{{filestackApiKey}}'); 
+    let leadersSelectedValues = [];
+
+    function setLeadersType(type){
+        
+        leadersType = type;
+        $(".msg-error").remove();
+        
+       $('#leadersOrganisationOrSchool')
+            .closest(".inputGroup")
+            .find("label")
+            .html(type === 'Academia' ? "School/Institution Name" : "Organisation Name");
+
+        $('#leadersOrganisationOrSchool')
+            .attr('placeholder', type === 'Academia' ? "Enter School Name" : "Enter Your Organisation Name");
+
+        $('#leadersType')
+            .closest(".inputGroup")
+            .find("label")
+            .html(type === 'Academia' ? "School Type" : "Industry Type");
+        
+        $('#leadersYearsOfExperience')
+            .closest(".inputGroup")
+            .find("label")
+            .html(type === 'Academia' ? "Years of Experience In Education Industry<span class='font-red'>*</span>" : "Years of Experience<span class='font-red'>*</span>");
+
+        $("#intersectLeadersForm input, #intersectLeadersForm textarea").val("");
+        $("#leadersPastEventsAttended").prop("selectedIndex", 0);
+        $("#fileChosenText").text("");
+        resetLeadersPastEventsAttended();
+        $('#leadersPastEventsAttended-options').addClass('hide')
+
+
+        uploadedFileUrl = '';
+
+        const academiaBtn = document.getElementById("academiaBtn");
+        const industryBtn = document.getElementById("industryBtn");
+
+        if (type === "Academia") {
+            academiaBtn.style.backgroundColor = "black";
+            academiaBtn.style.color = "white";
+            academiaBtn.style.border = "none";
+
+            industryBtn.style.backgroundColor = "white";
+            industryBtn.style.color = "black";
+            industryBtn.style.border = "2px solid lightgray";
+        } else {
+            industryBtn.style.backgroundColor = "black";
+            industryBtn.style.color = "white";
+            industryBtn.style.border = "none";
+
+            academiaBtn.style.backgroundColor = "white";
+            academiaBtn.style.color = "black";
+            academiaBtn.style.border = "2px solid lightgray";
+        }
+    }
+
+    function showLeadersForm() {
+
+        const form = document.getElementById("intersectLeadersForm");
+        form.classList.add("active")
+        $('.inputGroup').removeClass('hide')
+        $('#serverErrorMessage').addClass('hide')
+        
+        $("#intersectLeadersForm input, #intersectLeadersForm textarea").val("");
+        $("#leadersPastEventsAttended").prop("selectedIndex", 0);
+        $("#fileChosenText").text(""); 
+        resetLeadersPastEventsAttended();
+        $('#leadersPastEventsAttended-options').addClass('hide')
+
+    }
+
+    function hideLeadersForm(){
+        $(".msg-error").remove();
+        const form = document.getElementById("intersectLeadersForm");
+        form.classList.remove("active");
+        resetLeadersPastEventsAttended();
+    }
+
+    function hideThanksPage(){
+        $('.popupContainer').removeClass('hide'); 
+        $('.congrats-box').addClass('hide');
+        $('#intersectLeadersForm').removeClass('active')
+        $('#intersectPartnerVolForm').removeClass('active')
+        resetLeadersPastEventsAttended();
+    }
+
+    let isValid = true;
+
+    function showError(input, message) {
+        $(input).after(`<p class="msg-error">${message}</p>`);
+        isValid = false;
+    }
+
+    function clearError(input){
+        $(`#${input.id}`).next('.msg-error').remove();
+    }
+
+    async function submitLeadersForm() {  
+        
+        isValid = true
+        $(".msg-error").remove();
+
+        let fullName = $("#leadersFullName").val().trim();
+        if (fullName === "") showError("#leadersFullName", "Full Name is required");
+
+        let email = $("#leadersEmail").val().trim();
+        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email === "") showError("#leadersEmail", "Email is required");
+        else if (!emailPattern.test(email)) showError("#leadersEmail", "Enter a valid email");
+
+        let phone = $("#leadersPhone").val().trim();
+        let phonePattern = /^[0-9]{10}$/;
+        if (phone === "") showError("#leadersPhone", "Phone number is required");
+        else if (!phonePattern.test(phone)) showError("#leadersPhone", "Enter a valid 10-digit phone number");
+
+        {{!-- let password = $("#leadersPassword").val().trim();
+        let confirmPassword = $("#leadersConfirmPassword").val().trim(); --}}
+
+        {{!-- if (password === "") showError("#leadersPassword", "Password is required"); --}}
+
+        {{!-- if (confirmPassword === "") showError("#leadersConfirmPassword", "Confirm Password is required"); --}}
+        {{!-- if (password !== confirmPassword) showError("#leadersConfirmPassword", "Passwords do not match"); --}}
+
+        let yearsOfExperience = $("#leadersYearsOfExperience").val().trim();
+        let experiencePattern = /^[0-9]+$/;
+        if (yearsOfExperience === "") {
+            showError("#leadersYearsOfExperience", "Experience is required");
+        } else if (!experiencePattern.test(yearsOfExperience) || parseInt(yearsOfExperience) <= 0) {
+            showError("#leadersYearsOfExperience", "Enter a valid number of years");
+        }
+
+        let requiredFields = [
+            {{!-- { id: "#leadersPassword", message: "Password is required" },
+            { id: "#leadersConfirmPassword", message: "Confirm Password is required" }, --}}
+            { id: "#leadersOrganisationOrSchool", message: "This field is required" },
+            { id: "#leadersRoleDesignation", message: "Role/Designation is required" },
+            { id: "#leadersType", message: "School type is required" },
+            { id: "#leadersLocation", message: "Location is required" },
+            { id: "#leaderslinkedin", message: "LinkedIn profile is required" },
+            { id: "#leadersProfessionalPicture", message: "Professional picture link is required" },
+            { id: "#leadersReasonToJoin", message: "Reason to join is required" },
+        ];
+
+        requiredFields.forEach(field => {
+            if ($(field.id).val().trim() === "") showError(field.id, field.message);
+        });
+
+        if ($("#leadersPastEventsAttended").val() === "") {
+            showError("#leadersPastEventsAttended", "Please select an option");
+        }
+
+        if (isValid) {
+            $('#leaderFormSubmitButton').html('Submitting...');
+            if(selectedFile){
+                try{
+                    let response = await fileStackClient.upload(selectedFile);
+                    uploadedFileUrl = response.url
+                }catch(err){
+                    console.error('Error uploading image:', err);
+                }
+            }
+
+            let formData = { 
+                    category : leadersType,
+                    fullName: fullName,
+                    email: email,
+                    {{!-- password : password, --}}
+                    phoneNumber: phone,
+                    organisationOrSchool: $("#leadersOrganisationOrSchool").val().trim(),
+                    roleDesignation: $("#leadersRoleDesignation").val().trim(),
+                    type: $("#leadersType").val().trim(),
+                    location: $("#leadersLocation").val().trim(),
+                    yearsOfExperience: $("#leadersYearsOfExperience").val().trim(),
+                    linkedinProfile: $("#leaderslinkedin").val().trim(),
+                    professionalPicture: uploadedFileUrl,
+                    pastIntersectEvents: leadersSelectedValues.join(","),
+                    reasonToJoin: $("#leadersReasonToJoin").val().trim(),
+                    comments: $("#leadersComments").val().trim(),
+            };  
+            $.ajax({
+                url: `{{apiBaseURL}}/api/intersect/addLeaders`, 
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(formData), 
+                success: function (response) {
+                    console.log("Form submitted successfully:", response);
+                    $('.popupContainer').addClass('hide'); 
+                    $('.congrats-box').removeClass('hide');
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 409) {
+                    showError("#leadersEmail", "Email is Already Registered"); 
+                    $('#leadersEmail').focus();
+                    }
+                    else if (xhr.status === 500) {
+                        errorMessage = "Server error! Please try again.";
+                        $("#serverErrorMessage").text(errorMessage).removeClass("hide");
+                    } else if (xhr.status === 503) {
+                        errorMessage = "Service unavailable. Please try again later.";
+                        $("#serverErrorMessage").text(errorMessage).removeClass("hide");
+                    }
+                }
+            })
+            .always(function () {
+                        $('#leaderFormSubmitButton').html(`Submit Application <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                                        xmlns="https://www.w3.org/2000/svg">
+                                                                        <path
+                                                                            d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                                                            fill="white"></path>
+                                                                    </svg>`);
+                    });
+        }
+    }
+
+    $(document).ready(function () {
+        $('#leadersProfessionalPicture').on('change', function (event) {
+            const file = event.target.files[0];
+            selectedFile = file;
+            if (!file) {
+                console.log('No file selected. Please choose a file.');
+                return;
+            }
+
+            const allowedExtensions = ['image/png', 'image/jpeg', 'image/jpg'];
+            const maxSize = 5 * 1024 * 1024;
+
+            $(this).next(".msg-error").remove();
+
+            if (!allowedExtensions.includes(file.type)) {
+                showError("#leadersProfessionalPicture", "Invalid file type. Please upload a valid image file (PNG, JPEG, JPG).");
+                selectedFile = null;
+                return;
+            }
+
+            if (file.size > maxSize) {
+                showError("#leadersProfessionalPicture", "File size exceeds 5 MB. Please upload a smaller file.");
+                selectedFile = null;
+                return;
+            }
+        });
+
+        const multiSelectBox = document.querySelector("#leadersPastEventsAttended-box");
+        const multiSelectOptions = document.querySelector("#leadersPastEventsAttended-options");
+        const hiddenInput = document.querySelector("#leadersPastEventsAttended");
+
+        // Update the selected items displayed in the box
+        function updateSelectedItems() {
+            multiSelectBox.innerHTML = "";
+
+            if (leadersSelectedValues.length === 0) {
+                multiSelectBox.innerHTML = '<span class="placeholder">Select options</span>';
+            } else {
+                leadersSelectedValues.forEach(value => {
+                    const selectedItem = document.createElement("div");
+                    selectedItem.className = "selected-item";
+
+                    const itemText = document.createElement("span");
+                    itemText.textContent = value;
+                    selectedItem.appendChild(itemText);
+
+                    const removeBtn = document.createElement("span");
+                    removeBtn.className = "remove-item";
+                    removeBtn.innerHTML = "&times;";
+                    removeBtn.addEventListener("click", function (e) {
+                        e.stopPropagation();
+                        leadersSelectedValues = leadersSelectedValues.filter(val => val !== value);
+                        updateSelectedItems();  // Re-render the selected items
+                    });
+
+                    selectedItem.appendChild(removeBtn);
+                    multiSelectBox.appendChild(selectedItem);
+                });
+            }
+
+            hiddenInput.value = leadersSelectedValues.join(",");
+
+            clearError(hiddenInput);
+
+            // Highlight the selected options in the dropdown list
+            multiSelectOptions.querySelectorAll(".multi-select-option").forEach(option => {
+                option.classList.toggle("selected", leadersSelectedValues.includes(option.getAttribute("data-value")));
+            });
+        }
+
+        // Toggle dropdown visibility when the select box is clicked
+        multiSelectBox.addEventListener("click", function () {
+            multiSelectBox.classList.toggle("active");
+            multiSelectOptions.classList.toggle("show");
+        });
+
+        // Close the dropdown when clicking outside of the container
+        document.addEventListener("click", function (e) {
+            if (!multiSelectBox.contains(e.target)) {
+                multiSelectBox.classList.remove("active");
+                multiSelectOptions.classList.remove("show");
+            }
+        });
+
+        // Add click event listeners to each option in the dropdown
+        multiSelectOptions.querySelectorAll(".multi-select-option").forEach(option => {
+            option.addEventListener("click", function () {
+                const value = option.getAttribute("data-value");
+
+                if (value === "None") {
+                    leadersSelectedValues = ["None"];
+                } else {
+                    if (leadersSelectedValues.includes("None")) {
+                        leadersSelectedValues = leadersSelectedValues.filter(val => val !== "None");
+                    }
+                    if (leadersSelectedValues.includes(value)) {
+                        leadersSelectedValues = leadersSelectedValues.filter(val => val !== value);
+                    } else {
+                        leadersSelectedValues.push(value);
+                    }
+                }
+                updateSelectedItems();  // Update the displayed selected items
+            });
+        });
+
+        // Function to reset the multi-select
+        function resetMultiSelect() {
+            leadersSelectedValues = [];
+            updateSelectedItems();  // Reset by clearing the selected items
+        }
+
+        // Expose the reset function globally so it can be called anytime
+        window.resetLeadersPastEventsAttended = resetMultiSelect;
+
+        $('#leadersPastEventsAttended-box').click(function(){
+            $('#leadersPastEventsAttended-options').removeClass('hide')
+        })
+
+        document.addEventListener("click", function (e) {
+            const box = document.querySelector("#leadersPastEventsAttended-box");
+            const options = document.querySelector("#leadersPastEventsAttended-options");
+
+            if (!box.contains(e.target) && !options.contains(e.target)) {
+                box.classList.remove("active");
+                options.classList.remove("show");
+                options.classList.add("hide");
+            }
+        });
+    });
+</script>

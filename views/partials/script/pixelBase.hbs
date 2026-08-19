@@ -1,0 +1,30 @@
+<!-- Meta Pixel Code — GDPR consent-gated -->
+<script>
+/*
+ * Loads the Meta/Facebook Pixel (and fires the PageView) ONLY after the visitor accepts
+ * cookies via the banner. See window.MUConsent in components/cokkie.hbs. If the user rejects
+ * or has not chosen yet, nothing runs and no _fbp / _fbc cookies are set.
+ * The <noscript> tracking pixel was removed because a no-JS fallback cannot honour consent.
+ */
+(function () {
+    function loadMetaPixel() {
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s)
+        }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2179377029099307');
+        fbq('track', 'PageView');
+    }
+
+    if (window.MUConsent && typeof window.MUConsent.whenGranted === 'function') {
+        window.MUConsent.whenGranted(loadMetaPixel);
+    } else {
+        try {
+            if (localStorage.getItem('mu_cookie_consent') === 'accepted') loadMetaPixel();
+        } catch (e) { /* no-op */ }
+    }
+})();
+</script>
+<!-- End Meta Pixel Code -->

@@ -1,0 +1,220 @@
+.bottomNav {
+    position: fixed;
+    bottom: 30px !important;
+    right: 30px;
+    top: auto;
+    left: auto;
+    z-index: 9998;
+    display: flex;
+    width: 60px;
+    height: 60px;
+    padding: 8px 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    border-radius: 45px;
+    cursor: pointer;
+    background:
+        linear-gradient(0deg, rgba(12, 12, 12, 0.10) 0%, rgba(12, 12, 12, 0.10) 100%),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.16) 100%),
+        linear-gradient(180deg, rgba(57, 181, 215, 0.70) 0%, rgba(247, 213, 68, 0.70) 50%, rgba(227, 131, 48, 0.70) 100%);
+    backdrop-filter: blur(4px);
+    transition: height 0.4s ease;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    overflow: hidden !important;
+    flex-direction: column;
+}
+
+.bottomNav.is-expanded .logosFoot:hover::after {
+    content: '';
+    position: absolute;
+    left: -9px;
+    top: -9px;
+    border-radius: 50px;
+    background: #00000091;
+    opacity: 1;
+    pointer-events: none;
+    z-index: -1;
+    padding: 21px;
+    transition: 0.3s ease-in-out;
+
+}
+.bottomNav.is-expanded button:hover::after {
+    content: '';
+    position: absolute;
+    left: -9px;
+    top: -9px;
+    border-radius: 50px;
+    background: #00000091;
+    opacity: 1;
+    pointer-events: none;
+    z-index: -1;
+    padding: 21px;
+    transition: 0.3s ease-in-out;
+
+}
+
+.bottomNav.is-expanded a,
+.bottomNav.is-expanded button {
+    z-index: 2;
+    transition: 0.3s ease-in-out;
+}
+
+
+
+.bottomNav .logosFoot {
+    display: none;
+    width: 100%;
+    height: 100%;
+    max-width: 24px;
+    max-height: 24px;
+    display: none;
+    transform: translateX(100px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+/* CrossBar should not slide in from outside */
+.bottomNav .logosFoot.crossBar {
+    transform: translateX(0);
+}
+
+.bottomNav .dizzlingImage {
+    display: block;
+    max-width: 24px;
+    max-height: 20px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.bottomNav.is-expanded {
+    height: 320px;
+    padding: 18px;
+    justify-content: space-between;
+}
+
+
+.bottomNav.is-expanded .dizzlingImage {
+    display: none;
+    transform: scale(0);
+    pointer-events: none;
+}
+
+.bottomNav.is-expanded .logosFoot:not(.crossBar) {
+    display: block;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+/* CrossBar should appear immediately without slide animation */
+.bottomNav.is-expanded .logosFoot.crossBar {
+    display: block;
+    transform: translateX(0);
+    pointer-events: auto;
+    transition-delay: 0s !important;
+}
+
+/* Reverse animation when collapsing - faster and no delay */
+.bottomNav:not(.is-expanded) .logosFoot:not(.crossBar) {
+    transition-delay: 0s;
+}
+
+
+@media (min-width: 320px) and (max-width: 380px) {
+    .bottomNav {
+        bottom: 50px;
+    }
+}
+
+
+@media (max-width: 767px) {
+    .bottomNav {
+        position: fixed;
+        bottom: 75px;
+        right: 20px;
+        top: auto;
+        left: auto;
+        z-index: 99999;
+        display: flex;
+        width: 60px;
+        height: 60px;
+        padding: 8px 16px;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+        border-radius: 45px;
+        cursor: pointer;
+        background: linear-gradient(0deg, rgba(12, 12, 12, 0.10) 0%, rgba(12, 12, 12, 0.10) 100%), linear-gradient(0deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.16) 100%), linear-gradient(89deg, rgba(57, 181, 215, 0.70) -6.74%, rgba(247, 213, 68, 0.70) 54.11%, rgba(227, 131, 48, 0.70) 114.42%);
+        backdrop-filter: blur(4px);
+        transition: width 0.3s ease !important;
+        transform: translate3d(0, 0, 0);
+        -webkit-transform: translate3d(0, 0, 0);
+        will-change: transform;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        overflow: hidden !important;
+        flex-direction: row;
+    }
+
+    .bottomNav .logosFoot {
+        display: none;
+        width: 100%;
+        height: 100%;
+        max-width: 24px;
+        max-height: 24px;
+        display: none;
+        transform: translateX(100px);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        pointer-events: none;
+    }
+
+    /* CrossBar should not slide in from outside */
+    .bottomNav .logosFoot.crossBar {
+        transform: translateX(0);
+    }
+
+    .bottomNav .dizzlingImage {
+        display: block;
+        max-width: 24px;
+        max-height: 20px;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .bottomNav.is-expanded {
+        width: 92%;
+        padding: 10px 16px;
+        justify-content: space-around;
+        height: 60px;
+    }
+
+    .bottomNav.is-expanded .dizzlingImage {
+        display: none;
+        transform: scale(0);
+        pointer-events: none;
+    }
+
+    .bottomNav.is-expanded .logosFoot:not(.crossBar) {
+        display: block;
+        transform: translateX(0);
+        pointer-events: auto;
+    }
+
+    /* CrossBar should appear immediately without slide animation */
+    .bottomNav.is-expanded .logosFoot.crossBar {
+        display: block;
+        transform: translateX(0);
+        pointer-events: auto;
+        transition-delay: 0s !important;
+    }
+
+    /* Reverse animation when collapsing - faster and no delay */
+    .bottomNav:not(.is-expanded) .logosFoot:not(.crossBar) {
+        transition-delay: 0s;
+    }
+
+}

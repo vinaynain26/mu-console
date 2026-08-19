@@ -1,0 +1,552 @@
+<main>
+    <div class="popupContainerOuter   ApplyNow scrollPopup intersectForms"
+        id="ApplyNowPopUpNEW">
+
+        <div class="popupContainer">
+            <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_heading">
+                    Get Involved, Collaborate With Us
+                </h2>
+
+                <div class="popUpCloseBtnWrap homeCrossfix">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Icon" onclick="hideApplyNowPopUp();">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="leadformContainer">
+
+                <div class="right">
+                    <div class="formContainer active">
+                        <div class="flexInput" id="formain">
+                            <div class="formtwoRow">
+                                <div class="inputGroup">
+                                    <label for="fullName" class="font-14 font-medium font-black1">Full Name <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter your full name"
+                                        class="inputBox font-16 font-black1 font-medium" id="fullName"
+                                        onblur="validateNameInput('fullName','fullNameError','Full Name')">
+                                    <p class="font-12 font-red font-regular warning" id="fullNameError">Full Name cannot be empty</p>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="email" class="font-14 font-medium font-black1">Email <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter your email"
+                                        class="inputBox font-16 font-black1 font-medium" id="email"
+                                        onblur="validateEmailInput('email','emailError')">
+                                    <p class="font-12 font-red font-regular warning" id="emailError">Email cannot be empty</p>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="phone" class="font-14 font-medium font-black1">Enter Phone Number <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter your phone number"
+                                        class="inputBox font-16 font-black1 font-medium" id="phone"
+                                        onblur="validateMobileInput('phone','phoneError')">
+                                    <p class="font-12 font-red font-regular warning" id="phoneError">Mobile number cannot be empty</p>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="organisation" class="font-14 font-medium font-black1">Organisation Name
+                                        <span class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter your organisation name"
+                                        class="inputBox font-16 font-black1 font-medium" id="organisation"
+                                        onblur="validateNameInput('organisation','organisationError','Organisation')">
+                                    <p class="font-12 font-red font-regular warning" id="organisationError">Organisation cannot be empty</p>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="role" class="font-14 font-medium font-black1">Role/Designation <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter your role/designation"
+                                        class="inputBox font-16 font-black1 font-medium" id="role"
+                                        onblur="validateNameInput('role','roleError','Designation')">
+                                    <p class="font-12 font-red font-regular warning" id="roleError">Role/Designation cannot be empty</p>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="orgType" class="font-14 font-medium font-black1">Organisation Type <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter organisation type"
+                                        class="inputBox font-16 font-black1 font-medium" id="orgType"
+                                        onblur="validateNameInput('orgType','orgTypeError','Designation')">
+                                    <p class="font-12 font-red font-regular warning" id="orgTypeError">Organisation Type cannot be empty</p>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="location" class="font-14 font-medium font-black1">Location <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter location"
+                                        class="inputBox font-16 font-black1 font-medium" id="location"
+                                        onblur="validateNameInput('location','locationError','Designation')">
+                                    <p class="font-12 font-red font-regular warning" id="locationError">Location cannot be empty</p>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="interest" class="font-14 font-medium font-black1">Partnership interest
+                                        <span class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter partnership interest"
+                                        class="inputBox font-16 font-black1 font-medium" id="interest"
+                                        onblur="validateNameInput('interest','interestError','Designation')">
+                                    <p class="font-12 font-red font-regular warning" id="interestError">Partnership interest cannot be empty</p>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="linkedin" class="font-14 font-medium font-black1">LinkedIn profile <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter LinkedIn profile link"
+                                        class="inputBox font-16 font-black1 font-medium" id="linkedin"
+                                        onblur="validateNameInput('linkedin','linkedinError','Organisation')">
+                                    <p class="font-12 font-red font-regular warning" id="linkedinError">LinkedIn profile cannot be empty</p>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="website" class="font-14 font-medium font-black1">Website link <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter website link"
+                                        class="inputBox font-16 font-black1 font-medium" id="website"
+                                        onblur="validateNameInput('website','websiteError','Organisation')">
+                                    <p class="font-12 font-red font-regular warning" id="websiteError">Website link cannot be empty</p>
+                                </div>
+                            </div>
+
+                            <div class="inputGroup">
+                                <label for="reason" class="font-14 font-medium font-black1">Why Do You Want to Partner
+                                    with Us? <span class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your reason"
+                                    class="inputBox font-16 font-black1 font-medium" id="reason"
+                                    onblur="validateNameInput('reason','reasonError','Designation')">
+                                <p class="font-12 font-red font-regular warning" id="reasonError">Reason cannot be empty</p>
+                            </div>
+
+                            <div class="inputGroup">
+                                <label for="query" class="font-14 font-medium font-black1">Query/comments, if
+                                    any</label>
+                                <input type="text" placeholder="Enter any query/comments"
+                                    class="inputBox font-16 font-black1 font-medium" id="query">
+                            </div>
+
+                            <div class="inputGroup select">
+                                <label class="font-14 font-medium" for="events">Have you attended any of the intersect
+                                    events before? <span class="font-red">*</span></label>
+                                <select id="events" class="inputBox safariFix"
+                                    onblur="validateSelectInput('events','eventsError')"
+                                    onchange="validateSelectInput('events','eventsError')">
+                                    <option value="">Select an option</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                                <p class="font-12 font-red font-regular warning" id="eventsError">Please select an option</p>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                    <div class="consentCheckWrapper">
+                        <div class="consentCheckRow">
+                            <input type="checkbox" id="consentCheckipf">
+                            <label for="consentCheckipf">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+                        </div>
+                        <p id="consentCheckErroripf" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+                    </div>
+                    <div class="formFooter" id="submitbuttonreport">
+                        <div class="gradientButton whiteHover" onclick="onButtonClickSubmitReport()">
+                            <button class="button iconButton gtmUgDwnBroPop" id="gtmUgDwnBroPopId">
+                                Partner With Us
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="https://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                        fill="white"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="SuccessMessage" class="congrats-box">
+                <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+
+                <h3 class="thankyouboxHeading mt-10 gtmUgDwnBroGotit" id="gtmUgDwnBroGotitId">Thank You</h3>
+                <p class="text-2 gtmUgDwnBroGotPara" id="gtmUgDwnBroGotParaId">You've successfully downloaded our
+                    Placement Report</p>
+                <p class="text-2">For any queries please contact us at <a class="font-red"
+                        href="mailto:admissions@mastersunion.org">admissions@mastersunion.org</a></p>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+
+
+    function pgpPlacementReport(formTitle, destination) {
+        const form = document.getElementById("ApplyNowPopUpNEW");
+        const h2 = document.querySelector("#form_heading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        document.querySelector("#SuccessMessage").classList.add("hide");
+        document.querySelector("#submitbuttonreport").classList.remove("hide");
+        document.querySelector("#leadformContainer").classList.remove("hide");
+        document.querySelector("#form_heading").classList.remove("hide");
+    }
+    // let name = $('#nameReport').val();
+    // let email = $('#emailReport').val();
+    // let number = $('#numberReport').val();
+    function onButtonClickSubmitReport() {
+        console.log('on submit::', full_utm_url);
+
+        // Per-field required validation (blocks submit + shows inline errors)
+        let isFormValid = true;
+        isFormValid = validateNameInput('fullName', 'fullNameError', 'Full Name') && isFormValid;
+        isFormValid = validateEmailInput('email', 'emailError') && isFormValid;
+        isFormValid = validateMobileInput('phone', 'phoneError') && isFormValid;
+        isFormValid = validateNameInput('organisation', 'organisationError', 'Organisation') && isFormValid;
+        isFormValid = validateNameInput('role', 'roleError', 'Designation') && isFormValid;
+        isFormValid = validateNameInput('orgType', 'orgTypeError', 'Designation') && isFormValid;
+        isFormValid = validateNameInput('location', 'locationError', 'Designation') && isFormValid;
+        isFormValid = validateNameInput('interest', 'interestError', 'Designation') && isFormValid;
+        isFormValid = validateNameInput('linkedin', 'linkedinError', 'Organisation') && isFormValid;
+        isFormValid = validateNameInput('website', 'websiteError', 'Organisation') && isFormValid;
+        isFormValid = validateNameInput('reason', 'reasonError', 'Designation') && isFormValid;
+        isFormValid = validateSelectInput('events', 'eventsError') && isFormValid;
+        if (!document.getElementById('consentCheckipf')?.checked) {
+            document.getElementById('consentCheckErroripf').classList.remove('warning');
+            isFormValid = false;
+        } else {
+            document.getElementById('consentCheckErroripf').classList.add('warning');
+        }
+        if (!isFormValid) return;
+
+        // Validate functions
+        const validateNumber = (number) => /^\d+$/.test(number);
+        const validateEmail = (email) => email.includes("@") && email.includes(".");
+
+        let name = $('#fullName').val().trim();
+        let email = $('#email').val().trim();
+        let number = $('#phone').val().trim();
+        const workExpUser = (document.getElementById('workExpUser')?.value) || "";
+        const userOrganization = ($('#organisation').val() || "").trim();
+        const countryCode = (document.getElementById('selectCountryCode')?.value || "").trim();
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const utmSource = params.utm_source || 'Website';
+        const utmMedium = params.utm_medium;
+        const utmCampaign = params.utm_campaign;
+        let url = window.location.pathname.substring(1);
+        let formname = document.querySelector("#ApplyNowPopUpNEW").getAttribute("data-title") || "Download Placement Report";
+        console.log(formname, "form anem22")
+        console.log(formname, "form name");
+
+        let course;
+        let field_program_eligible;
+
+        // if (formname == "Download Placement Report PGP-TBM") {
+        //     course = "PGP TBM intake of 2025";
+        //     field_program_eligible = "PGP-TBM";
+
+        // } else if (formname == "Download Placement Report PGP-TBM YLC") {
+        //     course = "PGP TBM - Young Leaders Cohort";
+        //     field_program_eligible = "Young Leaders Cohort";
+
+        // } else {
+        //      field_program_eligible = "PGP-TBM";
+        //     course = "PGP TBM intake of 2025"; // Default case to handle unexpected values
+        // }
+
+
+        if (workExpUser === "Fresher") {   // condition changed as if user select fresher the lead will always go to the YLC 
+            course = "PGP TBM - Young Leaders Cohort";
+            field_program_eligible = "Young Leaders Cohort";
+        } else {
+            field_program_eligible = "PGP-TBM";
+            course = "PGP TBM intake of 2025"; // Default case to handle unexpected values
+        }
+
+
+        console.log(course, "Final course--::", field_program_eligible);
+
+        let medium = `PGP-TBM - ${formname} Popup`;
+        let formLocation = `PGP-TBM - ${formname} Popup`;
+
+        //if (url.startsWith("pgp-rise")) {
+        //    course = 'PGP Rise';
+        //    medium = `PGP Rise - ${formname} Popup`;
+        //} else if (url.startsWith("ug-")) {
+        //    course = 'Undergraduate Programme';
+        //    medium = `UG - ${formname} Popup`;
+        //}
+
+        let device = 'PC';
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            device = "Mobile";
+        } else {
+            device = "Desktop";
+        }
+
+        // api for our Data base
+        var post_url = '{{apiBaseURL}}/api/courseRegister';
+        var request_method = 'POST'; //get form GET/POST method
+        $.ajax({
+            url: post_url,
+            type: request_method,
+            contentType: "application/json",
+            data: JSON.stringify({
+                "email": email,
+                "name": name,
+                "mobile": number,
+                "countryCode": countryCode,
+                //   "organisation": userOrganization,
+                "workExperince": workExpUser,
+                "courseName": course,
+                consentCheck: document.getElementById('consentCheckipf')?.checked || false,
+                "full_utm_url": full_utm_url || "N/A",
+                "leadSource": formLocation
+
+
+            }),
+            dataType: "json",
+            success: function (result) {
+                console.log("Second api after first success")
+                const post_url = '{{apiBaseURL}}/api/leads/pushToNPF_PGP_TBM';  // changed for the PGP TBM leads only
+                const request_method = 'POST';
+
+                $.ajax({
+                    url: post_url,
+                    type: request_method,
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        field_device_type: device,
+                        email: email,
+                        name: name,
+                        mobile: number,
+                        linkedinProfile: "",
+                        consentCheck: document.getElementById('consentCheckipf')?.checked || false,
+                        medium: utmMedium || medium,
+                        campaign: utmCampaign || null,
+                        source: utmSource,
+                        course: "Course",
+                        field_utm_url: window.location.href,
+                        sendMail: false,
+                        leadSource: formLocation,
+                        specialization: course || "PGP TBM intake of 2025",
+                        field_program_eligible: field_program_eligible,
+                        field_current_total_work_experience: workExpUser
+                    }),
+                    dataType: "json",
+                    success: function (result) {
+
+                    }
+                });
+
+            }
+        });
+
+        const form = document.getElementById("ApplyNowPopUpNEW");
+        console.log("all the done");
+        localStorage.setItem("userName", name);
+
+        const destination = form.getAttribute("data-destination") || "https://files.mastersunion.link/assets/1/Placement_Report_25.pdf";
+        /// const destination2 = "/pgp-placement-thankyou";
+        const destination2 = "https://files.mastersunion.link/assets/1/Placement_Report_25.pdf";
+
+        fetch(destination)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                ///const url = URL.createObjectURL(blob);
+                ///const link = document.createElement("a");
+                ///link.href = url;
+                ///link.download = "placementreport2024.pdf";
+                ///document.body.appendChild(link);
+                ///link.click();
+                ///document.body.removeChild(link);
+                ///URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('Error downloading the file:', error));
+
+        const linkPage = document.createElement("a");
+        setTimeout(() => {
+            linkPage.href = destination;
+            linkPage.target = "_blank";
+            document.body.appendChild(linkPage);
+            linkPage.click();
+            document.body.removeChild(linkPage);
+            //window.location.href = destination2;
+            // Open the PDF in a new tab
+            // window.open(destination, "_blank");
+            //window.open(destination2, "_blank");
+            // Redirect to the thank-you page
+            //   window.location.href = "/pgp-placement-thankyou";
+        }, 1500);
+
+
+        document.querySelector("#SuccessMessage").classList.remove("hide");
+        document.querySelector("#submitbuttonreport").classList.add("hide");
+        document.querySelector("#leadformContainer").classList.add("hide");
+        document.querySelector("#form_heading").classList.add("hide");
+
+
+    }
+
+    function validateInputBlur(fieldId, fieldName) {
+        const inputValue = $(`#${fieldId}`).val().trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const numberRegex = /^\d+$/;
+
+        if (inputValue === "") {
+            $(`#${fieldName}ReportVal`).removeClass('warning');
+        } else {
+            $(`#${fieldName}ReportVal`).addClass('warning');
+        }
+    }
+
+
+
+
+    function hideApplyNowPopUp() {
+        let applyNowPopUp = document.getElementById("ApplyNowPopUpNEW");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+
+        $('#nameReport').val("");
+        $('#emailReport').val("");
+        $('#numberReport').val("");
+
+        const consentCheckipf = document.getElementById('consentCheckipf');
+        if (consentCheckipf) consentCheckipf.checked = false;
+        const consentCheckErroripf = document.getElementById('consentCheckErroripf');
+        if (consentCheckErroripf) consentCheckErroripf.classList.add('warning');
+
+    }
+
+
+    function validationOnblurPgpTbmCommon(field, errorId, errorMessage) {
+        var input = $("#" + field);  // Get the field by ID
+        var error = $("#" + errorId);  // Get the error element by ID
+
+        if (input.val() === "") {
+            error.removeClass("warning");  // Add the warning class if applicable
+            error.text(errorMessage);  // Set the dynamic error message
+        } else {
+            error.hide();  // Hide the error message if input is valid
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $(document).ready(function () {
+        (function deferCscUntilIntersectPartnerPopupOpen() {
+            var el = document.getElementById("ApplyNowPopUpNEW");
+            if (!el) return;
+            var started = false;
+            function kick() {
+                if (started || !el.classList.contains("active")) return;
+                started = true;
+                getAllCountries();
+            }
+            kick();
+            if (typeof MutationObserver !== "undefined") {
+                new MutationObserver(kick).observe(el, {
+                    attributes: true,
+                    attributeFilter: ["class"],
+                });
+            }
+        })();
+
+        $('#selectCountryCode').change(function () {
+            var countryCode = $(this).val();
+            getAllStates(countryCode);
+        });
+
+        $('#userState').change(function () {
+            var countryCode = $('#selectCountryCode').val();
+            var stateCode = $(this).val();
+            getCities(countryCode, stateCode);
+        });
+
+
+
+
+
+        function getAllCountries() {
+            $.ajax({
+                url: 'https://api.mastersunion.org/api/geo/countries',
+                type: 'GET',
+                headers: {
+                    "Accept": "application/json"
+                }
+            }).done(function (response) {
+                $('#selectCountryCode').empty().append($("<option value='' disabled selected></option>").text("Select your country"));
+                $.each(response, function (idx, country) {
+                    $('#selectCountryCode').append($("<option></option>")
+                        .attr("value", country.iso2)
+                        .text(`${country.phonecode} (${country.name})`));
+                });
+
+                $('#selectCountryCode').val('IN').change();
+            });
+        }
+
+        function getAllStates(countryCode) {
+            $.ajax({
+                url: `https://api.mastersunion.org/api/geo/countries/${countryCode}/states`,
+                type: 'GET',
+                headers: {
+                    "Accept": "application/json"
+                }
+            }).done(function (response) {
+                $('#userState').empty().append($("<option value='' disabled selected></option>").text("Select your state"));
+                $.each(response, function (idx, state) {
+                    $('#userState').append($("<option></option>")
+                        .attr("value", state.iso2)
+                        .text(state.name));
+                });
+            });
+        }
+
+        function getCities(countryCode, stateCode) {
+            $.ajax({
+                url: `https://api.mastersunion.org/api/geo/countries/${countryCode}/states/${stateCode}/cities`,
+                type: 'GET',
+                headers: {
+                    "Accept": "application/json"
+                }
+            }).done(function (response) {
+                $('#userCity').empty().append($("<option value='' disabled selected></option>").text("Select your city"));
+                $.each(response, function (idx, city) {
+                    $('#userCity').append($("<option></option>")
+                        .attr("value", city.name)
+                        .text(city.name));
+                });
+            });
+        }
+    });
+
+</script>

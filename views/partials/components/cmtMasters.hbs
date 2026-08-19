@@ -1,0 +1,369 @@
+<style>
+    /* ── CMT master card (scoped: cmtMaster*) ─────────────────────────────
+       Dimensions come from the 3-line Figma variant so 2-line cards keep the
+       same height and the logos line up across the rail. */
+    .cmtMasterCard {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex: 0 0 auto;
+        width: 235px;
+        overflow: hidden;
+        border: 1px solid #404040;
+        border-radius: 8px;
+        background: #090909;
+        box-sizing: border-box;
+    }
+
+    .cmtMasterCard__avatar {
+        position: relative;
+        width: 100%;
+        height: 200px;
+        overflow: hidden;
+        flex-shrink: 0;
+        background: linear-gradient(70.91deg, #0b0b0b 11.24%, #303030 93.06%);
+    }
+
+    .cmtMasterCard__photo {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        pointer-events: none;
+    }
+
+    .cmtMasterCard__body {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        width: 100%;
+        padding: 16px 8px;
+        border-top: 1px solid #404040;
+        box-sizing: border-box;
+    }
+
+    .cmtMasterCard__identity {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        width: 100%;
+    }
+
+    .cmtMasterCard__name {
+        margin: 0;
+        font-family: var(--go-regular);
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 1.2;
+        color: #ffffff;
+    }
+
+    .cmtMasterCard__title {
+        margin: 0;
+        font-family: var(--go-regular);
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #d4d4d4;
+        /* 12px * 1.5 * 3 lines - reserved so shorter cards match the tallest */
+        min-height: 54px;
+    }
+
+    .cmtMasterCard__logo {
+        position: relative;
+        width: 200px;
+        height: 35px;
+        overflow: hidden;
+        flex-shrink: 0;
+        mix-blend-mode: luminosity;
+    }
+
+    .cmtMasterCard__logo img {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 138px;
+        height: 35px;
+        object-fit: contain;
+        object-position: left bottom;
+        pointer-events: none;
+    }
+
+    /* diagonal gloss across the top-left corner, clipped by the card */
+    .cmtMasterCard__shine::before,
+    .cmtMasterCard__shine::after {
+        content: "";
+        position: absolute;
+        height: 505.76px;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%) rotate(43deg);
+        pointer-events: none;
+    }
+
+    .cmtMasterCard__shine::before {
+        left: -45.83px;
+        top: -6.82px;
+        width: 23px;
+    }
+
+    .cmtMasterCard__shine::after {
+        left: -3.86px;
+        top: -12.17px;
+        width: 7.331px;
+    }
+</style>
+
+<div class="mastersScroll mob-hide">
+    <div class="marqueesliders" id="slider"></div>
+</div>
+
+<div class="mob-visible dsaiMastersMobile">
+    <div class="container">
+        <div class="mastersScrollMob mt30 " id="cmtMastersMob"></div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        // ── Edit the masters here ─────────────────────────────────────────
+        // name  - card heading
+        // title - credentials line, wraps to a max of 3 lines
+        // photo - cut-out portrait, sits over the card gradient
+        // logo  - company logo, rendered with mix-blend-mode: luminosity
+        const cmtMasters = [
+            {
+                name: "Arun Gupta",
+                title: "Commodities and Energy Head at Futures First",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v4/1.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/1.svg",
+            },
+            {
+                name: "Chandan Papneja",
+                title: "VP - Investments,  Xander Advisors India Pvt Ltd | Ex-AVP- Investments, DMI Finance",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/2.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/2.svg",
+            },
+               {
+                name: "Chilukuri Vijaya Kumar",
+                title: "Founder & Managing Director, MUVES CONSULTANCY SERVICES PVT LTD",
+                photo: "https://cdn.unionstack.in/uploads/18082026/v1/new1.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v1/new1Logo.svg",
+            },
+         
+            {
+                name: "Gaurav Arora",
+                title: "Associate Director, Grant Thornton Bharat LLP",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/4.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/3.svg",
+            },
+             {
+                name: "Himanshu Arora",
+                title: "Stock Market & Finance Educator | 12000+ Trainings",
+                photo: "https://cdn.unionstack.in/uploads/18082026/v1/new2.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v1/new2Logo.svg",
+            },
+         
+            {
+                name: "Karan Rastogi",
+                title: "Managing Partner, Neo Wealth & Asset Management",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/6.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/4.svg",
+            },
+            {
+                name: "Kunal Bothra",
+                title: "Consultant - Technicals, Market Expert at ET Now | SEBI registered Research Analyst ",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/7.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/5.svg",
+            },
+            {
+                name: "Milan Bavishi",
+                title: "Director - Content, Upstox",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/8.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/6.svg",
+            },
+            {
+                name: "Nikhil Rungta",
+                title: "Ex Chief Investment Officer, LIC Mutual Fund | Ex-Fund Manager, Nippon India Mutual Fund",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/9.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/7.svg",
+            },
+            {
+                name: "Paramjeet Singh Chopra",
+                title: "Co-Founder, Trigen Wealth",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/10.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/8.svg",
+            },
+            {
+                name: "Priyank Jain",
+                title: "Product at IND money | Co-founder SoupX",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/11.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/9.svg",
+            },
+         
+            {
+                name: "Rakesh Nair",
+                title: "AVP - Head of Academics & Content, BSE Institute Ltd",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/13.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/10.svg",
+            },
+            {
+                name: "Ritesh Victor",
+                title: "Co-Founder Myforexeye Fintech Pvt Ltd | Ex Chief Treasury Officer-Trident Ltd",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/14.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/11.svg",
+            },
+            {
+                name: "Sanjiv Bhasin",
+                title: "Ex-Director, IIFL Securities| Market Guru",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/15.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/12.svg",
+            },
+         
+            {
+                name: "Vaibhav Jain",
+                title: "Founder- Capital Quill",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/17.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/13.svg",
+            },
+            {
+                name: "Vasav Sahgal",
+                title: "Associate Fund Manager, Fyers | Ex-Fund Manager, ITI Mutual Fund",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/18.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/14.svg",
+            },
+            {
+                name: "Venkatachalam Srivatsa",
+                title: "Fund Manager- Executive Vice President  at UTI MF",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/19.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/15.svg",
+            },
+              {
+                name: "Rajat Bhatia",
+                title: "Founder & CEO of NEURAL CAPITAL",
+                photo: "https://cdn.unionstack.in/uploads/18082026/v1/new3.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v1/new3Logo.svg",
+            },
+
+            {
+                name: "Ishu Agarwal",
+                title: "Assistant Vice President, Futures First",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/21.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/16.svg",
+            },
+            {
+                name: "Jay Mehta",
+                title: "Senior Manager, Research, Upstox",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/22.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/17.svg",
+            },
+            {
+                name: "Kiran Jani",
+                title: "Head Technical Reseach, Jainam Broking Limited",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/23.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/18.svg",
+            },
+         
+            {
+                name: "Sudhanshu Kanwar",
+                title: "Vice President, Global Banking and Markets, HSBC",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/25.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/19.svg",
+            },
+            {
+                name: "Viraj Taral",
+                title: "Trainer, Grant Thornton Bharat",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/26.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/20.svg",
+            },
+            {
+                name: "Rahul Gupta",
+                title: "Vice Prsident, Houlihan Lokey",
+                photo: "https://cdn.unionstack.in/uploads/14082026/v3/27.webp",
+                logo: "https://cdn.unionstack.in/uploads/18082026/v2/21.svg",
+            },
+         
+           
+          
+        ];
+
+        function esc(s) {
+            return String(s == null ? "" : s).replace(/[&<>"]/g, c => ({
+                "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"
+            }[c]));
+        }
+
+        function cardHTML(m) {
+            return `
+                <div class="cmtMasterCard">
+                    <div class="cmtMasterCard__avatar">
+                        <img class="cmtMasterCard__photo" src="${esc(m.photo)}" alt="${esc(m.name)}"
+                             width="235" height="200" loading="lazy" decoding="async">
+                    </div>
+                    <div class="cmtMasterCard__body">
+                        <div class="cmtMasterCard__identity">
+                            <h3 class="cmtMasterCard__name">${esc(m.name)}</h3>
+                            <p class="cmtMasterCard__title">${esc(m.title)}</p>
+                        </div>
+                        <div class="cmtMasterCard__logo">
+                            <img src="${esc(m.logo)}" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        </div>
+                    </div>
+                    <span class="cmtMasterCard__shine" aria-hidden="true"></span>
+                </div>`;
+        }
+
+        var slider = document.getElementById("slider");
+        var mob = document.getElementById("cmtMastersMob");
+        var markup = cmtMasters.map(cardHTML).join("");
+
+        if (slider) slider.innerHTML = markup;
+        if (mob) mob.innerHTML = markup;
+
+        if (!slider) return;
+
+        // Hide scrollbar but keep functionality
+        slider.style.msOverflowStyle = 'none'; // IE and Edge
+        slider.style.scrollbarWidth = 'none'; // Firefox
+        slider.style.overflow = '-moz-scrollbars-none'; // Firefox
+        slider.style.overflow = 'scroll';
+        slider.style.overflow = '-webkit-scrollbar'; // Chrome and Safari
+
+        // Clone the contents once to allow seamless scroll
+        slider.innerHTML += slider.innerHTML;
+
+        let scrollAmount = 0;
+        let animationFrame;
+
+        function autoScroll() {
+            scrollAmount += 0.80; // Adjust scroll speed here
+            slider.scrollLeft = scrollAmount;
+
+            // Reset scroll when it reaches half (original content width)
+            if (scrollAmount >= slider.scrollWidth / 2) {
+                scrollAmount = 0;
+            }
+
+            animationFrame = requestAnimationFrame(autoScroll);
+        }
+
+        // Start scrolling
+        autoScroll();
+
+        // Pause on hover
+        slider.addEventListener('mouseenter', () => {
+            cancelAnimationFrame(animationFrame);
+        });
+
+        // Resume on mouse leave
+        slider.addEventListener('mouseleave', () => {
+            autoScroll();
+        });
+    });
+</script>

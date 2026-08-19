@@ -1,0 +1,97 @@
+<div class="productDivi">
+  <div class="productUpper">
+    <div class="directorDivi">
+      <div class="directorImage">
+        {{#if profileImg}}
+            <img src="{{profileImg}}" alt="Company Logo">
+          {{else}}
+            <img src="https://images.mastersunion.link/uploads/15052025/v1/Maskgroup1.webp" alt="Default Logo">
+        {{/if}}
+      </div>
+      <div class="productInfo">
+        <div class="paytmWrapper">
+          <div class="nameLogoDivi">
+            <p class="nameProduct" id="userName">{{firstName}} </p>
+            <a href="{{linkedin}}">
+              <img src="https://images.mastersunion.link/uploads/16042025/v1/image43578.svg">
+            </a>
+          </div>
+          {{!-- <p class="designationProduct">{{profession.designation}}</p> --}}
+        </div>
+        {{!-- <div class="logoDiviProduct">
+          <img src="{{CompanyLogoImage}}">
+        </div> --}}
+      </div>
+    </div>
+
+    <div class="ratingDivi">
+      <img src="https://images.mastersunion.link/uploads/16042025/v1/icon_star_.svg">
+      <p class="ratingNum">{{toFixed ratings 1}}</p>
+    </div>
+  </div>
+
+  <div class="yearWrapperProduct">
+    <div class="expProductDivi">
+      {{!-- <div class="yearProductDivi">
+        <img src="https://images.mastersunion.link/uploads/16042025/v1/Frame1321317001.svg">
+        <p class="designationProduct">{{profession.yrsOfExp}} Yrs of Experience</p>
+      </div> --}}
+
+      <div class="yearProductDivi">
+        <img src="https://images.mastersunion.link/uploads/16042025/v1/Frame1321317002.svg">
+        {{#if languages.length}}
+          <p class="designationProduct">
+            {{#each languages}}
+              {{name}}{{#unless @last}}, {{/unless}}
+            {{/each}}
+          </p>
+        {{else}}
+          <p class="designationProduct">English</p>
+        {{/if}}
+      </div>
+
+      {{!-- <div class="yearProductDivi">
+        <img src="https://images.mastersunion.link/uploads/16042025/v1/Frame1321317002.svg">
+        <p class="designationProduct">{{completedCalls}} Successful Calls</p>
+      </div> --}}
+    </div>
+
+    <div id="{{id}}" class="marketingWrapper">
+      <div class="marketingDivi">Product Management</div>
+    </div>
+  </div>
+
+  <div class="scheduleWrapper">
+    <div class="sessionWrapper"></div>
+    <button onclick="pgpPlacementReport()" class="whiteApplyButton _DSAIApplyNowBtn">
+      Schedule Call
+      <img src="https://images.mastersunion.link/uploads/16042025/v1/Frame13213165111.svg">
+    </button>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log("i am jadshjahhaadhdahdhda")
+    const mentorInterests = `{{mentorInterests}}`;
+    const mentorTopics = `{{mentorTopics}}`;
+    const interests = mentorInterests.split('|').map(str => str.trim());
+    const topics = mentorTopics.split('|').map(str => str.trim());
+    const merged = [...new Set([...topics, ...interests])];
+
+    const top6 = merged.slice(0, 5);
+
+    const wrapper = document.getElementById('{{id}}');
+
+    top6.forEach(interest => {
+      if(interest.trim()){
+        let div = document.createElement('div');
+        div.classList.add('marketingDivi');
+        div.textContent = interest
+
+        wrapper.appendChild(div)
+      }
+    })
+  });
+</script>

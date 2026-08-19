@@ -1,0 +1,629 @@
+<div class="homepage">
+    <section class="tetrStartupSection ">
+        <div class="container">
+            <div class="startUpWrapBlock">
+                <div class="leftWrapStartup">
+
+
+                    <div class="swiper startupVideoSec">
+                        <div class="swiper-wrapper" id="name-list-startup-tetr"></div>
+
+                        <div class="mob-visible">
+                            <button class="btnBlack" id="playActiveVideoMobileTetr">
+
+                                <svg xmlns="https://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"
+                                    fill="none">
+                                    <path
+                                        d="M20.625 11.0001C20.6256 10.7666 20.5657 10.537 20.4513 10.3336C20.3368 10.1301 20.1717 9.95976 19.9719 9.83904L7.59 2.26451C7.38125 2.13668 7.14215 2.0669 6.89741 2.06237C6.65267 2.05783 6.41116 2.11872 6.19781 2.23873C5.9865 2.35688 5.81047 2.52918 5.68783 2.73792C5.56518 2.94665 5.50035 3.18429 5.5 3.42639L5.5 18.5737C5.50035 18.8158 5.56518 19.0535 5.68783 19.2622C5.81047 19.4709 5.9865 19.6432 6.19781 19.7614C6.41116 19.8814 6.65267 19.9423 6.89741 19.9378C7.14215 19.9332 7.38125 19.8634 7.59 19.7356L19.9719 12.1611C20.1717 12.0404 20.3368 11.87 20.4513 11.6665C20.5657 11.4631 20.6256 11.2335 20.625 11.0001Z"
+                                        fill="white" />
+                                </svg>
+
+                                Watch Video
+                            </button>
+
+                        </div>
+
+
+                    </div>
+
+                    <script>
+                        let isAutoplayManuallyPausedTetr = false;
+
+                        function isMobileDeviceTetr() {
+                            return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                        }
+
+                        function togglePlayPauseTetr(videoId, posterId, buttonId) {
+                            const video = document.getElementById(videoId);
+                            const poster = document.getElementById(posterId);
+                            const buttonIcon = document.getElementById(buttonId);
+
+                            if (video.paused || video.ended) {
+                                pauseAllVideosTetr(); // Ensure only one video plays
+                                stopSwiperAutoplayTetr(); // Stop Swiper autoplay
+
+                                // Show popup only on mobile, play inline on desktop
+                                if (isMobileDeviceTetr()) {
+                                    showVideoPopupTetr(video.querySelector('source').src);
+                                } else {
+                                    // Desktop behavior - play video inline
+                                    video.style.display = "block";
+                                    poster.style.display = "none";
+                                    video.play();
+                                }
+
+                                video.classList.add("playing");
+                                buttonIcon.src = "https://images.mastersunion.link/uploads/27062025/v1/MainButton4.svg";   //pausebtn
+
+                                // Resume autoplay when the video ends (for desktop)
+                                if (!isMobileDeviceTetr()) {
+                                    video.onended = () => {
+                                        resetVideoStateTetr(video, poster, buttonIcon);
+                                        resumeSwiperAutoplayTetr();
+                                    };
+                                }
+                            } else {
+                                resetVideoStateTetr(video, poster, buttonIcon);
+                                if (isMobileDeviceTetr()) {
+                                    closeVideoPopupTetr();
+                                }
+                                resumeSwiperAutoplayTetr();
+                            }
+                        }
+
+                        function showVideoPopupTetr(videoUrl) {
+                            // Only show popup on mobile devices
+                            if (!isMobileDeviceTetr()) return;
+
+                            // Create a new popup specifically for videos
+                            let videoPopup = document.getElementById('videoPopupTetr');
+
+                            if (!videoPopup) {
+                                // Create the video popup if it doesn't exist
+                                videoPopup = document.createElement('div');
+                                videoPopup.id = 'videoPopupTetr';
+                                videoPopup.className = 'popup tetr-video-popup';
+                                videoPopup.innerHTML = `
+            <div class="popupBody">
+                <div class="floatingClose">
+                    <img  src="https://files.mastersunion.link/resources/svg/close.svg" alt="icon" onclick="closeVideoPopupTetr();">
+                </div>
+                <div class="video-navigation">
+                    <div class="prev-video prev" id="prevVideoTetr">
+                        <img src="https://images.mastersunion.link/uploads/20022025/v1/black_arrow.svg" class="" alt="Previous">
+                    </div>
+                    <div class="next-video" id="nextVideoTetr">
+                        <img src="https://images.mastersunion.link/uploads/20022025/v1/black_arrow.svg" alt="Next">
+                    </div>
+                </div>
+                <div class="video-container-wrapper">
+                    <div class="custom-video-area" id="custom-video-player-tetr">
+                        <video class="iframeHero" controls autoplay playsinline>
+                            <source src="${videoUrl}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="video-transition-overlay"></div>
+                </div>
+            </div>
+        `;
+                                document.body.appendChild(videoPopup);
+
+                                // Add navigation button event listeners
+                                document.getElementById('prevVideoTetr').addEventListener('click', function () {
+                                    changeVideoWithAnimationTetr('prev');
+                                });
+
+                                document.getElementById('nextVideoTetr').addEventListener('click', function () {
+                                    changeVideoWithAnimationTetr('next');
+                                });
+                            } else {
+                                // Update existing popup with new video
+                                updatePopupVideoTetr();
+                            }
+
+                            // Show the video popup
+                            $("#videoPopupTetr").addClass("active");
+                            $("body").css("overflow", "hidden");
+
+                            // Add swipe functionality to popup
+                            addVideoPopupSwipeControlsTetr();
+                        }
+
+                        function changeVideoWithAnimationTetr(direction) {
+                            // Only work on mobile devices
+                            if (!isMobileDeviceTetr()) return;
+
+                            // Don't do anything if we're already in the middle of an animation
+                            if (window.isVideoChangingTetr) return;
+                            window.isVideoChangingTetr = true;
+
+                            const videoContainer = document.querySelector('.video-container-wrapper');
+                            const overlay = videoContainer.querySelector('.video-transition-overlay');
+
+                            // Show overlay with fade in
+                            overlay.style.display = 'block';
+                            overlay.style.opacity = '0';
+
+                            // Use requestAnimationFrame for smoother animation
+                            requestAnimationFrame(() => {
+                                overlay.style.opacity = '1';
+
+                                // After overlay is fully visible, change the video
+                                setTimeout(() => {
+                                    if (direction === 'next') {
+                                        swiperVideoTetr.slideNext();
+                                    } else {
+                                        swiperVideoTetr.slidePrev();
+                                    }
+
+                                    updatePopupVideoTetr();
+
+                                    // After video is updated, fade out overlay
+                                    setTimeout(() => {
+                                        overlay.style.opacity = '0';
+
+                                        // After overlay is fully hidden, remove it
+                                        setTimeout(() => {
+                                            overlay.style.display = 'none';
+                                            window.isVideoChangingTetr = false;
+                                        }, 300);
+                                    }, 100);
+                                }, 300);
+                            });
+                        }
+
+                        function updatePopupVideoTetr() {
+                            // Only work on mobile devices
+                            if (!isMobileDeviceTetr()) return;
+
+                            const activeSlide = swiperVideoTetr.slides[swiperVideoTetr.activeIndex];
+                            const activeVideo = activeSlide.querySelector('.videoPlayLeft');
+                            if (activeVideo) {
+                                const videoUrl = activeVideo.querySelector('source').src;
+                                const videoContainer = document.getElementById('custom-video-player-tetr');
+                                if (videoContainer) {
+                                    videoContainer.innerHTML = `
+                <video class="iframeHero" controls autoplay playsinline>
+                    <source src="${videoUrl}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            `;
+                                }
+                            }
+                        }
+
+                        function addVideoPopupSwipeControlsTetr() {
+                            // Only work on mobile devices
+                            if (!isMobileDeviceTetr()) return;
+
+                            const popup = document.getElementById('videoPopupTetr');
+                            if (!popup) return;
+
+                            // Remove existing event listeners to prevent duplicates
+                            popup.removeEventListener('touchstart', handleTouchStartTetr);
+                            popup.removeEventListener('touchmove', handleTouchMoveTetr);
+                            popup.removeEventListener('touchend', handleTouchEndTetr);
+
+                            // Add new event listeners
+                            popup.addEventListener('touchstart', handleTouchStartTetr);
+                            popup.addEventListener('touchmove', handleTouchMoveTetr);
+                            popup.addEventListener('touchend', handleTouchEndTetr);
+                        }
+
+                        // Touch handling variables
+                        let xDownTetr = null;
+                        let yDownTetr = null;
+                        let xDiffTetr = 0;
+                        let yDiffTetr = 0;
+                        let touchStartTimeTetr = 0;
+
+                        function handleTouchStartTetr(evt) {
+                            const firstTouch = evt.touches[0];
+                            xDownTetr = firstTouch.clientX;
+                            yDownTetr = firstTouch.clientY;
+                            touchStartTimeTetr = Date.now();
+                            xDiffTetr = 0;
+                            yDiffTetr = 0;
+                        }
+
+                        function handleTouchMoveTetr(evt) {
+                            if (!xDownTetr || !yDownTetr) return;
+
+                            const xUp = evt.touches[0].clientX;
+                            const yUp = evt.touches[0].clientY;
+
+                            xDiffTetr = xDownTetr - xUp;
+                            yDiffTetr = yDownTetr - yUp;
+
+                            // If horizontal swipe is more significant than vertical
+                            if (Math.abs(xDiffTetr) > Math.abs(yDiffTetr)) {
+                                // Prevent default to stop page scrolling
+                                evt.preventDefault();
+                            }
+                        }
+
+                        function handleTouchEndTetr(evt) {
+                            if (!xDownTetr || !yDownTetr) return;
+
+                            // Check if horizontal swipe is more significant than vertical and exceeds threshold
+                            if (Math.abs(xDiffTetr) > Math.abs(yDiffTetr) && Math.abs(xDiffTetr) > 50) {
+                                const touchDuration = Date.now() - touchStartTimeTetr;
+
+                                // Only process swipe if it was fast enough (under 300ms)
+                                if (touchDuration < 300) {
+                                    if (xDiffTetr > 0) {
+                                        // Swipe left - next slide
+                                        changeVideoWithAnimationTetr('next');
+                                    } else {
+                                        // Swipe right - previous slide
+                                        changeVideoWithAnimationTetr('prev');
+                                    }
+                                }
+                            }
+
+                            // Reset values
+                            xDownTetr = null;
+                            yDownTetr = null;
+                        }
+
+                        function closeVideoPopupTetr() {
+                            // Only work on mobile devices
+                            if (!isMobileDeviceTetr()) return;
+
+                            const videoPopup = document.getElementById('videoPopupTetr');
+                            if (videoPopup) {
+                                const videoContainer = document.getElementById('custom-video-player-tetr');
+
+                                // Stop any playing video in popup
+                                const popupVideo = videoContainer.querySelector('video');
+                                if (popupVideo) {
+                                    popupVideo.pause();
+                                    popupVideo.currentTime = 0;
+                                }
+
+                                // Hide the video popup
+                                $("#videoPopupTetr").removeClass("active");
+                                $("body").css("overflow", "visible");
+                            }
+
+                            // Reset all video states
+                            pauseAllVideosTetr();
+                            resumeSwiperAutoplayTetr();
+                        }
+
+                        function resetVideoStateTetr(video, poster, buttonIcon) {
+                            video.pause();
+                            video.currentTime = 0;
+                            video.style.display = "none";
+                            video.classList.remove("playing");
+                            poster.style.display = "block";
+                            buttonIcon.src = "https://images.mastersunion.link/uploads/16062025/v2/MainButton.svg";
+                        }
+
+                        function stopSwiperAutoplayTetr() {
+                            swiperVideoTetr.autoplay.stop();
+                            swiperVideoTetr.params.autoplay.disableOnInteraction = true;
+                            isAutoplayManuallyPausedTetr = true;
+                        }
+
+                        function resumeSwiperAutoplayTetr() {
+                            swiperVideoTetr.params.autoplay.disableOnInteraction = false;
+                            swiperVideoTetr.autoplay.start();
+                            isAutoplayManuallyPausedTetr = false;
+                        }
+
+                        function pauseAllVideosTetr() {
+                            const videos = document.querySelectorAll(".videoPlayLeft");
+                            const posters = document.querySelectorAll(".videoPoster");
+                            const buttons = document.querySelectorAll(".playButton");
+
+                            videos.forEach((video) => {
+                                video.pause();
+                                video.currentTime = 0;
+                                video.style.display = "none";
+                                video.classList.remove("playing");
+                            });
+
+                            posters.forEach((poster) => {
+                                poster.style.display = "block";
+                            });
+
+                            buttons.forEach((button) => {
+                                button.src = "https://images.mastersunion.link/uploads/16062025/v2/MainButton.svg";
+                            });
+                        }
+
+                        // Make closeVideoPopup function available globally
+                        window.closeVideoPopupTetr = closeVideoPopupTetr;
+                        window.isVideoChangingTetr = false;
+
+                        document.addEventListener("DOMContentLoaded", function () {
+                            const names = [
+                                {
+                                    name: "/20072025/v2/image20250720T201044.121",
+                                    url: "https://files.mastersunion.link/gif/1stv.mp4",
+                                },
+                                {
+                                    name: "/20072025/v2/image20250720T201129.714",
+                                    url: "https://files.mastersunion.link/gif/2ndv.mp4",
+                                },
+                                {
+                                    name: "/20072025/v2/image20250720T201156.093",
+                                    url: "https://files.mastersunion.link/gif/3rdv.mp4",
+                                },
+                                {
+                                    name: "/20072025/v1/tprojects41",
+                                    url: "https://files.mastersunion.link/gif/last3rd.mp4",
+                                },
+                                {
+                                    name: "/20072025/v1/tprojects51",
+                                    url: "https://files.mastersunion.link/gif/last2nd.mp4",
+                                },
+                                {
+                                    name: "/20072025/v1/tprojects61",
+                                    url: "https://files.mastersunion.link/gif/lastvid3.mp4",
+                                },
+                                {
+                                    name: "/24072025/v1/tprojects62",
+                                    url: "https://files.mastersunion.link/gif/24072025/v1/videoplayback.mp4",
+                                },
+
+
+
+                            ];
+
+                            const mappedArray = names.map((item, index) => ({
+                                img: `https://images.mastersunion.link/uploads${item.name}.webp`,
+                                url: item.url,
+                                index,
+                            }));
+
+                            const nameList = document.getElementById("name-list-startup-tetr");
+
+                            mappedArray.forEach((item, index) => {
+                                const videoId = `videoPlay-tetr-${index}`;
+                                const posterId = `postervideo-tetr-${index}`;
+                                const buttonId = `buttonIcon-tetr-${index}`;
+
+                                const slide = document.createElement("div");
+                                slide.classList.add("swiper-slide");
+                                slide.innerHTML = `
+            <video playsinline class="videoPlayLeft" id="${videoId}" style="display: none;">
+                <source src="${item.url}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <img id="${posterId}" class="videoPoster" src="${item.img}" alt="">
+            <span class="floatingButton">
+                <img class="playButton" onclick="togglePlayPauseTetr('${videoId}', '${posterId}', '${buttonId}')" id="${buttonId}"
+                src="https://images.mastersunion.link/uploads/16062025/v2/MainButton.svg" alt="">
+            </span>
+        `;
+                                nameList.appendChild(slide);
+                            });
+
+                            window.swiperVideoTetr = new Swiper(".startupVideoSec", {
+                                loop: true,
+                                centeredSlides: true,
+                                slidesPerView: 1.2,
+                                spaceBetween: 0,
+                                initialSlide: 3,
+                                autoplay: {
+                                    delay: 1500,
+                                    disableOnInteraction: false,
+                                },
+
+                                on: {
+                                    slideChange: () => {
+                                        pauseAllVideosTetr();
+
+                                        // Update popup video if popup is open (only if not triggered by animation and on mobile)
+                                        const videoPopup = document.getElementById('videoPopupTetr');
+                                        if (isMobileDeviceTetr() && videoPopup && videoPopup.classList.contains('active') && !window.isVideoChangingTetr) {
+                                            updatePopupVideoTetr();
+                                        }
+                                    },
+                                    touchEnd: () => {
+                                        const videoPopup = document.getElementById('videoPopupTetr');
+                                        if (!isMobileDeviceTetr() || !videoPopup || !videoPopup.classList.contains('active')) {
+                                            resumeSwiperAutoplayTetr();
+                                        }
+                                    },
+                                },
+                            });
+
+                            document.getElementById("playActiveVideoMobileTetr").addEventListener("click", function () {
+                                const activeSlide = swiperVideoTetr.slides[swiperVideoTetr.activeIndex];
+                                const video = activeSlide.querySelector(".videoPlayLeft");
+                                const poster = activeSlide.querySelector(".videoPoster");
+                                const buttonIcon = activeSlide.querySelector(".playButton");
+
+                                // If no video or video is already playing, disable button functionality
+                                if (video && video.paused) {
+                                    pauseAllVideosTetr();
+                                    stopSwiperAutoplayTetr();
+
+                                    // Show popup with active video (only on mobile)
+                                    if (isMobileDeviceTetr()) {
+                                        showVideoPopupTetr(video.querySelector('source').src);
+                                    } else {
+                                        // Desktop behavior - play video inline
+                                        video.style.display = "block";
+                                        poster.style.display = "none";
+                                        video.play();
+
+                                        // Resume autoplay when the video ends
+                                        video.onended = () => {
+                                            resetVideoStateTetr(video, poster, buttonIcon);
+                                            resumeSwiperAutoplayTetr();
+                                        };
+                                    }
+
+                                    video.classList.add("playing");
+                                    buttonIcon.src = "/"; // Adjust icon if required
+                                } else {
+                                    // Optional: Disable button or give feedback
+                                    console.log("Video is already playing.");
+                                }
+                            });
+
+                            // Add event listener for desktop button
+                            document.getElementById("playActiveVideoTetr").addEventListener("click", function () {
+                                const activeSlide = swiperVideoTetr.slides[swiperVideoTetr.activeIndex];
+                                const video = activeSlide.querySelector(".videoPlayLeft");
+                                const poster = activeSlide.querySelector(".videoPoster");
+                                const buttonIcon = activeSlide.querySelector(".playButton");
+
+                                // If no video or video is already playing, disable button functionality
+                                if (video && video.paused) {
+                                    pauseAllVideosTetr();
+                                    stopSwiperAutoplayTetr();
+
+                                    // Desktop behavior - play video inline
+                                    video.style.display = "block";
+                                    poster.style.display = "none";
+                                    video.play();
+
+                                    // Resume autoplay when the video ends
+                                    video.onended = () => {
+                                        resetVideoStateTetr(video, poster, buttonIcon);
+                                        resumeSwiperAutoplayTetr();
+                                    };
+
+                                    video.classList.add("playing");
+                                    buttonIcon.src = "https://images.mastersunion.link/uploads/27062025/v1/MainButton4.svg"; //pausebtn
+                                } else {
+                                    // Optional: Disable button or give feedback
+                                    console.log("Video is already playing.");
+                                }
+                            });
+
+                            // Add CSS for navigation buttons and transition overlay (only for mobile)
+                            const style = document.createElement('style');
+                            style.textContent = `
+        @media (max-width: 768px) {
+            #videoPopupTetr .video-navigation {
+                position: absolute;
+                width: 110%;
+                height: 100%;
+                top: 0;
+                left: -5%;
+                z-index: 10;
+                pointer-events: none;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            #videoPopupTetr .prev-video,
+            #videoPopupTetr .next-video {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                pointer-events: auto;
+                transition: all 0.3s ease;
+            }
+            
+           
+            
+            #videoPopupTetr .prev-video img,
+            #videoPopupTetr .next-video img {
+                width: 90%;
+                opacity: 0.8;
+            }
+            
+            #videoPopupTetr .video-container-wrapper {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+            
+            #videoPopupTetr .video-transition-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.7);
+                display: none;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                z-index: 5;
+            }
+            
+            /* Add swipe hint animation */
+            @keyframes swipeHint {
+                0% { transform: translateX(0); opacity: 0.7; }
+                50% { transform: translateX(-20px); opacity: 1; }
+                100% { transform: translateX(0); opacity: 0.7; }
+            }
+            
+            #videoPopupTetr .popupBody::after {
+                content: 'Swipe to navigate';
+                position: absolute;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                color: white;
+                padding: 8px 16px;
+                border-radius: 20px;
+                font-size: 14px;
+                opacity: 0.7;
+                animation: swipeHint 2s infinite;
+                pointer-events: none;
+                z-index: 20;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            #videoPopupTetr {
+                display: none !important;
+            }
+        }
+    `;
+                            document.head.appendChild(style);
+
+                            // Handle window resize to close popup if switching from mobile to desktop
+                            window.addEventListener('resize', function () {
+                                if (!isMobileDeviceTetr()) {
+                                    const videoPopup = document.getElementById('videoPopupTetr');
+                                    if (videoPopup && videoPopup.classList.contains('active')) {
+                                        closeVideoPopupTetr();
+                                    }
+                                }
+                            });
+                        });
+                    </script>
+                </div>
+
+                <div class="rightWrapStartup">
+                    <h2 class="go-HighlightHeading ">
+                        {{!-- <span class="greycrossAsset">Projects </span> --}}
+                        <span class="fr-HeadingItalic">Student Entrepreneurs
+                            <br class="mob-visible"></span>
+                    </h2>
+                    <p>Explore what our students are building in the field of healthtech, e-commerce, AI, and more.</p>
+                    <div class="mob-hide">
+                        <button class="btnBlack" id="playActiveVideoTetr">
+
+                        <svg xmlns="https://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                            <path
+                                d="M20.625 11.0001C20.6256 10.7666 20.5657 10.537 20.4513 10.3336C20.3368 10.1301 20.1717 9.95976 19.9719 9.83904L7.59 2.26451C7.38125 2.13668 7.14215 2.0669 6.89741 2.06237C6.65267 2.05783 6.41116 2.11872 6.19781 2.23873C5.9865 2.35688 5.81047 2.52918 5.68783 2.73792C5.56518 2.94665 5.50035 3.18429 5.5 3.42639L5.5 18.5737C5.50035 18.8158 5.56518 19.0535 5.68783 19.2622C5.81047 19.4709 5.9865 19.6432 6.19781 19.7614C6.41116 19.8814 6.65267 19.9423 6.89741 19.9378C7.14215 19.9332 7.38125 19.8634 7.59 19.7356L19.9719 12.1611C20.1717 12.0404 20.3368 11.87 20.4513 11.6665C20.5657 11.4631 20.6256 11.2335 20.625 11.0001Z"
+                                fill="white" />
+                        </svg>
+
+                        Watch Video
+                    </button>
+
+                    </div>
+                    
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

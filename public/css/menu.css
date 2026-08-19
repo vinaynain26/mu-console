@@ -1,0 +1,865 @@
+    .topHeader {
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.5) 30%, rgba(0, 0, 0, 0.3) 55%, rgba(0, 0, 0, 0.0) 100%);
+        top: 0;
+        z-index: 9999;
+        border-bottom: unset;
+        transition: 0.6s ease;
+        width: 100%;
+        position: fixed;
+    }
+
+    header.topHeader {
+        transition: background 0.6s ease;
+    }
+
+    .mobileHeader,
+    .mobileHeaderContent {
+        display: none;
+    }
+
+ 
+
+    @keyframes menuanimate {
+        0% {
+            transform: translateY(10px);
+        }
+
+        100% {
+            transform: translateY(0px);
+        }
+    }
+
+    .topHeader.shrikIt {
+        top: -38px !important;
+        background: var(--black);
+        border-bottom: 1px solid var(--black5);
+        transition: 0.6s ease;
+
+        .upperHeader {
+            border-bottom: 1px solid var(--black5);
+            transition: 0.4s ease-in-out;
+        }
+    }
+
+    header:has(.menuDown.active) .upperHeader {
+        border-bottom: 1px solid var(--black5);
+    }
+
+    header.topHeader:has(.menuDown.active) {
+        background: var(--black) !important;
+        transition: 0.6s ease;
+    }
+
+
+
+    .topHeader {
+
+
+        .aboutItems.pointerNoneList p {
+            min-width: unset !important;
+        }
+
+        .academicsDiv.enterpriseDivi {
+            .sub-academic-content .aboutTabs {
+                min-width: 390px;
+            }
+
+        .imageBoxi {
+            max-width: 390px;
+           
+
+        }
+
+            .tabSecondary>.schoolWrapper {
+                min-width: 240px;
+            }
+        }
+
+
+        .menuActive {
+            background: var(--black);
+            transition: 0.4s ease-in-out;
+        }
+
+        .menuLogoNew {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: 10%;
+        }
+
+        .upperHeader {
+            border-bottom: 1px solid var(--grey10);
+            padding: 10px 0;
+            transition: 0.4s ease-in-out;
+        }
+
+        .topNav {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 30px;
+
+            .navItem {
+                color: var(--grey12);
+                text-decoration: none;
+                font-size: 13px;
+                font-family: var(--go-regular);
+                transition: color 0.4s ease;
+            }
+        }
+
+        .belowHeader {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .navMenu {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            list-style: none;
+
+            .dropdownItems {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 13px;
+                font-family: var(--go-medium);
+                color: var(--white);
+                text-transform: uppercase;
+                transition: color 0.4s ease;
+                line-height: 18px;
+            }
+
+            .dropdownItems:hover {
+                color: #E38330;
+                font-family: "go-bold";
+                transition: 0.4s ease-in-out;
+            }
+
+            .megaLink.active {
+                .dropdownItems {
+                    color: #E38330;
+                    font-family: "go-bold";
+                    transition: 0.4s ease-in-out;
+
+                    .dropdown-icon path {
+                        stroke: #E38330;
+                    }
+                }
+            }
+        }
+
+        .navItem:hover {
+            color: #E38330;
+            font-family: "go-semibold";
+        }
+
+        .menuDown {
+            padding: 0;
+            background: var(--black);
+            position: absolute;
+            width: 100%;
+            z-index: 10000;
+            display: none;
+            animation: menuanimate 0.4s ease-out;
+        }
+
+        .menuDown.active {
+            display: block;
+            transform: translateY(0px);
+        }
+
+        .tabMenu {
+            padding: 30px 15px;
+        }
+
+        .dropdownItems svg {
+            transition: 0.4s ease-in-out;
+        }
+
+        .megaLink.active {
+            .dropdownItems svg {
+                transform: rotate(180deg);
+            }
+        }
+
+        .menuDown::after {
+            position: absolute;
+            background: var(--gradient);
+            height: 2px;
+            width: 100%;
+            content: "";
+            bottom: 0;
+        }
+
+
+        .aboutItems.school>a {
+            font-size: 22px;
+            line-height: 120%;
+            font-weight: 400;
+            color: var(--grey10);
+            font-family: "Fraunces", serif;
+            transition: 0.4s ease;
+        }
+
+        .aboutItems.schoolOther>a {
+            font-size: 22px;
+            line-height: 120%;
+            font-weight: 400;
+            color: var(--grey10);
+            font-family: "Fraunces", serif;
+            transition: 0.4s ease;
+
+        }
+
+        .aboutItems.schoolOther:hover,
+        .aboutItems.schoolOther.active {
+            a {
+                color: var(--white);
+            }
+
+            .programIconGradient {
+                display: block;
+            }
+
+            .programIcon {
+                display: none;
+            }
+        }
+
+        .aboutItems.schoolOther {
+            .programIconGradient {
+                display: none;
+                transition: 0.4s ease;
+            }
+        }
+
+        .academicsDiv,
+        .enterpriseDivi {
+            .programIconGradient {
+                opacity: 0 !important;
+                display: unset !important;
+                transition: 0.4s ease;
+            }
+
+            .aboutItems.menuExtend.active,
+            .aboutItems.menuExtend:hover {
+                .programIconGradient {
+                    opacity: 1 !important;
+                    display: unset !important;
+                }
+            }
+        }
+
+        .aboutItems.pointerNone a {
+            cursor: default !important;
+        }
+
+        .aboutTabs {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 24px;
+            width: 100%;
+
+            .aboutItems {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                cursor: default !important;
+            }
+
+            /* .aboutItems:hover {
+    a {
+      text-decoration: underline;
+      transition: 0.4s ease-in-out;
+      text-decoration-thickness: 1px;
+    }
+
+    img {
+      opacity: 1;
+    }
+  } */
+            .aboutItems.menuExtend {
+                align-items: flex-start;
+
+                a {
+                    color: var(--grey10);
+                    font-weight: 600;
+                    font-size: 15px;
+                    transition: 0.4s ease-in-out;
+
+                }
+
+
+            }
+
+            .aboutItems.school {
+                img {
+                    opacity: 0;
+                    transition: 0.4s ease-in-out;
+
+                }
+            }
+
+            .aboutItems.school:hover,
+            .aboutItems.school.active {
+                img {
+                    opacity: 1;
+                }
+
+                a {
+                    color: var(--white);
+                }
+            }
+
+        }
+
+        .tabSecondaryOther .aboutTabs {
+            gap: 16px;
+        }
+
+        .tabs-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            flex-direction: column;
+            display: none;
+            transition: 0.4s;
+            border-left: 1px solid var(--black5);
+            padding-left: 30px;
+            margin-left: 40px;
+            min-width: max-content;
+        }
+
+        .sub-academic-content .aboutTabs {
+            min-width: 185px;
+        }
+
+
+
+        .tabSecondary .aboutTabs {
+            max-width: 100%;
+        }
+
+        .academicsDiv .tabSecondary>.aboutTabs {
+            min-width: 375px;
+        }
+
+        .studentLifeDiv .schoolWrapper {
+            max-width: 300px;
+        }
+
+        .academicsDiv .tabSecondary>.schoolWrapper {
+            min-width: 520px;
+        }
+
+        .upperHeader .caseSense {
+            text-transform: capitalize !important;
+            color: var(--grey12);
+            font-family: var(--go-regular);
+            transition: 0.4 ease;
+        }
+
+        .upperHeader {
+            .megaLink.active {
+                .dropdown-icon path {
+                    stroke: #E38330;
+
+                }
+
+                .dropdownItems {
+                    color: #E38330;
+                    font-family: "go-bold";
+                    transition: 0.4s ease-in-out;
+                }
+            }
+        }
+
+        .tabSecondary {
+            flex-direction: row;
+            display: flex;
+            align-items: stretch;
+            height: 100%;
+        }
+
+        .tabs-content.active {
+            display: block;
+        }
+
+        .nav-heading {
+            color: #737373;
+            font: 0.875rem "go-medium";
+            min-width: max-content;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .aboutItems>a,
+        .aboutItems>p {
+            font: 0.875rem "go-regular";
+            color: var(--white);
+            line-height: 150%;
+            min-width: max-content;
+        }
+
+        .pointerNoneList {
+            cursor: unset !important;
+        }
+
+        .menuExtend.aboutItems {
+            position: relative;
+
+            .programIconGradient {
+                display: none;
+                transition: 0.4s ease;
+            }
+        }
+
+        .sub-academic-content .aboutTabs {
+            gap: 16px;
+        }
+
+        .aboutItems.menuExtend.active,
+        .aboutItems.menuExtend:hover {
+            a {
+                color: var(--white);
+            }
+
+            .programIconGradient {
+                display: block;
+            }
+
+            .programIcon {
+                display: none;
+            }
+        }
+
+        .categoryName {
+            font-size: 10px;
+            text-transform: uppercase;
+            line-height: 150%;
+            font-family: var(--go-regular);
+            color: var(--grey4);
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+        }
+
+        .globalBtn {
+            border-radius: 40px;
+            background: #313131;
+            backdrop-filter: blur(2px);
+            display: flex;
+            padding: 4px 12px;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-family: var(--go-medium);
+            color: var(--grey4);
+            width: fit-content;
+        }
+
+        .markGlobal {
+            margin-top: 8px;
+        }
+
+        .blurScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            height: 100%;
+            visibility: hidden;
+            opacity: 0;
+            backdrop-filter: blur(2px);
+            background: #0000009c;
+            transition: 0.3s;
+            overflow: hidden;
+        }
+
+        .blurScreen.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tabAcademic {
+            display: flex;
+            align-items: stretch;
+            justify-content: flex-end;
+            width: 88%;
+        }
+
+
+        .studentProgramWrapper {
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .studentLifeContent {
+            border-left: 1px solid var(--black5);
+            border-right: 1px solid var(--black5);
+            padding: 0 80px;
+        }
+
+        .tabMenu {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+        }
+
+    .tabMenuOther {
+        display: flex;
+        align-items: stretch;
+        justify-content: flex-end;
+        gap: 32px;
+        padding: 32px 0;
+    }
+
+    .tabSecondaryOther {
+        display: flex;
+        align-items: stretch;
+        gap: 32px;
+        width: 100%;
+        height: 100%;
+        justify-content: flex-end;
+
+            .aboutTabs {
+                max-width: fit-content;
+                border-right: 1px solid var(--black5);
+                border-left: 1px solid var(--black5);
+                padding: 0 32px;
+                min-height: unset;
+                width: 100%;
+                max-width: 310px;
+            }
+        }
+
+
+    .imageBoxi {
+        max-width: 390px;
+        border-radius: 12px;
+        overflow: hidden;
+      line-height: 0;
+    }
+
+        .studentLifeDiv .tabSecondary .aboutTabs {
+            gap: 16px;
+
+        }
+
+
+        .studentImageWrapper {
+            width: 100%;
+            max-width: 390px;
+        }
+
+        .schoolName {
+            font-size: 10px;
+            line-height: 150%;
+            text-transform: uppercase;
+            font-family: var(--go-regular);
+            color: var(--grey4);
+        }
+
+        .schoolWrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            width: 100%;
+
+
+        }
+
+        .tabSecondary .schoolWrapper {
+
+            .aboutTabs {
+                gap: 16px;
+            }
+        }
+
+        .otherSecondaryContent {
+            width: 60%;
+            align-items: flex-start;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .coursesTab {
+            width: 100%;
+            max-width: 230px;
+        }
+
+
+    }
+
+
+
+    @media (max-width: 768px) {
+        .topHeader {
+            display: none;
+        }
+
+
+        .mobileMenu {
+
+            .mobileHeader {
+                width: 100%;
+                z-index: 9999;
+                position: fixed;
+                border-bottom: 1px solid var(--black5);
+                background: var(--black);
+                transition: 0.4s ease-in;
+                backdrop-filter: blur(10px);
+                top: 0;
+                display: block;
+            }
+
+            .mobileNetwork {
+                display: flex;
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 12px;
+                width: 100%;
+            }
+
+            .subDropdown {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .subLinkHeading {
+                font-size: 0.8rem;
+                color: var(--white);
+                transition: 0.4s ease;
+                text-transform: uppercase;
+                font-family: var(--go-medium);
+                line-height: 120%;
+            }
+
+            .subDropHeading {
+                font-size: 13px;
+                color: var(--white);
+                transition: 0.3s ease;
+                font-family: "go-regular";
+            }
+
+            .hamburgerParent {
+                width: 100%;
+                justify-content: space-between;
+                display: flex;
+                align-items: center;
+            }
+
+            .subParent {
+                display: flex;
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 16px;
+                width: 100%;
+            }
+
+            .mobMenuItemBody.open {
+                max-height: 80vh !important;
+                transition: 0.4s ease;
+            }
+
+            .menuLogoNew {
+                width: 38%;
+            }
+
+            .subDropdown.active {
+                .subLinkHeading {
+                    color: #E38330;
+                }
+
+                .togglerDownSub {
+                    transform: rotate(180deg);
+                    transition: 0.4s ease;
+                }
+            }
+
+            .togglerDownSub {
+                transition: 0.4s ease;
+            }
+
+            .subDropContent {
+                display: none;
+            }
+
+            .hamburger {
+                width: 100%;
+                height: 100%;
+                max-width: 62px;
+                max-height: 62px;
+                padding-inline: 22px;
+                padding-right: 0;
+
+
+                img {
+                    width: 80%;
+                }
+            }
+
+            .mobileHeaderContent {
+                display: block;
+            }
+
+            .headerContentMob {
+                display: flex;
+                width: 100%;
+                background: var(--black);
+                position: fixed;
+                height: 100%;
+                top: 0;
+                justify-content: flex-start;
+                align-items: flex-start;
+                flex-direction: column;
+                transition: 0.5s ease;
+                left: 0;
+            }
+
+            .mobMenuHeader {
+                padding: 16px 20px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+
+            }
+
+            .mobMenuHeader .logo {
+                width: 40%;
+            }
+
+            .mobileHeaderContent.active {
+                transform: translateX(0);
+            }
+
+            .mobileHeaderContent .closeIcon {
+                cursor: pointer;
+            }
+
+            .mobileHeaderContent {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                z-index: 9999;
+                transform: translateX(-100%);
+                transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+                will-change: transform;
+                overflow-y: auto;
+            }
+
+            .mobMenuBody {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 0 15px 15px;
+                width: 100%;
+                height: 85vh;
+                overflow: auto;
+            }
+
+            .mobMenuItem {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-start;
+                width: 100%;
+                padding: 16px 16px;
+                transition: 0.4s ease;
+                gap: 24px;
+                position: relative;
+                border-radius: 12px;
+            }
+
+            .mobMenuItemHeader {
+                display: flex;
+                width: 100%;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .heading {
+                font-size: 0.875rem;
+                color: var(--white);
+                transition: 0.4s ease;
+                text-transform: uppercase;
+                font-family: var(--go-medium);
+            }
+
+            .mobMenuItemBody {
+                width: 100%;
+                display: none;
+                transition: 0.3s ease;
+
+            }
+
+            .mobMenuItemBody.open {
+                display: block;
+                transition: 0.3s ease;
+            }
+
+            .mobMenuParent {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-start;
+                gap: 16px;
+
+            }
+
+            .mobMenuParent>a {
+                width: 100%;
+                display: flex;
+            }
+
+            .linkText {
+                font-size: 14px;
+                color: var(--white);
+                transition: 0.3s ease;
+                font-family: "go-regular";
+            }
+
+            .directMobLinks {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                padding: 16px 16px;
+                align-items: center;
+
+            }
+
+
+            .mobMenuItem.active {
+                background: var(--black4);
+                border-radius: 8px 8px 0px 0px;
+                border-bottom: 3px solid;
+                /* Required for border-image to apply */
+                border-image: linear-gradient(90deg, #39b6d8 0%, #f7d344 50%, #e38330 100%);
+                border-image-slice: 1;
+
+                .togglerDown {
+                    transform: rotate(180deg);
+                    display: block;
+                }
+
+                .heading {
+                    color: #E38330;
+                }
+            }
+        }
+
+
+    }

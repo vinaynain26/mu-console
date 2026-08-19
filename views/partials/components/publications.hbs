@@ -1,0 +1,171 @@
+<section class="facultyResearch  stories events">
+    <div class="container">
+        <p class="headingSmall">
+            <img  src="https://files.mastersunion.link/resources/svg/star.svg" alt="Icon">
+            RESEARCH HIGHLIGHTS
+        </p>
+        <div class="headingWrapperButton">
+            <h2 class="sectionHeading font-white">
+                <span class="gradientUnderline"> Faculty Research &amp;</span> Publications
+            </h2>
+
+        </div>
+    </div>
+    <div class="container ">
+        <div class="loadMoreWrap ">
+            <div class="facultycardsWrapper mt30" id="newsWrapper">
+                <!-- Dynamic content will be appended here -->
+            </div>
+            <a href="javascript:void(0);" onclick="loadMore()" class="mt30 gradientButton whiteHover mob-hide">
+                <button id="loadMoreButton" class="button iconButton">
+                    View more
+                </button>
+            </a>
+        </div>
+
+
+        <script>
+            var newsData = [
+                {
+                    "title": "Manager’s perspective on workers’ participation in management",
+                    "author": "Rinku Mahindru, Ph.D, Delhi School of Economics",
+                    "publisher": "Emerald Insights, 2024",
+                    "url": "https://www.emerald.com/insight/content/doi/10.1108/MRR-07-2021-0521/full/html?skipTracking=true",
+                    "image": "https://files.mastersunion.link/resources/img/fr5.webp"
+                },
+                {
+                    "title": "Crowdfunding and governance: A review and research roadmap",
+                    "author": "Vipin Sreekumar, Ph.D, IIM Calcutta",
+                    "publisher": "ESBCO",
+                    "url": "https://openurl.ebsco.com/EPDB%3Agcd%3A11%3A1811563/detailv2?sid=ebsco%3Aplink%3Ascholar&id=ebsco%3Agcd%3A161947259&crl=f",
+                    "image": "https://files.mastersunion.link/resources/img/fr4.webp"
+                },
+                {
+                    "title": "Development of a comprehensive multi-factor method for comparing batting performances in one-day international cricket",
+                    "author": "Shubasis Mishra, Ph.D, IIM Calcutta",
+                    "publisher": "Sage Journals, 2021",
+                    "url": "https://journals.sagepub.com/doi/abs/10.1177/22779752211017260?casa_token=rrqPe2VkFrwAAAAA%3Aiv_uoROhpyX4pDpklvFVGPQWXx3qWUvzqTZlmmVc0pYyUjSYKY7UuIjo1Xf-Flabm5J7lmYFSNxG1QOt&journalCode=ksma",
+                    "image": "https://files.mastersunion.link/resources/img/fr1.webp"
+                },
+                {
+                    "title": "The Grasim Industries-Aditya Birla Nuvo Limited merger: Wealth creation?",
+                    "author": "Garima Chaklader, Ph.D, IIM Bangalore",
+                    "publisher": "Harvard Business Journal, 2020",
+                    "url": "https://store.hbr.org/product/the-grasim-industries-aditya-birla-nuvo-limited-merger-wealth-creation/W20073",
+                    "image": "https://files.mastersunion.link/resources/img/fr2.webp"
+                },
+                {
+                    "title": "Digital technology-enabled transformative consumer responsibilisation: A case study",
+                    "author": "Bhupesh Manoharan, Ph.D, IIM Calcutta",
+                    "publisher": "Emerald Insights, 2021",
+                    "url": "https://www.emerald.com/insight/content/doi/10.1108/EJM-02-2020-0139/full/html?skipTracking=true",
+                    "image": "https://files.mastersunion.link/resources/img/fr3.webp"
+                },
+                {
+                    "title": "New venture governance: An integrative, multidisciplinary review",
+                    "author": "Vipin Sreekumar, Ph.D, IIM Calcutta",
+                    "publisher": "Academy of Management, 2024",
+                    "url": "https://journals.aom.org/doi/abs/10.5465/annals.2022.0167",
+                    "image": "https://files.mastersunion.link/resources/img/publication6.webp"
+                },
+                {
+                    "title": "India’s startup explosion: More pitfalls than promise?",
+                    "author": "Vipin Sreekumar, Ph.D, IIM Calcutta",
+                    "publisher": "London School of Economics, 2022",
+                    "url": "https://blog.lse.ac.uk/businessreview/2022/05/11/indias-startup-explosion-more-pitfalls-than-promise/",
+                    "image": "https://files.mastersunion.link/resources/img/publication7.webp"
+                },
+                {
+                    "title": "The threat of bankruptcy and financing strategy in learning-intensive industries",
+                    "author": "Vipin Sreekumar, Ph.D, IIM Calcutta",
+                    "publisher": "Emerald Insights, 2021",
+                    "url": "https://www.emerald.com/insight/content/doi/10.1108/JSMA-11-2020-0321/full/html",
+                    "image": "https://files.mastersunion.link/resources/img/publication8.webp"
+                },
+                {
+                    "title": "Active and upcoming deals: Effect on purchase intention",
+                    "author": "Garima Chaklader, Ph.D, IIM Bangalore",
+                    "publisher": "Emerald Insights, 2022",
+                    "url": "https://www.emerald.com/insight/content/doi/10.1108/MIP-01-2019-0004/full/html?skipTracking=true",
+                    "image": "https://files.mastersunion.link/resources/img/publication9.webp"
+                },
+                {
+                    "title": "Impact of environmental, social and governance (ESG) on foreign institutional investments in India: A machine learning perspective",
+                    "author": "Garima Chaklader, Ph.D, IIM Bangalore",
+                    "publisher": "R Discovery, 2024",
+                    "url": "https://discovery.researcher.life/article/impact-of-environmental-social-and-governance-esg-on-foreign-institutional-investments-in-india-a-machine-learning-perspective/e88632160fa63270bfb8bccac77f5fce",
+                    "image": "https://files.mastersunion.link/resources/img/publication10.webp"
+                },
+                {
+                    "title": "Service sector dynamics and role in the Indian economy",
+                    "author": "Garima Chaklader, Ph.D, IIM Bangalore",
+                    "publisher": "Springer",
+                    "url": "https://link.springer.com/book/9789819780532",
+                    "image": "https://files.mastersunion.link/resources/img/publication11.webp"
+                },
+                {
+                    "title": "Gender diversity and inclusion on Indian boards: Post the introduction of the mandate in 2015 and 2019",
+                    "author": "Kashika Sud, Ph.D, IIM Ahmedabad",
+                    "publisher": "Sage Journals, 2024",
+                    "url": "https://journals.sagepub.com/doi/10.1177/22785337241249557",
+                    "image": "https://files.mastersunion.link/resources/img/publication12.webp"
+                },
+                {
+                    "title": "Hybrid organization deconstructed: A bibliographic investigation into the origins, development, and future of the research domain",
+                    "author": "Bhupesh Manoharan, Ph.D, IIM Calcutta",
+                    "publisher": "Wiley Online Library",
+                    "url": "https://onlinelibrary.wiley.com/doi/full/10.1111/ijmr.12314",
+                    "image": "https://files.mastersunion.link/resources/img/publication13.webp"
+                }
+            ];
+
+
+
+
+            $(document).ready(loadMore);
+            var itemsPerPage = 13;
+            var currentIndex = 0;
+
+            function loadMore() {
+                var itemsToShow = newsData.slice(currentIndex, currentIndex + itemsPerPage);
+                itemsToShow.forEach(function (item) {
+                    var newsItemHTML = `
+                    <div class="facultyCards">
+                        <a href=${item.url}
+                            target="_blank" class="masterBox">
+                            <div class="masterImage">
+                                <img  src=${item.image} alt="">
+                                {{!-- <div class="masterPlay" onclick="openPopup('QblIGeJO7CI');"><img 
+                                        src="https://files.mastersunion.link/resources/svg/homePlayIcon.svg" alt="icon"></div> --}}
+                            </div>
+                            <div class="masterinner">
+                                <p class="name">
+                                   ${item.title}
+                                </p>
+                                <div class="alumniDesgination">
+                                    Published in
+
+                                    <img  src="https://files.mastersunion.link/resources/svg/darkCircle.svg" alt="icon">
+                                   ${item.publisher}
+                                </div>
+                                <hr class="lineSpace">
+                                <div class="flexbox">
+                                    <p class="storiesTag">${item.author}</p>
+                                </div>
+
+                            </div>
+                        </a>
+                    </div>`;
+                    $('#newsWrapper').append(newsItemHTML);
+                });
+
+                currentIndex += itemsPerPage;
+
+                if (currentIndex >= newsData.length) {
+                    $('#loadMoreButton').hide();
+                }
+            }
+
+        </script>
+    </div>
+</section>

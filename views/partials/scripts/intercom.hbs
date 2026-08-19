@@ -1,0 +1,71 @@
+<script>
+/*
+ * Chat / support widgets (ChatbotBuilder + Crisp) — GDPR consent-gated.
+ * Both set cookies / localStorage (chatbot session, crisp-client session), so they load ONLY
+ * after the visitor accepts cookies via the banner (window.MUConsent, components/cokkie.hbs).
+ * If the user rejects or has not chosen yet, no chat scripts load and none of their storage
+ * is set. When the user accepts later, the widgets load at that moment (no page reload).
+ */
+(function () {
+    function loadChatWidgets() {
+        // --- ChatbotBuilder ---
+        window.cbbSettings = {
+            base_url: "https://tarun.chatbotbuilder.net",
+            app_id: "tarun-67",
+            app_type: "chat",
+        };
+        (function () {
+            var s = document.createElement("script");
+            s.src = "https://tarun.chatbotbuilder.net/embed.js";
+            s.defer = true;
+            document.head.appendChild(s);
+        })();
+
+        // --- Crisp (loaded 10s later, hidden by default; pushes its visitor id into CBB) ---
+        setTimeout(function () {
+            window.$crisp = window.$crisp || [];
+            window.CRISP_WEBSITE_ID = "1e8db9cc-b31f-4f4c-9a7b-a23d5c97ba6e";
+
+            // Hide Crisp widget immediately (keeps it active but invisible)
+            window.$crisp.push(["do", "chat:hide"]);
+
+            // When Crisp is ready, push its visitor id into CBB
+            window.CRISP_READY_TRIGGER = function () {
+                function pushToCBB(visitorId) {
+                    // wait for CBB API if it's not ready yet
+                    if (!(window.ChatbotBuilder && typeof window.ChatbotBuilder.setUserData === "function")) {
+                        return setTimeout(function () { pushToCBB(visitorId); }, 50);
+                    }
+                    // Push visitorId into CBB
+                    window.ChatbotBuilder.setUserData({ crisp_session_id: String(visitorId || "") });
+                }
+
+                // If Crisp already has an id, push it
+                var idNow = (window.$crisp.get && window.$crisp.get("session:identifier")) || null;
+                if (idNow) pushToCBB(idNow);
+
+                // Also handle the case where the session loads later
+                window.$crisp.push(["on", "session:loaded", function (id) {
+                    pushToCBB(id);
+                }]);
+            };
+
+            // Load Crisp script
+            (function () {
+                var d = document, s = d.createElement("script");
+                s.src = "https://client.crisp.chat/l.js";
+                s.async = 1;
+                d.head.appendChild(s);
+            })();
+        }, 10000); // <-- 10 second delay
+    }
+
+    if (window.MUConsent && typeof window.MUConsent.whenGranted === 'function') {
+        window.MUConsent.whenGranted(loadChatWidgets);
+    } else {
+        try {
+            if (localStorage.getItem('mu_cookie_consent') === 'accepted') loadChatWidgets();
+        } catch (e) { /* no-op */ }
+    }
+})();
+</script>

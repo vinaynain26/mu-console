@@ -1,0 +1,152 @@
+<section class="mission" >
+    <div class="missionButtonWrap" id="makeHidden">
+        <button class="missionBtn" id="scroll1Btn">Vision</button>
+        <button class="missionBtn" id="scroll2Btn">Mission</button>
+    </div>
+
+    <span id="scrl2"></span>
+
+    <div class="fixedMission active" id="fxCld1">
+        <div class="container">
+
+            <div class="flexbox missionFlex">
+                <div class="missionLeft">
+                    <h2 class="missionHeading whiteBgHead">
+                        To iterate an education model
+                        that maximises
+                        <span class="lightMuVector font-bold">human potential</span>
+                    </h2>
+                    <p class="missionText">
+                        “Why” Masters’ Union Exists
+                    </p>
+                </div>
+
+                <div class="missionCenter">
+                    <img  src="https://files.mastersunion.link/media/img/vision.webp" alt="">
+                </div>
+
+                <div class="missionRight">
+                    <ul>
+                        <li><img  src="https://files.mastersunion.link/resources/svg/littleStar.svg" class="opacity05" alt=""> The
+                            age-old education model is
+                            built on memorization, conformity
+                            & indoctrination
+                        </li>
+
+                        <li><img  src="https://files.mastersunion.link/resources/svg/littleStar.svg" class="opacity05" alt="">We want
+                            to build a model that's
+                            hands-on, rooted in reality & has a
+                            high degree of throughput</li>
+
+                        {{!-- <li><img  src="https://files.mastersunion.link/resources/svg/littleStar.svg" class="opacity05" alt="">Do
+                            not
+                            hesitate to paint outside the
+                            lines.</li> --}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <span id="scrl1"></span>
+
+    <div class="fixedMission positionTranslate" id="fxCld2">
+        <div class="container">
+            <div class="flexbox missionFlex">
+                <div class="missionLeft">
+                    <h2 class="missionHeading">
+                        To build a <span class="font-bold">globally eminent
+                            institution</span> that continuously
+                        challenges pedagogy &
+                        processes to deliver
+                        <span class="lightMuVector"> unparalleled human growth
+                        </span>
+                    </h2>
+                    <p class="missionText">
+                        “What” Masters’ Union is building
+                    </p>
+                </div>
+
+                <div class="missionCenter">
+                    <img  src="https://files.mastersunion.link/media/img/mission.webp" alt="">
+                </div>
+
+                <div class="missionRight black">
+
+                    <p class="gradientText">The "How"</p>
+                    <ul>
+                        <li><img  src="https://files.mastersunion.link/resources/svg/littleStar.svg" alt=""> By not being a prisoner
+                            of our own
+                            legacy & continuously iterating on
+                            curriculum
+                        </li>
+                        <li><img  src="https://files.mastersunion.link/resources/svg/littleStar.svg" alt=""> By teaching as if a
+                            student is not a vessel
+                            that needs filling, but a candle that
+                            needs lighting
+                        </li>
+                        <li><img  src="https://files.mastersunion.link/resources/svg/littleStar.svg" alt=""> By always thinking big,
+                            striving to paint
+                            outside the lines while always being
+                            student centric
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            function adjustScrolling() {
+                var parentOffset = $('.mission').offset().top + 200;
+                var windowHeight = $(window).height();
+
+                $(window).scroll(function () {
+                    var scrollPosition = $(window).scrollTop();
+                    var sectionHeight = $('.mission').outerHeight();
+                    var scrollPercentage = (scrollPosition - parentOffset) / (sectionHeight - windowHeight);
+
+                    if (scrollPercentage >= 0.7) {
+                        $('#makeHidden').addClass('hidden');
+                    } else {
+                        $('#makeHidden').removeClass('hidden');
+                    }
+
+                    if (scrollPosition >= parentOffset) {
+                        $('#fxCld1').removeClass('active');
+                        $('#fxCld2').addClass('active');
+                        $('.mission').addClass('darkTheme');
+                        $('.missionButtonWrap').addClass('active');
+                    } else {
+                        $('#fxCld1').addClass('active');
+                        $('#fxCld2').removeClass('active');
+                        $('.mission').removeClass('darkTheme');
+                        $('.missionButtonWrap').removeClass('active');
+                    }
+                });
+
+                $('#scroll1Btn').click(function () {
+                    $('html, body').animate({
+                        scrollTop: $('.mission').offset().top + 200
+                    }, 100);
+                });
+
+                $('#scroll2Btn').click(function () {
+                    $('html, body').animate({
+                        scrollTop: $('#scrl2').offset().top + 200
+                    }, 100);
+                });
+            }
+
+            adjustScrolling(); // Initial adjustment
+
+            $(window).resize(function () {
+                adjustScrolling();
+            });
+        });
+    </script>
+
+</section>

@@ -1,0 +1,76 @@
+<main>
+    <div class="popupContainerOuter   ApplyNow" id="UgdownloadBrochure">
+
+        <div class="popupContainer">
+            <div class="fromTophead ">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="Ug_form_heading"> Download Programme
+                    Brochure </h2>
+                <div class="popUpCloseBtnWrap">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Icon" onclick="hideApplyNowPopUp();">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="leadformContainer">
+                <div class="left mob-hide">
+                    <img class="ugPopUpImg" src="https://files.mastersunion.link/media/img/ug-brochure-image.webp" alt="">
+                </div>
+                <div class="right">
+                    <iframe id="1eedc5bf-eb53-484a-922f-2462f5c97495" width="100%" height="400px"></iframe>
+
+                </div>
+            </div>
+
+            <div id="SuccessMessage" class="congrats-box text-center hide">
+                <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+
+                <h3 class="thankyouboxHeading mt-10 gtmUgDwnBroGotit" id="gtmUgDwnBroGotitId">Got it</h3>
+                <p class="text-2 gtmUgDwnBroGotPara" id="gtmUgDwnBroGotParaId">The Report will be downloaded shortly.
+                <p class="text-2"> Feel free to write to us at <a class="link-red"
+                        href="mailto:ugadmissions@mastersunion.org" target="_blank">ugadmissions@mastersunion.org</a>
+                </p>
+
+                <p class="text-2"> or call on <span class="font-bold">+91 76691 86660</span> in case of any queries.
+                </p>
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+
+
+    function UgdownloadBrochure(formTitle, destination) {
+        const form = document.getElementById("UgdownloadBrochure");
+        const h2 = document.querySelector("#Ug_form_heading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        document.querySelector("#SuccessMessage").classList.add("hide");
+        document.querySelector("#submitbuttonreport").classList.remove("hide");
+        document.querySelector("#leadformContainer").classList.remove("hide");
+        document.querySelector("#Ug_form_heading").classList.remove("hide");
+    }
+   
+
+    function hideApplyNowPopUp() {
+        let applyNowPopUp = document.getElementById("UgdownloadBrochure");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+
+        $('#nameReport').val("");
+        $('#emailReport').val("");
+        $('#numberReport').val("");
+
+    }
+
+
+
+</script>

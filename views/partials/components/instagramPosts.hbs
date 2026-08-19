@@ -1,0 +1,94 @@
+<div class="insta_slider swiper">
+
+    <div class="swiper-wrapper" id="instaSliderId">
+
+
+    </div>
+
+</div>
+
+{{> popups/instaFeeds}}
+
+<script>
+
+    let instaPostData;
+    getInstaPosts();
+
+    function getInstaPosts() {
+        $.ajax({
+            url: '{{apiBaseURL}}/api/getInstaAPIPosts',
+            data: {
+                limit: '8'
+            }
+        }).done(function (response) {
+            if (response.IsSuccess == true) {
+                console.log("===========Insta posts Data=========");
+                instaPostData = response.Data.data;
+                console.log(instaPostData);
+                console.log("====================================")
+                bindInstagramPosts(instaPostData);
+            }
+        });
+    }
+
+    function bindInstagramPosts(instaData) {
+        instaData.forEach((data, i) => {
+            if (true) {
+                let instaPostHtml = `<div class="swiper-slide swiper-slide-prev insta-slide ">
+                            <div class="insta-slide" onclick="openPost('${data.permalink}');"">
+                                
+                                <div class="news-post" onclick= 'checkinstagrmm(${i})' style="background: url('${data.media_type === 'VIDEO' ? data.thumbnail_url : data.media_url}')">
+                                        
+                                        <img src="${data.media_type === 'VIDEO' ? data.thumbnail_url : data.media_url}" alt="main-post">
+                                </div>
+
+                            </div>
+                        </div>`
+                $('#instaSliderId').append(instaPostHtml);
+                setTimeout(function () {
+                    $('#instaSliderId').trigger('swiper-wrapper', [instaPostHtml])
+                    $('#instaSliderId').trigger('refresh.swiper-wrapper');
+                }, 200);
+            }
+        })
+    }
+
+    function getPostTime(postTimestamp) {
+        let postTime;
+        let todayDate = new Date();
+        let postDate = new Date(postTimestamp);
+        let diffMs = Math.abs(postDate - todayDate) / 1000;
+        // calculate days
+        const days = Math.floor(diffMs / 86400);
+        diffMs -= days * 86400;
+        // calculate hours
+        const hours = Math.floor(diffMs / 3600) % 24;
+        diffMs -= hours * 3600;
+        // calculate minutes
+        const minutes = Math.floor(diffMs / 60) % 60;
+        if (days > 30) {
+            const months = Math.floor(days / 30);
+            postTime = (months === 1) ? `${months} month ago` : `${months} months ago`;
+        } else if (days >= 7) {
+            const weeks = Math.floor(days / 7);
+            postTime = (weeks === 1) ? `${weeks} week ago` : `${weeks} weeks ago`;
+        } else if (days > 0) {
+            postTime = (days === 1) ? `${days} day ago` : `${days} days ago`;
+        } else {
+            if (hours > 0) {
+                postTime = (hours === 1) ? `${hours} hour ago` : `${hours} hours ago`;
+            } else {
+                postTime = (minutes === 0 || minutes === 1) ? `${minutes} minute ago` : `${minutes} minutes ago`;
+            }
+        }
+        return postTime;
+    }
+
+    function openPost(url) {
+        var winWidth = window.matchMedia("(max-width: 767px)");
+        if (winWidth.matches) {
+            window.open(url);
+        }
+    }
+
+</script>

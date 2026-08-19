@@ -1,0 +1,113 @@
+<style>
+    /* Fixed card height so the photo always fills its column and the popup
+       itself never scrolls — any overflow is absorbed by the widget iframe,
+       i.e. only the form fields scroll. Height grows with the viewport so on
+       tall screens every field is visible without any scroll at all. */
+    #UgdownloadBrochure .popupContainer {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        height: min(calc(100vh - 40px), 860px);
+    }
+
+    #UgdownloadBrochure .PopupformWrapper {
+        flex: 1 1 auto;
+        min-height: 0;
+        align-items: stretch;
+    }
+
+    #UgdownloadBrochure .PopupformWrapper .left {
+        display: flex;
+        align-items: stretch;
+        min-height: 0;
+    }
+
+    #UgdownloadBrochure .ugPopUpImg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 12px;
+        display: block;
+    }
+
+    #UgdownloadBrochure .PopupformWrapper .right {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        min-height: 0;
+    }
+
+    /* the widget owns its own internal scroll, so let it fill the column and
+       the fields scroll inside it instead of the whole popup */
+    #UgdownloadBrochure .PopupformWrapper .right iframe {
+        flex: 1 1 auto;
+        width: 100%;
+        height: 100%;
+        min-height: 0;
+        border: none;
+        display: block;
+    }
+</style>
+
+<main>
+    <div class="popupContainerOuter   ApplyNow" id="UgdownloadBrochure">
+
+        <div class="popupContainer">
+            <div class="fromTophead ">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="Ug_form_heading"> Download Programme
+                    Brochure </h2>
+                <div class="popUpCloseBtnWrap">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Icon" onclick="hideApplyNowPopUpDSAI();">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="leadformContainer">
+                <div class="left mob-hide">
+                    <img class="ugPopUpImg" src="https://files.mastersunion.link/media/img/ug-brochure-image.webp" alt="">
+                </div>
+                <div class="right">
+                    <iframe id="9107dba9-723f-40d1-b5f6-fb3d21d81132" width="100%" height="640px"></iframe>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script src="https://cdn.mastersunion.org/widget/iframe.js"></script>
+<script>
+    new LoadWidget("9107dba9-723f-40d1-b5f6-fb3d21d81132");
+</script>
+
+<script>
+
+
+    function UgdownloadBrochure(formTitle, destination) {
+        const form = document.getElementById("UgdownloadBrochure");
+        const h2 = document.querySelector("#Ug_form_heading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        // Disable scrolling when popup is open
+        document.body.style.overflow = 'hidden';
+    }
+
+
+    function hideApplyNowPopUpDSAI() {
+        let applyNowPopUp = document.getElementById("UgdownloadBrochure");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+
+        // Re-enable scrolling when popup is closed
+        document.body.style.overflow = 'auto';
+    }
+
+
+
+</script>

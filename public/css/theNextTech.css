@@ -1,0 +1,6201 @@
+#cursor-grid-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 99;
+}
+
+.sp-link {
+    color: black;
+    padding: 6px;
+    background: white;
+    border-radius: 6px;
+    display: flex;
+    font-size: 14px;
+    gap: 4px;
+    min-width: max-content;
+    align-items: center;
+}
+
+.panelBtn {
+    width: 100%;
+
+    a {
+        margin: 40px auto 0;
+
+    }
+}
+
+.summitAgendaPanels.panel {
+    .summitAgendaRow:has(.summitAgendaAction) .summitAgendaContentBelow {
+        flex: 0 0 54% !important;
+    }
+
+    .summitAgendaAction {
+        flex: 0 0 28% !important;
+    }
+}
+
+#cursor-dot {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: white;
+    mix-blend-mode: difference;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s ease;
+}
+
+.theNextTech .tnPageForm.genaiform {
+    .tnPageInner {
+        max-height: 634px;
+    }
+
+    .tnStepHeader {
+        justify-content: flex-start;
+    }
+}
+
+.theNextTech {
+
+    .tnThankYouSub.redcolor {
+        color: #ef4444 !important;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 150%;
+        margin-top: 16px;
+    }
+
+    .tnModalOverlay {
+        position: fixed;
+        inset: 0;
+        background: radial-gradient(circle at top, #020817 0%, #000000 55%, #000000 100%);
+        background-color: rgba(0, 0, 0, 0.88);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+        z-index: 9998;
+        padding: 24px;
+
+        .thankyouDivi {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .tnThankYouTitle {
+            font-family: "NeueKaine", system-ui, sans-serif;
+            font-size: 32px;
+            line-height: 120%;
+            color: #06F;
+        }
+
+        .tnThankYouSub {
+            font-family: "NeueKaine", system-ui, sans-serif;
+            font-size: 16px;
+            line-height: 120%;
+            color: #0F172A;
+            margin: 16px 0;
+            text-align: center;
+        }
+
+        .tnBarcodeId {
+            font-family: "NeueKaine", system-ui, sans-serif;
+            font-size: 16px;
+            line-height: 120%;
+            color: #0F172A;
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .tnQrImage {
+            max-height: 200px;
+        }
+
+        .tnAvatarStep {
+            width: 100%;
+        }
+
+        .tnModal {
+            position: relative;
+            max-width: 75%;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            background: transparent;
+            box-shadow:
+                0 24px 120px rgba(0, 0, 0, 0.85);
+        }
+
+        .tnModalInner {
+            display: grid;
+            grid-template-columns: 1.05fr 1.15fr;
+            min-height: 440px;
+            background: #ffffff;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .tnModalInner::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -1px;
+            height: 5px;
+            background: #06F;
+
+        }
+
+        .tnModalLeft {
+            padding: 40px 40px 36px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background:
+                radial-gradient(circle at top left, rgba(59, 130, 246, 0.08), transparent 60%),
+                linear-gradient(180deg, #f9fbff 0%, #f5f7ff 55%, #f4f5fb 100%);
+            border-right: 1px solid #e2e8f0;
+            color: #020617;
+        }
+
+        .tnLeftHeader {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .tnPill {
+            border-radius: 6px;
+            padding: 8px 12px;
+            background: #C8DDFF;
+            color: #030229;
+            font-family: "NeueKaine", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tnHeading {
+            margin-top: 0;
+            font-family: "NeueKaine", system-ui, sans-serif;
+            font-weight: 800;
+            font-size: 38px;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            color: #020617;
+        }
+
+        .tnHeading span {
+            color: #06F;
+        }
+
+        .tnLeftCopy {
+            margin-top: 0;
+            font-family: "NeueKaine", system-ui, sans-serif;
+            font-size: 13px;
+            line-height: 1.7;
+            color: #6b7280;
+        }
+
+        .tnAvatarPreview {
+            width: 100%;
+            height: 100%;
+            border-radius: 12PX;
+            background: #f8fafc;
+            border: 1px dashed #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+
+        }
+
+        .tnAvatarFlexRow {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            align-self: center;
+            width: 100%;
+            max-width: 170px;
+            max-height: 200px;
+        }
+
+        .tnAvatarAfterSelectCreateBtn {
+            width: 110px;
+            border-radius: 12px;
+            border: 1px solid rgba(6, 102, 255, 0.35);
+            background: rgba(255, 255, 255, 0.92);
+            color: #06F;
+            font-family: "NeueKaine", system-ui, sans-serif;
+            font-weight: 800;
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 12px 10px;
+            cursor: pointer;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .tnAvatarPreview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* removed mini create button */
+
+        /* When no avatar is selected, keep the left "middle space" visually empty
+           (box still occupies space because tnAvatarPreview has fixed size). */
+        .tnAvatarPreview:not(.has-avatar) {
+            border: none;
+            background: transparent;
+        }
+
+        /* Subtle glow highlight when an image is selected */
+        .tnAvatarPreview::after {
+            content: "";
+            position: absolute;
+            inset: -10px;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0;
+            border-radius: inherit;
+            background: radial-gradient(circle at 50% 10%, rgba(6, 102, 255, 0.35) 0%, rgba(6, 102, 255, 0) 58%);
+            transition: opacity 0.2s ease;
+        }
+
+        .tnAvatarPreview.has-avatar::after {
+            opacity: 1;
+        }
+
+        /* "Scan/parsik" effect after user clicks "Create your avatar" */
+        .tnAvatarPreview.is-creating::after {
+            z-index: 2;
+            /* above the image */
+            opacity: 1;
+            background: linear-gradient(90deg,
+                    rgba(6, 102, 255, 0) 0%,
+                    rgba(6, 102, 255, 0) 25%,
+                    rgba(6, 102, 255, 0.75) 50%,
+                    rgba(6, 102, 255, 0) 75%,
+                    rgba(6, 102, 255, 0) 100%);
+            transform: translateX(-60%);
+            animation: tnAvatarScan 0.95s ease-in-out infinite;
+            filter: blur(2px);
+            mix-blend-mode: screen;
+        }
+
+        @keyframes tnAvatarScan {
+            from {
+                transform: translateX(-60%);
+            }
+
+            to {
+                transform: translateX(60%);
+            }
+        }
+
+        .tnModalRight {
+            padding: 32px 32px 30px 32px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            min-width: 0;
+            /* allow the grid item to shrink so horizontal overflow can scroll */
+            overflow-x: auto;
+            /* enable horizontal scroll for wide form content */
+            overflow-y: auto;
+        }
+
+        .tnForm {
+            width: 100%;
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 26px 26px 24px 26px;
+            box-shadow: none;
+            color: #020617;
+            font-family: "NeueKaine", system-ui, sans-serif;
+        }
+
+        .tnFormGrid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px 20px;
+        }
+
+        .tnFormGrid>.tnField {
+            flex: 0 0 calc(50% - 10px);
+            min-width: 0;
+        }
+
+        .tnField {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .tnFieldFull {
+            margin-top: 22px;
+        }
+
+        #tnRoleFieldsContainer:has(.tnRoleFields:not([hidden])) {
+            margin-top: 22px;
+        }
+
+        #tnRoleFieldsContainer .tnRoleFields:not([hidden]) {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px 20px;
+        }
+
+        #tnRoleFieldsContainer .tnRoleFields>.tnField {
+            flex: 0 0 calc(50% - 10px);
+            min-width: 0;
+        }
+
+        #tnRoleFieldsContainer .tnRoleFields>.tnField.tnFieldFull {
+            flex: 0 0 100%;
+            margin-top: 0;
+        }
+
+        .tnLabel {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+
+        .tnReq {
+            color: #ef4444;
+            margin-left: 2px;
+        }
+
+        .tnInput {
+            border-radius: 9px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            padding: 10px 12px;
+            font-family: "NeueKaine", system-ui, sans-serif;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #0f172a;
+            outline: none;
+            transition: border-color 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
+        }
+
+        .tnInput::placeholder {
+            color: #94a3b8;
+        }
+
+        .tnInput:focus {
+            border-color: #2563eb;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.4);
+        }
+
+        .tnTextarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .tnSelectWrap {
+            position: relative;
+        }
+
+        .tnSelect {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 28px;
+            background-color: #f8fafc;
+        }
+
+        .tnSelectIcon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            color: #64748b;
+            pointer-events: none;
+        }
+
+        .tnSubmit {
+            margin-top: 18px;
+            width: 100%;
+            border-radius: 9px;
+            border: none;
+            padding: 16px 20px;
+            font-family: "NeueKaine", system-ui, sans-serif;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            background: #06F;
+            color: #ffffff;
+            cursor: pointer;
+            box-shadow: none;
+            border: none;
+            transition: background 0.16s ease, transform 0.1s ease;
+        }
+
+        .tnSubmit:hover {
+            background: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .tnSubmit:active {
+            transform: translateY(0);
+        }
+
+        .tnModalClose {
+            position: absolute;
+            top: 18px;
+            right: 22px;
+            width: 30px;
+            height: 30px;
+            border-radius: 999px;
+            background: #F3F4F6;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+            z-index: 3;
+        }
+
+        .tnModalClose svg {
+            width: 20px;
+            height: 20px;
+            display: block;
+        }
+    }
+
+    /* JS toggles `is-visible` on the overlay element (`#tn-register-modal`) */
+    .tnModalOverlay.is-visible {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+
+
+    @media (max-width: 1024px) {
+
+        /* Hide preview+create row until user selects an image */
+        .tnAvatarFlexRow {
+            display: none !important;
+        }
+
+        .tnAvatarFlexRow.tnAvatarFlexRow--active {
+            display: flex !important;
+        }
+
+        .tnModalOverlay {
+            .tnModalInner {
+                grid-template-columns: 1fr;
+            }
+
+            .tnModalLeft {
+                padding: 30px 26px 8px 26px;
+            }
+
+            .tnLeftHeader {
+                gap: 16px;
+            }
+
+            .tnModalRight {
+                padding: 18px 18px 22px 18px;
+            }
+
+            .tnHeading {
+                font-size: 30px;
+            }
+        }
+    }
+
+    @media (max-width: 767px) {
+
+        .aiSubmitHearindWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* On mobile, show avatar preview+create-row only after user selects a photo
+           (i.e. after clicking "Create your avatar"). */
+        .tnAvatarFlexRow {
+            display: none;
+        }
+
+        .tnAvatarFlexRow.tnAvatarFlexRow--active {
+            display: flex;
+        }
+
+        .tnModalOverlay {
+            padding: 8px;
+            align-items: flex-start;
+            top: 3.5rem;
+            overflow-y: auto;
+
+
+            .tnModal {
+                max-width: 100%;
+                margin-top: 8px;
+                overflow-y: auto;
+                max-height: 100dvh;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .tnModalLeft {
+                padding: 44px 14px 14px 14px;
+                gap: 32px;
+                border-right: none;
+                border-bottom: 1px solid #e2e8f0;
+                justify-content: flex-start;
+            }
+
+            .tnModalInner {
+                min-height: unset;
+            }
+
+            .tnLeftHeader {
+                gap: 10px;
+            }
+
+            .tnPill {
+                padding: 7px 10px;
+                font-size: 9px;
+                letter-spacing: 0.12em;
+            }
+
+            .tnHeading {
+                font-size: 32px;
+                line-height: 1.08;
+            }
+
+            .tnLeftCopy {
+                margin-top: 12px;
+                font-size: 12px;
+                line-height: 1.45;
+            }
+
+            .tnAvatarPreview {
+                width: 110px;
+                height: 110px;
+
+            }
+
+            .tnForm {
+                padding: 14px 12px 14px 12px;
+                border-radius: 0;
+            }
+
+            .tnFormGrid {
+                gap: 12px;
+            }
+
+            .tnFormGrid>.tnField {
+                flex: 0 0 100%;
+            }
+
+            #tnRoleFieldsContainer .tnRoleFields {
+                gap: 12px;
+            }
+
+            #tnRoleFieldsContainer .tnRoleFields>.tnField {
+                flex: 0 0 100%;
+            }
+
+            .tnModalRight {
+                padding: 12px 10px 16px 10px;
+            }
+
+            .tnLabel {
+                text-transform: none;
+                letter-spacing: 0;
+                font-size: 11px;
+            }
+
+            .tnInput {
+                font-size: 12px;
+                padding: 10px;
+            }
+
+            .tnFieldFull {
+                margin-top: 8px;
+            }
+
+            .tnTextarea {
+                min-height: 58px;
+            }
+
+            .tnSubmit {
+                font-size: 12px;
+                padding: 14px 16px;
+            }
+
+            .tnModalClose {
+                top: 22px;
+                right: 10px;
+                width: 26px;
+                height: 26px;
+            }
+        }
+
+    }
+
+
+
+
+
+
+    .text-center {
+        text-align: center;
+    }
+
+    .greyBtn {
+        color: var(--black) !important;
+        background-color: var(--white) !important;
+        border: 1px solid var(--black);
+    }
+
+    .blackBtn {
+        color: var(--white) !important;
+        background-color: var(--black) !important;
+
+    }
+
+    .blueBtn {
+        color: var(--white) !important;
+        background-color: #296BFF !important;
+        border: 1px solid var(--black);
+    }
+
+    .transparentBtn {
+        color: var(--white) !important;
+        background-color: transparent !important;
+        border: 1px solid var(--white);
+    }
+
+    .roboBtn {
+        padding: 16px 32px;
+        border-radius: 12px;
+        color: var(--white);
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font: 16px "neueKaine";
+        font-weight: 700;
+        max-width: fit-content;
+        cursor: pointer;
+    }
+
+    .roboBtnSm {
+        padding: 10px 16px;
+        border-radius: 6px;
+        color: var(--white);
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        font: 14px "neueKaine";
+        font-weight: 500;
+        max-width: fit-content;
+        cursor: pointer;
+    }
+
+    @media (max-width: 767px) {
+        .roboBtnSm {
+            font-weight: 400;
+            gap: 2px;
+        }
+    }
+
+    .arrow {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.25s ease-in-out;
+    }
+
+    .arrow1 {
+        transform: translate(0%, 0%);
+        z-index: 2;
+    }
+
+    /* On hover - Diagonal movement */
+    .roboBtn:hover .arrow1 {
+        transform: translate(100%, -100%);
+    }
+
+    .roboBtn:hover .arrow2 {
+        transform: translate(0%, 0%);
+    }
+
+    .sp-btn:hover .arrow1 {
+        transform: translate(100%, -100%);
+    }
+
+    .sp-btn:hover .arrow2 {
+        transform: translate(0%, 0%);
+    }
+
+    .roboBtnSm:hover .arrow1 {
+        transform: translate(100%, -100%);
+    }
+
+    .roboBtnSm:hover .arrow2 {
+        transform: translate(0%, 0%);
+    }
+
+    .neuHeadingBold {
+        font: 32px "neueKaine";
+        font-weight: 900;
+        line-height: 120%;
+        color: var(--white);
+        text-transform: uppercase;
+
+    }
+
+    .aiAwardsHeading {
+
+        font: 34px "neueKaine";
+        font-weight: 700;
+        line-height: 120%;
+        color: var(--white);
+        text-transform: uppercase;
+    }
+
+    .registerSubheading {
+        font: 16px "neueKaine";
+        font-weight: 600;
+        line-height: 150%;
+        color: var(--grey18);
+    }
+
+    .aiSubmitSubHeading {
+        font: 16px "neueKaine";
+        font-weight: 400;
+        line-height: 150%;
+        color: var(--grey18);
+    }
+
+
+
+    .gradientAbsolute {
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        background: linear-gradient(60deg, #00F0FF 18.74%, #0066FF 104.82%);
+        /* Electric blue gradient */
+        filter: blur(20px);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.8;
+        mix-blend-mode: screen;
+        transition: opacity 0.3s ease, transform 0.1s ease;
+    }
+
+
+
+    /* initial */
+    background: var(--black);
+    color: var(--white);
+
+    /* Fonts */
+    /* NeueKaine Fonts Start */
+    .nkRegular {
+        font-family: "NeueKaine";
+        font-weight: 400;
+    }
+
+    .nkMedium {
+        font-family: "NeueKaine";
+        font-weight: 500;
+    }
+
+    .nkSemiBold {
+        font-family: "NeueKaine";
+        font-weight: 600;
+    }
+
+    .nkBold {
+        font-family: "NeueKaine";
+        font-weight: 700;
+    }
+
+    /* Orbitron Font */
+
+    .orbitronRegular {
+        font-family: "Orbitron";
+        font-weight: 400;
+    }
+
+    .orbitronMedium {
+        font-family: "Orbitron";
+        font-weight: 500;
+    }
+
+    .orbitronSemi {
+        font-family: "Orbitron";
+        font-weight: 600;
+    }
+
+    .orbitronBold {
+        font-family: "Orbitron";
+        font-weight: 700;
+    }
+
+
+    /* Fonts End */
+
+    /*  end */
+
+
+    /* Main Page */
+
+    .heroSection {
+        padding: 0;
+
+        .heroWrapper {
+            position: relative;
+        }
+
+        .heroContentWrapper {
+            position: absolute;
+            transform: translate(-50%, -140%);
+            text-align: center;
+            left: 50%;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .heroHeading {
+            font: 175px "orbitron";
+            font-weight: 600;
+            line-height: 76%;
+        }
+
+        .heroHeadingSub {
+            font: 125px "orbitron";
+            font-weight: 400;
+            line-height: 100%;
+        }
+
+        .heroSubHeading {
+            font-size: 22px;
+            font-family: "neueKaine";
+            font-weight: 700;
+            line-height: 150%;
+        }
+
+        .heroSubHeadingPoints {
+            font-size: 20px;
+            font-family: "neueKaine";
+            font-weight: 500;
+        }
+
+        .heroTag {
+            background: var(--grey3);
+            max-width: fit-content;
+            width: 100%;
+            border-radius: 60px;
+            padding: 12px 32px;
+            margin: auto;
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+        }
+
+        .tagDetail {
+            align-items: self-end;
+            display: flex;
+            gap: 8px;
+            max-width: fit-content;
+        }
+
+        .tagText {
+            font: 18px "neueKaine";
+            font-weight: 700;
+        }
+
+        .playBtn {
+            background: #FFFFFF40;
+            border-radius: 54px;
+            padding: 16px 28px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            max-width: fit-content;
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+
+            font: 22px "neueKaine";
+            font-weight: 700;
+            line-height: 70%;
+            color: var(--white);
+        }
+
+    }
+
+    .heroSection {
+        position: relative;
+        line-height: 0;
+        z-index: 9;
+        padding: 0px 0 0;
+        overflow: hidden;
+        min-height: 100vh;
+        background: #020202;
+
+
+        .heroSectionContent .go-HeroSubtitle {
+            color: var(--grey4);
+        }
+
+        .heroSectionImg iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none;
+            /* Prevent clicks on iframe */
+        }
+
+        .heroSectionImg::after {
+            content: '';
+            position: absolute;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) -12.02%, rgba(0, 0, 0, 0.29) 50.35%, #000 119.89%);
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-container {
+            max-height: 94vh !important;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+        }
+
+        .heroSectionContent {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, -30%);
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            width: 100%;
+        }
+
+        .go-HeroSubtitle {
+            margin-top: 16px;
+
+            .textHighlight {
+                color: var(--white);
+            }
+        }
+
+        .heroSectionBtnWrap {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-top: 24px;
+        }
+
+
+    }
+
+    /* end of hero section */
+
+    /* robo */
+    .robo {
+        spline-viewer {
+            /* background-color: black; */
+            width: 100%;
+            height: 74vh;
+        }
+
+        .roboBtn {
+
+            justify-content: center;
+
+        }
+
+        .rightDivText {
+            font: 14px "neueKaine";
+            font-weight: 400;
+            line-height: 150%;
+            color: var(--grey10);
+        }
+
+
+        .roboHeading {
+            font: 32px "neueKaine";
+            font-weight: 400;
+            line-height: 120%;
+        }
+
+        .roboHeadingSub {
+            font: 32px "neueKaine";
+            font-weight: 700;
+            line-height: 120%;
+        }
+
+        .roboSubheading {
+            font: 16px "neueKaine";
+            font-weight: 400;
+            line-height: 150%;
+        }
+
+        .headingWrapper {
+            text-align: center;
+            display: flex;
+            gap: 8px;
+            flex-direction: column;
+        }
+
+        .roboContentWrapper {
+            position: relative;
+        }
+
+
+        .robodiv {
+            top: 10px;
+            position: absolute;
+            text-align: center;
+            padding: 22px 45px;
+            background: var(--grey17);
+            border: 1px solid #0066FF80;
+            max-width: fit-content;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .robdiv1 {
+            top: 300px;
+        }
+
+        .robdiv2 {
+            top: 120px;
+            right: 10%;
+        }
+
+        .robdiv3 {
+            top: 400px;
+            right: 5%;
+            z-index: 99;
+        }
+
+        .blank {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            background-color: var(--black);
+            height: 100px;
+            width: 200px;
+            z-index: 9;
+        }
+
+        .robodivHeading {
+            font: 50px "orbitron";
+            font-weight: 400;
+        }
+
+        .robodivText {
+            font: 14px "neueKaine";
+            font-weight: 400;
+
+        }
+
+        .roboBtn {
+            padding: 16px 32px;
+            border-radius: 12px;
+            color: var(--white);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btnText {
+            font: 16px "neueKaine";
+            font-weight: 700;
+            line-height: 100%;
+        }
+
+        .blueBtn {
+            background: #296BFF;
+        }
+
+        .greyBtn {
+            background-color: var(--grey17);
+            border: 1px solid var(--grey3);
+        }
+
+        .roboBtnWrapper {
+            display: flex;
+            gap: 12px;
+            margin: 0 auto;
+            max-width: fit-content;
+        }
+
+        .roboWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+    }
+
+    .summitAgenda {
+        background: var(--black);
+        padding: 80px 0;
+
+        .summitAgendaWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .summitAgendaHeading {
+            color: var(--white);
+            text-transform: uppercase;
+            line-height: 100%;
+            text-align: center;
+            font-size: 32px;
+        }
+
+        .summitAgendaList {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .summitAgendaRow {
+            display: flex;
+            width: 100%;
+        }
+
+        .mandatoryNote {
+            border-radius: 8px;
+            border: 1px solid rgba(0, 102, 255, 0.50);
+            background: #000612;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            margin-bottom: 16px;
+        }
+
+        .noteText {
+            color: var(--white);
+            font-size: 16px;
+            font-family: var(--go-regular);
+            line-height: 150%;
+        }
+
+        .summitAgendaTimeBelow {
+            flex: 0 0 18%;
+        }
+
+        .summitAgendaContentBelow {
+            flex: 1;
+            /* take remaining space by default */
+        }
+
+        .summitAgendaAction {
+            flex: 0 0 22%;
+        }
+
+        /* 👉 When action (3rd box) exists, limit content to 60% */
+        .summitAgendaRow:has(.summitAgendaAction) .summitAgendaContentBelow {
+            flex: 0 0 60%;
+        }
+
+        /* 👉 When action (3rd box) does NOT exist, content expands automatically */
+
+        .summitAgendaTime {
+            padding: 20px;
+            width: 100%;
+            max-width: 286px;
+            border-radius: 12px;
+            background: #111;
+            border: 1px solid #1E293B;
+        }
+
+        .timeText {
+            color: var(--white);
+            font-size: 18px;
+            line-height: 28px;
+            font-weight: 600;
+
+        }
+
+        .summitAgendaContent {
+            padding: 20.25px 20px 21.25px 20px;
+            flex: 1 0 0;
+            /* width: 100%;
+            max-width: 286px; */
+            border-radius: 12px;
+            background: #111;
+            border: 1px solid #1E293B;
+        }
+
+        .summitAgendaTitle {
+            font-size: 17px;
+            line-height: 150%;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .summitAgendaDesc {
+            margin-top: 6px;
+            font: 13px "neueKaine";
+            font-weight: 400;
+            line-height: 160%;
+            color: var(--grey18);
+        }
+
+        .summitAgendaAction {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            border-radius: 12px;
+            background: #111;
+            border: 1px solid #1E293B;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .summitFounderFirst .summitAgendaAction {
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .summitAgendaBookBtn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            backdrop-filter: blur(2.5px);
+            color: var(--white);
+            background: #000F25;
+            border: 1px solid rgba(0, 102, 255, 0.25);
+
+        }
+
+        .summitAgendaBookBtn:hover {
+            border: 1px solid rgba(0, 102, 255, 0.25);
+            background: #06F;
+            backdrop-filter: blur(2.5px);
+        }
+
+        .summitAgendaTabs {
+            border: 1px solid #1E293B;
+            background: #171717;
+            display: flex;
+            border-radius: 8px;
+            border: 1px solid #1E293B;
+            background: #171717;
+            overflow-x: auto;
+            list-style-type: none;
+            justify-content: space-between;
+        }
+
+        .summitAgendaTimeBelow {
+            padding: 24px 20px 20px 20px;
+            width: 100%;
+            max-width: 226px;
+            border-radius: 12px;
+            background: #111;
+            border: 1px solid #1E293B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .summitAgendaContentBelow {
+            padding: 24px 20px 20px 20px;
+            flex: 1 0 0;
+            /* width: 100%;
+            max-width: 286px; */
+            border-radius: 12px;
+            background: #111;
+            border: 1px solid #1E293B;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+            justify-content: center;
+
+        }
+
+        .agendaTextUpper:nth-child(1) {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            border-bottom: 1px solid #1E293B;
+            padding-bottom: 16px;
+
+        }
+
+        .white-medium {
+            color: var(--white);
+            font-family: var(--go-medium);
+        }
+
+        .agendaFounder {
+            font-size: 16px;
+            font-family: var(--go-regular);
+            line-height: 120%;
+            color: var(--white);
+        }
+
+        .founderDesignation {
+            font-size: 14px;
+            font-family: var(--go-regular);
+            line-height: 120%;
+            color: #A0A0A0;
+        }
+
+        .summitSubTitle {
+            font-size: 16px;
+            color: #A0A0A0;
+            line-height: 150%;
+        }
+
+        .summitListBelow {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .summitAgendaTab {
+            cursor: pointer;
+            border: 0;
+            padding: 16px 15px;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2.1px;
+            color: var(--white);
+            background: transparent;
+            text-transform: uppercase;
+        }
+
+
+
+
+
+        .summitAgendaTab.active {
+            color: var(--white);
+            background: #296BFF;
+        }
+
+        .summitAgendaPanels {
+            margin-top: 6px;
+        }
+
+        .summitAgendaEmpty {
+            padding: 26px 18px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--grey18);
+        }
+
+        @media (max-width: 768px) {
+
+
+
+            .summitAgendaHeading {
+                font-size: 26px;
+            }
+
+            .summitAgendaRow {
+                grid-template-columns: 1fr;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .summitAgendaAction {
+                justify-content: flex-start;
+            }
+
+        }
+    }
+
+
+
+    .techSpeaker {
+        .row-reverse-move {
+            animation: partner-logo 140s linear infinite reverse !important;
+            margin-top: 20px;
+        }
+
+        .techSpeakerWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            overflow: hidden;
+        }
+
+        .techMasterLogo {
+            max-width: 160px;
+            width: 100%;
+        }
+
+        .speakerButton {
+            display: flex;
+            justify-content: center;
+        }
+
+
+
+        .speakerSwiper {
+            /* overflow: hidden !important; */
+            width: 100%;
+        }
+
+        .slides-wrapper {
+            width: max-content;
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 24px;
+            /* animation: partner-logo 140s linear infinite; */
+        }
+
+        .slides-wrapper .slide-box {
+            flex: 0 0 220px;
+        }
+
+        .techSpeakerWrapper {
+            width: 100%;
+        }
+
+        .techHeading {
+            text-align: center;
+            font: 34px "neueKaine";
+            line-height: 120%;
+            font-weight: 600;
+        }
+
+        .techMasterName {
+            font: 20px "neueKaine";
+            font-weight: 600;
+            line-height: 120%;
+        }
+
+        .techMasterPosition {
+            font: 14px "neueKaine";
+            line-height: 120%;
+            font-weight: 600;
+            color: #A3A3A3;
+        }
+
+        .techMasterCard {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+
+        }
+
+        .swiper-slide-active {
+
+
+            .techMasterSpeaker::after {
+                background: #0066ff;
+            }
+
+        }
+
+        .techMasterCardNew {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            cursor: pointer;
+
+        }
+
+        /* 
+        .slides-wrapper:hover {
+            animation-play-state: paused;
+        } */
+
+        .techMasterCardNew:hover {
+            .techMasterSpeaker::after {
+                background: #0066ff;
+            }
+        }
+
+        .techMasterSpeaker {
+            position: relative;
+        }
+
+        .techMasterSpeaker::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: #171717;
+            clip-path: polygon(25% 14%, 100% 14%, 100% 85%, 100% 100%, 0% 100%, 0% 32%);
+            z-index: 0;
+            transition: 0.4s ease;
+
+        }
+
+        .marqueesliders {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 16px;
+            overflow: auto;
+        }
+
+
+        .swiper-wrapper {
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .techMasterImg {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            display: block;
+        }
+
+        .techMasterCardactive {
+            max-width: 265px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .techMasterContent {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .techSpeakerCardWrapper {
+            display: flex;
+            gap: 24px;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .techSpeakerCardWrapper {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        .techMarqueeTrack {
+            display: flex;
+            gap: 20px;
+            width: max-content;
+            animation: scrollMarquee 20s linear infinite;
+        }
+
+        .techMasterCardNew {
+            flex: 0 0 auto;
+            width: 250px;
+            /* adjust as needed */
+        }
+
+
+
+    }
+
+
+
+    .aiAwardsSection {
+        background: url("https://images.mastersunion.link/uploads/23032026/v1/Awardsbg.webp");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+
+        .aiAwardsWrapper {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .mb-32 {
+            margin-bottom: 32px;
+        }
+
+        .margin-auto {
+            margin: 0 auto;
+        }
+
+        .aiAwardsPointWrapper {
+            max-width: 410px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 34px;
+            padding-top: 120px;
+            padding-bottom: 70px;
+
+        }
+
+        .neuHeadingBold {
+            text-transform: uppercase;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .aiAwardsPoint {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            padding: 12px 16px;
+            background: #001228;
+            border-radius: 12px;
+        }
+
+        .mainAiAward {
+            position: absolute;
+            max-width: 425px;
+            width: 100%;
+            left: 406px;
+            top: 48px;
+        }
+
+    }
+
+    .aiBreatherSection {
+        background: url("https://images.mastersunion.link/uploads/23032026/v1/asfsdfsd.webp");
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .borderl1 {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+        }
+
+        .borderl2 {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            transform: rotate(90deg);
+        }
+
+        .borderb1 {
+            position: absolute;
+            bottom: 24px;
+            left: 24px;
+            transform: rotate(-90deg);
+        }
+
+        .borderb2 {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            transform: rotate(180deg);
+        }
+
+        .verticalTextWrapper {
+            display: flex;
+            gap: 50px;
+            flex-direction: column;
+            align-items: center;
+            min-height: 610px;
+            width: min-content;
+            max-width: 44px;
+            color: #ed217c;
+            transform: rotate(180deg);
+        }
+
+        .verticalFadedText,
+        .verticalText {
+            writing-mode: vertical-lr;
+            text-orientation: mixed;
+            white-space: nowrap;
+            color: #7AA1FF;
+        }
+
+        .verticalFadedText {
+            color: #1A2C6B;
+        }
+
+        .verticalBtnWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .aiBreatherWrapper {
+            display: flex;
+            gap: 40px;
+
+        }
+
+        .aiBoldContentWrapper {
+            max-width: 672px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .aiBoldHeading {
+            font: 115px "orbitron";
+            font-weight: 800;
+            line-height: 104px;
+            color: var(--white);
+            letter-spacing: -2px;
+        }
+
+        .blueText {
+
+            color: #0066FF;
+            letter-spacing: -2px;
+        }
+
+        .blueDot {
+            width: 8px;
+            height: 8px;
+            background: #0066FF;
+            border-radius: 50%;
+        }
+
+        .aiPoint {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .aiBreatherPointerWrapper {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .aiPointText {
+            font: 16px "neueKaine";
+            font-weight: 400;
+            line-height: 100%;
+            color: var(--white);
+        }
+
+        .aiTagWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .heroTag {
+            padding: 14px 34px;
+
+            border-radius: 60px;
+            background-color: #000A1A;
+            border: 1px solid #0066FF;
+            max-width: fit-content;
+            width: 100%;
+        }
+
+        .tagDetail {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .tagText {
+            font-size: 18px;
+            color: var(--grey18);
+            line-height: 100%;
+        }
+
+        .verticalLine {
+            height: 412px;
+            width: 2px;
+            background: #0066FF4D;
+        }
+
+        .aiContentWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            max-width: 500px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .blueTextthin {
+            font: 40px "neueKaine";
+            font-weight: 400;
+            line-height: 100%;
+            color: #0066FF;
+        }
+
+        .aiContentWrapperHeading {
+            font: 40px "neueKaine";
+            font-weight: 900;
+            line-height: 100%;
+            color: var(--white);
+        }
+
+        .aiContentText {
+            font: 32px "neueKaine";
+            font-weight: 500;
+            line-height: 120%;
+            color: var(--grey10);
+        }
+
+        .circles {
+            max-width: 20px;
+            width: 100%;
+            min-height: 20px;
+            height: 100%;
+            max-height: 20px;
+        }
+
+
+
+    }
+
+
+
+    /* register */
+    .register {
+
+        .registerHeading {
+            font: 34px "neueKaine";
+            font-weight: 700;
+            line-height: 120%;
+        }
+
+        .blueText {
+            color: #0066FF;
+        }
+
+        .registerTxt {
+            font: 16px "neueKaine";
+            font-weight: 400;
+            line-height: 150%;
+            color: var(--grey18);
+        }
+
+        .registerSubheading {
+            font: 24px "neueKaine";
+            font-weight: 600;
+            line-height: 150%;
+            color: var(--grey18);
+        }
+
+        .registerWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .registerContent {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .registerCard {
+            border-radius: 14px;
+            align-items: center;
+            padding: 24px;
+            display: flex;
+            gap: 24px;
+            background: #00000066;
+            border: solid 1px #0066FF33;
+            max-width: 405px;
+            width: 100%;
+        }
+
+        .registerCard:hover {
+            transition: 0.4s ease, border 0.25s ease;
+            background: #001A5B66;
+        }
+
+        .registerCardContent {
+            max-width: 262px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+        }
+
+        .registerCardHeading {
+            font: 20px "neueKaine";
+            font-weight: 700;
+            line-height: 120%;
+        }
+
+        .registerCardTxt {
+            font: 14px "neueKaine";
+            font-weight: 400;
+            line-height: 150%;
+            color: #99A1AF;
+        }
+
+        .registerCardImg {
+            max-width: 48px;
+            width: 100%;
+            max-height: 48px;
+        }
+
+        .registerCardsWrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+
+    }
+
+    /* register end */
+
+    /* Tech awards */
+    .techAwards {
+        background-image: url("https://images.mastersunion.link/uploads/30122025/v1/BG.webp");
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+
+        .techAwardsWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .techAwardHeadingWrapper {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .techAwardsHeading {
+            font: 34px "neueKaine";
+            font-weight: 700;
+            line-height: 120%;
+        }
+
+        .techAwardSubheading {
+            font: 16px "neueKaine";
+            line-height: 150%;
+            font-weight: 400;
+            color: var(--grey18);
+            max-width: 690px;
+        }
+
+        .techAwardsFolder {
+            background-image: url("https://images.mastersunion.link/uploads/30122025/v1/Vector1384.webp");
+            max-width: 600px;
+            width: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            padding: 18px 22px;
+
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .techAwardsFolderImg {
+            max-width: 544px;
+            width: 100%;
+        }
+
+        .techAwardsFolderWrapper {
+            display: flex;
+            gap: 40px;
+        }
+
+        .techAwardsFolderHeading {
+            font: 24px "neueKaine";
+            font-weight: 600;
+            line-height: 150%;
+        }
+
+        .techAwardFolderSubtext {
+            font: 18px "neueKaine";
+            font-weight: 400;
+            line-height: 150%;
+        }
+
+    }
+
+    /* Tech awards end  */
+
+    /* techOurProgramme */
+    .techOurProgramme {
+        .ourLogoBar {
+            background: radial-gradient(circle,
+                    #3b3b3b 5%,
+                    #121212 35%,
+                    #090909 100%);
+
+            display: flex;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .ourLogo {
+            max-width: 206px;
+            max-height: 90px;
+        }
+
+        .neuHeadingBold {
+            text-transform: uppercase;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* --- Institutional partners infinite marquee (scoped) --- */
+        #tnTechPartnersMarquee .ourLogoMarqueeViewport {
+            width: 100%;
+            min-width: 0;
+            overflow: hidden;
+            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+        }
+
+        #tnTechPartnersMarquee .logoTrackMarquee {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 24px;
+            width: max-content;
+        }
+
+        #tnTechPartnersMarquee .logoTrackMarquee .ourLogo {
+            flex-shrink: 0;
+            object-fit: contain;
+        }
+
+        /* Keyframes + animation live at file root (see below); nested @keyframes are invalid in plain CSS. */
+
+        /* --- end marquee --- */
+
+        .ourLogoWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 40px;
+        }
+
+        .ourProgrammeWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .techOurProgrammeHeading {
+            font: 34px "neueKaine";
+            font-weight: 700;
+            line-height: 120%;
+            text-align: center;
+        }
+
+
+    }
+
+    /* techOurProgramme end */
+
+    .aiSubmit {
+        background-image: url("https://images.mastersunion.link/uploads/23032026/v1/1.webp");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+
+        .aiSubmitWrapper {
+            display: flex;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .aiSubmitLeft {
+            max-width: 505px;
+            width: 100%;
+            filter: brightness(1.3);
+        }
+
+        .aiSubmitRight {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .aiFolderWrapper {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100%;
+            position: absolute;
+            padding: 14px 20px;
+        }
+
+        .aiSubmitFolder {
+
+            /* background-image: url("https://images.mastersunion.link/uploads/30122025/v1/aiFolder.webp"); */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            /* min-height: 122px; */
+            max-width: 654px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+        }
+
+        .aiFolderWrapperdiv {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+
+        }
+
+        .linkedInTag {
+            padding: 8px;
+            border-radius: 8px;
+            background: #081221;
+            border: 1px solid #0066FF80;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+
+        }
+
+        .normaldiv {
+            max-width: 15%;
+            display: flex;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .roboBtn {
+            padding: 16px 32px;
+            border-radius: 12px;
+            color: var(--white);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            font: 16px "neueKaine";
+            font-weight: 700;
+        }
+
+        .blueBtn {
+            background: #296BFF;
+        }
+
+        .aiSubmitFolderHeading {
+            font: 400 14px / 120% neueKaine;
+            color: var(--white);
+        }
+
+        .aiSubmitFolderHeadingBold {
+            font: 700 14px / 120% neueKaine;
+            color: var(--white);
+        }
+
+        .greyBtn {
+            color: var(--black);
+            background-color: var(--white) !important;
+            border: 1px solid var(--black);
+        }
+
+        .roboBtnWrapper {
+            display: flex;
+            gap: 12px;
+            /* flex-direction: column; */
+            /* margin: 0 auto; */
+            /* max-width: fit-content; */
+        }
+
+        .aiSubmitHeading {
+            font: 32px "neueKaine";
+            font-weight: 400;
+            line-height: 120%;
+
+        }
+
+        .aiSubmitHeadingMain {
+            font: 32px "neueKaine";
+            font-weight: 700;
+            line-height: 120%;
+        }
+
+        .aiSubmitSubHeading {
+            font: 16px "neueKaine";
+            font-weight: 400;
+            line-height: 150%;
+            color: var(--grey18);
+        }
+
+        .aiSubmitFolderHeading {
+            font: 14px "neueKaine";
+            font-weight: 400;
+            line-height: 120%;
+        }
+
+        .aiDivTxt {
+            font: 16px "neueKaine";
+            font-weight: 500;
+            line-height: 120%;
+            color: var(--white);
+        }
+
+    }
+
+    .ticketSection {
+        background-image: url("https://images.mastersunion.link/uploads/21032026/v1/4135937491.webp");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+
+        .arrowWrap {
+            position: relative;
+            width: 14px;
+            height: 14px;
+            overflow: hidden;
+        }
+
+        .upperWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .ticketCardWrapper {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .neuHeadingBold {
+            text-transform: uppercase;
+        }
+
+        .ticketCard {
+            max-width: 200px;
+            width: 100%;
+            position: relative;
+            /* padding: 24px 48px; */
+        }
+
+        .openSpotGap {
+            gap: 12px !important;
+        }
+
+        .onSpotFeeWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .onSpotFeeText {
+            font: 16px "neueKaine";
+            font-weight: 400;
+            line-height: 120%;
+            color: var(--black);
+        }
+
+        .onSpotFeeTextBlue {
+            font: 16px "neueKaine";
+            font-weight: 700;
+            line-height: 120%;
+            color: #0066FF;
+        }
+
+        .ticketCardContent {
+            position: absolute;
+            top: 0;
+            padding: 26px;
+            min-height: 276px;
+            max-width: 276px;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+
+        }
+
+        .ticketCardHeadingWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .tickerHeading {
+            font: 20px "neueKaine";
+            font-weight: 700;
+            line-height: 120%;
+            color: var(--black);
+        }
+
+        @media (max-width: 767px) {
+            .tickerHeading {
+                font-size: 18px;
+            }
+        }
+
+        .tickerHeadingBlue {
+            font: 20px "neueKaine";
+            font-weight: 400;
+            line-height: 120%;
+            color: #0066FF;
+        }
+
+        .cardTextThin {
+            font: 12px "neueKaine";
+            font-weight: 400;
+            line-height: 120%;
+            color: var(--black);
+        }
+
+        .spotText {
+            font-size: 16px;
+            text-transform: uppercase;
+            line-height: 120%;
+            color: var(--black);
+            text-align: center;
+
+        }
+
+        .ticketCardLowerContent {
+            display: flex;
+            justify-content: center;
+        }
+
+        .ticketCardLowerContent.new {
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+
+            .roboBtnSm {
+                background: white !important;
+                color: black !important;
+            }
+        }
+
+        .ticketCardUpperContent {
+            text-align: center;
+            min-height: 172px;
+            border-bottom: 1px solid #0066FF;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .lineText {
+            font: 16px "neueKaine";
+            font-weight: 400;
+            line-height: 120%;
+            color: var(--grey10);
+            text-decoration: line-through;
+        }
+
+        .boldBlue {
+            font: 24px "neueKaine";
+            font-weight: 900;
+            line-height: 120%;
+            color: #0066FF;
+
+        }
+
+        .soldOut {
+            border-bottom: 1px solid var(--black);
+
+        }
+
+        .blueTicket {
+            .tickerHeading {
+                color: var(--white);
+            }
+
+            .ticketCardContent {
+                padding: 20px 24px;
+            }
+
+            .ticketCardUpperContent {
+                min-height: unset;
+                border-bottom: none;
+
+            }
+
+            .ticketCardContent {
+                justify-content: unset;
+                gap: 16px;
+            }
+
+
+            .cardPoint {
+                font: 12px "neueKaine";
+                font-weight: 400;
+                line-height: 120%;
+                color: var(--white);
+                display: inline-flex;
+                align-items: center;
+                gap: 4px;
+            }
+
+            .cardBoldPoint {
+                font: 16px "neueKaine";
+                font-weight: 900;
+                line-height: 120%;
+                color: #0066FF;
+            }
+
+            .tardsPointer {
+                text-align: center;
+                display: flex;
+                gap: 40px;
+                flex-direction: column;
+                padding-top: 18px;
+            }
+        }
+
+        .ticketTag {
+            max-width: 798px;
+            width: 100%;
+            margin: 0 auto;
+            background: #0066FF;
+            padding: 8px 40px;
+            border-radius: 16px;
+            /* margin-top: 30px; */
+        }
+
+        .tagText {
+            font: 20px "neueKaine";
+            font-weight: 400;
+            line-height: 120%;
+            color: var(--white);
+            text-align: center;
+        }
+
+        .tagBoldText {
+            font: 20px "neueKaine";
+            font-weight: 700;
+            line-height: 120%;
+            color: var(--white);
+            text-align: center;
+        }
+
+
+        .entryFreeTicket {
+            position: relative;
+            margin: 0 auto;
+            max-width: 680px;
+            width: 100%;
+
+            .tickerHeading {
+                color: var(--white);
+            }
+        }
+
+        .enteryFeesContentWrapper {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 42px;
+            color: var(--white);
+        }
+
+        .enteryfeesAbsoluteWrapper {
+            position: absolute;
+            top: 0;
+            max-width: 680px;
+            width: 100%;
+        }
+
+
+    }
+
+    .threeCardSectionAi {
+        overflow: hidden;
+
+        .threeCardWrapper {
+            width: 100%;
+        }
+
+        .threeCardWrapper .swiper-wrapper {
+            align-items: stretch;
+        }
+
+        .neuHeadingBold {
+            font-weight: 700;
+        }
+
+        .aiCard {
+            max-width: 362px;
+            width: 100%;
+            position: relative;
+            max-height: 460px;
+            overflow: hidden;
+        }
+
+        .aiCardContent {
+            position: absolute;
+            z-index: 1;
+            min-height: 476px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 34px;
+            top: 0;
+        }
+
+        .marqueesliders {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 16px;
+            overflow: auto;
+        }
+
+        .neuHeadingBold::after {
+            display: none !important;
+        }
+
+    }
+
+    .bookStaySection {
+        padding: 0 !important;
+        line-height: 0;
+        background-image: url("https://images.mastersunion.link/uploads/20032026/v1/bookStayBg.webp");
+        background-size: cover;
+        background-repeat: no-repeat;
+
+        .bookStayWrapper {
+            padding-block: 140px;
+            max-width: 680px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: flex-start;
+            max-width: 684px;
+            width: 100%;
+            left: 0;
+        }
+
+        .aiSubmitFolder {
+
+            /* background-image: url("https://images.mastersunion.link/uploads/30122025/v1/aiFolder.webp"); */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            /* min-height: 122px; */
+            max-width: 654px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+        }
+
+        .aiFolderWrapperdiv {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+
+        }
+
+        .aiFolderWrapper {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            position: absolute;
+            width: 100%;
+            justify-content: flex-start;
+            padding: 14px 20px;
+        }
+
+        .aiSubmitFolderHeading {
+            font: 400 14px / 120% neueKaine;
+            color: var(--white);
+        }
+
+        .aiSubmitFolderHeadingBold {
+            font: 700 14px / 120% neueKaine;
+            color: var(--white);
+        }
+
+        .marqueesliders {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 16px;
+            overflow: auto;
+        }
+
+
+    }
+
+    .venueSection {
+        padding: 0 !important;
+        line-height: 0;
+        background: url("https://images.mastersunion.link/uploads/20032026/v1/venueBg.webp");
+        background-size: cover;
+        background-repeat: no-repeat;
+
+
+        .venueWrapper {
+            display: flex;
+            padding-block: 100px;
+            justify-content: end;
+        }
+
+        .aiSubmitFolder {
+
+            /* background-image: url("https://images.mastersunion.link/uploads/30122025/v1/aiFolder.webp"); */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            /* min-height: 122px; */
+            max-width: 574px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            position: relative;
+        }
+
+        .venueHeading {
+            font: 24px "neueKaine";
+            font-weight: 700;
+            line-height: 120%;
+            color: var(--white);
+            text-transform: uppercase;
+        }
+
+        .aiFolderWrapperdiv {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+
+        }
+
+        .aiFolderWrapper {
+            display: flex;
+            gap: 24px;
+            flex-direction: column;
+            align-items: flex-start;
+            position: absolute;
+            padding: 32px 30px 42px;
+        }
+
+        .dateWrapper {
+            display: flex;
+            gap: 24px;
+        }
+
+        .date {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .registerSubheading {
+            min-width: fit-content;
+            color: var(--white);
+        }
+
+        .roboBtnWrapper {
+            display: flex;
+            gap: 24px;
+        }
+
+    }
+
+
+
+    /* ai running strip */
+    .aiRunningStrip {
+        overflow: hidden;
+        padding: 20px 0;
+        background: #0066FF;
+        color: var(--white);
+    }
+
+    .aiRunningTextWrapper {
+        display: flex;
+        gap: 60px;
+        width: max-content;
+        animation: marquee 20s linear infinite;
+    }
+
+    .aiRunningText {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-family: "Orbitron";
+        font-weight: 400;
+        font-size: 40px;
+        white-space: nowrap;
+    }
+
+    .aiRunningText img {
+        width: 28px;
+        height: auto;
+    }
+
+    @keyframes marquee {
+        from {
+            transform: translateX(-50%);
+        }
+
+        to {
+            transform: translateX(100%);
+        }
+    }
+
+    /* ai running strip end  */
+
+
+
+    .aiFeeSection {
+        background-image: url("https://images.mastersunion.link/uploads/23022026/v1/413593743.webp");
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+
+        .aiFeeWrapper {
+            display: flex;
+            align-items: stretch;
+            gap: 40px;
+            justify-content: center;
+
+        }
+
+        .aiFeeLeftWrapper {
+            border: 1px solid #ffffff24;
+            background-color: rgb(23 23 23 / 15%);
+            backdrop-filter: blur(6px);
+            border-radius: 16px;
+            max-width: 720px;
+            width: 100%;
+            padding: 40px 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            justify-content: center;
+        }
+
+        .aiFeeContentWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .aiFeeTag {
+            padding: 6px 16px;
+            background: #0A6CFF;
+            max-width: fit-content;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        .aiFee {
+            font: 32px "go-semibold";
+            line-height: 160%;
+            color: var(--white3);
+        }
+
+        .aiFeeCross {
+            font: 24px "go-semiBold";
+            line-height: 150%;
+            color: var(--grey);
+            text-decoration: line-through;
+        }
+
+        .aiGreyFee {
+            font: 20px "go-medium";
+            line-height: 150%;
+            color: var(--grey10);
+        }
+
+        .aiFeeRightWrapper {
+            padding: 80px 100px;
+            border: 1px solid #ffffff24;
+            background-color: rgb(23 23 23 / 15%);
+            backdrop-filter: blur(12px);
+            border-radius: 16px;
+        }
+
+        .aiRightContentWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .aiContentText {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .aiContentTextPara {
+            font: 24px "go-regular";
+            line-height: 150%;
+        }
+
+        .aiContentTextParaBold {
+            font: 24px "go-semiBold";
+            color: var(--white);
+        }
+
+        .pt10 {
+            padding-top: 10px;
+        }
+
+        .roboBtn {
+            padding: 16px 32px;
+            border-radius: 12px;
+            color: var(--white);
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            font: 16px "neueKaine";
+            font-weight: 700;
+            max-width: fit-content;
+        }
+
+        .greyBtn {
+            color: var(--black);
+            background-color: var(--white) !important;
+            border: 1px solid var(--black);
+        }
+
+
+    }
+
+
+
+    .scheduleSection {
+        background-image: url("https://images.mastersunion.link/uploads/05032026/v1/bghewhe.webp");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+
+
+        .scheduleContentWrapper {
+            background-image: url("https://images.mastersunion.link/uploads/02032026/v1/swdwa.webp");
+            height: 578px;
+            background-size: cover;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 36px;
+        }
+
+        .day1,
+        .day2 {
+            padding: 8px 0;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 500;
+            border-radius: 20px;
+            max-width: 192px;
+            width: 100%;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .dayButtonHeadingWrapper {
+            display: flex;
+            gap: 8px;
+            min-height: 40px;
+        }
+
+        .dayTabActive {
+            /* background: #1e66e1; */
+            color: #ffffff;
+        }
+
+        .dayTabInactive {
+            background: transparent;
+            /* color: #1e66e1; */
+            /* border: 1px solid #1e66e1; */
+        }
+
+        .dayContentDiv {
+            padding: 24px 0;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+            padding-left: 20px;
+        }
+
+        .dayContentTime {
+            font: 24px "neueKaine";
+            font-weight: 600;
+            line-height: 120%;
+            color: #06F;
+        }
+
+        .dayContentBoldText {
+            font: 20px "neueKaine";
+            font-weight: 800;
+            line-height: 120%;
+            color: var(--white);
+        }
+
+        .dayContentText {
+            font: 14px "neueKaine";
+            font-weight: 500;
+            line-height: 120%;
+            color: var(--grey10);
+        }
+
+        .dayContentTextWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .dayContentWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            overflow-y: scroll;
+        }
+
+        .blueLine {
+            min-width: 862px;
+            height: 1px;
+            background: #06F;
+        }
+
+        .scheduleHeadingWrapper {
+            text-align: center;
+        }
+
+        .scheduleHeading {
+            font: 34px "neueKaine";
+            font-weight: 800;
+            line-height: 120%;
+        }
+
+        .scheduleSubheading {
+            font: 32px "neueKaine";
+            font-weight: 400;
+            line-height: 120%;
+            color: var(--white);
+        }
+
+        .scheduleWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .tabBg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 40px;
+            height: 100%;
+
+        }
+
+        .dayTabText {
+            position: absolute;
+            z-index: 9;
+            left: 60px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #171717;
+        }
+
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #0066FF;
+        }
+
+        /* Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+
+        .dayContentDivLine {
+            display: flex;
+            gap: 20px;
+            max-width: 986px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .greyLine {
+            height: 2px;
+            width: 100%;
+            background: var(--grey3);
+        }
+
+        .greyLineTextWrapper {
+            max-width: fit-content;
+            width: 100%;
+            display: flex;
+            gap: 12px;
+        }
+
+        .dayContentTextbold {
+            font: 14px "neueKaine";
+            font-weight: 900;
+            line-height: 120%;
+            color: var(--grey18);
+        }
+
+        .dayContentBlueLineDiv {
+            position: relative;
+            max-width: 986px;
+            width: 100%;
+            min-height: 40px;
+            height: 100%;
+
+        }
+
+        .blueLinePart {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            top: 20px;
+            background: #06F;
+        }
+
+        .blueLineImgBg {
+            position: absolute;
+            left: 390px;
+        }
+
+        .l460 {
+            left: 460px;
+            top: 8px;
+        }
+    }
+
+
+}
+
+
+
+@keyframes partner-logo {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.forAiSummit.topHeader {
+    .summitHeader {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .sp-btn:hover .arrow1 {
+        transform: translate(100%, -100%);
+    }
+
+    .sp-btn:hover .arrow2 {
+        transform: translate(0%, 0%);
+    }
+
+    .arrowWrap {
+        position: relative;
+        width: 16px;
+        height: 16px;
+        overflow: hidden;
+    }
+
+    .navItem {
+        font-size: 16px;
+        color: var(--grey10);
+    }
+
+    .topNav {
+        gap: 50px;
+    }
+
+    .upperHeader {
+        border-bottom: unset;
+        padding: 2px 0;
+    }
+
+    .menuLogo {
+        width: 10%;
+    }
+
+    .navItem:hover {
+        color: var(--white);
+        font-family: var(--go-medium) !important;
+    }
+
+
+
+    .navItem.navItemActive {
+        color: var(--white) !important;
+        font-family: var(--go-medium)
+    }
+
+    .sp-btn {
+        background: white;
+        margin: 0;
+        color: var(--black);
+        font-family: var(--go-regular);
+        gap: 8px;
+        border: unset;
+        font-weight: 500;
+        padding: 6px 12px;
+        font-size: 14px;
+        gap: 6px;
+    }
+
+    .sp-btn>img {
+        max-width: 22px;
+        max-height: 22px;
+    }
+
+}
+
+.hamburgerParent {
+    .sp-btn {
+        background: white;
+        margin: 0;
+        color: var(--black);
+        font-family: var(--go-regular);
+        gap: 8px;
+        border: unset;
+        font-weight: 500;
+        padding: 8px 16px;
+        width: fit-content;
+    }
+
+    .sp-btn:hover {
+        background: var(--white);
+    }
+}
+
+.forAiSummit.topHeader.shrikIt {
+    top: 0 !important;
+}
+
+
+/*
+ * Institutional partners marquee: @keyframes and animation must be top-level.
+ * Browsers ignore @keyframes nested inside .theNextTech { }, so the marquee never ran.
+ */
+@keyframes tnTechMarqueeRtl {
+    from {
+        transform: translate3d(0, 0, 0);
+    }
+
+    to {
+        transform: translate3d(-50%, 0, 0);
+    }
+}
+
+@keyframes tnTechMarqueeLtr {
+    from {
+        transform: translate3d(-50%, 0, 0);
+    }
+
+    to {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+.theNextTech .techOurProgramme #tnTechLogoTrack1,
+.theNextTech .techOurProgramme #tnTechLogoTrack3 {
+    animation: tnTechMarqueeRtl 22s linear infinite;
+}
+
+.theNextTech .techOurProgramme #tnTechLogoTrack2,
+.theNextTech .techOurProgramme #tnTechLogoTrack4 {
+    animation: tnTechMarqueeLtr 22s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .theNextTech .techOurProgramme #tnTechLogoTrack1,
+    .theNextTech .techOurProgramme #tnTechLogoTrack2,
+    .theNextTech .techOurProgramme #tnTechLogoTrack3,
+    .theNextTech .techOurProgramme #tnTechLogoTrack4 {
+        animation: none;
+        transform: none;
+    }
+}
+
+.tnBarcodeWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.summitAgendaAction.twobtn {
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+
+    .horiline {
+        width: 100%;
+        height: 1px;
+        background: #1E293B;
+    }
+}
+
+/* end of main page */
+
+
+
+@media (max-width: 767px) {
+    .theNextTech {
+
+        .AiDivImg {
+            max-width: 30px;
+            width: 100%;
+        }
+
+        .btnText {
+            font: 14px "neueKaine" !important;
+            font-weight: 700 !important;
+        }
+
+        .neuHeadingBold {
+            font: 24px "neueKaine";
+            font-weight: 700;
+            line-height: 120%;
+        }
+
+        .threeCardSectionAi .aiCard:hover {
+            transform: unset;
+            box-shadow: unset;
+        }
+
+        .threeCardSectionAi .aiCard {
+            transition: unset;
+        }
+
+        .threeCardSectionAi .aiCard:hover .aiCardImg {
+            transform: unset;
+        }
+
+        /* .heroSection {
+            padding-bottom: 0 !important;
+
+            .heroHeading {
+                font: 52px "orbitron";
+                font-weight: 600;
+                line-height: 100%;
+            }
+
+            .heroHeadingSub {
+                font: 42px "orbitron";
+                font-weight: 400;
+            }
+
+            .heroSubHeading {
+                font: 14px "neueKaine";
+                font-weight: 900;
+                line-height: 150%;
+            }
+
+            .heroSubHeadingPoints {
+                font: 16px "neueKaine";
+                font-weight: 500;
+            }
+
+            .heroTag {
+                background: none;
+                display: flex;
+                flex-direction: column;
+                padding: unset;
+                gap: 8px;
+                align-items: center;
+            }
+
+            .tagDetail {
+                background: var(--black5);
+                border: 1px solid var(--grey3);
+                padding: 8px 32px;
+                border-radius: 60px;
+                align-items: center;
+
+            }
+
+
+            .tagText {
+                font: 12px "neueKaine";
+                font-weight: 700;
+            }
+
+            .heroContentWrapper {
+                top: 80%;
+            }
+
+
+
+        } */
+
+        .heroSection {
+            padding-top: 60px !important;
+            min-height: 80vh;
+            padding-bottom: 0 !important;
+
+            .heroSectionContent {
+                width: 100%;
+                padding: 0 12px;
+                transform: translate(-50%, -20%);
+            }
+
+            .heroSectionImg::after {
+                background: unset;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .heroSectionImg {
+                max-height: 80vh;
+            }
+
+            .go-HeroSubtitle {
+                margin-top: 8px;
+            }
+
+            .heroSectionBtnWrap {
+                margin-top: 24px;
+                width: 100%;
+                align-items: flex-start;
+                gap: 12px;
+                flex-direction: column;
+                padding: 0 16px;
+
+                a {
+                    width: 100%;
+                }
+            }
+        }
+
+
+        /* end of hero section */
+
+        .robo {
+            .roboHeading {
+                font: 24px "neueKaine";
+                line-height: 120%;
+                font-weight: 400;
+            }
+
+
+            .roboHeadingSub {
+                font: 24px "neueKaine";
+                font-weight: 700;
+            }
+
+            .robodivHeading {
+                font: 42px "orbitron";
+                font-weight: 400;
+            }
+
+            .roboSubheading {
+                font: 14px "neueKaine";
+                font-weight: 400;
+                line-height: 150%;
+            }
+
+            .blank {
+                height: 60px;
+                width: 100%;
+            }
+
+            .roboDivWrapper {
+                margin-top: 100px;
+                z-index: 9;
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .robodivMob {
+                /* box-shadow: 0 0 13px #00d0ff66; */
+                /* padding: 42px 24px; */
+                padding-top: 32px;
+                padding-bottom: 40px;
+
+                border: 1px solid #0066FF80;
+                text-align: center;
+                border-radius: 16px;
+                background: rgb(0 0 0 / 70%);
+                backdrop-filter: blur(4px);
+                -webkit-backdrop-filter: blur(10px);
+            }
+
+            .roboBtnWrapper {
+                max-width: unset;
+                width: 100%;
+                justify-content: center;
+                margin-top: 36px !important;
+                z-index: 9;
+                flex-direction: column;
+            }
+
+            .roboContentWrapper {
+
+                position: sticky !important;
+                top: 100px;
+            }
+
+            .btnText {
+                font: 14px "neueKaine" !important;
+            }
+
+
+        }
+
+        /* end of robo */
+        .scheduleSection {
+            background-image: url("https://images.mastersunion.link/uploads/05032026/v1/sadfc.webp");
+
+            .scheduleContentWrapper {
+                background-image: unset;
+            }
+
+            .day1,
+            .day2 {
+                max-width: 112px;
+                font-size: 14px;
+            }
+
+            .dayTabText {
+                left: 36px;
+                top: 10px;
+                font-size: 14px;
+            }
+
+            .scheduleContentWrapper {
+                min-height: unset;
+                padding: unset;
+                gap: 16px;
+            }
+
+            /* Hide schedule content scrollbar in mobile view only */
+            .dayContentWrapper {
+                scrollbar-width: none;
+                /* Firefox */
+                -ms-overflow-style: none;
+                /* IE/Edge */
+            }
+
+            .dayContentWrapper::-webkit-scrollbar {
+                display: none;
+                /* WebKit (Chrome/Safari) */
+            }
+
+            /* Ensure correct active/inactive tab background on mobile */
+            .dayTabActive .activeImg.mob-visible {
+                display: block !important;
+            }
+
+            .dayTabActive .InactiveImg.mob-visible {
+                display: none !important;
+            }
+
+            .dayTabInactive .activeImg.mob-visible {
+                display: none !important;
+            }
+
+            .dayTabInactive .InactiveImg.mob-visible {
+                display: block !important;
+            }
+
+            .dayContentDiv {
+                padding: 0;
+            }
+
+            .dayContentWrapper {
+                gap: 24px;
+                background: black;
+                border-radius: 16px;
+                padding: 24px 16px;
+                border: 1px solid var(--grey3);
+            }
+
+            /* .dayButtonHeadingWrapper{
+                background-image: url("https://images.mastersunion.link/uploads/05032026/v1/1x.webp");
+                max-width: 300px;
+                width: 100%;
+            } */
+            .dayContentBoldText {
+                font-size: 14px;
+            }
+
+            .dayContentText {
+                font-size: 12px;
+            }
+
+            .dayContentTextWrapper {
+                gap: 4PX;
+                padding-right: 8px;
+            }
+
+            .blueLine {
+                max-width: 162px;
+                min-width: 162px;
+                width: 100%;
+            }
+
+            .dayContentTime {
+                font: 20px "neueKaine";
+            }
+
+            .blueLineImgBg {
+                left: 138px;
+            }
+
+            .l460 {
+                left: 172px !important;
+                top: 8px !important;
+            }
+
+            .dayButtonHeadingWrapper {
+                gap: 0;
+            }
+
+            .scheduleHeading {
+                font: 24px "neueKaine";
+                font-weight: 800;
+            }
+
+            .scheduleSubheading {
+                font: 24px "neueKaine";
+            }
+
+        }
+
+
+        .techSpeaker {
+            .techSpeakerCardWrapper {
+                display: flex;
+                gap: 24px;
+
+                align-items: baseline;
+            }
+
+            .slides-wrapper {
+                animation: unset;
+                width: 100%;
+                overflow: auto;
+                padding: 0 16px;
+            }
+
+            .swiper-wrapper {
+                align-items: flex-start !important;
+                justify-content: flex-start !important;
+            }
+
+            .TechMasterLogo {
+                max-width: 100px;
+                width: 100%;
+            }
+
+
+            .techMasterName {
+                font: 14px "neueKaine";
+                font-weight: 600;
+                line-height: 120%;
+            }
+
+            .techMasterPosition {
+                font: 10px "neueKaine";
+                font-weight: 600;
+                line-height: 120%;
+            }
+        }
+
+        /* techSpeaker */
+
+        .aiRunningStrip {
+            padding: 14px;
+
+            .aiRunningTxt {
+                font: 26px "Orbitron";
+                font-weight: 400;
+            }
+
+            .aiRunningTextWrapper {
+                gap: 40px;
+            }
+
+            .aiRunningText>img {
+                max-width: 18px;
+                width: 100%;
+            }
+
+
+        }
+
+        /* end of airunning strip */
+        .whyJoin {
+            background-image: url("https://images.mastersunion.link/uploads/30122025/v2/BG.webp");
+            background-size: contain;
+
+            .joinWrapper {
+                flex-direction: column;
+                align-items: unset;
+            }
+
+            .rightDivText {
+                font: 14px "neueKaine";
+                font-weight: 400;
+                line-height: 150%;
+                color: var(--grey10);
+            }
+
+            .centerDiv {
+                font: 20px "neueKaine";
+                font-weight: 500;
+                line-height: 120%;
+                color: var(--grey18);
+            }
+
+            .whyHeading {
+                font: 52px "neueKaine";
+                font-weight: 500;
+            }
+
+            .JoinHeading {
+                font: 52px "neueKaine";
+                font-weight: 500;
+            }
+
+
+        }
+
+
+
+        .register {
+
+            .registerHeading {
+                font: 24px "neueKaine";
+                font-weight: 700;
+                line-height: 120%;
+            }
+
+            .registerSubheading {
+                font: 16px "neueKaine";
+                font-weight: 600;
+                line-height: 150%;
+                color: var(--grey18);
+            }
+
+            .registerCardHeading {
+                font: 18px "neueKaine";
+                font-weight: 700;
+                line-height: 120%;
+                text-align: start;
+            }
+
+            .registerCardTxt {
+                text-align: left;
+                font: 12px "neueKaine";
+                font-weight: 400;
+                line-height: 150%;
+                color: #99A1AF;
+            }
+
+            .registerCardContent {
+                max-width: 262px;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                align-items: flex-start;
+            }
+
+            .registerCard {
+                padding: 12px;
+            }
+        }
+
+
+
+        .aiSubmit {
+            background: black;
+            background-image: none;
+
+            .aiSubmitWrapper {
+                gap: 0;
+                flex-direction: column;
+            }
+
+            .aiSubmitFolder {
+
+                justify-content: space-around;
+            }
+
+            .aiFolderWrapper {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            /* .aiSubmitFolderHeading {
+            font: 12px "neueKaine";
+            font-weight: 400;
+            line-height: 120%;
+        } */
+            .aiDivTxt {
+                font: 15px "neueKaine";
+                font-weight: 400;
+                line-height: 120%;
+                color: var(--white);
+            }
+
+
+            .roboBtn {
+                justify-content: center;
+            }
+
+            .aiSubmitRight {
+                gap: 24px;
+            }
+
+            .aiSubmitHeading {
+                font: 24px "neueKaine";
+                font-weight: 400;
+                line-height: 120%;
+
+            }
+
+
+            .aiSubmitHeadingMain {
+                font: 24px "neueKaine";
+                font-weight: 700;
+                line-height: 120%;
+            }
+
+            .roboBtnWrapper {
+                flex-direction: column;
+            }
+
+            .roboBtn {
+                justify-content: center;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .linkedInTag {
+                max-width: fit-content;
+
+                img {
+                    max-width: 34px;
+                }
+
+
+
+            }
+
+            .normaldiv {
+                display: flex;
+                gap: 6px;
+                align-items: center;
+                justify-content: center;
+                max-width: unset;
+            }
+
+            .btnTagWrapper {
+                display: flex;
+                gap: 8px;
+            }
+
+            .aiSubmitFolderHeading {
+                font: 14px "neueKaine";
+                font-weight: 400;
+                line-height: 120%;
+                color: var(--white);
+            }
+
+            .aiSubmitFolderHeadingBold {
+                font: 14px "neueKaine";
+                font-weight: 700;
+                line-height: 120%;
+                color: var(--white);
+            }
+
+        }
+
+        /* end of aiSubmit */
+        .techOurProgramme {
+            .ourLogo {
+                max-width: 146px;
+                width: 100%;
+            }
+
+            #tnTechPartnersMarquee .logoTrackMarquee {
+                gap: 12px;
+            }
+
+            #tnTechPartnersMarquee .ourLogoMarqueeViewport {
+                mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+                -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+            }
+
+            #tnTechLogoTrack1,
+            #tnTechLogoTrack2,
+            #tnTechLogoTrack3,
+            #tnTechLogoTrack4 {
+                animation-duration: 28s;
+            }
+
+            .techOurProgrammeHeading {
+                font: 24px "neueKaine";
+                font-weight: 700;
+                line-height: 120%;
+            }
+        }
+
+
+
+
+
+        .aiFeeSection {
+            background-image: url("https://images.mastersunion.link/uploads/26022026/v1/413593742.webp");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            line-height: 0;
+
+
+            .pt10 {
+                padding-top: 0;
+            }
+
+            .aiFeeWrapper {
+                flex-direction: column;
+            }
+
+            .aiFeeTag {
+                font: 14px "go-regular";
+                padding: 8px 24px;
+            }
+
+            .aiFeeLeftWrapper {
+                padding: 32px 40px;
+            }
+
+            .aiFeeCross {
+                font: 16px "go-semiBold";
+                line-height: 150%;
+                color: var(--grey);
+                text-decoration: line-through;
+            }
+
+            .aiFee {
+                font: 24px "go-semibold";
+                line-height: 160%;
+                color: var(--white3);
+            }
+
+            .aiFeeRightWrapper {
+                padding: 80px 20px;
+            }
+
+            .aiRightContentWrapper {
+                align-items: flex-start;
+            }
+
+            .roboBtn {
+                max-width: unset;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .aiContentTextPara {
+                font: 16px "go-regular";
+            }
+
+            .aiContentTextParaBold {
+                font: 16px "go-semiBold";
+            }
+
+            .aiFeeRightWrapper {
+                padding: 32px 20px;
+            }
+
+            .aiContentText {
+                margin: 0 auto;
+            }
+
+        }
+
+        .aiBreatherSection {
+
+            background: url("https://images.mastersunion.link/uploads/23032026/v2/Body.webp");
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            .container {
+                position: relative;
+            }
+
+            .borderl1 {
+                top: 0;
+                left: 16px;
+            }
+
+            .borderl2 {
+                position: absolute;
+                top: 0;
+                right: 16px;
+                transform: rotate(90deg);
+            }
+
+            .borderb1 {
+                position: absolute;
+                bottom: -34px;
+                left: 16px;
+                transform: rotate(-90deg);
+            }
+
+            .borderb2 {
+                position: absolute;
+                bottom: -34px;
+                right: 16px;
+                transform: rotate(180deg);
+            }
+
+            .aiBoldHeading {
+                font: 48px "orbitron";
+                font-weight: 800;
+                text-align: center;
+                line-height: 90%;
+            }
+
+            .aiBreatherWrapper {
+                padding-block: 34px;
+                flex-direction: column;
+            }
+
+            .aiPointText {
+                font: 12px "neueKaine";
+            }
+
+            .verticalLine {
+                height: 2px;
+                width: 100%;
+
+            }
+
+            .blueTextthin {
+                font: 24px "neueKaine";
+                font-weight: 400;
+                line-height: 100%;
+                color: #0066FF;
+            }
+
+            .aiContentWrapperHeading {
+                font: 24px "neueKaine";
+                font-weight: 900;
+                line-height: 100%;
+                color: var(--white);
+            }
+
+            .aiContentWrapper {
+                gap: 8px;
+                padding-inline: 16px;
+            }
+
+            .aiContentText {
+                font: 18px "neueKaine";
+                font-weight: 500;
+                line-height: 120%;
+                color: var(--grey10);
+            }
+
+            .aiPoint {
+                align-items: start;
+            }
+
+
+        }
+
+        .threeCardSectionAi {
+            overflow: hidden;
+
+            .neuHeadingBold {
+                font: 26px "neueKaine";
+                font-weight: 900;
+                line-height: 120%;
+                color: var(--white);
+            }
+
+            .threeCardWrapper {
+                padding: 0 16px;
+            }
+
+            .aiCardContent {
+                min-height: 360px;
+                max-height: 360px;
+                padding: 30px;
+            }
+
+            .btnText {
+                font: 12px "neueKaine";
+            }
+
+            .aiCard {
+                max-width: 298px;
+                width: 100%;
+                position: relative;
+            }
+
+            .roboBtn {
+                padding: 14px 24px;
+
+                font: 12px "neueKaine";
+                font-weight: 700;
+
+            }
+
+            .marqueesliders {
+                min-height: 400px;
+            }
+
+
+        }
+
+        .aiAwardsMobSection {
+            position: relative;
+            background: linear-gradient(180deg, #000a1a 0%, #001030 40%, #000a1a 100%);
+            overflow: hidden;
+            padding-block: 48px;
+
+            .container {
+                position: relative;
+                z-index: 1;
+            }
+
+            /* ── Header ── */
+            .aiAwardsMobHeader {
+                text-align: center;
+                margin-bottom: 32px;
+            }
+
+            .aiAwardsMobEyebrowWrap {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 12px;
+                margin-bottom: 12px;
+            }
+
+            .aiAwardsMobEyebrowLine {
+                display: block;
+                width: 28px;
+                height: 1px;
+                background: linear-gradient(90deg, transparent, #0066FF, transparent);
+            }
+
+            .aiAwardsMobEyebrow {
+                font: 11px "neueKaine";
+                font-weight: 700;
+                letter-spacing: 2.5px;
+                text-transform: uppercase;
+                color: #5eaaff;
+            }
+
+            .neuHeadingBold {
+                font: 28px "neueKaine";
+                font-weight: 900;
+                line-height: 115%;
+                color: #fff;
+                padding-bottom: 8px;
+            }
+
+            .aiAwardsMobSubtitle {
+                font: 13px "neueKaine";
+                font-weight: 400;
+                line-height: 155%;
+                color: #7e9cc7;
+                max-width: 280px;
+                margin: 0 auto;
+                display: none;
+            }
+
+            /* ── Trophy Hero ── */
+            .aiAwardsMobHero {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 36px;
+                padding: 20px 0;
+            }
+
+            .aiAwardsMobTrophyGlow {
+                position: absolute;
+                width: 220px;
+                height: 220px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(0, 102, 255, 0.35) 0%, rgba(0, 102, 255, 0) 70%);
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 0;
+                animation: awardsMobGlowPulse 3s ease-in-out infinite;
+            }
+
+            @keyframes awardsMobGlowPulse {
+
+                0%,
+                100% {
+                    transform: translate(-50%, -50%) scale(1);
+                    opacity: 0.7;
+                }
+
+                50% {
+                    transform: translate(-50%, -50%) scale(1.15);
+                    opacity: 1;
+                }
+            }
+
+            .aiAwardsMobTrophyImg {
+                position: relative;
+                z-index: 1;
+                max-width: 92%;
+                width: 100%;
+                height: auto;
+            }
+
+            .aiAwardsMobBadge {
+                position: absolute;
+                display: none;
+                bottom: 8px;
+                right: calc(50% - 110px);
+                z-index: 2;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #0055e0 0%, #003399 100%);
+                border: 2px solid rgba(94, 170, 255, 0.4);
+                box-shadow: 0 4px 20px rgba(0, 102, 255, 0.4);
+            }
+
+            .aiAwardsMobBadgeNum {
+                font: 18px "neueKaine";
+                font-weight: 900;
+                line-height: 1;
+                color: #fff;
+            }
+
+            .aiAwardsMobBadgeLabel {
+                font: 8px "neueKaine";
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: rgba(255, 255, 255, 0.8);
+                line-height: 1;
+                margin-top: 2px;
+            }
+
+            /* ── Awards Grid ── */
+            .aiAwardsMobGrid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+                margin-bottom: 32px;
+            }
+
+            .aiAwardsMobCard {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+                padding: 12px 10px;
+                border-radius: 12px;
+                background: rgba(0, 18, 40, 0.85);
+                border: 1px solid rgba(0, 102, 255, 0.12);
+                transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s ease;
+                overflow: hidden;
+            }
+
+            .aiAwardsMobCard:active {
+                transform: scale(0.97);
+                border-color: rgba(0, 102, 255, 0.5);
+                background: rgba(0, 29, 67, 0.9);
+            }
+
+            .aiAwardsMobCardNum {
+                font: 10px "neueKaine";
+                font-weight: 800;
+                color: white;
+                position: absolute;
+                top: 8px;
+                right: 10px;
+                line-height: 1;
+            }
+
+            .aiAwardsMobCardIcon {
+                width: 20px;
+                height: 20px;
+                flex-shrink: 0;
+            }
+
+            .aiAwardsMobCardText {
+                font: 14px "neueKaine";
+                font-weight: 600;
+                line-height: 140%;
+                color: rgba(255, 255, 255, 0.88);
+            }
+
+            /* ── CTA ── */
+            .aiAwardsMobCta {
+                padding-top: 4px;
+            }
+
+            .roboBtn {
+                max-width: 100%;
+                width: 100%;
+                justify-content: center;
+                border-radius: 12px;
+            }
+        }
+
+
+
+        .ticketSection {
+            background: url("https://images.mastersunion.link/uploads/23032026/v1/ticketbg.webp");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+
+            .ticketCardWrapper {
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                gap: 20px;
+            }
+
+            .tardsPointer {
+
+                gap: 30px !important;
+
+            }
+
+            .ticketTag {
+                margin-top: 0;
+            }
+
+            .ticketTag {
+                padding: 8px 22px !important;
+            }
+
+            .tagText {
+                font: 16px "neueKaine";
+                font-weight: 400;
+                line-height: 120%;
+            }
+
+            .blueTicket {
+                margin: 0 auto;
+            }
+
+            .centerCard {
+                width: 100%;
+            }
+
+            .neuHeadingBold {
+                font: 24px "neueKaine";
+                font-weight: 700;
+                line-height: 120%;
+            }
+
+            .tagBoldText {
+                font: 16px "neueKaine";
+                font-weight: 700;
+                line-height: 120%;
+                color: var(--white);
+                text-align: center;
+            }
+
+            .ticketCard {
+                max-width: 47%;
+            }
+
+            .ticketCardUpperContent {
+                gap: 12px;
+                min-height: unset;
+                height: 80%;
+            }
+
+            .ticketCardContent {
+                padding: 20px 16px 16px;
+                min-height: unset;
+                height: 100%;
+            }
+
+            .onSpotFeeWrapper {
+                gap: 12px;
+            }
+
+            .entryFreeTicket {
+                .tickerHeading {
+                    font: 10px "neueKaine";
+                    font-weight: 700;
+                    line-height: 120%;
+                    color: var(--white);
+                }
+
+                .enteryFeesContentWrapper {
+                    padding: 10px 32px;
+                    gap: 32px;
+                    justify-content: unset;
+                }
+            }
+
+        }
+
+        .venueSection {
+            min-height: 578px;
+            display: flex;
+            align-items: end;
+            background-image: url("https://images.mastersunion.link/uploads/21032026/v1/413593756.webp");
+            padding: 60px 0 !important;
+
+            .aiSubmitFolder {
+                justify-content: center;
+            }
+
+            .registerSubheading {
+                font: 14px "neueKaine";
+                font-weight: 700;
+                line-height: 150%;
+                color: var(--white);
+            }
+
+            .venueHeading {
+                font: 18px "neueKaine";
+                font-weight: 700;
+                line-height: 120%;
+                color: var(--white);
+            }
+
+            .btnIcon {
+                max-width: 14px;
+                width: 100%;
+            }
+
+            .dateIcon {
+                max-width: 14px;
+                width: 100%;
+            }
+
+            .aiFolderWrapper {
+                padding: 12px;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .btnText {
+                font: 12px "neueKaine" !important;
+                font-weight: 700;
+                line-height: 100%;
+            }
+
+            .roboBtn {
+                padding: 10px 16px;
+            }
+
+            .venueWrapper {
+                display: flex;
+                flex-direction: row-reverse;
+                margin-top: unset;
+                bottom: 60px;
+                max-width: 100%;
+                width: 100%;
+                padding: 0;
+            }
+
+
+
+
+
+        }
+
+        .bookStaySection {
+            min-height: 769px;
+            display: flex;
+            align-items: end;
+            padding: 60px 0 !important;
+            background: url("https://images.mastersunion.link/uploads/21032026/v1/413593755.webp");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+
+            .bookStayWrapper {
+                gap: 12px;
+                margin-top: unset;
+                bottom: 60px;
+                padding: 20px;
+                max-width: 100%;
+                width: 100%;
+                padding: 0;
+            }
+
+            .aiAwardsHeading {
+                font: 24px "neueKaine";
+                font-weight: 700;
+                line-height: 120%;
+                color: var(--white);
+
+            }
+
+            .registerSubheading {
+                font: 16px "neueKaine";
+                font-weight: 700;
+                color: var(--white);
+            }
+
+            .aiSubmitSubHeading {
+                font: 14px "neueKaine";
+                font-weight: 400;
+                line-height: 150%;
+                color: var(--grey18);
+            }
+
+            .aiFolderWrapper {
+                display: flex;
+                gap: 18px;
+                align-items: start;
+                position: absolute;
+                flex-direction: column;
+                padding: 18px;
+                margin-top: 6px;
+            }
+
+            .aiSubmitFolder {
+                justify-content: center;
+            }
+
+            .roboBtn {
+                max-width: unset;
+                width: 100%;
+                justify-content: center;
+            }
+
+            .aiSubmitFolderHeading {
+                font: 14px "neueKaine";
+                font-weight: 400;
+                line-height: 120%;
+                color: var(--white);
+            }
+
+            .aiSubmitFolderHeadingBold {
+                font: 14px "neueKaine";
+                font-weight: 700;
+                line-height: 120%;
+                color: var(--white);
+            }
+
+            .aiDivTxt {
+                font: 15px "neueKaine";
+                font-weight: 600;
+                line-height: 120%;
+                color: var(--white);
+            }
+
+        }
+
+        .aiAwardsSection {
+            overflow: hidden;
+        }
+
+
+
+    }
+}
+
+@media (min-width: 1920px) {
+    .tnHeroSectionWrap {
+        scale: 1.4;
+    }
+}
+
+.theNextTech .viewticket-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(4px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.theNextTech .viewticket-orbOne {
+    width: 320px;
+    height: 320px;
+    left: 8%;
+    top: 10%;
+    background: radial-gradient(circle, rgba(0, 102, 255, 0.38) 0%, rgba(0, 102, 255, 0) 72%);
+    animation: viewticketOrb 9s ease-in-out infinite;
+}
+
+.theNextTech .viewticket-orbTwo {
+    width: 260px;
+    height: 260px;
+    right: 10%;
+    bottom: 12%;
+    background: radial-gradient(circle, rgba(94, 176, 255, 0.32) 0%, rgba(94, 176, 255, 0) 70%);
+    animation: viewticketOrb 11s ease-in-out infinite reverse;
+}
+
+.theNextTech .viewticket-card {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    border-radius: 22px;
+    background: #ffffff;
+    overflow: hidden;
+    box-sizing: border-box;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+    z-index: 1;
+}
+
+
+.theNextTech .viewticket-brand {
+    padding: 22px 28px 6px;
+}
+
+.theNextTech .viewticket-razorpayRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.theNextTech .viewticket-razorpayIcon {
+    width: 40px;
+    height: 22px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #1d4ed8 0%, #60a5fa 100%);
+    position: relative;
+    display: inline-block;
+}
+
+.theNextTech .viewticket-razorpayIcon::before,
+.theNextTech .viewticket-razorpayIcon::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    background: #ffffff;
+    opacity: 0.92;
+}
+
+.theNextTech .viewticket-razorpayIcon::before {
+    left: 10px;
+}
+
+.theNextTech .viewticket-razorpayIcon::after {
+    left: 18px;
+}
+
+.theNextTech .viewticket-razorpayWord {
+    font: 800 22px/1 "NeueKaine", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    color: #2b66ff;
+    letter-spacing: -0.02em;
+}
+
+.theNextTech .viewticket-ftx26Word {
+    margin-top: 6px;
+    font: 900 38px/1 "NeueKaine", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    color: #295bff;
+    letter-spacing: -0.03em;
+}
+
+.theNextTech .viewticket-hero {
+    position: relative;
+    background: linear-gradient(180deg, #020817 0%, #06305f 100%);
+    padding: 24px 28px 22px;
+    text-align: center;
+}
+
+.theNextTech .viewticket-hero>* {
+    position: relative;
+    z-index: 1;
+}
+
+.theNextTech .viewticket-seat {
+    font: 900 30px/1.15 "NeueKaine", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    color: #ffffff;
+    margin-bottom: 14px;
+}
+
+.theNextTech .viewticket-dates {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    text-align: left;
+}
+
+.theNextTech .viewticket-col:first-child {
+    grid-column: 1 / -1;
+}
+
+.theNextTech .viewParent {
+    display: flex;
+    align-items: stretch;
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.theNextTech .viewticket-col {
+    padding: 14px 14px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.theNextTech .viewticket-label {
+    font: 800 11px/1.2 "NeueKaine", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.theNextTech .viewticket-value {
+    margin-top: 10px;
+    font: 800 16px/1.25 "NeueKaine", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    color: #ffffff;
+}
+
+.theNextTech .viewticket-valueNote {
+    margin-top: 6px;
+    font: 600 13px/1.35 "NeueKaine", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.theNextTech .viewticket-valueBreak {
+    word-break: break-word;
+}
+
+.theNextTech .viewticket-fetchError {
+    margin: 0 auto 12px;
+    max-width: 420px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: rgba(255, 80, 80, 0.18);
+    border: 1px solid rgba(255, 120, 120, 0.45);
+    font: 600 13px/1.4 "NeueKaine", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #ffb4b4;
+    text-align: center;
+}
+
+.theNextTech .viewticket-rule {
+    height: 2px;
+    background: rgba(255, 255, 255, 0.35);
+    margin: 14px auto 14px;
+    width: 100%;
+    max-width: 420px;
+}
+
+.theNextTech .viewticket-qrWrap {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.theNextTech .viewticket-qrFrame {
+    position: relative;
+    width: 172px;
+    height: 172px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.theNextTech .viewticket-qrImage {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.theNextTech .viewticket-qrMissing {
+    margin: 0;
+    padding: 8px 6px;
+    font: 600 11px/1.45 "NeueKaine", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: rgba(0, 0, 0, 0.72);
+    text-align: center;
+}
+
+.theNextTech .viewticket-qrMissingCode {
+    font-size: 0.95em;
+    font-weight: 700;
+    padding: 1px 4px;
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.theNextTech .viewticket-qrScan {
+    content: "";
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    top: -16px;
+    height: 16px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(0, 255, 255, 0) 0%, rgba(0, 255, 255, 0.72) 100%);
+    box-shadow: 0 0 16px rgba(0, 255, 255, 0.55);
+    animation: viewticketScan 2.2s ease-in-out infinite;
+}
+
+.theNextTech .viewticket-qrText {
+    margin-top: 10px;
+    font: 600 12px/1.4 "NeueKaine", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.theNextTech .viewticket-valid {
+    background: #0066FF;
+    color: #ffffff;
+    text-align: center;
+    padding: 11px 12px;
+    font: 900 12px/1.2 "NeueKaine", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+
+.theNextTech .viewticket-signoff {
+    margin-top: 6px;
+}
+
+@keyframes viewticketScan {
+
+    0%,
+    100% {
+        top: 8px;
+        opacity: 0.2;
+    }
+
+    50% {
+        top: calc(100% - 20px);
+        opacity: 1;
+    }
+}
+
+@keyframes viewticketOrb {
+
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate3d(0, -14px, 0) scale(1.04);
+    }
+}
+
+@media (max-width: 480px) {
+    .theNextTech .viewticket {
+        padding: 18px 12px 50px;
+        min-height: 100vh;
+    }
+
+    .theNextTech .viewticket-card {
+        border-radius: 18px;
+    }
+
+    .theNextTech .viewticket-brand {
+        padding: 18px 18px 6px;
+    }
+
+    .theNextTech .viewticket-ftx26Word {
+        font-size: 32px;
+    }
+
+    .theNextTech .viewticket-hero {
+        padding: 16px 18px 18px;
+    }
+
+    .theNextTech .viewticket-seat {
+        font-size: 26px;
+    }
+
+    .theNextTech .viewticket-dates {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        text-align: left;
+    }
+
+    .theNextTech .viewticket-rule {
+        margin: 12px auto;
+    }
+
+    .theNextTech .viewticket-qrFrame {
+        width: 148px;
+        height: 148px;
+    }
+
+    .theNextTech .viewticket-orbOne,
+    .theNextTech .viewticket-orbTwo {
+        display: none;
+    }
+
+
+}
+
+
+/* ═══════════════════════════════════════════
+       SUMMIT AGENDA — MOBILE VIEW
+       ═══════════════════════════════════════════ */
+@media (max-width: 767px) {
+    .theNextTech {
+
+        /* Force show on mobile (override global mob-hide) */
+        .summitAgenda.mob-hide {
+            display: block !important;
+        }
+
+        .summitAgenda {
+            padding: 48px 0;
+        }
+
+        .summitAgenda .summitAgendaWrapper {
+            gap: 20px;
+        }
+
+        .summitAgenda .summitAgendaHeading {
+            font-size: 22px;
+            line-height: 120%;
+        }
+
+        /* Tabs — horizontally scrollable */
+        .summitAgenda .summitAgendaTabs {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            gap: 0;
+            padding: 4px;
+            border-radius: 8px;
+            scrollbar-width: none;
+        }
+
+        .summitAgenda .summitAgendaTabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .summitAgenda .summitAgendaTab {
+            flex: 0 0 auto;
+            padding: 10px 14px;
+            font-size: 11px;
+            letter-spacing: 1.2px;
+            white-space: nowrap;
+            border-radius: 6px;
+        }
+
+        .summitAgenda .summitListBelow {
+            gap: 12px;
+        }
+
+        .summitAgenda .summitAgendaPanels {
+            margin-top: 4px;
+        }
+
+        /* Rows — stack vertically */
+        .summitAgenda .summitAgendaRow {
+            flex-direction: column;
+            gap: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #1E293B;
+            background: #111;
+        }
+
+        .summitAgenda .summitAgendaTimeBelow,
+        .summitAgenda .summitAgendaTime {
+            max-width: 100%;
+            width: 100%;
+            border-radius: 0;
+            border: none;
+            border-bottom: 1px solid #1E293B;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+        }
+
+        .summitAgenda .summitAgendaContentBelow,
+        .summitAgenda .summitAgendaContent {
+            border-radius: 0;
+            border: none;
+            padding: 14px 16px;
+            gap: 10px;
+        }
+
+        .summitAgenda .summitAgendaAction {
+            border-radius: 0;
+            border: none;
+            border-top: 1px solid #1E293B;
+            padding: 14px 16px;
+            justify-content: center;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .summitAgenda .summitAgendaAction.hide {
+            display: none;
+        }
+
+        .summitAgenda .summitAgendaBookBtn {
+            padding: 12px 20px;
+            font-size: 11px;
+            width: 100%;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .summitAgenda .summitAgendaTitle {
+            font-size: 15px;
+            line-height: 140%;
+        }
+
+        .summitAgenda .summitSubTitle {
+            font-size: 13px;
+            line-height: 150%;
+        }
+
+        .summitAgenda .timeText {
+            font-size: 15px;
+            line-height: 100%;
+            font-weight: 700;
+        }
+
+        .summitAgenda .summitAgendaList {
+            gap: 12px;
+        }
+
+        /* Two-button variant — stack */
+        .summitAgenda .summitAgendaAction.twobtn {
+            flex-direction: column;
+            gap: 12px;
+            padding: 14px 16px;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .summitAgenda .summitAgendaAction.twobtn .horiline {
+            width: 100%;
+            height: 1px;
+        }
+
+        .summitAgenda .summitAgendaAction.twobtn .summitAgendaBookBtn {
+            width: 100%;
+        }
+
+        /* Agenda text upper divider for Labs tab */
+        .summitAgenda .agendaTextUpper:nth-child(1) {
+            padding-bottom: 12px;
+        }
+
+        /* Disable hover transforms on touch */
+        .summitAgenda .summitAgendaRow:hover {
+            transform: none;
+        }
+
+        /* Hidden panel state */
+        .summitAgenda .summitAgendaPanel[hidden] {
+            display: none;
+        }
+
+        .summitAgenda .summitAgendaPanel.active {
+            display: block;
+        }
+    }
+}
+
+
+
+/* The Next Tech layout — minimal copyright footer */
+.tnTechSiteFooter {
+    margin: 0;
+    padding: 20px 24px;
+    text-align: center;
+    background: #000f25;
+    border-top: 1px solid rgba(0, 102, 255, 0.22);
+}
+
+.tnTechSiteFooter-copy {
+    margin: 0;
+    font: 600 13px/1.4 "NeueKaine", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+
+@media (max-width: 321px) {
+    .ticketCardContent {
+        padding: 10px 16px 16px !important;
+        min-height: unset !important;
+        height: 100% !important;
+    }
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL-REVEAL ANIMATIONS
+   ═══════════════════════════════════════════ */
+
+@keyframes tntFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(60px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes tntFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes tntSlideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-80px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes tntSlideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(80px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes tntScaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes tntBlurIn {
+    from {
+        opacity: 0;
+        filter: blur(12px);
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0);
+    }
+}
+
+.tnt-reveal {
+    opacity: 0;
+    will-change: opacity, transform;
+}
+
+.tnt-reveal.is-visible {
+    animation: tntFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.tnt-reveal-left {
+    opacity: 0;
+    will-change: opacity, transform;
+}
+
+.tnt-reveal-left.is-visible {
+    animation: tntSlideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.tnt-reveal-right {
+    opacity: 0;
+    will-change: opacity, transform;
+}
+
+.tnt-reveal-right.is-visible {
+    animation: tntSlideInRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.tnt-reveal-scale {
+    opacity: 0;
+    will-change: opacity, transform;
+}
+
+.tnt-reveal-scale.is-visible {
+    animation: tntScaleIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 1;
+}
+
+.tnt-reveal-blur {
+    opacity: 0;
+    will-change: opacity, transform, filter;
+}
+
+.tnt-reveal-blur.is-visible {
+    animation: tntBlurIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.tnt-stagger-1 {
+    animation-delay: 0.08s !important;
+}
+
+.tnt-stagger-2 {
+    animation-delay: 0.16s !important;
+}
+
+.tnt-stagger-3 {
+    animation-delay: 0.24s !important;
+}
+
+.tnt-stagger-4 {
+    animation-delay: 0.32s !important;
+}
+
+.tnt-stagger-5 {
+    animation-delay: 0.40s !important;
+}
+
+.tnt-stagger-6 {
+    animation-delay: 0.48s !important;
+}
+
+.tnt-stagger-7 {
+    animation-delay: 0.56s !important;
+}
+
+.tnt-stagger-8 {
+    animation-delay: 0.64s !important;
+}
+
+.tnt-stagger-9 {
+    animation-delay: 0.72s !important;
+}
+
+.tnt-stagger-10 {
+    animation-delay: 0.80s !important;
+}
+
+/* Button animations removed per request */
+
+/* ═══════════════════════════════════════════
+   CARD HOVER EFFECTS
+   ═══════════════════════════════════════════ */
+
+.theNextTech .techMasterCard {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theNextTech .techMasterCard:hover {
+    transform: translateY(-8px);
+}
+
+.theNextTech .techMasterCardactive {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theNextTech .techMasterCardactive:hover {
+    transform: translateY(-8px);
+}
+
+.theNextTech .aiCard {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.4s ease;
+}
+
+
+.theNextTech .aiCard .aiCardImg {
+    transition: transform 0.5s ease;
+}
+
+.theNextTech .aiCard:hover .aiCardImg {
+    transform: scale(1.04);
+}
+
+.theNextTech .ticketCard {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.4s ease;
+}
+
+.theNextTech .ticketCard:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 16px 50px rgba(0, 102, 255, 0.15);
+}
+
+.theNextTech .ticketCard .ticketCardImg {
+    transition: transform 0.5s ease;
+}
+
+.theNextTech .ticketCard:hover .ticketCardImg {
+    transform: scale(1.03);
+}
+
+/* ═══════════════════════════════════════════
+   AI AWARDS POINT HOVER / GLOW
+   ═══════════════════════════════════════════ */
+
+.theNextTech .aiAwardsPoint {
+    transition: transform 0.3s ease,
+        background 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.theNextTech .aiAwardsPoint:hover {
+    transform: translateX(8px);
+    background: #001D43;
+    border-color: rgba(0, 102, 255, 0.5);
+    box-shadow: 0 4px 24px rgba(0, 102, 255, 0.2);
+}
+
+/* ═══════════════════════════════════════════
+   SUMMIT AGENDA ROW HOVER
+   ═══════════════════════════════════════════ */
+
+.theNextTech .summitAgendaRow {
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.theNextTech .summitAgendaRow:hover {
+    transform: translateX(6px);
+}
+
+/* Button/tab animations removed per request */
+
+/* ═══════════════════════════════════════════
+   HERO TAG FLOAT ANIMATION
+   ═══════════════════════════════════════════ */
+
+@keyframes tntFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+.theNextTech .aiBreatherSection .heroTag {
+    animation: tntFloat 3.5s ease-in-out infinite;
+}
+
+.theNextTech .aiBreatherSection .heroTag:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.theNextTech .aiBreatherSection .heroTag:nth-child(3) {
+    animation-delay: 0.8s;
+}
+
+/* ═══════════════════════════════════════════
+   BLUE DOT PULSE
+   ═══════════════════════════════════════════ */
+
+@keyframes tntDotPulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.6);
+        opacity: 0.6;
+    }
+}
+
+.theNextTech .blueDot {
+    animation: tntDotPulse 2s ease-in-out infinite;
+}
+
+.theNextTech .aiBreatherPointerWrapper .aiPoint:nth-child(2) .blueDot {
+    animation-delay: 0.35s;
+}
+
+.theNextTech .aiBreatherPointerWrapper .aiPoint:nth-child(3) .blueDot {
+    animation-delay: 0.7s;
+}
+
+/* ═══════════════════════════════════════════
+   VERTICAL LINE DRAW ANIMATION
+   ═══════════════════════════════════════════ */
+
+@keyframes tntLineGrow {
+    from {
+        height: 0;
+        opacity: 0;
+    }
+
+    to {
+        height: 412px;
+        opacity: 1;
+    }
+}
+
+/* LinkedIn tag hover removed per request */
+
+/* ═══════════════════════════════════════════
+   TICKET TAG SHIMMER
+   ═══════════════════════════════════════════ */
+
+@keyframes tntShimmer {
+    0% {
+        background-position: -200% center;
+    }
+
+    100% {
+        background-position: 200% center;
+    }
+}
+
+.theNextTech .ticketTag {
+    background-image: linear-gradient(90deg, #0066FF 0%, #0066FF 40%, #3d8bff 50%, #0066FF 60%, #0066FF 100%);
+    background-size: 200% auto;
+    animation: tntShimmer 4s linear infinite;
+}
+
+/* ═══════════════════════════════════════════
+   HEADING UNDERLINE REVEAL
+   ═══════════════════════════════════════════ */
+
+.theNextTech .neuHeadingBold {
+    position: relative;
+    display: inline-block;
+}
+
+.theNextTech .neuHeadingBold::after {
+    display: none;
+}
+
+.theNextTech .neuHeadingBold.is-visible::after {
+    width: 60px;
+    left: calc(50% - 30px);
+}
+
+/* ═══════════════════════════════════════════
+   VENUE / BOOK STAY FOLDER HOVER
+   ═══════════════════════════════════════════ */
+
+.theNextTech .aiSubmitFolder .aiFolderImg {
+    transition: transform 0.5s ease;
+}
+
+.theNextTech .aiSubmitFolder:hover .aiFolderImg {
+    transform: scale(1.03);
+}
+
+/* ═══════════════════════════════════════════
+   BORDER CORNER DECORATIONS ANIMATION
+   ═══════════════════════════════════════════ */
+
+@keyframes tntCornerFade {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+.theNextTech .aiBreatherSection .borderl1,
+.theNextTech .aiBreatherSection .borderl2,
+.theNextTech .aiBreatherSection .borderb1,
+.theNextTech .aiBreatherSection .borderb2 {
+    animation: tntCornerFade 3s ease-in-out infinite;
+}
+
+.theNextTech .aiBreatherSection .borderl2 {
+    animation-delay: 0.75s;
+}
+
+.theNextTech .aiBreatherSection .borderb1 {
+    animation-delay: 1.5s;
+}
+
+.theNextTech .aiBreatherSection .borderb2 {
+    animation-delay: 2.25s;
+}
+
+/* ═══════════════════════════════════════════
+   LOGO HOVER IN PARTNERS
+   ═══════════════════════════════════════════ */
+
+.theNextTech .techOurProgramme .ourLogo {
+    transition: transform 0.3s ease, filter 0.3s ease;
+    filter: grayscale(0.3) brightness(0.85);
+}
+
+.theNextTech .techOurProgramme .ourLogo:hover {
+    transform: scale(1.12);
+    filter: grayscale(0) brightness(1);
+}
+
+/* ═══════════════════════════════════════════
+   REDUCED MOTION
+   ═══════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .tnt-reveal,
+    .tnt-reveal-left,
+    .tnt-reveal-right,
+    .tnt-reveal-scale,
+    .tnt-reveal-blur {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        animation: none !important;
+    }
+
+    .theNextTech .heroSection .playBtn,
+    .theNextTech .blueDot,
+    .theNextTech .aiBreatherSection .heroTag,
+    .theNextTech .aiBreatherSection .borderl1,
+    .theNextTech .aiBreatherSection .borderl2,
+    .theNextTech .aiBreatherSection .borderb1,
+    .theNextTech .aiBreatherSection .borderb2,
+    .theNextTech .ticketTag {
+        animation: none !important;
+    }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   PAGE-LEVEL REGISTRATION FORM  (.tnPageForm)
+   Standalone page version of the modal form — does NOT touch modal styles.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.theNextTech .tnPageForm {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at top, #020817 0%, #000000 55%, #000000 100%);
+    padding: 80px 24px;
+    box-sizing: border-box;
+}
+
+.theNextTech .tnPageForm .tnPageContainer {
+    width: 100%;
+    max-width: 960px;
+    box-shadow: 0 24px 120px rgba(0, 0, 0, 0.85);
+}
+
+.theNextTech .tnPageForm .tnPageInner {
+    display: grid;
+    grid-template-columns: 1.05fr 1.15fr;
+    min-height: 440px;
+    background: #ffffff;
+    position: relative;
+    padding-bottom: 4px;
+}
+
+.theNextTech .tnPageForm .tnPageInner::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 5px;
+    background: #06F;
+}
+
+.theNextTech .tnPageForm .tnPageLeft {
+    padding: 40px 40px 36px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background:
+        radial-gradient(circle at top left, rgba(59, 130, 246, 0.08), transparent 60%),
+        linear-gradient(180deg, #f9fbff 0%, #f5f7ff 55%, #f4f5fb 100%);
+    border-right: 1px solid #e2e8f0;
+    color: #020617;
+}
+
+.theNextTech .tnPageForm .tnLeftHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.theNextTech .tnPageForm .tnPill {
+    border-radius: 6px;
+    padding: 8px 12px;
+    background: #C8DDFF;
+    color: #030229;
+    font-family: "NeueKaine", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: none;
+    cursor: default;
+}
+
+.theNextTech .tnPageForm .tnHeading {
+    margin-top: 0;
+    font-family: "NeueKaine", system-ui, sans-serif;
+    font-weight: 800;
+    font-size: 38px;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    color: #020617;
+}
+
+.theNextTech .tnPageForm .tnHeading span {
+    color: #06F;
+}
+
+.theNextTech .tnPageForm .tnLeftCopy {
+    margin-top: 0;
+    font-family: "NeueKaine", system-ui, sans-serif;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #6b7280;
+}
+
+.theNextTech .tnPageForm .tnAvatarPreview {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    background: #f8fafc;
+    border: 1px dashed #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.theNextTech .tnPageForm .tnAvatarFlexRow {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    align-self: center;
+    width: 100%;
+    max-width: 170px;
+    max-height: 200px;
+}
+
+.theNextTech .tnPageForm .tnAvatarPreview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    position: relative;
+    z-index: 1;
+}
+
+.theNextTech .tnPageForm .tnAvatarPreview:not(.has-avatar) {
+    border: none;
+    background: transparent;
+}
+
+.theNextTech .tnPageForm .tnAvatarPreview::after {
+    content: "";
+    position: absolute;
+    inset: -10px;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0;
+    border-radius: inherit;
+    background: radial-gradient(circle at 50% 10%, rgba(6, 102, 255, 0.35) 0%, rgba(6, 102, 255, 0) 58%);
+    transition: opacity 0.2s ease;
+}
+
+.theNextTech .tnPageForm .tnAvatarPreview.has-avatar::after {
+    opacity: 1;
+}
+
+.theNextTech .tnPageForm .tnPageRight {
+    padding: 32px 32px 30px 32px;
+    background: #ffffff;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.theNextTech .tnPageForm .tnForm {
+    width: 100%;
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 26px 26px 24px 26px;
+    box-shadow: none;
+    color: #020617;
+    font-family: "NeueKaine", system-ui, sans-serif;
+}
+
+.theNextTech .tnPageForm .tnFormGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px 20px;
+}
+
+.theNextTech .tnPageForm .tnFormGrid>.tnField {
+    flex: 0 0 calc(50% - 10px);
+    min-width: 0;
+}
+
+.theNextTech .tnPageForm .tnField {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.theNextTech .tnPageForm .tnFieldFull {
+    margin-top: 22px;
+}
+
+.theNextTech .tnPageForm #tnRoleFieldsContainer:has(.tnRoleFields:not([hidden])) {
+    margin-top: 22px;
+}
+
+.theNextTech .tnPageForm #tnRoleFieldsContainer .tnRoleFields:not([hidden]) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px 20px;
+}
+
+.theNextTech .tnPageForm #tnRoleFieldsContainer .tnRoleFields>.tnField {
+    flex: 0 0 calc(50% - 10px);
+    min-width: 0;
+}
+
+.theNextTech .tnPageForm #tnRoleFieldsContainer .tnRoleFields>.tnField.tnFieldFull {
+    flex: 0 0 100%;
+    margin-top: 0;
+}
+
+
+.theNextTech .tnPageForm .tnLabel {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #64748b;
+    font-family: "NeueKaine", system-ui, sans-serif;
+}
+
+.theNextTech .tnPageForm .tnReq {
+    color: #ef4444;
+    margin-left: 2px;
+}
+
+.theNextTech .tnPageForm .tnInput {
+    border-radius: 9px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    padding: 10px 12px;
+    font-family: "NeueKaine", system-ui, sans-serif;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #0f172a;
+    outline: none;
+    transition: border-color 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
+}
+
+.theNextTech .tnPageForm .tnInput::placeholder {
+    color: #94a3b8;
+}
+
+.theNextTech .tnPageForm .tnInput:focus {
+    border-color: #2563eb;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.4);
+}
+
+.theNextTech .tnPageForm .tnTextarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.theNextTech .tnPageForm .tnSelectWrap {
+    position: relative;
+}
+
+.theNextTech .tnPageForm .tnSelect {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: 28px;
+    background-color: #f8fafc;
+}
+
+.theNextTech .tnPageForm .tnSelectIcon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: #64748b;
+    pointer-events: none;
+}
+
+.theNextTech .tnPageForm .tnSubmit {
+    margin-top: 18px;
+    width: 100%;
+    border-radius: 9px;
+    border: none;
+    padding: 16px 20px;
+    font-family: "NeueKaine", system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    background: #06F;
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background 0.16s ease, transform 0.1s ease;
+}
+
+.theNextTech .tnPageForm .tnSubmit:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.theNextTech .tnPageForm .tnSubmit:active {
+    transform: translateY(0);
+}
+
+.theNextTech .tnPageForm .thankyouDivi {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.theNextTech .tnPageForm .tnThankYouTitle {
+    font-family: "NeueKaine", system-ui, sans-serif;
+    font-size: 32px;
+    line-height: 120%;
+    color: #06F;
+}
+
+.theNextTech .tnPageForm .tnThankYouSub {
+    font-family: "NeueKaine", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 120%;
+    color: #0F172A;
+    margin: 16px 0;
+    text-align: center;
+}
+
+.theNextTech .tnPageForm .tnBarcodeId {
+    font-family: "NeueKaine", system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 120%;
+    color: #0F172A;
+    text-align: center;
+    margin-top: 16px;
+}
+
+.theNextTech .tnPageForm .tnQrImage {
+    max-height: 200px;
+}
+
+.theNextTech .tnPageForm .tnAvatarStep {
+    width: 100%;
+}
+
+/* ── PAGE FORM — TABLET (≤1024px) ──────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+    .theNextTech .tnPageForm {
+        padding: 40px 16px;
+    }
+
+    .theNextTech .tnPageForm .tnPageContainer {
+        max-width: 100%;
+    }
+
+    .theNextTech .tnPageForm .tnPageInner {
+        grid-template-columns: 1fr;
+    }
+
+    .theNextTech .tnPageForm .tnPageLeft {
+        padding: 30px 26px 20px 26px;
+        border-right: none;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .theNextTech .tnPageForm .tnLeftHeader {
+        gap: 16px;
+    }
+
+    .theNextTech .tnPageForm .tnHeading {
+        font-size: 30px;
+    }
+
+    .theNextTech .tnPageForm .tnPageRight {
+        padding: 18px 18px 22px 18px;
+    }
+
+    .theNextTech .tnPageForm .tnAvatarFlexRow {
+        display: none;
+    }
+
+    .theNextTech .tnPageForm .tnAvatarFlexRow.tnAvatarFlexRow--active {
+        display: flex;
+    }
+}
+
+/* ── PAGE FORM — MOBILE (≤767px) ───────────────────────────────────────── */
+
+@media (max-width: 767px) {
+    .theNextTech .tnPageForm {
+        padding: 80px 10px;
+        align-items: flex-start;
+    }
+
+    .theNextTech .tnPageForm .tnPageLeft {
+        padding: 28px 14px 14px 14px;
+        gap: 20px;
+        justify-content: flex-start;
+    }
+
+    .theNextTech .tnPageForm .tnLeftHeader {
+        gap: 10px;
+    }
+
+    .theNextTech .tnPageForm .tnPill {
+        padding: 7px 10px;
+        font-size: 9px;
+        letter-spacing: 0.12em;
+    }
+
+    .theNextTech .tnPageForm .tnHeading {
+        font-size: 28px;
+        line-height: 1.08;
+    }
+
+    .theNextTech .tnPageForm .tnLeftCopy {
+        margin-top: 12px;
+        font-size: 12px;
+        line-height: 1.45;
+    }
+
+    .theNextTech .tnPageForm .tnLeftCopy br {
+        display: none;
+    }
+
+    .theNextTech .tnPageForm .tnAvatarPreview {
+        width: 110px;
+        height: 110px;
+    }
+
+    .theNextTech .tnPageForm .tnAvatarFlexRow {
+        display: none;
+    }
+
+    .theNextTech .tnPageForm .tnAvatarFlexRow.tnAvatarFlexRow--active {
+        display: flex;
+    }
+
+    .theNextTech .tnPageForm .tnForm {
+        padding: 14px 12px 14px 12px;
+        border-radius: 0;
+    }
+
+    .theNextTech .tnPageForm .tnFormGrid {
+        gap: 12px;
+    }
+
+    .theNextTech .tnPageForm .tnFormGrid>.tnField {
+        flex: 0 0 100%;
+    }
+
+    .theNextTech .tnPageForm .tnPageRight {
+        padding: 24px 10px 16px 10px;
+    }
+
+    .theNextTech .tnPageForm .tnLabel {
+        text-transform: none;
+        letter-spacing: 0;
+        font-size: 11px;
+    }
+
+    .theNextTech .tnPageForm .tnInput {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .theNextTech .tnPageForm .tnFieldFull {
+        margin-top: 8px;
+    }
+
+    .theNextTech .tnPageForm #tnRoleFieldsContainer .tnRoleFields {
+        gap: 12px;
+    }
+
+    .theNextTech .tnPageForm #tnRoleFieldsContainer .tnRoleFields>.tnField {
+        flex: 0 0 100%;
+    }
+
+    .theNextTech .tnPageForm .tnTextarea {
+        min-height: 58px;
+    }
+
+    .theNextTech .tnPageForm .tnSubmit {
+        font-size: 12px;
+        padding: 14px 16px;
+    }
+
+    .theNextTech .tnPageForm .tnThankYouTitle {
+        font-size: 24px;
+    }
+
+    .theNextTech .tnPageForm .tnThankYouSub {
+        font-size: 14px;
+    }
+}
+
+
+
+
+/* footer */
+.footer-bg-black {
+
+    background: var(--black) !important;
+
+}
+
+.upperFooter .container {
+    gap: 60px;
+    justify-content: unset !important;
+}
+
+.aiFooter {
+
+    .footherLogoWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        align-items: flex-start;
+        justify-content: space-between;
+        max-width: 25%;
+        width: 100%;
+    }
+
+    .pb-36 {
+        padding-bottom: 36px;
+    }
+
+    .scalebig2 {
+        max-width: 100px;
+        min-width: 100px;
+        width: 100%;
+    }
+
+    .aiFootherDetailsColWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .bottomFooter {
+        gap: 60px;
+        max-width: 65%;
+        width: 100%;
+    }
+
+    .aiFooterDetailHeading {
+        font: 16px "go-regular";
+        font-weight: 800;
+        line-height: 100%;
+        color: var(--white);
+    }
+
+    .aiFooterDetailName {
+        font: 12px "neueKaine";
+        font-weight: 600;
+        line-height: 120%;
+        color: var(--grey18);
+    }
+
+    .aiFooterDetailPoints {
+        font: 12px "neueKaine";
+        font-weight: 600;
+        line-height: 120%;
+        color: var(--grey10);
+    }
+
+    .aiFootherDetailsWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .footer-imgs img {
+        max-width: 40%;
+        width: 100%;
+    }
+
+    footer {
+        background: var(--black);
+    }
+
+
+
+    @media (max-width: 767px) {
+        .footer-imgs img {
+            max-width: 20%;
+            width: 100%;
+        }
+
+        .bottomFooter {
+            gap: 24px;
+        }
+
+        .aiFootherDetailsColWrapper {
+            gap: 24px;
+        }
+
+        .upperFooter .container {
+            gap: 40px;
+        }
+
+        .pb-36 {
+            padding-bottom: 0;
+        }
+
+        .footherLogoWrapper {
+            max-width: 100%;
+        }
+
+
+    }
+
+
+}

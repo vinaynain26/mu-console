@@ -1,0 +1,332 @@
+<section class="flex-container-section popup-section eventpopup" style="display: none;"
+    id="download-modal1">
+    <div class="popup download-popup ">
+        {{!-- <span class="close">X</span> --}}
+        <div class="popup-content master-pop-up">
+            <div class="popup-left flex-center white mob-hide">
+                <img src="https://files.mastersunion.link/media/img/eventbrochure.png" alt="">
+             
+            </div>
+
+            <div class="popup-right">
+                <form class="form-flex" id="brochure_form" style="display: block;">
+                    <div class="form-header flex-end">
+                        <p class="text-3 flex-end">
+                            <img src="https://mastersunion.org/assets/img/svg/Close.svg" alt=""
+                                onclick="closeDownloadBrochure()" class="pointer">
+                        </p>
+                    </div>
+                    <div class="inner-box pt-0" id="form-fields">
+                        <div>
+                            <div class="form-group">
+                                <label class="form-label text-4">
+                                    Name <span class="imp-sign">*</span>
+                                </label>
+                                <div class="input-group mt5">
+                                    <img class="form-svgs" src="https://mastersunion.org/assets/img/svg/User.svg"
+                                        alt="">
+                                    <input type="text" id="name12" name="name" placeholder="Enter your name"
+                                        class="text-3" onblur="validateName12(this)">
+                                    <span class="msg-error" id="nameValidation12">Please enter a valid name</span>
+                                </div>
+                            </div>
+                            <div class="form-group mt5">
+                                <label class="form-label text-4">
+                                    Email <span class="imp-sign">*</span>
+                                </label>
+                                <div class="input-group mt5">
+                                    <img class="form-svgs"
+                                        src="https://mastersunion.org/assets/img/svg/EnvelopeSimple.svg" alt="">
+                                    <input type="email" id="email12" name="email" placeholder="Enter your email"
+                                        class="text-3" onblur="validateEmail12(this)">
+                                    <span class="msg-error" id="emailValidation12">Please enter a valid email
+                                        address</span>
+                                </div>
+                            </div>
+                            <div class="form-group mt5">
+                                <label class="form-label text-4">
+                                    Mobile Number <span class="imp-sign">*</span>
+                                </label>
+                                <div class="input-group mt5">
+                                    <img class="form-svgs" src="https://mastersunion.org/assets/img/svg/Phone.svg"
+                                        alt="">
+                                    <input type="tel" name="phone" placeholder="Enter your mobile number" class="text-3"
+                                        id="mobile12" maxlength="10" onblur="validateMobile12(this)">
+                                    <span id="mobileValidation12" class="msg-error">Please enter a valid 10-digit mobile
+                                        number</span>
+                                </div>
+                            </div>
+                            <div class="consentCheckWrapper">
+                                <div class="consentCheckRow">
+                                    <input type="checkbox" id="authoriseCheck12" onclick="toggleCheck11()">
+                                    <label for="authoriseCheck12">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+                                </div>
+                                <p id="consentCheckErrorauthoriseCheck12" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+                            </div>
+                        </div>
+                        <div class="submit-box mt20">
+                            <button type="button" id="oneventstartupbtn"
+                                class="gradient-btn w-100">Download Now</button>
+                        </div>
+                    </div>
+                    <div class="form-flex thanku-section hide" id="thanku-section">
+                        <div class="inner-box">
+                            <div class="congrats-box">
+                                <img src="https://files.mastersunion.link/media/img/yellow-check.png" alt="">
+
+                                <div class="congrats-inner mt20">
+                                    <h3 class="heading-3 mb-0">Thank you!</h3>
+                                    <p class="text-2">In case of any queries, please reach out to <a href="tel:+917669186660" class="red-link">+91 7669186660</a></p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+</section>
+
+<script>
+    function downloadevntstartup() {
+        $("#download-modal1").css("display", 'flex')
+        $('body').css('overflow', 'hidden');
+    }
+    function closeDownloadBrochure() {
+        $("#download-modal1").css("display", "none")
+        $('#brochure_form #thanku-section').addClass('hide');
+        $('#brochure_form #form-fields').removeClass('hide');
+        $('body').css('overflow', 'visible');
+        var consentCb = document.getElementById('authoriseCheck12');
+        if (consentCb) consentCb.checked = false;
+        var consentErr = document.getElementById('consentCheckErrorauthoriseCheck12');
+        if (consentErr) consentErr.classList.add('warning');
+    }
+    function validateEmail12(emailField) {
+        var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+        if (reg.test(emailField.value) == false) {
+            document.getElementById('emailValidation12').style.visibility = "visible"
+            return false;
+        }
+        document.getElementById('emailValidation12').style.visibility = "hidden"
+        return true;
+
+    }
+    function validateMobile12(mobileField) {
+        var reg = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
+        if (reg.test(mobileField.value) == false) {
+            document.getElementById('mobileValidation12').style.visibility = "visible"
+            return false;
+        }
+        document.getElementById('mobileValidation12').style.visibility = "hidden"
+        return true;
+    }
+    function validateName12(nameField) {
+        var reg = /^[a-zA-Z ]+$/;
+        if (reg.test(nameField.value) == false || nameField.value.trim() === '') {
+            document.getElementById('nameValidation12').style.visibility = "visible"
+            return false;
+        }
+        document.getElementById('nameValidation12').style.visibility = "hidden"
+        return true;
+    }
+
+    function toggleCheck11() {
+        var isChecked = $('#authoriseCheck12').prop("checked");
+        if (isChecked) {
+            $('#oneventstartupbtn').removeClass('disabled');
+        } else {
+            $('#oneventstartupbtn').addClass('disabled');
+        }
+    }
+
+    $(document).ready(function () {
+        $("#oneventstartupbtn").click(function (event) {
+            event.preventDefault();
+            console.log('on submit')
+
+            if (!document.getElementById('authoriseCheck12')?.checked) {
+                document.getElementById('consentCheckErrorauthoriseCheck12').classList.remove('warning');
+                return;
+            } else {
+                document.getElementById('consentCheckErrorauthoriseCheck12').classList.add('warning');
+            }
+
+            const urlSearchParams = new URLSearchParams(window.location.search);
+            var params = Object.fromEntries(urlSearchParams.entries());
+            if (params.utm_source) { var utmSource = params.utm_source }
+            if (params.utm_medium) { var utmMedium = params.utm_medium }
+            if (params.utm_campaign) { var utmCampaign = params.utm_campaign }
+
+            let isMasterCamp = false;
+            let url = $(location).attr('pathname');
+            let medium = url + " - Download Brochure";
+
+            if (url.split('/')[1] == "mastercamps") {
+                isMasterCamp = true;
+            }
+
+            /*if(url === "/"){ //home
+                source = "https://mastersunion.org/ - Placement Report Home Page";
+            }else if(url === "/pgp-technology-and-business-management"){
+                source = 'https://mastersunion.org/academics - Placement Report PGP';
+            }else if(url === "/careers"){
+                source = "https://mastersunion.org/careers - Placement Report Careers Page";
+            }*/
+
+            if (
+                $('#mobile12').val().trim() != '' &&
+                $('#name12').val().trim() != '' &&
+                $('#email12').val().trim() != '' &&
+                /^[a-zA-Z ]+$/.test($('#name12').val()) == true &&
+                (/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test($('#mobile12').val()) == true) &&
+                /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/.test($("#email12").val()) == true
+            ) {
+
+                if (isMasterCamp) {
+                    let specializn = "MasterCamp in Applied Finance - By KPMG";
+                    if (url.split('/')[2] == "mastercamp-in-applied-finance") {
+                        specializn = "MasterCamp in Applied Finance - By KPMG"
+                    } else if (url.split('/')[2] == "product-management") {
+                        specializn = "MasterCamp - Product Management"
+                    } else if (url.split('/')[2] == "mastercamp-in-financial-planning-analysis") {
+                        specializn = "MasterCamp in Financial Planning & Analysis by KPMG"
+                    } else if (url.split('/')[2] == "user-experience-design") {
+                        specializn = "MasterCamp in Experience Design"
+                    } else if (url.split('/')[2] == "mastercamp-in-human-resource-management") {
+                        specializn = "MasterCamp in Human Resource Management"
+                    }
+
+                    let device = 'PC'
+                        if (window.matchMedia("(max-width: 768px)").matches) {
+                            device = "Mobile"
+                        } else {
+                            device="Desktop"
+                        }
+                        var post_url = '{{apiBaseURL}}/api/leads/captureNPF'
+                    var request_method = 'POST'; //get form GET/POST method
+                    $.ajax({
+                        url: post_url,
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            "college_id": 5034,
+                                "field_device_type":device,
+                            "source": utmSource || 'Website',
+                            "secret_key": "daf06dc1569172c55e4026e7c5ad0d05",
+                            "email": $('#email12').val(),
+                            "name": $('#name12').val(),
+                            "mobile": $('#mobile12').val(),
+                            "field_linkedin_profile_url": null,
+                            "state": null,
+                            "city": null,
+                            "medium": utmMedium || medium,
+                            "campaign": utmCampaign || null,
+                            "course": "course",
+                            "Specialization": specializn,
+                            "sendMail": true,
+                            "consentCheck": document.getElementById('authoriseCheck12')?.checked || false
+
+                        }),
+                        dataType: "json",
+                        success: function (result) {
+                            //Write your code here
+                            if (result.IsSuccess) {
+                                $('#brochure_form #thanku-section').removeClass('hide');
+                                $('#brochure_form #form-fields').addClass('hide');
+                                $("input[type=text], input[type=email], input[type=tel], textarea").val("");
+                                $("#emailFooter").val('')
+                                window.open("{{CDN_BASE_URL}}/assets/imgV2/StartupWeekend-flyer-FEB27.pdf", "_blank")
+                                $("#download-modal1").removeClass("is-visible")
+                                window.open("/reportdownload", "_blank")
+                            }
+                        }
+                    })
+                } else {
+                    let course = 'Post Graduate Programme in Technology & Business Management'
+                    if (url == '/' || url == '/pgp-technology-and-business-management') {
+                        course = 'Post Graduate Programme in Technology & Business Management'
+                    } else if (url == '/pgp-rise') {
+                        course = 'Post Graduate Programme in Technology & Business Management'
+                    } else if (url == "/ug-programme") {
+                        course = 'Under Graduate Program'
+                    } else if (url == "/events/ug-startup-weekend-experience") {  // specially for event Todo - can be deleted after some time according to need
+                        course = 'Under Graduate Program'
+                    } 
+                    else if (url == "/events/startup-weekend") {  // specially for event Todo - can be deleted after some time according to need
+                        course = 'Under Graduate Program'
+                    }
+
+                    let device = 'PC'
+                        if (window.matchMedia("(max-width: 768px)").matches) {
+                            device = "Mobile"
+                        } else {
+                            device="Desktop"
+                        }
+                        var post_url = '{{apiBaseURL}}/api/leads/pushToNPF'
+                    var request_method = 'POST'; //get form GET/POST method
+                    $.ajax({
+                        url: post_url,
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            "field_device_type":device,
+                            "email": $('#email12').val(),
+                            "name": $('#name12').val(),
+                            "mobile": $('#mobile12').val(),
+                            "linkedinProfile": "",
+                            "medium": utmMedium || medium,
+                            "campaign": utmCampaign || null,
+                            "source": utmSource || 'Website',
+                            "course": course,
+                            "leadSource": medium,
+                            "consentCheck": document.getElementById('authoriseCheck12')?.checked || false
+                            //"sendMail": true
+
+                        }),
+                        dataType: "json",
+
+                        success: function (result) {
+                            //Write your code here
+                                $('#brochure_form #thanku-section').removeClass('hide');
+                                $('#brochure_form #form-fields').addClass('hide');
+
+
+                                $("input[type=text], input[type=email], input[type=tel], textarea").val("");
+                                $("#emailFooter").val('')
+                             //   window.open("{{CDN_BASE_URL}}/assets/imgV2/StartupWeekend-flyer-FEB27.pdf", "_blank")
+                                 window.open("{{CDN_BASE_URL}}/assets/imgV2/Startup_Weekend-Brochure.pdf", "_blank")
+
+                             //   $("#download-modal1").removeClass("is-visible")
+                               // window.open("/reportdownload", "_blank")
+                        }
+                    });
+                }
+
+
+            } else {
+                if (/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/.test($("#email12").val()) == false || $('#email12').val().trim() == '') {
+                    document.getElementById('emailValidation12').style.visibility = "visible"
+                } else {
+                    document.getElementById('emailValidation12').style.visibility = "hidden";
+                }
+
+                if (/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test($('#mobile12').val()) == false || $('#mobile12').val().trim() == '') {
+                    document.getElementById('mobileValidation12').style.visibility = "visible"
+                } else {
+                    document.getElementById('mobileValidation12').style.visibility = "hidden"
+                }
+
+                if (/^[a-zA-Z ]+$/.test($('#name12').val()) == false || $('#name12').val().trim() == '') {
+                    document.getElementById('nameValidation12').style.visibility = "visible"
+                } else {
+                    document.getElementById('nameValidation12').style.visibility = "hidden"
+                }
+            }
+
+        });
+    });
+</script>

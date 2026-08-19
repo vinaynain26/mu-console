@@ -1,0 +1,521 @@
+<section class="careerteam">
+  <div class="container">
+    <div class="headingWrap">
+      <p class="headingSmall">
+        <img src="https://files.mastersunion.link/resources/svg/star.svg" alt="Icon">
+        PROFESSIONAL GUIDANCE
+      </p>
+      <h2 class="sectionHeading whiteBgHead">
+       <span class="lightMuVector"> Careers Team</span>
+      </h2>
+    </div>
+    <div class="opportunityWrapper mt30" id="opportunityWrapper"></div>
+
+    <div class="careerTeamToggleWrap">
+      <button type="button" class="careerTeamToggleBtn" id="careerTeamToggleBtn" aria-expanded="false"
+        aria-controls="opportunityWrapper">
+        <span class="careerTeamToggleLabel">View More</span>
+        <svg class="careerTeamToggleIcon" width="14" height="14" viewBox="0 0 14 14" fill="none"
+          xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M3.5 5.25L7 8.75L10.5 5.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="caution black mt30">
+      <img src="https://files.mastersunion.link/resources/svg/announcementIcon.svg" alt="">
+      <p>Reach out to our team at <a href="mailto:careerservices@mastersunion.org"
+          class="gradientBold mt10">careerservices@mastersunion.org</a></p>
+
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .careerteam .masterBox.isTeamHidden {
+    display: none;
+  }
+
+  .careerTeamToggleWrap {
+    display: none;
+    justify-content: center;
+    margin-top: 40px;
+  }
+
+  .careerTeamToggleWrap.isVisible {
+    display: flex;
+  }
+
+  .careerTeamToggleBtn {
+    border-radius: 54px;
+    background: var(--white, #fff);
+    border: 1px solid #d4d4d4;
+    padding: 12px 24px;
+    font: 0.875rem "go-medium";
+    line-height: 150%;
+    color: var(--black5, #090909);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+
+  .careerTeamToggleIcon {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+  }
+
+  .careerTeamToggleBtn[aria-expanded="true"] .careerTeamToggleIcon {
+    transform: rotate(180deg);
+  }
+
+  @media (max-width: 767px) {
+
+    .careerTeamToggleWrap,
+    .careerTeamToggleWrap.isVisible {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  const data = [
+  {
+    "serial": 1,
+    "name": "Abhishek Kaul",
+    "designation": "Director - Corporate Engagements, Masters' Union & Tetr",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Abhishek_Kaul.webp",
+    "bio": "MBA, ISB | Ex. Walt Disney, EY, Times Group"
+  },
+  {
+    "serial": 2,
+    "name": "Abhinav Arora",
+    "designation": "Associate Director - Strategic Initiatives",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Abhinav_Arora.webp",
+    "bio": "MBA, FMS | Ex. Ernt & Young (P), Jio"
+  },
+  {
+    "serial": 3,
+    "name": "Amit Kumar",
+    "designation": "Associate Director - Corporate Engagements",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Amit_Kumar.webp",
+    "bio": "MBA, IIM-Ahemdabad | Ex-Paytm, PayU, upGrad, NIIT"
+  },
+  {
+    "serial": 4,
+    "name": "Ali Zein Alabdin Qeddo",
+    "designation": "Associate Director - Corporate Engagements",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Ali_Zein_Alabdin_Qeddo.webp",
+    "bio": "Ex-Al Habtoor Group, Bayzat"
+  },
+  {
+    "serial": 5,
+    "name": "Anurag Yadav",
+    "designation": "Associate Director - Corporate Engagements",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Anurag_Yadav.webp",
+    "bio": "MBA, MDI Gurgaon | Ex. Accenture"
+  },
+  {
+    "serial": 6,
+    "name": "Nishant Singh Tanwar",
+    "designation": "Associate Director - Corporate Engagements",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Nishant_Singh_Tanwar.webp",
+    "bio": "MBA, XLRI | Ex. Naukri.com, Korn Ferry"
+  },
+  {
+    "serial": 7,
+    "name": "Akhil Krishna Gupta",
+    "designation": "Associate Director - Corporate Engagements",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Akhil_Krishna_Gupta.webp",
+    "bio": "IIT-Kharagpur Alumnus | Ex-Reliance Retail, OYO"
+  },
+  {
+    "serial": 8,
+    "name": "Dibyendu Choudhury",
+    "designation": "Deputy Director - Corporate Engagements",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Dibyendu_Choudhury.webp",
+    "bio": "Ex. Amity University"
+  },
+  {
+    "serial": 9,
+    "name": "Aastha Arora",
+    "designation": "Deputy Director - Corporate Engagements",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Aastha_Arora.webp",
+    "bio": "Ex. Emeritus"
+  },
+  {
+    "serial": 10,
+    "name": "Vinayak Chowdhri",
+    "designation": "Deputy Director - Corporate Engagements",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Vinayak_Chowdhri.webp",
+    "bio": "Ex. DTDC Express Ltd, ITC Hotels, GroupOn Inc."
+  },
+  {
+    "serial": 11,
+    "name": "Chanpreet Singh Gulati",
+    "designation": "General Manager - Corporate Engagements",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Chanpreet_Singh_Gulati.webp",
+    "bio": "Ex. Zomato"
+  },
+  {
+    "serial": 12,
+    "name": "Simran Bhatia",
+    "designation": "General Manager -  Corporate Engagements",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Simran_Bhatia.webp",
+    "bio": "Ex. KPMG, Unacademy"
+  },
+  {
+    "serial": 13,
+    "name": "Vidhu Goel",
+    "designation": "General Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Vidhu_Goel.webp",
+    "bio": "MBA, Masters' Union | Ex. Collegedunia"
+  },
+  {
+    "serial": 14,
+    "name": "Sheliza Mamad",
+    "designation": "General Manager -  Corporate Engagements",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Sheliza_Mamad.webp",
+    "bio": "Kingston University Alumnus | Ex-Middlesex University, Dubai"
+  },
+  {
+    "serial": 15,
+    "name": "Radhika Goyal",
+    "designation": "Senior Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Radhika_Goyal.webp",
+    "bio": "MBA, Masters' Union | Ex. Daarshik Aerotech, Virtusa"
+  },
+  {
+    "serial": 16,
+    "name": "Shubham Gupta",
+    "designation": "Senior Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Shubham_Gupta.webp",
+    "bio": "MBA, Masters' Union | Ex. Meltwater, Vistara"
+  },
+  {
+    "serial": 17,
+    "name": "Ajaya Kaushik",
+    "designation": "Senior Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Ajaya_Kaushik.webp",
+    "bio": "YIF, Ashoka University | Ex. Deutsche Telekom"
+  },
+  {
+    "serial": 18,
+    "name": "Pragati Gupta",
+    "designation": "Senior Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Pragati_Gupta.webp",
+    "bio": "Ex. Pearson"
+  },
+  {
+    "serial": 19,
+    "name": "Jasleen Taluja",
+    "designation": "Senior Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Jasleen_Taluja.webp",
+    "bio": "MBA, IMT Ghaziabad | Ex. Seekho"
+  },
+  {
+    "serial": 20,
+    "name": "Vibhuti Singh",
+    "designation": "Senior Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Vibhuti_Singh.webp",
+    "bio": "MBA, Murdoch University, Australia | Ex. KiwiTech"
+  },
+  {
+    "serial": 21,
+    "name": "Santanu Goswami",
+    "designation": "Senior Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Santanu_Goswami.webp",
+    "bio": "MBA, IIM-Calcutta | Ex. Career Launcher"
+  },
+  {
+    "serial": 22,
+    "name": "Mansi Bhargava",
+    "designation": "Senior Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Mansi_Bhargava.webp",
+    "bio": "MBA, IIM-Ranchi | Ex. Web3"
+  },
+  {
+    "serial": 23,
+    "name": "Kartikeya Gupta",
+    "designation": "Senior Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Kartikeya_Gupta.webp",
+    "bio": "MBA, Mesa School of Business | Ex. Zomato"
+  },
+  {
+    "serial": 24,
+    "name": "Kriti Sharma",
+    "designation": "Senior Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Kriti_Sharma.webp",
+    "bio": "MBA, Masters' Union | Ex. BCG"
+  },
+  {
+    "serial": 25,
+    "name": "Siddharth Jangir",
+    "designation": "Senior Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Siddharth_Jangir.webp",
+    "bio": "MBA, IIM-Kozhikode | Ex. Seashell Logistics"
+  },
+  {
+    "serial": 26,
+    "name": "Namita Bhatia",
+    "designation": "Senior Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Namita_Bhatia.webp",
+    "bio": "University of Melbourne Alumnus | Ex. InternMatch"
+  },
+  {
+    "serial": 27,
+    "name": "Riti Marwah",
+    "designation": "Senior Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Riti_Marwah.webp",
+    "bio": "Ex. FIIB, Infoedge, Kotak Securities"
+  },
+  {
+    "serial": 28,
+    "name": "Vinayaka Goyal",
+    "designation": "Senior Program Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Vinayaka_Goyal.webp",
+    "bio": "Ex. AccuWiz Consulting"
+  },
+  {
+    "serial": 29,
+    "name": "Rudransh Tiwari",
+    "designation": "Senior Program Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Rudransh_Tiwari.webp",
+    "bio": "Ex. Pristyn Care, PhonePe"
+  },
+  {
+    "serial": 30,
+    "name": "Sonali Awasthi",
+    "designation": "Senior Program Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Sonali_Awasthi.webp",
+    "bio": "Ex. NIPUN Bharat (GOI)"
+  },
+  {
+    "serial": 31,
+    "name": "Kushagra Kumar",
+    "designation": "Senior Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Kushagra_Kumar.webp",
+    "bio": "MBA, DIAS | Ex. Fuld, 10times, infoedge"
+  },
+  {
+    "serial": 32,
+    "name": "Shivangi Dwivedi",
+    "designation": "Senior Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Shivangi_Dwivedi.webp",
+    "bio": "Ex. Britannica Education India"
+  },
+  {
+    "serial": 33,
+    "name": "Sanjukta Mukherjee",
+    "designation": "Senior Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Sanjukta_Mukherjee.webp",
+    "bio": "Ex. AiSensy, Marriott International"
+  },
+  {
+    "serial": 34,
+    "name": "Sourav Majumder",
+    "designation": "Senior Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Sourav_Majumder.webp",
+    "bio": "Ex. CodingNinjas"
+  },
+  {
+    "serial": 35,
+    "name": "Sidhartha Bal",
+    "designation": "Program Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Sidhartha_Bal.webp",
+    "bio": "Ex. Growth School"
+  },
+  {
+    "serial": 36,
+    "name": "Nitika Wadhwa",
+    "designation": "Program Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Nitika_Wadhwa.webp",
+    "bio": "Ex. EHL, Jamboree, Cognizant"
+  },
+  {
+    "serial": 37,
+    "name": "Zubair Warsi",
+    "designation": "Program Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Zubair_Warsi.webp",
+    "bio": "Ex. Spectacom Global, All Stars Digital, Radio Mirchi"
+  },
+  {
+    "serial": 38,
+    "name": "Saksham Dutt",
+    "designation": "Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Saksham_Dutt.webp",
+    "bio": "Ex. Adobe, Cvent, Gartner"
+  },
+  {
+    "serial": 39,
+    "name": "Vedika Kanodiya",
+    "designation": "Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Vedika_Kanodiya.webp",
+    "bio": "Ex. Axis Max Life Insurance Ltd"
+  },
+  {
+    "serial": 40,
+    "name": "Koshlendra Singh",
+    "designation": "Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Koshlendra_Singh.webp",
+    "bio": "Ex-AccioJob, Zomato"
+  },
+  {
+    "serial": 41,
+    "name": "Vansh Pratap Singh",
+    "designation": "Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Vansh_Pratap_Singh.webp",
+    "bio": "Ex-KPMG"
+  },
+  {
+    "serial": 42,
+    "name": "Adiksha Bhalla",
+    "designation": "Program Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Adiksha_Bhalla.webp",
+    "bio": "Ex. Sunstone"
+  },
+  {
+    "serial": 43,
+    "name": "Jitender Sharma",
+    "designation": "Placement Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Jitender_Sharma.webp",
+    "bio": "Ex. Amity University, JIMS College"
+  },
+  {
+    "serial": 44,
+    "name": "Tanya Verma",
+    "designation": "Associate Program Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Tanya_Verma.webp",
+    "bio": "Ex-Consultadd"
+  },
+  {
+    "serial": 45,
+    "name": "Anshuman Raj",
+    "designation": "Associate Program Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Anshuman_Raj.webp",
+    "bio": "Ex. Loop, Simplilearn"
+  },
+  {
+    "serial": 46,
+    "name": "Anjali Antil",
+    "designation": "Associate Program Manager - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Anjali_Antil.webp",
+    "bio": "Ex. Altera Institute"
+  },
+  {
+    "serial": 47,
+    "name": "Mansi Jain",
+    "designation": "Associate Program Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Mansi_Jain.webp",
+    "bio": "Ex. CollegeDekho"
+  },
+  {
+    "serial": 48,
+    "name": "Vidit Vishal",
+    "designation": "Associate Program Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Vidit_Vishal.webp",
+    "bio": "Duke University Alumnus | Ex. Cars24"
+  },
+  {
+    "serial": 49,
+    "name": "Tanwir Haque",
+    "designation": "Associate Program Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Tanwir_Haque.webp",
+    "bio": "Ex-MoHUA (GOI)"
+  },
+  {
+    "serial": 50,
+    "name": "Abhay Barari",
+    "designation": "Associate Program Manager - Career Preparation",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Abhay_Barari.webp",
+    "bio": "Ex- Coding Nexus, Study IQ"
+  },
+  {
+    "serial": 51,
+    "name": "Ankit Jain",
+    "designation": "Associate - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Ankit_Jain.webp",
+    "bio": "Ex. SMC"
+  },
+  {
+    "serial": 52,
+    "name": "Ayushi Singh",
+    "designation": "Senior Executive - Corporate Relations",
+    "image": "https://cdn.unionstack.in/uploads/15082026/v1/Ayushi_Singh.webp",
+    "bio": "Ex. GradRight Inc."
+  }
+]
+    ;
+
+  const container = document.getElementById("opportunityWrapper");
+  const VISIBLE_TEAM_COUNT = 15;
+
+  data.forEach((person, index) => {
+    const box = document.createElement("div");
+    box.className = index < VISIBLE_TEAM_COUNT ? "masterBox" : "masterBox isTeamHidden";
+    box.innerHTML = `
+      <img  src="${person.image}" alt="${person.name}">
+      <div class="opprName new flexbox">${person.name}</div>
+      <div class="lightmastername">${person.designation}</div>
+      <hr class="lineSpace">
+      <div class="opprDesignation">
+        <div class="opprDesignation new">${person.bio}</div>
+      </div>
+    `;
+    container.appendChild(box);
+  });
+
+  (function () {
+    const toggleWrap = document.querySelector(".careerTeamToggleWrap");
+    const toggleBtn = document.getElementById("careerTeamToggleBtn");
+
+    if (!toggleWrap || !toggleBtn || data.length <= VISIBLE_TEAM_COUNT) return;
+
+    const toggleLabel = toggleBtn.querySelector(".careerTeamToggleLabel");
+    const overflowBoxes = Array.from(container.querySelectorAll(".masterBox.isTeamHidden"));
+    const mobileQuery = window.matchMedia("(max-width: 767px)");
+
+    const setCollapsed = (isCollapsed) => {
+      overflowBoxes.forEach(box => box.classList.toggle("isTeamHidden", isCollapsed));
+      toggleBtn.setAttribute("aria-expanded", String(!isCollapsed));
+      toggleLabel.textContent = isCollapsed ? "View More" : "View Less";
+    };
+
+    // Mobile shows the full list with no toggle; desktop starts collapsed at VISIBLE_TEAM_COUNT.
+    const syncViewport = () => {
+      const isMobile = mobileQuery.matches;
+      toggleWrap.classList.toggle("isVisible", !isMobile);
+
+      if (isMobile) {
+        overflowBoxes.forEach(box => box.classList.remove("isTeamHidden"));
+        toggleBtn.setAttribute("aria-expanded", "false");
+        toggleLabel.textContent = "View More";
+        return;
+      }
+
+      setCollapsed(true);
+    };
+
+    toggleBtn.addEventListener("click", function () {
+      if (mobileQuery.matches) return;
+
+      const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+      setCollapsed(isExpanded);
+
+      if (isExpanded) {
+        container.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+
+    if (typeof mobileQuery.addEventListener === "function") {
+      mobileQuery.addEventListener("change", syncViewport);
+    } else if (typeof mobileQuery.addListener === "function") {
+      mobileQuery.addListener(syncViewport);
+    }
+
+    syncViewport();
+  })();
+</script>

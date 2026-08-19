@@ -1,0 +1,741 @@
+<div class="tnModalOverlay" id="tn-register-modal" aria-hidden="true">
+    <div class="tnModal" role="dialog" aria-modal="true" aria-labelledby="tn-modal-title">
+        <button class="tnModalClose" type="button" aria-label="Close registration form">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"
+                aria-hidden="true">
+                <path d="M5 15L15 5M5 5L15 15" stroke="black" stroke-width="1.66667" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+        </button>
+
+        <div class="tnModalInner">
+            <div class="tnModalLeft">
+                <div class="tnLeftHeader">
+                    <button class="tnPill" type="button" tabindex="-1">
+                        <span>REGISTER NOW FOR</span>
+                    </button>
+                    <h2 class="tnHeading">
+                        PARTNER WITH US<br>
+                        AS WE UNVEIL<br>
+                        <span>AI'S NEXT FRONTIER</span>
+                    </h2>
+                </div>
+                <div class="tnAvatarFlexRow">
+                    <div class="tnAvatarPreview" id="tnAvatarPreview" aria-live="polite"></div>
+                </div>
+                <p class="tnLeftCopy">
+                    Share your details with us, and our team<br>
+                    will reach out to you.
+                </p>
+            </div>
+
+            <div class="tnModalRight">
+                <form class="tnForm" id="tnRegisterForm" novalidate>
+                    <div class="tnFormGrid">
+                        <div class="tnField">
+                            <label class="tnLabel" for="tn-name">Name<span class="tnReq">*</span></label>
+                            <input class="tnInput" id="tn-name" type="text" name="name" placeholder="Jane Smith">
+                            <span class="tnFieldError" id="tn-name-err" style="color:red;font-size:12px;"></span>
+                        </div>
+                        <div class="tnField">
+                            <label class="tnLabel" for="tn-company">Company<span class="tnReq">*</span></label>
+                            <input class="tnInput" id="tn-company" type="text" name="company" placeholder="Razorpay">
+                            <span class="tnFieldError" id="tn-company-err" style="color:red;font-size:12px;"></span>
+                        </div>
+
+                        <div class="tnField">
+                            <label class="tnLabel" for="tn-email">Email ID<span class="tnReq">*</span></label>
+                            <input class="tnInput" id="tn-email" type="email" name="email"
+                                placeholder="john@example.com">
+                            <span class="tnFieldError" id="tn-email-err" style="color:red;font-size:12px;"></span>
+                        </div>
+                        <div class="tnField">
+                            <label class="tnLabel" for="tn-designation">Designation<span class="tnReq">*</span></label>
+                            <input class="tnInput" id="tn-designation" type="text" name="designation"
+                                placeholder="Product Manager">
+                            <span class="tnFieldError" id="tn-designation-err" style="color:red;font-size:12px;"></span>
+                        </div>
+
+                        <div class="tnField">
+                            <label class="tnLabel" for="tn-phone">Contact Number<span class="tnReq">*</span></label>
+                            <input class="tnInput" id="tn-phone" type="tel" name="phone" placeholder="XXXXXXXXXX">
+                            <span class="tnFieldError" id="tn-phone-err" style="color:red;font-size:12px;"></span>
+                        </div>
+                        <div class="tnField">
+                            <label class="tnLabel" for="tn-registerAs">Register As<span class="tnReq">*</span></label>
+                            <div class="tnSelectWrap">
+                                <select class="tnInput tnSelect" id="tn-registerAs" name="registerAs">
+                                    <option value="" disabled selected>Select role</option>
+                                    <option value="student_delegate">Student Delegate</option>
+                                    <option value="professional_delegate">Professional Delegate</option>
+                                    <option value="sponsor">Sponsor</option>
+                                    <option value="exhibitor">Exhibitor</option>
+                                    <option value="awardee_nomination">Nominate as an Awardee</option>
+                                </select>
+                                <span class="tnSelectIcon">&#9662;</span>
+                            </div>
+                            <span class="tnFieldError" id="tn-registerAs-err" style="color:red;font-size:12px;"></span>
+                        </div>
+                    </div>
+
+                    <div id="tnRoleFieldsContainer">
+                        <div class="tnRoleFields" data-role="student_delegate" hidden>
+                            <div class="tnField">
+                                <label class="tnLabel" for="tn-student-school">School / College Name<span class="tnReq">*</span></label>
+                                <input class="tnInput" id="tn-student-school" type="text" name="school"
+                                    placeholder="Enter school or college name"
+                                    data-role-required="true" data-role-label="School / College Name">
+                                <span class="tnFieldError" id="tn-student-school-err" style="color:red;font-size:12px;"></span>
+                            </div>
+                            <div class="tnField">
+                                <label class="tnLabel" for="tn-student-academic-year">Academic Year / Graduation Year<span class="tnReq">*</span></label>
+                                <input class="tnInput" id="tn-student-academic-year" type="text" name="academicYear"
+                                    placeholder="Ex: Final Year / 2026"
+                                    data-role-required="true" data-role-label="Academic Year / Graduation Year">
+                                <span class="tnFieldError" id="tn-student-academic-year-err" style="color:red;font-size:12px;"></span>
+                            </div>
+                            <div class="tnField tnFieldFull">
+                                <label class="tnLabel" for="tn-student-id-proof">Student ID Card Details<span class="tnReq">*</span></label>
+                                <input class="tnInput" id="tn-student-id-proof" type="text" name="studentIdProof"
+                                    placeholder="Mention ID card details / validity"
+                                    data-role-required="true" data-role-label="Student ID Card Details">
+                                <span class="tnFieldError" id="tn-student-id-proof-err" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+
+                        <div class="tnRoleFields" data-role="professional_delegate" hidden>
+                            <div class="tnField">
+                                <label class="tnLabel" for="tn-prof-company">Professional Company<span class="tnReq">*</span></label>
+                                <input class="tnInput" id="tn-prof-company" type="text" name="profCompany"
+                                    placeholder="Enter company name"
+                                    data-role-required="true" data-role-label="Professional Company">
+                                <span class="tnFieldError" id="tn-prof-company-err" style="color:red;font-size:12px;"></span>
+                            </div>
+                            <div class="tnField">
+                                <label class="tnLabel" for="tn-prof-designation">Professional Designation<span class="tnReq">*</span></label>
+                                <input class="tnInput" id="tn-prof-designation" type="text" name="profDesignation"
+                                    placeholder="Enter designation"
+                                    data-role-required="true" data-role-label="Professional Designation">
+                                <span class="tnFieldError" id="tn-prof-designation-err" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+
+                        <div class="tnRoleFields" data-role="exhibitor" hidden>
+                            <div class="tnField">
+                                <label class="tnLabel" for="tn-exhibitor-company">Exhibitor Company<span class="tnReq">*</span></label>
+                                <input class="tnInput" id="tn-exhibitor-company" type="text" name="exhibitorCompany"
+                                    placeholder="Enter company name"
+                                    data-role-required="true" data-role-label="Exhibitor Company">
+                                <span class="tnFieldError" id="tn-exhibitor-company-err" style="color:red;font-size:12px;"></span>
+                            </div>
+                            <div class="tnField">
+                                <label class="tnLabel" for="tn-exhibitor-business">Nature of Business / Industry<span class="tnReq">*</span></label>
+                                <input class="tnInput" id="tn-exhibitor-business" type="text" name="exhibitorBusiness"
+                                    placeholder="Ex: SaaS, AI, EdTech"
+                                    data-role-required="true" data-role-label="Nature of Business / Industry">
+                                <span class="tnFieldError" id="tn-exhibitor-business-err" style="color:red;font-size:12px;"></span>
+                            </div>
+                            <div class="tnField">
+                                <label class="tnLabel" for="tn-exhibitor-designation">Designation<span class="tnReq">*</span></label>
+                                <input class="tnInput" id="tn-exhibitor-designation" type="text" name="exhibitorDesignation"
+                                    placeholder="Enter designation"
+                                    data-role-required="true" data-role-label="Designation">
+                                <span class="tnFieldError" id="tn-exhibitor-designation-err" style="color:red;font-size:12px;"></span>
+                            </div>
+                            <div class="tnField">
+                                <label class="tnLabel" for="tn-exhibitor-purpose">Purpose of Exhibiting<span class="tnReq">*</span></label>
+                                <input class="tnInput" id="tn-exhibitor-purpose" type="text" name="exhibitorPurpose"
+                                    placeholder="What do you want to showcase?"
+                                    data-role-required="true" data-role-label="Purpose of Exhibiting">
+                                <span class="tnFieldError" id="tn-exhibitor-purpose-err" style="color:red;font-size:12px;"></span>
+                            </div>
+                            <div class="tnField tnFieldFull">
+                                <label class="tnLabel" for="tn-exhibitor-booth-size">Booth Size<span class="tnReq">*</span></label>
+                                <div class="tnSelectWrap">
+                                    <select class="tnInput tnSelect" id="tn-exhibitor-booth-size" name="exhibitorBoothSize"
+                                        data-role-required="true" data-role-label="Booth Size">
+                                        <option value="" disabled selected>Select booth size</option>
+                                        <option value="4x4">4x4</option>
+                                        <option value="8x8">8x8</option>
+                                    </select>
+                                    <span class="tnSelectIcon">&#9662;</span>
+                                </div>
+                                <span class="tnFieldError" id="tn-exhibitor-booth-size-err" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+
+                        <div class="tnRoleFields" data-role="sponsor" hidden>
+                            <div class="tnField tnFieldFull">
+                                <label class="tnLabel" for="tn-sponsor-interest">Sponsorship Interest<span class="tnReq">*</span></label>
+                                <textarea class="tnInput tnTextarea" id="tn-sponsor-interest" name="sponsorInterest" rows="3"
+                                    placeholder="Share sponsorship preference and objective"
+                                    data-role-required="true" data-role-label="Sponsorship Interest"></textarea>
+                                <span class="tnFieldError" id="tn-sponsor-interest-err" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+
+                        <div class="tnRoleFields" data-role="awardee_nomination" hidden>
+                            <div class="tnField tnFieldFull">
+                                <label class="tnLabel" for="tn-award-category">Award Category<span class="tnReq">*</span></label>
+                                <div class="tnSelectWrap">
+                                    <select class="tnInput tnSelect" id="tn-award-category" name="awardCategory"
+                                        data-role-required="true" data-role-label="Award Category">
+                                        <option value="" disabled selected>Select award category</option>
+                                        <option value="AI Founder of the Year">AI Founder of the Year</option>
+                                        <option value="AI Visionary Award">AI Visionary Award</option>
+                                        <option value="AI Investor of the Year Award">AI Investor of the Year Award</option>
+                                        <option value="The Emerging Titan Award">The Emerging Titan Award</option>
+                                        <option value="The Legacy Laureate in AI Award">The Legacy Laureate in AI Award</option>
+                                        <option value="AI Startup of the Year">AI Startup of the Year</option>
+                                        <option value="AI Enterprise Catalyst Award">AI Enterprise Catalyst Award</option>
+                                        <option value="AI Bharat Impact Award">AI Bharat Impact Award</option>
+                                        <option value="AI Paradigm Disruptor Award">AI Paradigm Disruptor Award</option>
+                                        <option value="AI Luminary in Media & Creativity Award">AI Luminary in Media &amp; Creativity Award</option>
+                                    </select>
+                                    <span class="tnSelectIcon">&#9662;</span>
+                                </div>
+                                <span class="tnFieldError" id="tn-award-category-err" style="color:red;font-size:12px;"></span>
+                            </div>
+                            <div class="tnField">
+                                <label class="tnLabel" for="tn-award-nominee-name">Nominee Name<span class="tnReq">*</span></label>
+                                <input class="tnInput" id="tn-award-nominee-name" type="text" name="awardNomineeName"
+                                    placeholder="Enter nominee full name"
+                                    data-role-required="true" data-role-label="Nominee Name">
+                                <span class="tnFieldError" id="tn-award-nominee-name-err" style="color:red;font-size:12px;"></span>
+                            </div>
+                            <div class="tnField tnFieldFull">
+                                <label class="tnLabel" for="tn-award-org">Nominee Organization<span class="tnReq">*</span></label>
+                                <input class="tnInput" id="tn-award-org" type="text" name="awardNomineeOrg"
+                                    placeholder="Enter organization name"
+                                    data-role-required="true" data-role-label="Nominee Organization">
+                                <span class="tnFieldError" id="tn-award-org-err" style="color:red;font-size:12px;"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tnField tnFieldFull" id="tn-payment-wrap" hidden>
+                        <label class="tnLabel" for="tn-payAmount">Payment Amount</label>
+                        <input class="tnInput" id="tn-payAmount" type="text" name="payAmount" readonly
+                            style="background:rgba(255,255,255,0.06);cursor:default;">
+                    </div>
+
+                    <div class="tnField tnFieldFull">
+                        <label class="tnLabel" for="tn-context">
+                            Anything that can help us prepare for a conversation?<span class="tnReq">*</span>
+                        </label>
+                        <textarea class="tnInput tnTextarea" id="tn-context" name="notes" rows="3"
+                            placeholder="Write in brief..."></textarea>
+                        <span class="tnFieldError" id="tn-context-err" style="color:red;font-size:12px;"></span>
+                    </div>
+
+                    <p id="tn-form-error" style="color:red;font-size:13px;margin-bottom:8px;"></p>
+
+                    <div class="consentCheckWrapper">
+                        <div class="consentCheckRow">
+                            <input type="checkbox" id="consentChecktn1">
+                            <label for="consentChecktn1">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+                        </div>
+                        <p id="consentCheckErrortn1" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+                    </div>
+
+                    <button class="tnSubmit" id="tnSubmitBtn" type="submit">
+                        SUBMIT
+                    </button>
+                </form>
+
+                <div class="tnThankYouContent tnThankYouInline" id="tnThankYouInline" hidden>
+                    <div class="thankyouDivi">
+                        <h3 class="tnThankYouTitle">Thank you for applying</h3>
+                        <p class="tnThankYouSub">Thank you for showing interest for The Next Tech 1.0. Our team will contact you shortly.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ─────────────────────────────────────────────────────────────────────────────
+    //  Registration form — THE NEXT TECH 1.0
+    //
+    //  Flow:
+    //    1. User opens modal  →  openModal()
+    //    2. User fills form and clicks SUBMIT  →  handleFormSubmit()
+    //       a. validateAllFields()   — shows red errors inline, stops if invalid
+    //       b. detectDeviceType()    — mobile / tablet / desktop from screen width
+    //       c. readUtmParamsFromUrl() — picks up any utm_* / gclid / fbclid from URL
+    //       d. buildRequestBody()    — assembles the full payload
+    //       d. registerForEvent()    — POSTs to API
+    //    3. On success  →  showThankYouScreen(data)   — hides form, shows QR + token
+    //    4. User closes modal  →  closeModal()         — resets back to form
+    // ─────────────────────────────────────────────────────────────────────────────
+
+    var API_BASE = "{{apiBaseUrl}}";
+
+    // Event details — change these if the event changes Critical INFORMATION FOR THE NEXT TECH 1.0 *******************************************************************************************
+    var EVENT_NAME = 'THE NEXT TECH 1.0';
+    var EVENT_SLUG = 'the-next-tech-1.0';
+    var EVENT_DATE     = '2026-04-18T03:30:00.000Z';  // 18 Apr 2026, 9 AM IST (UTC+5:30)
+    var EVENT_LOCATION = 'Masters\' Union Campus, DLF CyberPark, Gurugram';
+    /* ******************************************************************************  critical information for the next tech 1.0 ******************************************************************************************* */
+
+    // Payment amounts per role (in INR)
+    var ROLE_PAY_AMOUNTS = {
+        student_delegate:      1,
+        professional_delegate: 2,
+        sponsor:               3,
+        exhibitor:             4,
+        awardee_nomination:    5
+    };
+
+    function getPayAmountForRole(role) {
+        return ROLE_PAY_AMOUNTS.hasOwnProperty(role) ? ROLE_PAY_AMOUNTS[role] : 0;
+    }
+
+
+    // ── 1. MODAL OPEN / CLOSE ────────────────────────────────────────────────────
+
+    var tnIsScrollLocked = false;
+    var tnOriginalScrollY = 0;
+    var tnOriginalBodyPaddingRight = '';
+    var tnOriginalHtmlOverflow = '';
+    var tnOriginalBodyOverflow = '';
+
+    function lockBackgroundScroll() {
+        if (tnIsScrollLocked) return;
+        tnIsScrollLocked = true;
+
+        tnOriginalScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+
+        var html = document.documentElement;
+        var body = document.body;
+        tnOriginalHtmlOverflow = html.style.overflow || '';
+        tnOriginalBodyOverflow = body.style.overflow || '';
+        tnOriginalBodyPaddingRight = body.style.paddingRight || '';
+
+        var scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+        if (scrollBarWidth > 0) {
+            body.style.paddingRight = scrollBarWidth + 'px';
+        }
+
+        html.style.overflow = 'hidden';
+
+        body.style.position = 'fixed';
+        body.style.top = (-tnOriginalScrollY) + 'px';
+        body.style.left = '0';
+        body.style.right = '0';
+        body.style.width = '100%';
+        body.style.overflow = 'hidden';
+    }
+
+    function unlockBackgroundScroll() {
+        if (!tnIsScrollLocked) return;
+        tnIsScrollLocked = false;
+
+        var html = document.documentElement;
+        var body = document.body;
+        body.style.position = '';
+        body.style.top = '';
+        body.style.left = '';
+        body.style.right = '';
+        body.style.width = '';
+        body.style.overflow = tnOriginalBodyOverflow;
+        body.style.paddingRight = tnOriginalBodyPaddingRight;
+        html.style.overflow = tnOriginalHtmlOverflow;
+
+        window.scrollTo(0, tnOriginalScrollY);
+    }
+
+    function openModal() {
+        var modal = document.getElementById('tn-register-modal');
+        if (!modal) return;
+        resetToFormScreen();
+        lockBackgroundScroll();
+        modal.classList.add('is-visible');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('tnModal-open');
+    }
+
+    function closeModal() {
+        var modal = document.getElementById('tn-register-modal');
+        if (!modal) return;
+        modal.classList.remove('is-visible');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('tnModal-open');
+        resetToFormScreen();
+        unlockBackgroundScroll();
+    }
+
+    function resetToFormScreen() {
+        var form = document.getElementById('tnRegisterForm');
+        var thanks = document.getElementById('tnThankYouInline');
+        if (form) form.hidden = false;
+        if (thanks) thanks.hidden = true;
+        clearForm();
+    }
+
+    function clearForm() {
+        ['tn-name', 'tn-company', 'tn-email', 'tn-designation', 'tn-phone', 'tn-context'].forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+
+        var select = document.getElementById('tn-registerAs');
+        if (select) select.selectedIndex = 0;
+
+        ['tn-name-err', 'tn-company-err', 'tn-email-err', 'tn-designation-err', 'tn-phone-err', 'tn-registerAs-err', 'tn-context-err'].forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) el.textContent = '';
+        });
+
+        document.querySelectorAll('#tnRoleFieldsContainer [data-role-required]').forEach(function (el) {
+            if (el.tagName === 'SELECT') {
+                el.selectedIndex = 0;
+            } else {
+                el.value = '';
+            }
+            var errorEl = document.getElementById(el.id + '-err');
+            if (errorEl) errorEl.textContent = '';
+        });
+
+        // hide payment field and clear its value
+        var payWrap = document.getElementById('tn-payment-wrap');
+        var payInput = document.getElementById('tn-payAmount');
+        if (payWrap) payWrap.hidden = true;
+        if (payInput) payInput.value = '';
+
+        updateRoleSpecificFieldsVisibility('');
+
+        var formError = document.getElementById('tn-form-error');
+        if (formError) formError.textContent = '';
+
+        var consentCb = document.getElementById('consentChecktn1');
+        if (consentCb) consentCb.checked = false;
+        var consentErr = document.getElementById('consentCheckErrortn1');
+        if (consentErr) consentErr.classList.add('warning');
+
+        resetSubmitButton(document.getElementById('tnSubmitBtn'));
+    }
+
+
+    // ── 2a. VALIDATE ALL FIELDS ──────────────────────────────────────────────────
+
+    function validateAllFields() {
+        var allValid = true;
+
+        var fieldsToCheck = [
+            { id: 'tn-name', errorMsg: 'Name is required' },
+            { id: 'tn-company', errorMsg: 'Company is required' },
+            { id: 'tn-email', errorMsg: 'Valid email is required', checkEmail: true },
+            { id: 'tn-designation', errorMsg: 'Designation is required' },
+            { id: 'tn-phone', errorMsg: 'Contact number is required' },
+            { id: 'tn-registerAs', errorMsg: 'Please select a role' },
+            { id: 'tn-context', errorMsg: 'Please fill this field' }
+        ];
+
+        fieldsToCheck.forEach(function (field) {
+            var input = document.getElementById(field.id);
+            var errorEl = document.getElementById(field.id + '-err');
+            if (!input || !errorEl) return;
+
+            var value = input.value.trim();
+            var errorMsg = '';
+
+            if (!value) {
+                errorMsg = field.errorMsg;
+            } else if (field.checkEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+                errorMsg = 'Please enter a valid email address';
+            }
+
+            errorEl.textContent = errorMsg;
+            if (errorMsg) allValid = false;
+        });
+
+        if (!validateRoleSpecificFields()) allValid = false;
+
+        return allValid;
+    }
+
+    function updateRoleSpecificFieldsVisibility(selectedRole) {
+        document.querySelectorAll('#tnRoleFieldsContainer .tnRoleFields').forEach(function (block) {
+            var isVisible = block.getAttribute('data-role') === selectedRole;
+            block.hidden = !isVisible;
+        });
+
+        var payWrap = document.getElementById('tn-payment-wrap');
+        var payInput = document.getElementById('tn-payAmount');
+        if (payWrap && payInput) {
+            if (selectedRole && ROLE_PAY_AMOUNTS.hasOwnProperty(selectedRole)) {
+                payInput.value = '₹' + ROLE_PAY_AMOUNTS[selectedRole];
+                payWrap.hidden = false;
+            } else {
+                payInput.value = '';
+                payWrap.hidden = true;
+            }
+        }
+    }
+
+    function validateRoleSpecificFields() {
+        var selectedRole = document.getElementById('tn-registerAs').value;
+        var activeBlock = document.querySelector('#tnRoleFieldsContainer .tnRoleFields[data-role="' + selectedRole + '"]');
+        if (!activeBlock) return true;
+
+        var isValid = true;
+        activeBlock.querySelectorAll('[data-role-required]').forEach(function (field) {
+            var errorEl = document.getElementById(field.id + '-err');
+            if (!errorEl) return;
+            var value = (field.value || '').trim();
+            if (!value) {
+                errorEl.textContent = (field.getAttribute('data-role-label') || 'This field') + ' is required';
+                isValid = false;
+            } else {
+                errorEl.textContent = '';
+            }
+        });
+
+        return isValid;
+    }
+
+
+    // ── 2b. DETECT DEVICE TYPE FROM SCREEN WIDTH ────────────────────────────────
+
+    function detectDeviceType() {
+        var width = window.innerWidth;
+        if (width <= 480) return 'mobile';
+        if (width <= 1024) return 'tablet';
+        return 'desktop';
+    }
+
+
+    // ── 2c. READ UTM PARAMS FROM URL ─────────────────────────────────────────────
+
+    function readUtmParamsFromUrl() {
+        var params = new URLSearchParams(window.location.search);
+
+        function get(key) { return params.get(key) || undefined; }
+
+        return {
+            source: get('utm_source') || window.location.href,
+            medium: get('utm_medium'),
+            campaign: get('utm_campaign'),
+            term: get('utm_term'),
+            content: get('utm_content'),
+            campaignId: get('utm_campaign_id') || get('campaignid'),
+            adGroupId: get('utm_adgroup_id') || get('adgroupid'),
+            creativeId: get('utm_creative_id') || get('creativeid'),
+            placement: get('utm_placement') || get('placement'),
+            gclid: get('gclid'),
+            fbclid: get('fbclid'),
+            leadSource: get('lead_source') || get('leadsource') || "THE NEXT TECH 1.0 Register For Event Form",
+            leadOrigin: get('lead_origin') || get('leadorigin') || "THE NEXT TECH 1.0 Register For Event Form",
+            device: get('device'),
+            landingPage: window.location.pathname,
+            fullUrl: window.location.href
+        };
+    }
+
+
+    // ── 2d. BUILD REQUEST BODY ───────────────────────────────────────────────────
+
+    function buildRequestBody(utm, deviceType) {
+        var selectedRole = document.getElementById('tn-registerAs').value;
+
+        var body = {
+            // event info
+            eventName: EVENT_NAME,
+            eventSlug: EVENT_SLUG,
+            eventDate: EVENT_DATE,
+            eventLocation: EVENT_LOCATION,
+
+            // core user fields
+            name:        document.getElementById('tn-name').value.trim(),
+            email:       document.getElementById('tn-email').value.trim(),
+            mobile:      document.getElementById('tn-phone').value.trim(),
+            company:     document.getElementById('tn-company').value.trim(),
+            designation: document.getElementById('tn-designation').value.trim(),
+            registerAs:  selectedRole,
+            notes:       document.getElementById('tn-context').value.trim(),
+            payAmount:   getPayAmountForRole(selectedRole),
+            consentCheck: document.getElementById('consentChecktn1')?.checked || false,
+
+            // device type
+            deviceType: deviceType,
+
+            // tracking
+            source:     utm.source,
+            medium:     utm.medium,
+            campaign:   utm.campaign,
+            term:       utm.term,
+            content:    utm.content,
+            campaignId: utm.campaignId,
+            adGroupId:  utm.adGroupId,
+            creativeId: utm.creativeId,
+            placement:  utm.placement,
+            gclid:      utm.gclid,
+            fbclid:     utm.fbclid,
+            leadSource: utm.leadSource,
+            leadOrigin: utm.leadOrigin,
+            landingPage: utm.landingPage,
+            fullUrl:    utm.fullUrl
+        };
+
+        // role-specific fields as individual keys
+        if (selectedRole === 'student_delegate') {
+            body.school        = document.getElementById('tn-student-school').value.trim();
+            body.academicYear  = document.getElementById('tn-student-academic-year').value.trim();
+            body.studentIdProof = document.getElementById('tn-student-id-proof').value.trim();
+
+        } else if (selectedRole === 'professional_delegate') {
+            body.profCompany     = document.getElementById('tn-prof-company').value.trim();
+            body.profDesignation = document.getElementById('tn-prof-designation').value.trim();
+
+        } else if (selectedRole === 'exhibitor') {
+            body.exhibitorCompany     = document.getElementById('tn-exhibitor-company').value.trim();
+            body.exhibitorBusiness    = document.getElementById('tn-exhibitor-business').value.trim();
+            body.exhibitorDesignation = document.getElementById('tn-exhibitor-designation').value.trim();
+            body.exhibitorPurpose     = document.getElementById('tn-exhibitor-purpose').value.trim();
+            body.exhibitorBoothSize   = document.getElementById('tn-exhibitor-booth-size').value;
+
+        } else if (selectedRole === 'sponsor') {
+            body.sponsorInterest = document.getElementById('tn-sponsor-interest').value.trim();
+
+        } else if (selectedRole === 'awardee_nomination') {
+            body.awardCategory    = document.getElementById('tn-award-category').value.trim();
+            body.awardNomineeName = document.getElementById('tn-award-nominee-name').value.trim();
+            body.awardNomineeOrg  = document.getElementById('tn-award-org').value.trim();
+        }
+
+        return body;
+    }
+
+
+    // ── 2e. CALL THE REGISTRATION API ───────────────────────────────────────────
+
+    function registerForEvent(body, submitBtn, formErrorEl) {
+        fetch(API_BASE + '/api/flagship-event-registration', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        })
+            .then(function (res) { return res.json(); })
+            .then(function (response) {
+
+                if (!response.success) {
+                    formErrorEl.textContent = response.message || 'Registration failed. Please try again.';
+                    resetSubmitButton(submitBtn);
+                    return;
+                }
+
+                showThankYouScreen();
+            })
+            .catch(function (networkError) {
+                formErrorEl.textContent = 'Something went wrong. Please try again.';
+                resetSubmitButton(submitBtn);
+                console.error('Registration error:', networkError);
+            });
+    }
+
+
+    // ── 3. SHOW THANK YOU SCREEN ─────────────────────────────────────────────────
+
+    function showThankYouScreen() {
+        var form = document.getElementById('tnRegisterForm');
+        var thanks = document.getElementById('tnThankYouInline');
+        if (form) form.hidden = true;
+        if (thanks) thanks.hidden = false;
+    }
+
+
+    // ── HELPERS ──────────────────────────────────────────────────────────────────
+
+    function setSubmitButtonLoading(btn) {
+        if (!btn) return;
+        btn.disabled = true;
+        btn.textContent = 'Submitting...';
+    }
+
+    function resetSubmitButton(btn) {
+        if (!btn) return;
+        btn.disabled = false;
+        btn.textContent = 'SUBMIT';
+    }
+
+
+    // ── ENTRY POINT — called when form is submitted ───────────────────────────────
+
+    function handleFormSubmit() {
+        var formErrorEl = document.getElementById('tn-form-error');
+        var submitBtn = document.getElementById('tnSubmitBtn');
+
+        formErrorEl.textContent = '';
+
+        var isValid = validateAllFields();
+
+        if (!document.getElementById('consentChecktn1')?.checked) { document.getElementById('consentCheckErrortn1').classList.remove('warning'); isValid = false; } else { document.getElementById('consentCheckErrortn1').classList.add('warning'); }
+
+        if (!isValid) return;
+
+        setSubmitButtonLoading(submitBtn);
+
+        var deviceType = detectDeviceType();
+        var utm = readUtmParamsFromUrl();
+        var body = buildRequestBody(utm, deviceType);
+
+        registerForEvent(body, submitBtn, formErrorEl);
+    }
+
+
+    // ── WIRE EVERYTHING UP ───────────────────────────────────────────────────────
+
+    function wireUpModalAndForm() {
+        var modal = document.getElementById('tn-register-modal');
+        if (!modal) return;
+
+        if (modal.dataset.tnInit === '1') return;
+        modal.dataset.tnInit = '1';
+
+        var closeBtn = modal.querySelector('.tnModalClose');
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) closeModal();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && modal.classList.contains('is-visible')) closeModal();
+        });
+
+        document.querySelectorAll('[data-open-tn-modal]').forEach(function (trigger) {
+            trigger.addEventListener('click', function (e) {
+                e.preventDefault();
+                openModal();
+            });
+        });
+
+        var form = document.getElementById('tnRegisterForm');
+        if (form) {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                handleFormSubmit();
+            });
+        }
+
+        var registerAs = document.getElementById('tn-registerAs');
+        if (registerAs) {
+            registerAs.addEventListener('change', function (e) {
+                updateRoleSpecificFieldsVisibility(e.target.value);
+            });
+            updateRoleSpecificFieldsVisibility(registerAs.value);
+        }
+
+    }
+
+    window.openTnRegisterModal = function (e) { if (e && e.preventDefault) e.preventDefault(); openModal(); };
+    window.closeTnRegisterModal = function (e) { if (e && e.preventDefault) e.preventDefault(); closeModal(); };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', wireUpModalAndForm);
+    } else {
+        wireUpModalAndForm();
+    }
+</script>

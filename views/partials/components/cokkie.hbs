@@ -1,0 +1,389 @@
+<div class="cookieConsent" id="cookieConsent">
+    <div class="cookieConsent__bar container">
+        <div class="cookieConsent__content">
+            <h3 class="cookieConsent__title">We value your privacy</h3>
+            <p class="cookieConsent__text">
+                We use cookies to improve your browsing experience, personalise content, and understand how our website
+                is used. By clicking &ldquo;Accept all cookies&rdquo;, you agree to our use of cookies. Learn more in our
+                <a href="/privacy-policy" target="_blank" rel="noopener" class="cookieConsent__link">Privacy Policy</a>.
+            </p>
+        </div>
+        <div class="cookieConsent__actions">
+            <button class="btnWhite btnSm" id="cookieReject">Reject All</button>
+            <button class="btnBlack btnSm" id="cookieAccept">Accept All Cookies</button>
+        </div>
+        <button class="cookieConsent__close" id="cookieClose" aria-label="Close">&times;</button>
+    </div>
+</div>
+
+<style>
+    .cookieConsent {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9999;
+        width: 100%;
+        background: #ffffff;
+        border-top: 1px solid #e4e9dd;
+        box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.12);
+        font-family: 'Poppins', sans-serif;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(100%);
+        transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+        pointer-events: none;
+    }
+
+    .cookieConsent.is-visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    .cookieConsent__bar {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 40px;
+        padding-block: 12px;
+    }
+
+    .cookieConsent__content {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .cookieConsent__close {
+        position: absolute;
+        top: 50%;
+        right: -30px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        font-size: 24px;
+        line-height: 1;
+        color: #8a8f82;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .cookieConsent__close:hover {
+        color: #1a1a1a;
+    }
+
+    .cookieConsent__title {
+        margin: 0 0 6px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+
+    .cookieConsent__text {
+        margin: 0;
+        font-size: 12px;
+        line-height: 1.55;
+        color: #3a3f33;
+    }
+
+    .cookieConsent__link {
+        color: #1a1a1a;
+        font-weight: 600;
+        text-decoration: underline;
+    }
+
+    .cookieConsent__actions {
+        display: flex;
+        gap: 14px;
+        flex-shrink: 0;
+    }
+
+
+
+    @media (max-width: 768px) {
+        .cookieConsent__bar {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 16px;
+        }
+
+        .cookieConsent__close {
+            top: 18px;
+            right: 0;
+            transform: none;
+        }
+
+        .cookieConsent__title {
+            padding-right: 24px;
+        }
+
+
+
+    }
+</style>
+
+<script>
+/*
+ * Cookie consent + UTM attribution — one place for the whole site.
+ *
+ * - window.MUConsent: the consent API. This file AND the LinkedIn / Meta / Crisp / Chatbot
+ *   partials use it to decide whether they may load.
+ * - Trackers (Clarity + GTM) load ONLY after the user accepts.
+ * - UTMs always stay in the URL and are forwarded to internal links. They are saved to
+ *   cookies (and restored on later visits) ONLY after the user accepts.
+ *
+ * localStorage['mu_cookie_consent']:
+ *   'accepted'     -> user clicked Accept; trackers load, UTMs saved
+ *   'india_exempt' -> India visitor; auto-granted (no banner). Same effect as 'accepted',
+ *                     stored separately so we can tell it apart from an explicit click.
+ *   'rejected'     -> permanent no; banner won't show again
+ *   'none'         -> closed with the × ; banner shows again next visit
+ *    null          -> not chosen yet; banner shows
+ */
+(function () {
+    var CONSENT_KEY = 'mu_cookie_consent';
+    // Testing flag for the India flow:
+    //   true  -> include India in the consent popup (India is NOT exempt; banner shows so you can see it)
+    //   false -> India is exempt (production behaviour: no banner for India)
+    var testing_mode_show_popup_to_india = false;
+    var INDIA_CONSENT = 'india_exempt'; // 4th state: granted-by-exemption for India visitors
+    var UTM_DAYS = 90;
+    var UTM_KEYS = [
+        'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+        'utm_placement', 'utm_campaign_id', 'utm_adgroup_id', 'utm_creative_id',
+        'gclid', 'fbclid'
+    ];
+    var waiting = []; // callbacks queued until the user accepts
+
+    window.dataLayer = window.dataLayer || []; // so dataLayer.push() never throws before GTM
+
+    /* ---------- cookie helpers ---------- */
+    function setCookie(name, value) {
+        var d = new Date();
+        d.setTime(d.getTime() + UTM_DAYS * 86400000);  // total days is 90
+        document.cookie = name + '=' + encodeURIComponent(value) + ';expires=' + d.toUTCString() + ';path=/';
+    }
+    function getCookie(name) {
+        var m = document.cookie.match('(?:^|; )' + name + '=([^;]+)');
+        return m ? decodeURIComponent(m[1]) : null;
+    }
+    function deleteCookie(name) {
+        document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/';
+    }
+
+    /* ---------- consent (window.MUConsent) ---------- */
+    function getConsent() { try { return localStorage.getItem(CONSENT_KEY); } catch (e) { return null; } }
+    // Both an explicit Accept and the India exemption count as "granted".
+    function hasConsent() { var c = getConsent(); return c === 'accepted' || c === INDIA_CONSENT; }
+
+    function setConsent(value) {
+        try { localStorage.setItem(CONSENT_KEY, value); } catch (e) {}
+        if (value === 'accepted' || value === INDIA_CONSENT) {
+            saveUTMs();        // store the URL's UTMs in cookies
+            addUTMsToLinks();  // forward them to links on the page
+            while (waiting.length) { try { waiting.shift()(); } catch (e) {} } // load trackers/pixels
+        } else {
+            UTM_KEYS.forEach(deleteCookie); // reject / close -> clear stored UTMs
+        }
+    }
+
+    // Run cb now if already accepted, else when the user accepts. Never runs if rejected.
+    function whenGranted(cb) {
+        if (hasConsent()) cb();
+        else waiting.push(cb);
+    }
+
+    window.MUConsent = { has: hasConsent, get: getConsent, set: setConsent, whenGranted: whenGranted };
+
+    /* ---------- trackers: Clarity + GTM (only after consent, and after page load) ---------- */
+    function loadTrackers() {
+        // Microsoft Clarity
+        (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) };
+            t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+            y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+        })(window, document, 'clarity', 'script', 'fqg7rs7i1v');
+
+        // Google Tag Manager
+        (function (w, d, s, l, i) {
+            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+            var f = d.getElementsByTagName(s)[0], j = d.createElement(s);
+            j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-MJMS5KQ');
+    }
+    whenGranted(function () {
+        if (document.readyState === 'complete') loadTrackers();
+        else window.addEventListener('load', loadTrackers, { once: true });
+    });
+
+    /* ---------- UTM attribution ---------- */
+    function getURLUTMs() {
+        var p = new URLSearchParams(location.search), utms = {};
+        UTM_KEYS.forEach(function (k) { if (p.get(k)) utms[k] = p.get(k); });
+        return utms;
+    }
+    function getStoredUTMs() {
+        var utms = {};
+        UTM_KEYS.forEach(function (k) { var v = getCookie(k); if (v) utms[k] = v; });
+        return utms;
+    }
+    function saveUTMs() { // URL -> cookies (called only on consent)
+        var utms = getURLUTMs();
+        UTM_KEYS.forEach(function (k) { if (utms[k]) setCookie(k, utms[k]); });
+    }
+    // UTMs to use: whatever is in the URL, else the stored ones (only if accepted).
+    function currentUTMs() {
+        var fromURL = getURLUTMs();
+        if (Object.keys(fromURL).length) return fromURL;
+        return hasConsent() ? getStoredUTMs() : {};
+    }
+    // On a later visit, put stored UTMs back in the address bar (consent only).
+    function restoreUTMsToURL() {
+        var stored = getStoredUTMs(), url = new URL(location.href), changed = false;
+        UTM_KEYS.forEach(function (k) {
+            if (stored[k] && !url.searchParams.has(k)) { url.searchParams.set(k, stored[k]); changed = true; }
+        });
+        if (changed) history.replaceState({}, '', url.toString());
+    }
+    // Add UTMs to same-origin links so they carry over while navigating.
+    function addUTMsToLinks() {
+        var utms = currentUTMs();
+        if (!Object.keys(utms).length) return;
+        document.querySelectorAll('a[href]').forEach(function (a) {
+            var href = a.getAttribute('href');
+            if (!href || href[0] === '#' || /^(javascript:|mailto:|tel:)/i.test(href)) return;
+            var url;
+            try { url = new URL(a.href, location.href); } catch (e) { return; }
+            if (url.origin !== location.origin) return; // skip external links
+            var changed = false;
+            UTM_KEYS.forEach(function (k) {
+                if (utms[k] && !url.searchParams.has(k)) { url.searchParams.set(k, utms[k]); changed = true; }
+            });
+            if (changed) a.href = url.toString();
+        });
+    }
+    // Re-run on links added later (popups, sliders), debounced.
+    function watchForNewLinks() {
+        if (!window.MutationObserver) return;
+        var timer;
+        new MutationObserver(function () {
+            clearTimeout(timer);
+            timer = setTimeout(addUTMsToLinks, 100);
+        }).observe(document.body, { childList: true, subtree: true });
+    }
+
+    /* ---------- geo (consent is required only outside India) ---------- */
+    // India is exempt: users there are treated as accepted by default and never see the
+    // banner. Everyone else gets the consent banner. On any failure we fall back to a
+    // non-India country so the banner DOES show — the privacy-safe default.
+    function getUserCountry() {
+        // Testing override: simulate an India visitor from anywhere so the India flow can
+        // be checked. Combined with the flag below, the banner is shown for this simulated
+        // India visitor. Skips the real geo call entirely.
+        if (testing_mode_show_popup_to_india) {
+            console.log('[MUConsent] testing mode: simulating country = IN');
+            return Promise.resolve('IN');
+        }
+        return fetch('https://api.country.is/')
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+                console.log('[MUConsent] geo response:', d);
+                return d && d.country ? d.country : 'US';
+            })
+            .catch(function (e) {
+                console.error('[MUConsent] geo lookup failed:', e);
+                return 'US';
+            });
+    }
+    
+    /* ---------- consent checkbox: required only OUTSIDE India ---------- */
+    // The consent checkbox added to the site's forms must follow the same rule as the cookie
+    // banner: shown only outside India. For India visitors we hide every .consentCheckWrapper
+    // and tick its checkbox so the existing per-form "please accept consent" validation still
+    // passes (India is treated as auto-granted, the same way the banner is exempt there).
+    // On any geo failure getUserCountry() returns a non-India country, so the checkbox stays
+    // visible and required — the privacy-safe default.
+    var COUNTRY_KEY = 'mu_user_country';
+
+    function resolveCountry() {
+        var cached = getCookie(COUNTRY_KEY);
+        if (cached) return Promise.resolve(cached);
+        return getUserCountry().then(function (c) {
+            if (c) setCookie(COUNTRY_KEY, c); // cache so later pages don't flicker / re-fetch
+            return c;
+        });
+    }
+
+    function hideConsentChecksForIndia() {
+        var wrappers = document.querySelectorAll('.consentCheckWrapper');
+        for (var i = 0; i < wrappers.length; i++) {
+            wrappers[i].style.display = 'none';
+            var boxes = wrappers[i].querySelectorAll('input[type="checkbox"]');
+            for (var j = 0; j < boxes.length; j++) boxes[j].checked = true;
+        }
+    }
+
+    function applyConsentCheckboxGeo() {
+        resolveCountry().then(function (country) {
+            // Testing mode shows the popup to India too, so keep the checkbox visible &
+            // required just like the banner (don't auto-hide/auto-tick it).
+            if (testing_mode_show_popup_to_india) return;
+            if (country !== 'IN') return; // outside India: leave it visible & required
+            hideConsentChecksForIndia();
+            // Popups inject their consent checkbox into the DOM later — keep hiding new ones.
+            if (window.MutationObserver) {
+                var timer;
+                new MutationObserver(function () {
+                    clearTimeout(timer);
+                    timer = setTimeout(hideConsentChecksForIndia, 100);
+                }).observe(document.body, { childList: true, subtree: true });
+            }
+        });
+    }
+
+    /* ---------- banner ---------- */
+    function onClick(id, fn) {
+        var el = document.getElementById(id);
+        if (el) el.addEventListener('click', fn);
+    }
+    function init() {
+        // UTMs run on every page: persist + restore if accepted, then always forward to links.
+        if (hasConsent()) { saveUTMs(); restoreUTMsToURL(); }
+        addUTMsToLinks();
+        watchForNewLinks();
+
+        // Hide the form consent checkbox for India visitors (visible everywhere else).
+        applyConsentCheckboxGeo();
+
+        var banner = document.getElementById('cookieConsent');
+        if (!banner) return;
+
+        function hide() { banner.classList.remove('is-visible'); }
+        onClick('cookieAccept', function () { setConsent('accepted'); hide(); });
+        onClick('cookieReject', function () { setConsent('rejected'); hide(); });
+        onClick('cookieClose', function () { setConsent('none'); hide(); });
+
+        // A final choice already exists -> respect it, never re-prompt or geo-check.
+        var consent = getConsent();
+        if (consent === 'accepted' || consent === 'rejected' || consent === INDIA_CONSENT) return;
+
+        // No decision yet (null or 'none'). India is consent-exempt: auto-grant silently
+        // under its own state, so trackers load + UTMs persist and the banner never appears.
+        // Everyone else gets the banner.
+        getUserCountry().then(function (country) {
+            // India is exempt only in normal mode. When the testing flag is on we include
+            // India in the popup so the banner can be seen.
+            if (country === 'IN' && !testing_mode_show_popup_to_india) {
+                setConsent(INDIA_CONSENT);
+            } else {
+                setTimeout(function () { banner.classList.add('is-visible'); }, 800);
+            }
+        });
+    }
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+    else init();
+})();
+</script>

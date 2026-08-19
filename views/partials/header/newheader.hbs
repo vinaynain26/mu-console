@@ -1,0 +1,93 @@
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+  <meta name="facebook-domain-verification" content="s4ua1njpjtxm5nvujtikb092tdhwbq" />
+
+  {{!--
+    Resource hints: warm up TCP/TLS for third-party origins so they don't sit on the critical path.
+    Lighthouse caps useful preconnects at ~4, so we reserve them for the LCP-critical origins:
+      - fonts.gstatic.com        → actual font files (FCP text)
+      - files.mastersunion.link  → hero video (LCP) + media
+      - images.mastersunion.link → bulk of content imagery
+      - cdn.jsdelivr.net         → render-blocking jQuery in <head>
+    fonts.googleapis.com only serves the font CSS, which is already loaded non-blocking
+    (media="print" swap below), so a lighter dns-prefetch is enough for it.
+  --}}
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://files.mastersunion.link" crossorigin>
+  <link rel="preconnect" href="https://images.mastersunion.link" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+  <link rel="dns-prefetch" href="https://www.clarity.ms">
+
+  <link rel="icon" href="https://files.mastersunion.link/resources/img/mu-fav-ico.png" type="image/x-icon">
+  <link rel="alternate" href="{{metaData.url}}" hreflang="en-in" />
+  <link rel="canonical" href="{{metaData.url}}" />
+
+  <title>{{#if fellowshipMetaRaw}}{{{title}}}{{else}}{{title}}{{/if}}</title>
+  <meta property="og:type" content="website" />
+  <meta name="description" content="{{#if fellowshipMetaRaw}}{{{description}}}{{else}}{{description}}{{/if}}">
+  <meta property='og:title' content="{{#if fellowshipMetaRaw}}{{{title}}}{{else}}{{title}}{{/if}}" />
+  <meta property='og:image' content="{{metaData.metaFacebookImg}}" />
+  <meta property='og:description' content="{{#if fellowshipMetaRaw}}{{{description}}}{{else}}{{description}}{{/if}}" />
+  <meta property='og:url' content="{{metaData.url}}" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@themastersunion" />
+  <meta name="twitter:creator" content="@themastersunion" />
+  <meta name="twitter:image" content="{{metaData.metaTwitterImg}}" />
+  <meta name="twitter:title" content="{{#if fellowshipMetaRaw}}{{{title}}}{{else}}{{title}}{{/if}}" />
+  <meta name="twitter:description" content="{{#if fellowshipMetaRaw}}{{{description}}}{{else}}{{description}}{{/if}}" />
+
+  {{!-- Preload render-critical assets so the browser starts fetching them in parallel with HTML parsing. --}}
+  <link rel="preload" as="style" href="/assets/css/root.css">
+  <link rel="preload" as="style" href="/assets/css/newmains.css">
+  <link rel="preload" as="style" href="/assets/css/fonts.css">
+  <link rel="preload" as="style" href="/assets/css/dsai.css">
+  <link rel="preload" as="style" href="/assets/css/components.css">
+  <link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" crossorigin>
+
+  <link rel="stylesheet" href="/assets/css/root.css">
+  <link rel="stylesheet" href="/assets/css/newmains.css">
+  <link rel="stylesheet" href="/assets/css/fonts.css">
+  <link rel="stylesheet" href="/assets/css/dsai.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+
+  {{!--
+    Google Fonts (Fraunces + Montserrat) loaded non-blocking in a single combined request.
+    Replaces (a) the previous <style>@import url(Fraunces)</style> in this file and
+    (b) the @import url(Montserrat) at the top of fonts.css, both of which were render-blockers.
+    Pattern: preload + media="print" swap + <noscript> fallback.
+  --}}
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap">
+  <link rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap">
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap">
+  </noscript>
+
+  {{!--
+    jQuery must remain synchronous in <head> because many inline $() scripts in body partials depend
+    on it being defined before they execute. The preload above lets it download in parallel anyway,
+    so it no longer extends the critical request chain.
+  --}}
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+  {{!--
+    GDPR: Microsoft Clarity + Google Tag Manager are no longer loaded here. They have moved to
+    components/cokkie.hbs, where they are consent-gated — loaded only after the user accepts,
+    and still deferred until after `load` for the same Lighthouse TBT benefit as before.
+    The GTM <noscript> iframe was removed because a no-JS fallback cannot honour consent.
+    The dns-prefetch hints for googletagmanager.com / clarity.ms above are kept (DNS only, no
+    cookies) so the eventual consented load is still fast.
+  --}}
+</head>
+
+{{> popups/heroPopup }}
+{{>components/bottomFooter}}
+{{>components/cokkie}}

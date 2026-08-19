@@ -1,0 +1,189 @@
+<div class="mastersScroll mt32 mob-hide">
+
+    {{!-- sliderTbm --}}
+    <div class="marqueesliders" id="sliderebap">
+
+        <div class="traderCardsBox">
+            <img src="https://images.mastersunion.link/uploads/01102025/v1/GreyColorIcon6.svg" alt="Icon">
+            <div class="traderDetails">
+                <p class="traderCardHeading">3X Your Sales. More<br class="mob-hide"> Customers,
+                    Expand<br class="mob-hide"> Markets. </p>
+                <p class="traderSubText">Proven GTM & digital playbooks that
+                    accelerate topline growth. </p>
+            </div>
+
+        </div>
+
+        <div class="traderCardsBox">
+            <img src="https://images.mastersunion.link/uploads/01102025/v1/GreyColorIcon7.svg" alt="Icon">
+            <div class="traderDetails">
+                <p class="traderCardHeading">Multiply Your Profits.<br class="mob-hide"> Maximise
+                    Your Margins. </p>
+                <p class="traderSubText">Sharper pricing, tighter controls, and performance-driven
+                    teams grow both
+                    margins and profits.</p>
+            </div>
+
+        </div>
+
+        <div class="traderCardsBox">
+            <img src="https://images.mastersunion.link/uploads/01102025/v1/GreyColorIcon8.svg" alt="Icon">
+            <div class="traderDetails">
+                <p class="traderCardHeading">Costs Under Control.<br class="mob-hide">
+                    No More Leaks.</p>
+                <p class="traderSubText">Stop cash drains, unlock working
+                    capital, and make every rupee work harder. </p>
+            </div>
+
+        </div>
+
+        <div class="traderCardsBox">
+            <img src="https://images.mastersunion.link/uploads/01102025/v1/GreyColorIcon9.svg" alt="Icon">
+            <div class="traderDetails">
+                <p class="traderCardHeading">Your Time Back. <br class="mob-hide">
+                    Your Life Back.</p>
+                <p class="traderSubText">Step out of firefighting — build leaders who run the
+                    business without you.</p>
+            </div>
+        </div>
+
+        <div class="traderCardsBox">
+            <img src="https://images.mastersunion.link/uploads/01102025/v1/GreyColorIcon10.svg" alt="Icon">
+            <div class="traderDetails">
+                <p class="traderCardHeading">Family in Sync.<br class="mob-hide">
+                    Business in Flow.</p>
+                <p class="traderSubText">End conflicts, align roles, and turn
+                    family leadership into a growth engine.
+                </p>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+</div>
+
+
+<div class="mob-visible">
+
+    <div class="container">
+
+        <div class="masterScrollMobile ">
+
+            <div class="traderCardsBox">
+                <img src="https://images.mastersunion.link/uploads/01102025/v1/GreyColorIcon6.svg" alt="Icon">
+                <div class="traderDetails">
+                    <p class="traderCardHeading">3X Your Sales. More<br class="mob-hide"> Customers,
+                        Expand<br class="mob-hide"> Markets. </p>
+                    <p class="traderSubText">Proven GTM & digital playbooks that
+                        accelerate topline growth. </p>
+                </div>
+
+            </div>
+
+            <div class="traderCardsBox">
+                <img src="https://images.mastersunion.link/uploads/01102025/v1/GreyColorIcon7.svg" alt="Icon">
+                <div class="traderDetails">
+                    <p class="traderCardHeading">Multiply Your Profits.<br class="mob-hide"> Maximise
+                        Your Margins. </p>
+                    <p class="traderSubText">Sharper pricing, tighter controls, and performance-driven
+                        teams grow both
+                        margins and profits.</p>
+                </div>
+
+            </div>
+
+            <div class="traderCardsBox">
+                <img src="https://images.mastersunion.link/uploads/01102025/v1/GreyColorIcon8.svg" alt="Icon">
+                <div class="traderDetails">
+                    <p class="traderCardHeading">Costs Under Control.<br class="mob-hide">
+                        No More Leaks.</p>
+                    <p class="traderSubText">Stop cash drains, unlock working
+                        capital, and make every rupee work harder. </p>
+                </div>
+
+            </div>
+
+            <div class="traderCardsBox">
+                <img src="https://images.mastersunion.link/uploads/01102025/v1/GreyColorIcon9.svg">
+                <div class="traderDetails">
+                    <p class="traderCardHeading">Your Time Back. <br class="mob-hide">
+                        Your Life Back.</p>
+                    <p class="traderSubText">Step out of firefighting — build leaders who run the
+                        business without you.</p>
+                </div>
+            </div>
+
+            <div class="traderCardsBox">
+                <img src="https://images.mastersunion.link/uploads/01102025/v1/GreyColorIcon10.svg" alt="Icon">
+                <div class="traderDetails">
+                    <p class="traderCardHeading">Family in Sync.<br class="mob-hide">
+                        Business in Flow.</p>
+                    <p class="traderSubText">End conflicts, align roles, and turn
+                        family leadership into a growth engine.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const slider = document.getElementById("sliderebap");
+
+        if (slider) {
+            // Hide scrollbar while keeping scroll functionality
+            slider.style.msOverflowStyle = 'none'; // IE and Edge
+            slider.style.scrollbarWidth = 'none'; // Firefox
+            slider.style.overflow = 'hidden'; // Hide overflow for smooth effect
+            slider.style.display = 'flex'; // Flexbox for better control
+
+            // Clone contents multiple times for seamless scroll
+            const originalContent = slider.innerHTML;
+            slider.innerHTML = originalContent + originalContent + originalContent;
+
+            // Get the width of one set of cards
+            const cardWidth = slider.scrollWidth / 3;
+
+            let scrollAmount = 0;
+            let animationFrame;
+            let isPaused = false;
+
+            function autoScroll() {
+                if (!isPaused) {
+                    scrollAmount += 0.8; // Adjust speed here
+
+                    // Seamless reset without visible jump
+                    if (scrollAmount >= cardWidth) {
+                        scrollAmount = 0;
+                    }
+
+                    slider.scrollLeft = scrollAmount;
+                }
+
+                animationFrame = requestAnimationFrame(autoScroll);
+            }
+
+            // Start auto scroll
+            autoScroll();
+
+            // Pause on hover
+            slider.addEventListener('mouseenter', () => {
+                isPaused = true;
+            });
+
+            // Resume on mouse leave
+            slider.addEventListener('mouseleave', () => {
+                isPaused = false;
+            });
+        }
+    });
+</script>

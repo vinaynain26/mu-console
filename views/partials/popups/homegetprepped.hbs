@@ -1,0 +1,770 @@
+<main>
+    <div class="popupContainerOuter   ApplyNow newHomePagePopup capthaForm  techDsaiHomePage new"
+        id="ApplyNowPopUpNEWs">
+        <div id="homeGetPrepleadformContainer" class="popupContainer scheduleCallForm">
+            <div>
+                <div class="fromTophead">
+
+                    <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_heading">
+                        Fill out your Information
+                    </h2>
+
+                    <div class="popUpCloseBtnWrap homeCrossfix" id="closePopupMenteeForm">
+                        <img loading="lazy" src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                            class="invert-img" alt="Icon" onclick="hideApplyNowPopUp();">
+                    </div>
+                </div>
+                <div class="PopupformWrapper">
+                    <div class="left mob-hide">
+                        <img src="https://images.mastersunion.link/uploads/15052025/v1/P10237831.webp"
+                            alt="MU Students">
+                    </div>
+                    <div class="right">
+                        <ul class="campusButtonDivi faqtabs">
+                            <button onclick="setUserType('workingProfessional')" class="withoutArrowWhiteBgBtn active"
+                                id="workingProfessional">
+                                Working Professional
+                            </button>
+                            <button onclick="setUserType('student')" class="withoutArrowWhiteBgBtn" id="student">
+                                Student
+                            </button>
+                        </ul>
+
+                        <div class="content-section">
+                            <div class="content active" id="workingprofessional">
+                                <div class="inputGroup">
+                                    <label class="font-14 font-medium font-black1">First Name <span
+                                            class="required">*</span></label>
+                                    <input type="text" id="homeGetPrepFirstname" placeholder="Enter Your First Name"
+                                        class="inputBox font-16 font-black1 font-medium" oninput="this.value = this.value.replace(/[^a-zA-Z0-9]/g, '')">
+                                    <span id="homeGetPrepFirstnameError" class="error-message required font-12"></span>
+                                </div>
+                                <div class="inputGroup">
+                                    <label class="font-14 font-medium font-black1">Last Name <span
+                                            class="required">*</span></label>
+                                    <input type="text" id="homeGetPrepLastname" placeholder="Enter Your Last Name"
+                                        class="inputBox font-16 font-black1 font-medium" oninput="this.value = this.value.replace(/[^a-zA-Z0-9]/g, '')">
+                                    <span id="homeGetPrepLastnameError" class="error-message required font-12"></span>
+                                </div>
+                                <div class="formflex">
+                                    <div class="inputGroup">
+                                        <label class="font-14 font-medium font-black1">Email <span class="required">*</span></label>
+                                        <div class="flexWrap emailWrapper">
+                                            <div class="input-wrapper">
+                                                <input type="text" id="homeGetPrepEmail"
+                                                    placeholder="Enter Your Email Address" class="inputBox">
+                                                <span id="homeGetPrepEmailError"
+                                                    class="error-message required font-12"></span>
+                                            </div>
+                                            {{!-- <span class="verifyLink" onclick="showOtp()">Verify?</span> --}}
+                                        </div>
+                                    </div>
+
+                                    <div class="inputGroup">
+                                        <label class="font-14 font-medium font-black1">Phone Number <span class="required">*</span></label>
+                                        <div class="flexWrap phoneWrapper">
+                                            <div class="input-wrapper">
+                                                <input type="text" maxlength="10"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                    id="homeGetPrepPhone" placeholder="Enter Your Phone Number"
+                                                    class="inputBox">
+                                                <span id="homeGetPrepPhoneError"
+                                                    class="error-message required font-12"></span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                {{!-- <span class="verifyLink mt20" onclick="showOtp()">Verify?</span> --}}
+
+                                <div class="inputGroup">
+                                    <label class="font-14 font-medium font-black1">Company Name <span
+                                            class="required">*</span></label>
+                                    <input type="text" id="homeGetPrepCompanyOrCollege"
+                                        placeholder="Enter Your Company Name"
+                                        class="inputBox font-16 font-black1 font-medium">
+                                    <span id="homeGetPrepCompanyOrCollegeError"
+                                        class="error-message required font-12"></span>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label class="font-14 font-medium font-black1">Designation <span
+                                            class="required">*</span></label>
+                                    <input type="text" id="homeGetPrepDesignationOrQualification"
+                                        placeholder="Enter Your Designation"
+                                        class="inputBox font-16 font-black1 font-medium">
+                                    <span id="homeGetPrepDesignationOrQualificationError"
+                                        class="error-message required font-12"></span>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label class="font-14 font-medium font-black1">Years of Experience <span
+                                            class="required">*</span></label>
+                                    <select id="homeGetPrepYearOfExperience" class="inputBox safariFix">
+                                        <option disabled selected>Select an option</option>
+                                        <option value="0-1">Less than a year</option>
+                                        <option value="1-2">1-2 Years</option>
+                                        <option value="3-5">3-5 Years</option>
+                                        <option value="5-10">5-10 Years</option>
+                                        <option value="10+">More than 10 years</option>
+                                    </select>
+                                    <span id="homeGetPrepYearOfExperienceError"
+                                        class="error-message required font-12"></span>
+                                </div>
+
+                                <div class="inputGroup hide">
+                                    <label class="font-14 font-medium font-black1">Current Year <span
+                                            class="required">*</span></label>
+                                    <input type="text" id="homeGetPrepCurrentYear"
+                                        placeholder="Enter Your Current Year"
+                                        class="inputBox font-16 font-black1 font-medium">
+                                    <span id="homeGetPrepCurrentYearError"
+                                        class="error-message required font-12"></span>
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label class="font-14 font-medium font-black1">LinkedIn Profile URL</label>
+                                    <input type="text" id="homeGetPrepLinkedIn"
+                                        placeholder="Enter Your LinkedIn Profile URL"
+                                        class="inputBox font-16 font-black1 font-medium">
+                                    <span id="homeGetPrepLinkedInError" class="error-message required font-12"></span>
+                                </div>
+
+                                <div class="formFooter">
+                                    <div class="gradientButton whiteHover">
+                                        <button onclick="submitForm()" id="homeGetPrepSubmit"
+                                            class="button iconButton">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="homeGetPrepSuccessMessage" class="congrats-box hide popupContainer" style="position: relative;">
+            <!-- Cross Icon to close -->
+            <button type="button" aria-label="Close" onclick="hideApplyNowPopUp()"
+                style="position: absolute; top: 20px; right: 20px; background: none; border: none; cursor: pointer; z-index: 10;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M18 6L6 18" stroke="#222" stroke-width="2" stroke-linecap="round" />
+                    <path d="M6 6L18 18" stroke="#222" stroke-width="2" stroke-linecap="round" />
+                </svg>
+            </button>
+            <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+
+            <h3 class="thankyouboxHeading mt-10 gtmUgDwnBroGotit" id="gtmUgDwnBroGotitId">Thank
+                You
+            </h3>
+            <p class="text-2 gtmUgDwnBroGotPara" id="gtmUgDwnBroGotParaId">You've successfully registered.</p>
+            <p class="text-2">For any queries please contact us at <a class="font-red"
+                    href="mailto:admissions@mastersunion.org">admissions@mastersunion.org</a>
+            </p>
+        </div>
+    </div>
+</main>
+
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+
+    let userType = 'workingProfessional';
+    // let isVerified = false; 
+    let nextFocusedElement = null;
+
+    const skipValidationIds = ['student', 'workingProfessional', 'closePopupMenteeForm'];
+
+    function setUserType(type) {
+        if (userType === type) return;
+
+        $(".inputGroup input").val("");
+        $(".inputGroup select").prop("selectedIndex", 0);
+        $("span.error-message").text("");
+        $("#homeGetPrepSubmit").html('Submit').prop('disabled', false)
+        //$(`.verifyLink`).show(); 
+        //{ { !--$('#otpBox').hide(); --} }
+        userType = type;
+
+        const isProfessional = userType === "workingProfessional";
+
+        $('#homeGetPrepCompanyOrCollege').closest(".inputGroup").find("label").html(isProfessional ? "Company Name <span class='required'>*</span>" : "College Name <span class='required'>*</span>");
+        $('#homeGetPrepCompanyOrCollege').attr('placeholder', isProfessional ? "Enter Your Company Name" : "Enter Your College Name");
+        $('#homeGetPrepDesignationOrQualification').closest(".inputGroup").find("label").html(isProfessional ? "Designation <span class='required'>*</span>" : "Qualification <span class='required'>*</span>");
+        $('#homeGetPrepDesignationOrQualification').attr('placeholder', isProfessional ? "Enter Your Profession" : "Enter Your Qualification");
+
+        if (isProfessional) {
+            $('#student').removeClass('active');
+            $('#workingProfessional').addClass('active');
+            $("#homeGetPrepYearOfExperience").closest(".inputGroup").removeClass('hide')
+            $("#homeGetPrepCurrentYear").closest(".inputGroup").addClass('hide')
+        }
+        else {
+            $('#student').addClass('active');
+            $('#workingProfessional').removeClass('active');
+            $("#homeGetPrepYearOfExperience").closest(".inputGroup").addClass('hide')
+            $("#homeGetPrepCurrentYear").closest(".inputGroup").removeClass('hide')
+        }
+    }
+
+    function isValidEmail(email) {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        return emailRegex.test(email);
+    }
+
+    function isValidPhone(phone) {
+        const phoneRegex = /^\d{10}$/;
+        return phoneRegex.test(phone);
+    }
+
+    function isValidYear(year) {
+        const yearNum = parseInt(year);
+        return !isNaN(yearNum) && yearNum >= 1 && yearNum <= 5;
+    }
+
+    function isValidLinkedInUrl(url) {
+        if (!url) return true;
+        const linkedinRegex = /^(https?:\/\/)?(www\.)?linkedin\.com\/(in|company)\/[a-zA-Z0-9-]+\/?$/;
+        return linkedinRegex.test(url);
+    }
+
+    function showError(id, message) {
+        $(`#${id}Error`).text(message)
+    }
+
+    function hideError(id) {
+        $(`#${id}Error`).text("")
+    }
+
+    function validateForm() {
+        let isValid = true;
+
+        const formData = {
+            firstname: $('#homeGetPrepFirstname'),
+            lastname: $('#homeGetPrepLastname'),
+            email: $('#homeGetPrepEmail'),
+            phone: $('#homeGetPrepPhone'),
+            designation: $('#homeGetPrepDesignationOrQualification'),
+            company: $('#homeGetPrepCompanyOrCollege'),
+            linkedin: $('#homeGetPrepLinkedIn'),
+            title: userType === 'student' ? 'student' : 'work',
+            yrsOfExp: userType === 'student' ? $('#homeGetPrepCurrentYear').val() : $('#homeGetPrepYearOfExperience').val()
+        };
+
+        $("span.error-message").text("");
+
+        if (!formData.firstname.val().trim()) {
+            showError('homeGetPrepFirstname', 'First name is required');
+            isValid = false;
+        } else if (!/^(?=.*[A-Za-z])[A-Za-z0-9]+$/.test(formData.firstname.val().trim())) {
+            showError('homeGetPrepFirstname', 'First name must contain letters and can include numbers only');
+            isValid = false;
+        }
+
+        if (!formData.lastname.val().trim()) {
+            showError('homeGetPrepLastname', 'Last name is required');
+            isValid = false;
+        } else if (!/^(?=.*[A-Za-z])[A-Za-z0-9]+$/.test(formData.lastname.val().trim())) {
+            showError('homeGetPrepLastname', 'Last name must contain letters and can include numbers only');
+            isValid = false;
+        }
+
+        if (!formData.email.val().trim()) {
+            showError('homeGetPrepEmail', 'Please enter a valid email address');
+            isValid = false;
+        } else if (!isValidEmail(formData.email.val().trim())) {
+            showError('homeGetPrepEmail', 'Please enter a valid email address');
+            isValid = false;
+        }
+
+        if (!formData.phone.val().trim()) {
+            showError('homeGetPrepPhone', 'Please enter a valid 10-digit phone number');
+            isValid = false;
+        } else if (!isValidPhone(formData.phone.val().trim())) {
+            showError('homeGetPrepPhone', 'Please enter a valid 10-digit phone number');
+            isValid = false;
+        }
+
+        if (!formData.company.val().trim()) {
+            showError('homeGetPrepCompanyOrCollege', `Please enter your ${formData.title === 'student' ? 'college name' : 'company name'}`);
+            isValid = false;
+        }
+
+        if (!formData.designation.val().trim()) {
+            showError('homeGetPrepDesignationOrQualification', `Please enter your ${formData.title === 'student' ? 'qualification' : 'designation'}`);
+            isValid = false;
+        }
+
+       if (formData.title === 'student') {
+            const value = $('#homeGetPrepCurrentYear').val().trim();
+            const currentYear = new Date().getFullYear();
+            const yearValue = parseInt(value.trim(), 10);
+
+            if (value.trim() === '') {
+                showError('homeGetPrepCurrentYear', 'Please enter your current year');
+                isValid = false;
+            } else if (isNaN(yearValue) || yearValue < 1900 || yearValue > currentYear) {
+                showError('homeGetPrepCurrentYear', 'Please enter a valid year');
+                isValid = false;
+            }
+        } else {
+            if (!formData.yrsOfExp || formData.yrsOfExp === 'Select The Option') {
+                showError('homeGetPrepYearOfExperience', 'Please select your years of experience');
+                isValid = false;
+            }
+        }
+
+        if (formData.linkedin.val().trim() && !isValidLinkedInUrl(formData.linkedin.val().trim())) {
+            showError('homeGetPrepLinkedIn', 'Please enter a valid LinkedIn profile URL');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function submitForm() {
+
+        if (!validateForm()) {
+            console.log(`Form ${userType} validation failed`);
+            return;
+        }
+
+        $('#homeGetPrepSubmit').html('Submitting...').prop('disabled', true)
+
+        const formData = {
+            firstName: $('#homeGetPrepFirstname').val().trim(),
+            lastName: $('#homeGetPrepLastname').val().trim(),
+            email: $('#homeGetPrepEmail').val().trim(),
+            mobileNumber: $('#homeGetPrepPhone').val().trim(),
+            designation: $('#homeGetPrepDesignationOrQualification').val().trim(),
+            company: $('#homeGetPrepCompanyOrCollege').val().trim(),
+            linkedin: $('#homeGetPrepLinkedIn').val().trim(),
+            title: userType === 'student' ? 'student' : 'work',
+            yrsOfExp: userType === 'student' ? $('#homeGetPrepCurrentYear').val().trim() : $('#homeGetPrepYearOfExperience').val().trim()
+        };
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const utmSource = params.utm_source || "Website";
+        const utmMedium = params.utm_medium;
+        const utmCampaign = params.utm_campaign;
+        const utmTerm = params.utm_term;
+        const utmContent = params.utm_content;
+
+        const deviceType = window.matchMedia("(max-width: 768px)").matches
+            ? "Mobile"
+            : "Desktop";
+
+        fetch('https://apiv3.getprepped.in/api/e46c8b15-d85c-4a74-bf98-47a18bba033d/12d6c921-ed79-4d7a-b5b2-3e2476392c8f/addMentee', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': 'QmFzZT/Y0RW5jb2RlZEl/eQ'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.isSuccess) {
+
+                    $('#homeGetPrepSuccessMessage').removeClass('hide');
+                    $('#homeGetPrepleadformContainer').addClass('hide');
+
+                    {{!-- var form_dataNPF = {
+                        course: "Course",
+                        campaign: utmCampaign || null,
+                        email: formData.email,
+                        field_device_type: deviceType,
+                        medium: utmMedium || `GetPrepped-Schedule CTA`,
+                        mobile: formData.number,
+                        name: formData.name,
+                        source: utmSource || 'Website',
+                        state: null,
+                        city: null,
+                        field_utm_url: window.location.href,
+                        event_payload: formData,
+                        leadSource: `GetPrepped Schedule Form`,
+                        field_current_total_work_experience: formData.yrsOfExp,
+                        linkedinProfile: formData.linkedin
+                    };
+
+                    fetch(`{{apiBaseURL}}/api/leads/pushToNPF_PGP_TBM`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(form_dataNPF),
+                    }); --}}
+                }
+                else {
+                    if (data.Message === "Email already exists") {
+                        showError('homeGetPrepEmail', 'Email already exists');
+                        //{ { !--$(`#homeGetPrepEmail`).focus(); --} }
+                    }
+                    else if (data.Message === "Mobile number already exists for a mentee") {
+                        showError('homeGetPrepPhone', 'Mobile number already exists for a mentee');
+                        //{ { !--$(`#homeGetPrepPhone`).focus(); --} }
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+
+            })
+            .finally(() => {
+                $('#homeGetPrepSubmit').html('Submit').prop('disabled', false)
+            });
+    }
+
+    document.addEventListener('mousedown', (e) => {
+        nextFocusedElement = e.target;
+    });
+
+    document.addEventListener('mouseup', () => {
+        nextFocusedElement = null;
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+        $('#otpBox').hide();
+        // Add tab switching functionality
+        document.querySelectorAll('.campusButtonDivi li').forEach(tab => {
+            tab.addEventListener('click', function () {
+                // Remove active class from all tabs
+                document.querySelectorAll('.campusButtonDivi li').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+
+                // Hide all content sections
+                document.querySelectorAll('.content-section .content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                // Show selected content
+                document.getElementById(this.dataset.rel).classList.add('active');
+                userType = this.dataset.rel;
+            });
+        });
+
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener('blur', function () {
+                const id = this.id;
+                const value = this.value.trim();
+
+                if (nextFocusedElement) {
+                    const id = nextFocusedElement.id;
+                    const classes = nextFocusedElement.classList;
+
+                    const isIgnoredClick = (id && skipValidationIds.includes(id));
+
+                    if (isIgnoredClick) return;
+                }
+                    
+                if (id === 'homeGetPrepFirstname') {
+                    if (value === '') {
+                        showError(id, 'First name is required')
+                    } else if (!/^(?=.*[A-Za-z])[A-Za-z0-9]+$/.test(value)) {
+                        showError(id, 'First name must contain letters and can include numbers only')
+                    }
+                }
+
+                if (id === 'homeGetPrepLastname') {
+                    if (value === '') {
+                        showError(id, 'Last name is required')
+                    } else if (!/^(?=.*[A-Za-z])[A-Za-z0-9]+$/.test(value)) {
+                        showError(id, 'Last name must contain letters and can include numbers only')
+                    }
+                }
+
+                if (id === 'homeGetPrepEmail') {
+                    if (!isValidEmail(value)) {
+                        showError(id, 'Please enter a valid email address');
+                    }
+                }
+
+                if (id === 'homeGetPrepPhone') {
+                    if (!isValidPhone(value)) {
+                        showError(id, 'Please enter a valid 10-digit phone number');
+                    }
+                }
+
+                if (id === 'homeGetPrepCompanyOrCollege' && value === '') {
+                    showError(id, `Please enter your ${userType === 'student' ? 'college' : 'company'} name`);
+                }
+
+                if (id === 'homeGetPrepDesignationOrQualification' && value === '') {
+                    showError(id, `Please enter your ${userType === 'student' ? 'qualification' : 'designation'}`);
+                }
+
+                if (id === 'homeGetPrepLinkedIn' && !isValidLinkedInUrl(value)) {
+                    showError(id, 'Please enter a valid LinkedIn profile URL');
+                }
+
+                if (id === 'homeGetPrepCurrentYear') {
+                    const currentYear = new Date().getFullYear();
+                    const yearValue = parseInt(value.trim(), 10);
+
+                    if (value.trim() === '') {
+                        showError(id, 'Please enter your current year');
+                    } else if (isNaN(yearValue) || yearValue < 1900 || yearValue > currentYear) {
+                        showError(id, 'Please enter a valid year');
+                    }
+                }
+            });
+
+            input.addEventListener('focus', function () {
+                hideError(this.id);
+            });
+        });
+
+        document.querySelectorAll('select').forEach(select => {
+            select.addEventListener('blur', function () {
+                const id = this.id;
+                const value = this.value.trim();
+
+                if (nextFocusedElement) {
+                    const id = nextFocusedElement.id;
+                    const classes = nextFocusedElement.classList;
+
+                    const isIgnoredClick = (id && skipValidationIds.includes(id));
+
+                    if (isIgnoredClick) return;
+                }
+
+                if (id === 'homeGetPrepYearOfExperience' && value === 'Select an option') {
+                    showError(id, 'Please select your years of experience');
+                }
+                else {
+                    hideError(id)
+                }
+            });
+            select.addEventListener('focus', function () {
+                hideError(this.id);
+            });
+        });
+    });
+
+    function pgpPlacementReport(formTitle, destination) {
+        const form = document.getElementById("ApplyNowPopUpNEWs");
+        const h2 = document.querySelector("#form_heading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        // Prevent body scrolling when popup is open
+        document.body.style.overflow = "hidden";
+
+   //     {
+   //         {
+   //             !--document.querySelector("#SuccessMessage").classList.add("hide");
+   //             document.querySelector("#submitbuttonreport").classList.remove("hide");
+   //             document.querySelector("#leadformContainer").classList.remove("hide");
+   //             document.querySelector("#form_heading").classList.remove("hide"); --}
+   //     }
+    }
+
+    function hideApplyNowPopUp() {
+        let applyNowPopUp = document.getElementById("ApplyNowPopUpNEWs");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active");
+        }
+
+        // Restore body scrolling when popup is closed
+        document.body.style.overflow = "visible";
+
+        $(".inputGroup input").val("");
+        $(".inputGroup select").prop("selectedIndex", 0);
+        $("span.error-message").text("");
+        $("#getPrepSubmit").html('Submit').prop('disabled', false)
+        $(`.verifyLink`).show();
+        $('#otpBox').hide();
+         $('#homeGetPrepSuccessMessage').addClass('hide');
+        $('#homeGetPrepleadformContainer').removeClass('hide');
+    }
+</script>
+
+{{!--
+<script>
+    let userType = 'workingProfessional';
+
+    function setUserType(type) {
+        if (userType === type) return;
+
+        $(".inputGroup input").val("");
+        $(".inputGroup select").prop("selectedIndex", 0);
+        $("span.error-message").text("");
+        $("#homeGetPrepSubmit").html('Submit Now').prop('disabled', false);
+
+        userType = type;
+        const isProfessional = userType === "workingProfessional";
+
+        $('#homeGetPrepCompanyOrCollege').closest(".inputGroup").find("label")
+            .html(isProfessional ? "Company Name <span class='required'>*</span>" : "College Name <span class='required'>*</span>");
+        $('#homeGetPrepCompanyOrCollege').attr('placeholder', isProfessional ? "Enter Your Company Name" : "Enter Your College Name");
+
+        $('#homeGetPrepDesignationOrQualification').closest(".inputGroup").find("label")
+            .html(isProfessional ? "Designation <span class='required'>*</span>" : "Qualification <span class='required'>*</span>");
+        $('#homeGetPrepDesignationOrQualification').attr('placeholder', isProfessional ? "Enter Your Designation" : "Enter Your Qualification");
+
+        if (isProfessional) {
+            $('#student').removeClass('active');
+            $('#workingProfessional').addClass('active');
+            $("#homeGetPrepYearOfExperience").closest(".inputGroup").removeClass('hide')
+            $("#homeGetPrepCurrentYearError").closest(".inputGroup").addClass('hide')
+        } else {
+            $('#student').addClass('active');
+            $('#workingProfessional').removeClass('active');
+            $("#homeGetPrepYearOfExperience").closest(".inputGroup").addClass('hide')
+            $("#homeGetPrepCurrentYearError").closest(".inputGroup").removeClass('hide')
+        }
+    }
+
+    function isValidEmail(email) {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        return emailRegex.test(email);
+    }
+
+    function isValidPhone(phone) {
+        return /^\d{10}$/.test(phone);
+    }
+
+    function isValidLinkedInUrl(url) {
+        if (!url) return true;
+        const linkedinRegex = /^(https?:\/\/)?(www\.)?linkedin\.com\/(in|company)\/[a-zA-Z0-9-]+\/?$/;
+        return linkedinRegex.test(url);
+    }
+
+    function showError(id, message) {
+        $(`#${id}Error`).text(message)
+    }
+
+    function hideError(id) {
+        $(`#${id}Error`).text("")
+    }
+
+    function validateForm() {
+        let isValid = true;
+
+        const formData = {
+            firstname: $('#homeGetPrepFirstname'),
+            lastname: $('#homeGetPrepLastname'),
+            email: $('#homeGetPrepEmail'),
+            phone: $('#homeGetPrepPhone'),
+            designation: $('#homeGetPrepDesignationOrQualification'),
+            company: $('#homeGetPrepCompanyOrCollege'),
+            linkedin: $('#homeGetPrepLinkedIn'),
+            title: userType === 'student' ? 'Student' : 'Work',
+            yrsOfExp: userType === 'student' ? $('#homeGetPrepCurrentYearError').val() : $('#homeGetPrepYearOfExperience').val()
+        };
+
+        $("span.error-message").text("");
+
+        if (!formData.firstname.val()) {
+            showError('homeGetPrepFirstname', 'Please enter your first name');
+            isValid = false;
+        }
+
+        if (!formData.lastname.val()) {
+            showError('homeGetPrepLastname', 'Please enter your last name');
+            isValid = false;
+        }
+
+        if (!formData.email.val() || !isValidEmail(formData.email.val())) {
+            showError('homeGetPrepEmail', 'Please enter a valid email address');
+            isValid = false;
+        }
+
+        if (!formData.phone.val() || !isValidPhone(formData.phone.val())) {
+            showError('homeGetPrepPhone', 'Please enter a valid 10-digit phone number');
+            isValid = false;
+        }
+
+        if (!formData.company.val()) {
+            showError('homeGetPrepCompanyOrCollege', `Please enter your ${formData.title === 'Student' ? 'college name' : 'company name'}`);
+            isValid = false;
+        }
+
+        if (!formData.designation.val()) {
+            showError('homeGetPrepDesignationOrQualification', `Please enter your ${formData.title === 'Student' ? 'qualification' : 'designation'}`);
+            isValid = false;
+        }
+
+        if (formData.title === 'Student') {
+            if (!formData.yrsOfExp) {
+                showError('homeGetPrepCurrentYearError', 'Please enter your current year');
+                isValid = false;
+            }
+        } else {
+            if (!formData.yrsOfExp || formData.yrsOfExp === 'Select The Option') {
+                showError('homeGetPrepYearOfExperience', 'Please select your years of experience');
+                isValid = false;
+            }
+        }
+
+        if (formData.linkedin.val() && !isValidLinkedInUrl(formData.linkedin.val())) {
+            showError('homeGetPrepLinkedIn', 'Please enter a valid LinkedIn profile URL');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function submitForm() {
+        if (!validateForm()) {
+            return;
+        }
+
+        $('#homeGetPrepSubmit').html('Submitting...').prop('disabled', true)
+
+        const formData = {
+            firstname: $('#homeGetPrepFirstname').val(),
+            lastname: $('#homeGetPrepLastname').val(),
+            email: $('#homeGetPrepEmail').val(),
+            number: $('#homeGetPrepPhone').val(),
+            designation: $('#homeGetPrepDesignationOrQualification').val(),
+            company: $('#homeGetPrepCompanyOrCollege').val(),
+            linkedin: $('#homeGetPrepLinkedIn').val(),
+            title: userType === 'student' ? 'Student' : 'Working Professional',
+            yrsOfExp: userType === 'student' ? $('#homeGetPrepCurrentYearError').val() : $('#homeGetPrepYearOfExperience').val()
+        };
+
+        fetch('https://apiv3.getprepped.in/api/registerAndBookSlot', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': 'QmFzZT/Y0RW5jb2RlZEl/eQ'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.IsSuccess) {
+                    $('#SuccessMessage').removeClass('hide');
+                    $('#leadformContainer').addClass('hide');
+                } else {
+                    if (data.Message === "User already exists! Please login to continue.") {
+                        showError('homeGetPrepEmail', 'Already Registered');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                $('#homeGetPrepSubmit').html('Submit Now').prop('disabled', false)
+            });
+    }
+
+    function hideApplyNowPopUp() {
+        let applyNowPopUp = document.getElementById("ApplyNowPopUpNEWs");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active");
+        }
+        document.body.style.overflow = "visible";
+        $(".inputGroup input").val("");
+        $(".inputGroup select").prop("selectedIndex", 0);
+        $("span.error-message").text("");
+        $("#homeGetPrepSubmit").html('Submit Now').prop('disabled', false);
+    }
+</script> --}}

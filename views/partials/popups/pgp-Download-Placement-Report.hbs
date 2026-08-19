@@ -1,0 +1,69 @@
+<main>
+    <div class="popupContainerOuter displyScreenResolution  ApplyNow scrollPopup newHomePagePopup homeCrossPopup"
+        id="ApplyNowPopUpNEW">
+
+        <div class="popupContainer">
+            <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_heading">
+                    Download Placement Report
+                </h2>
+
+                <div class="popUpCloseBtnWrap homeCrossfix">
+                    <img src="https://files.mastersunion.link/resources/svg/crossIcon.svg" class="invert-img" alt="Icon"
+                        onclick="hideApplyNowPopUp();">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="leadformContainer">
+                <div class="left mob-hide">
+                    <img src="https://images.mastersunion.link/brochures/18022025/v1/StudentsWork.webp"
+                        alt="MU Students">
+                </div>
+                <div class="right">
+                    <div id="pgpPlacementReportWidget" style="width: 100%;"></div>
+
+                    <script data-target="#pgpPlacementReportWidget" data-widget="b1ac6592-0aa7-4f27-afb2-50f9839b5cec"
+                        src="https://widgets-v2.mastersunion.org/loader.js"></script>
+
+                </div>
+            </div>
+
+            <div id="SuccessMessage" class="congrats-box hide">
+                <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+
+                <h3 class="thankyouboxHeading mt-10 gtmUgDwnBroGotit" id="gtmUgDwnBroGotitId">Thank You</h3>
+                <p class="text-2 gtmUgDwnBroGotPara" id="gtmUgDwnBroGotParaId">You've successfully downloaded our
+                    Placement Report</p>
+                <p class="text-2">For any queries please contact us at <a class="font-red"
+                        href="mailto:admissions@mastersunion.org">admissions@mastersunion.org</a></p>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+
+    function pgpPlacementReport(formTitle, destination) {
+        const form = document.getElementById("ApplyNowPopUpNEW");
+        const h2 = document.querySelector("#form_heading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        document.querySelector("#SuccessMessage").classList.add("hide");
+        document.querySelector("#leadformContainer").classList.remove("hide");
+        document.querySelector("#form_heading").classList.remove("hide");
+    }
+
+    function hideApplyNowPopUp() {
+        let applyNowPopUp = document.getElementById("ApplyNowPopUpNEW");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+    }
+
+</script>

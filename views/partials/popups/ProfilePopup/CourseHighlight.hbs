@@ -1,0 +1,206 @@
+<main>
+    <div class="popupContainerOuter introPopup coursePopup" id="CourseHighlightPop">
+
+        <div class="popupContainer">
+
+            <div class="fromTophead">
+                <h2>Course Highlight</h2>
+                <div class="pointer" onclick="closeCourseHighlight()">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0.5" y="0.5" width="31" height="31" rx="5.5" fill="white"/>
+                        <rect x="0.5" y="0.5" width="31" height="31" rx="5.5" stroke="#FAFAFA"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M11.0506 11.0499C11.3544 10.7462 11.8468 10.7462 12.1506 11.0499L20.9501 19.8495C21.2538 20.1532 21.2538 20.6457 20.9501 20.9494C20.6464 21.2531 20.1539 21.2531 19.8502 20.9494L11.0506 12.1499C10.7469 11.8461 10.7469 11.3537 11.0506 11.0499Z" fill="#525252"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M20.9494 11.0499C21.2531 11.3537 21.2531 11.8461 20.9494 12.1499L12.1498 20.9494C11.8461 21.2531 11.3536 21.2531 11.0499 20.9494C10.7462 20.6457 10.7462 20.1532 11.0499 19.8495L19.8494 11.0499C20.1532 10.7462 20.6456 10.7462 20.9494 11.0499Z" fill="#525252"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="PopupformWrapper" id="leadformContainer">
+                <form action="">
+                    <div id="courseHighlightContainer"></div>
+                    <div class="submitWrapper">
+                        <div class="gradientButton whiteHover">
+                            <button class="button iconButton" id="courseHighlightSubmit">
+                                Save
+                                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z" fill="#090909"/>
+                                    <path d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z" fill="#090909"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    $(document).ready(function () {
+        $('#courseHighlightSubmit').on('click', function (e) {
+            e.preventDefault();
+
+            let isValid = true;
+            const actions = [];
+            const initialHighlights = window.initialCourseHighlightsData?.courseHighlights || []
+
+            $('.courseHighlightItem').each(function (index) {
+                const $entry = $(this);
+                const entryId = $entry.data('id');
+
+                const labelFieldId = `courseLabel_${index}`;
+                const subLabelFieldId = `courseSubLabel_${index}`;
+                const descriptionFieldId = `courseDescription_${index}`;
+
+                const COURSE_LABEL_MAX_LENGTH = typeof window.COURSE_LABEL_MAX_LENGTH === 'number' ? window.COURSE_LABEL_MAX_LENGTH : 12;
+                const COURSE_DESCRIPTION_MAX_LENGTH = typeof window.COURSE_DESCRIPTION_MAX_LENGTH === 'number' ? window.COURSE_DESCRIPTION_MAX_LENGTH : 46;
+
+                let label = $entry.find(`#${labelFieldId}`).val().trim();
+                const subLabel = $entry.find(`#${subLabelFieldId}`).val().trim();
+                let description = $entry.find(`#${descriptionFieldId}`).val().trim();
+
+                // Check for length violations before truncation
+                const labelExceedsLimit = label.length > COURSE_LABEL_MAX_LENGTH;
+                const descriptionExceedsLimit = description.length > COURSE_DESCRIPTION_MAX_LENGTH;
+
+                // Enforce character limits
+                if (labelExceedsLimit) {
+                    label = label.slice(0, COURSE_LABEL_MAX_LENGTH);
+                    $entry.find(`#${labelFieldId}`).val(label);
+                    $(`#${labelFieldId}Counter`).text(label.length);
+                }
+                if (descriptionExceedsLimit) {
+                    description = description.slice(0, COURSE_DESCRIPTION_MAX_LENGTH);
+                    $entry.find(`#${descriptionFieldId}`).val(description);
+                    $(`#${descriptionFieldId}Counter`).text(description.length);
+                }
+
+                {{!-- const labelValid = validateField(labelFieldId, 'Please enter label');
+                const subLabelValid = validateField(subLabelFieldId, 'Please enter sub-label');
+                const descriptionValid = validateField(descriptionFieldId, 'Please enter description'); --}}
+
+                {{!-- if (!labelValid || !subLabelFieldId || !descriptionValid) {
+                    isValid = false;
+                    return;
+                } --}}
+
+                const isAnyFilled = label || subLabel || description;
+                if (isAnyFilled) {
+                    if (!label) {
+                        $(`#${labelFieldId}Error`).text('Please enter label');
+                        isValid = false;
+                    } else if (labelExceedsLimit) {
+                        $(`#${labelFieldId}Error`).text(`Label must be ${COURSE_LABEL_MAX_LENGTH} characters or fewer`);
+                        isValid = false;
+                    } else {
+                        $(`#${labelFieldId}Error`).text('');
+                    }
+
+                    if (!subLabel) {
+                        $(`#${subLabelFieldId}Error`).text('Please enter sub-label');
+                        isValid = false;
+                    } else {
+                        $(`#${subLabelFieldId}Error`).text('');
+                    }
+
+                    if (!description) {
+                        $(`#${descriptionFieldId}Error`).text('Please enter description');
+                        isValid = false;
+                    } else if (descriptionExceedsLimit) {
+                        $(`#${descriptionFieldId}Error`).text(`Description must be ${COURSE_DESCRIPTION_MAX_LENGTH} characters or fewer`);
+                        isValid = false;
+                    } else {
+                        $(`#${descriptionFieldId}Error`).text('');
+                    }
+                } else {
+                    // clear errors if all empty
+                    $(`#${labelFieldId}Error`).text('');
+                    $(`#${subLabelFieldId}Error`).text('');
+                    $(`#${descriptionFieldId}Error`).text('');
+                }
+                
+                if (!isValid) return;
+
+                const initialEntry = initialHighlights.find(entry => entry._id === entryId);
+                const isNew = !initialEntry;
+
+                if (isNew && isAnyFilled) {
+                    actions.push({
+                        action: 'add',
+                        data: { label, subLabel, description }
+                    });
+                    return;
+                }
+
+                if (!isNew && !isAnyFilled) {
+                    actions.push({
+                        action: 'delete',
+                        targetId: entryId
+                    });
+                    return;
+                }
+
+                if (!isNew && isAnyFilled) {
+                    const isChanged =
+                        String(initialEntry?.label || '') !== label ||
+                        String(initialEntry?.subLabel || '') !== subLabel ||
+                        String(initialEntry?.description || '') !== description;
+
+                    if (isChanged) {
+                        actions.push({
+                            action: 'update',
+                            targetId: entryId,
+                            data: { label, subLabel, description }
+                        });
+                    }
+                }
+
+                const isChanged = isNew || (
+                    String(initialEntry?.label || '') !== label ||
+                    String(initialEntry?.subLabel || '') !== subLabel ||
+                    String(initialEntry?.description || '') !== description
+                );
+                
+                if (isChanged) {
+                const actionObj = {
+                    action: 'update',
+                    data: { label, description, subLabel }
+                };
+                if (!isNew) {
+                    actionObj.targetId = entryId;
+                }
+                actions.push(actionObj);
+                }
+            });
+
+            if (!isValid) return;
+
+            if (actions.length === 0) {
+                alert('No changes detected.');
+                return;
+            }
+
+            const userId = window.location.pathname.split('/').pop();
+            const requestPayload = {
+                section: 'courseHighlights',
+                actions
+            };
+
+            $.ajax({
+                url: `{{apiBaseURL}}/api/student-profile/${userId}/draft`,
+                type: 'POST',
+                data: JSON.stringify(requestPayload),
+                contentType: 'application/json',
+                success: function (res) {
+                    renderProfile(res.draft)
+                    closeCourseHighlight();
+                },
+                error: function (err) {
+                console.error('Submission failed', err);
+                alert(err?.responseJSON?.Message || 'Something went wrong');
+                }
+            });
+         });
+    });
+</script>

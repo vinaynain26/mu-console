@@ -1,0 +1,130 @@
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <link rel="icon" href="https://files.mastersunion.link/resources/img/mu-fav-ico.png" type="image/x-icon">
+  <link rel="alternate" href="{{metaData.url}}" hreflang="en-in" />
+  <link rel="canonical" href="{{metaData.url}}" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+  <meta name="facebook-domain-verification" content="s4ua1njpjtxm5nvujtikb092tdhwbq" />
+  <title>{{#if fellowshipMetaRaw}}{{{title}}}{{else}}{{title}}{{/if}}</title>
+  <meta property="og:type" content="website" />
+  <meta name="description" content="{{#if fellowshipMetaRaw}}{{{description}}}{{else}}{{description}}{{/if}}">
+  <meta property='og:title' content="{{#if fellowshipMetaRaw}}{{{title}}}{{else}}{{title}}{{/if}}" />
+  <meta property='og:image' content="{{metaData.metaFacebookImg}}" />
+  <meta property='og:description' content="{{#if fellowshipMetaRaw}}{{{description}}}{{else}}{{description}}{{/if}}" />
+  <meta property='og:url' content="{{metaData.url}}" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@themastersunion" />
+  <meta name="twitter:creator" content="@themastersunion" />
+  <meta name="twitter:image" content="{{metaData.metaTwitterImg}}" />
+  <meta name="twitter:title" content="{{#if fellowshipMetaRaw}}{{{title}}}{{else}}{{title}}{{/if}}" />
+  <meta name="twitter:description" content="{{#if fellowshipMetaRaw}}{{{description}}}{{else}}{{description}}{{/if}}" />
+
+     <script src="/assets/js/sliders.js" ></script>
+   
+ <style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap');
+</style>
+
+  {{#if isProd}}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <script src="https://static.filestackapi.com/filestack-js/3.x.x/filestack.min.js"></script>
+  <link rel="stylesheet" href="/assets/css/masters.css">
+
+  {{else}}
+  <link rel="stylesheet" href="/assets/css/masters.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <script src="https://static.filestackapi.com/filestack-js/3.x.x/filestack.min.js"></script>
+
+
+  {{/if}}
+
+  {{!--
+    GDPR: Microsoft Clarity + Google Tag Manager are no longer loaded here. They are now
+    consent-gated and loaded from components/cokkie.hbs only after the user accepts cookies.
+    The GTM <noscript> iframe was also removed because a no-JS fallback cannot honour consent.
+  --}}
+
+  {{#if faqSchemaJsonLd}}
+  <script type="application/ld+json">{{{faqSchemaJsonLd}}}</script>
+  {{/if}}
+
+</head>
+
+<div id="preloader">
+  <div class="preloader">
+    <img  src="https://files.mastersunion.link/Preloader.gif" alt="Loader">
+  </div>
+</div>
+{{> popups/heroPopup }}
+{{>components/bottomFooter}}
+{{>components/cokkie}}
+<script>
+  // Function to hide preloader
+  function hidePreloader() {
+    $("#preloader").fadeOut(1000);
+  }
+
+  // Hide preloader after 2 seconds on page load
+  $("#preloader").fadeOut(1000);
+
+  // Handle page visibility change (browser back/forward)
+  document.addEventListener("visibilitychange", function() {
+    if (!document.hidden) {
+      // Page became visible (user came back via back button)
+      hidePreloader();
+    }
+  });
+
+  // Handle page show event (browser back/forward)
+  window.addEventListener("pageshow", function(event) {
+    // If page was loaded from cache (back/forward navigation)
+    if (event.persisted) {
+      hidePreloader();
+    }
+  });
+
+  // Handle page load event
+  window.addEventListener("load", function() {
+    // Additional safety to hide preloader after page is fully loaded
+    setTimeout(hidePreloader, 500);
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".darkHeader a, footer a").forEach((link) => {
+      link.addEventListener("click", function (e) {
+        const href = (link.getAttribute("href") || "").trim().toLowerCase();
+        // Do not show page loader for non-page navigation links like mailto/tel.
+        if (href.startsWith("mailto:") || href.startsWith("tel:")) {
+          hidePreloader();
+          return;
+        }
+
+        // Show preloader immediately
+        document.getElementById("preloader").style.display = "block";
+        
+        // Check if this is a middle-click, ctrl+click, or cmd+click (new tab)
+        if (e.button === 1 || e.ctrlKey || e.metaKey) {
+          // If opening in new tab, fade out preloader after a short delay
+          setTimeout(hidePreloader, 100);
+        }
+      });
+      
+      // Also handle mouseup event for middle-click detection
+      link.addEventListener("mouseup", function (e) {
+        if (e.button === 1) { // Middle click
+          setTimeout(hidePreloader, 100);
+        }
+      });
+    });
+  });
+
+</script>

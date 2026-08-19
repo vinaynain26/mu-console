@@ -1,0 +1,100 @@
+<style>
+    /* Keep the whole popup inside the viewport so nothing (image bottom, the
+       widget's Download button) is clipped. The image and the widget iframe
+       both fill this capped height; the widget scrolls its own content. */
+    #UgdownloadBrochure .popupContainer {
+        display: flex;
+        flex-direction: column;
+        height: min(calc(100vh - 100px), 720px);
+        overflow: hidden;
+    }
+
+    #UgdownloadBrochure .PopupformWrapper {
+        flex: 1 1 auto;
+        min-height: 0;
+        align-items: stretch;
+    }
+
+    #UgdownloadBrochure .PopupformWrapper .left {
+        display: flex;
+        min-height: 0;
+    }
+
+    #UgdownloadBrochure .ugPopUpImg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        border-radius: 12px;
+        display: block;
+    }
+
+    #UgdownloadBrochure .PopupformWrapper .right {
+        display: flex;
+        min-height: 0;
+    }
+
+    #UgdownloadBrochure .PopupformWrapper .right iframe {
+        width: 100%;
+        height: 100%;
+        display: block;
+        border: 0;
+        border-radius: 12px;
+    }
+</style>
+
+<main>
+    <div class="popupContainerOuter   ApplyNow" id="UgdownloadBrochure">
+
+        <div class="popupContainer">
+            <div class="fromTophead ">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="Ug_form_heading"> Download Programme
+                    Brochure </h2>
+                <div class="popUpCloseBtnWrap ">
+                    <img src="https://files.mastersunion.link/resources/svg/crossIcon.svg" class="invert-img" alt="Icon"
+                        onclick="hideApplyNowPopUpMainUG();">
+                </div>
+            </div>
+
+            <div class="PopupformWrapper">
+                <div class="left mob-hide">
+                    <img class="ugPopUpImg" src="https://files.mastersunion.link/media/img/ug-brochure-image.webp"
+                        alt="">
+                </div>
+                <div class="right">
+                    <iframe id="63ed8ec8-8e04-48ae-b716-f915a1b78a72" width="100%" height="640px"></iframe>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script src="https://cdn.mastersunion.org/widget/iframe.js"></script>
+<script>
+    new LoadWidget("63ed8ec8-8e04-48ae-b716-f915a1b78a72");
+</script>
+
+<script>
+    function UgdownloadBrochure(formTitle, destination) {
+        const form = document.getElementById("UgdownloadBrochure");
+        const h2 = document.querySelector("#Ug_form_heading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+
+        // Disable scrolling when popup is open
+        document.body.style.overflow = 'hidden';
+    }
+
+    function hideApplyNowPopUpMainUG() {
+        let applyNowPopUp = document.getElementById("UgdownloadBrochure");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active");
+        }
+
+        // Re-enable scrolling when popup is closed
+        document.body.style.overflow = 'auto';
+    }
+</script>

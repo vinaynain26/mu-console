@@ -1,0 +1,596 @@
+<section class="faq bg-grey faqWrapBox" data-faq-program="{{faqProgram}}">
+    <div class="container">
+        <div class="headingWrap flexbox">
+            <div class="headingsLeft">
+                <h2 class="go-HighlightHeading mt10">
+                    Frequently Asked <br class="mob-hide">
+                    <span class="fr-HeadingItalic">Questions</span>
+                </h2>
+            </div>
+        </div>
+
+        <div class="faqWrapper">
+            <nav class="navigationWrapper">
+                <ul class="tabs faqtabs" data-faq-tabs></ul>
+            </nav>
+
+            <div class="content-section" data-faq-content>
+                <p class="faqHeading" data-faq-state="loading">
+                    Loading FAQs...
+                </p>
+
+                <p class="faqHeading hide" data-faq-state="error">
+                    We couldn’t load the FAQs right now. Please try again later.
+                </p>
+
+                <p class="faqHeading hide" data-faq-state="empty">
+                    No FAQs are available at the moment.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    (function () {
+
+        const FAQ_API = 'https://api.mastersunion.org/api/faq/program/';
+        const TOGGLER_ICON =
+            'https://images.mastersunion.link/uploads/25062025/v1/MainButton3.svg';
+
+        const escapeHtml = (value) => {
+            if (value == null) return '';
+
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        };
+
+        const escapeAttr = (value) =>
+            escapeHtml(value).replace(/`/g, '&#96;');
+
+        // Wrap a text node's content in its marks (link/bold/italic/styles/etc.)
+        const applyMarks = (text, marks) => {
+
+            marks = marks || [];
+
+            // Collect inline-style marks (color/font) into one <span>.
+            const styles = [];
+
+            marks.forEach((mark) => {
+
+                switch (mark.type) {
+
+                    case 'color':
+                    case 'textColor': {
+                        const color = mark.color || mark.attrs?.color;
+                        if (color) styles.push(`color:${escapeAttr(color)}`);
+                        break;
+                    }
+
+                    case 'fontFamily': {
+                        const family =
+                            mark.value || mark.attrs?.fontFamily || mark.attrs?.value;
+                        if (family) styles.push(`font-family:${escapeAttr(family)}`);
+                        break;
+                    }
+
+                    case 'fontSize': {
+                        const size =
+                            mark.value || mark.attrs?.fontSize || mark.attrs?.value;
+                        if (size) styles.push(`font-size:${escapeAttr(size)}`);
+                        break;
+                    }
+
+                    case 'backgroundColor':
+                    case 'highlight': {
+                        const bg = mark.color || mark.attrs?.color || mark.value;
+                        if (bg) styles.push(`background-color:${escapeAttr(bg)}`);
+                        break;
+                    }
+                }
+            });
+
+            // Apply structural / semantic marks around the raw text first.
+            let html = marks.reduce((acc, mark) => {
+
+                switch (mark.type) {
+
+                    case 'link': {
+                        const href = escapeAttr(mark.href || mark.attrs?.href || '');
+                        return `<a href="${href}" target="_blank" rel="noopener noreferrer">${acc}</a>`;
+                    }
+
+                    case 'bold':
+                    case 'strong':
+                        return `<strong>${acc}</strong>`;
+
+                    case 'italic':
+                    case 'em':
+                        return `<em>${acc}</em>`;
+
+                    case 'underline':
+                        return `<u>${acc}</u>`;
+
+                    case 'strike':
+                        return `<s>${acc}</s>`;
+
+                    case 'code':
+                        return `<code>${acc}</code>`;
+
+                    default:
+                        return acc;
+                }
+            }, text);
+
+            // Wrap style span on the OUTSIDE so links inherit the color,
+            // keeping the underline color matched to the text.
+            if (styles.length) {
+                html = `<span style="${styles.join(';')}">${html}</span>`;
+            }
+
+            return html;
+        };
+
+        // Render a single ProseMirror/TipTap node to HTML
+        const renderNode = (node) => {
+
+            if (!node || typeof node !== 'object') return '';
+
+            switch (node.type) {
+
+                case 'text':
+                    return applyMarks(escapeHtml(node.text || ''), node.marks);
+
+                case 'hardBreak':
+                    return '<br>';
+
+                case 'paragraph':
+                    return `<p>${renderContent(node.content)}</p>`;
+
+                case 'heading': {
+                    const level = Math.min(Math.max(node.attrs?.level || 2, 1), 6);
+                    return `<h${level}>${renderContent(node.content)}</h${level}>`;
+                }
+
+                case 'bulletList':
+                case 'bullet_list':
+                    return `<ul>${renderContent(node.content)}</ul>`;
+
+                case 'orderedList':
+                case 'ordered_list':
+                    return `<ol>${renderContent(node.content)}</ol>`;
+
+                case 'listItem':
+                case 'list_item':
+                    return `<li>${renderContent(node.content)}</li>`;
+
+                default:
+                    // Unknown node — render its children if any
+                    return renderContent(node.content);
+            }
+        };
+
+        const renderContent = (content) =>
+            (content || []).map(renderNode).join('');
+
+        // Convert a TipTap doc (or plain string) to HTML
+        const renderDoc = (value) => {
+
+            if (value == null) return '';
+
+            if (typeof value === 'string') return escapeHtml(value);
+
+            if (value.type === 'doc') {
+                return renderContent(value.content);
+            }
+
+            return renderContent(value.content);
+        };
+
+        // Convert a TipTap doc to plain text (used for tab titles / questions)
+        const docToText = (value) => {
+
+            if (value == null) return '';
+            if (typeof value === 'string') return value;
+
+            const walk = (nodes) =>
+                (nodes || [])
+                    .map((node) => {
+                        if (node.type === 'text') return node.text || '';
+                        return walk(node.content);
+                    })
+                    .join('');
+
+            return walk(value.content);
+        };
+
+        const buildTab = (section, index) => {
+
+            const activeCls = index === 0 ? 'active' : '';
+            const titleText = docToText(section.title).trim();
+            const title = escapeHtml(titleText || `Section ${index + 1}`);
+
+            return `
+            <li 
+                class="${activeCls}" 
+                data-rel="faqTab-${index}" 
+                data-index="${index}"
+            >
+                ${title}
+            </li>
+        `;
+        };
+
+        const buildQuestion = (item, sectionIndex, itemIndex) => {
+
+            const answerId = `faqTab-${sectionIndex}-a-${itemIndex}`;
+            const isFirst = sectionIndex === 0 && itemIndex === 0;
+
+            const activeCls = isFirst ? ' active' : '';
+
+            const questionText = docToText(item.question);
+            const question = escapeHtml(questionText);
+            const answer = renderDoc(item.answer);
+
+            // The age-limit question is India-specific; tag it so the fellowship
+            // layout's geo CSS hides it for international (data-fellowship-region="out") visitors.
+            const indiaOnlyCls = /age\s*limit/i.test(questionText)
+                ? ' fellowship-faq-age-india-only'
+                : '';
+
+            return `
+            <div
+                class="faqquestionWrap mb30${activeCls}${indiaOnlyCls}"
+                data-rel="${answerId}"
+            >
+                <div class="left">
+
+                    <p class="faqHeading">
+                        ${question}
+                    </p>
+
+                    <img 
+                        src="${TOGGLER_ICON}" 
+                        class="toggler" 
+                        alt="Icon"
+                    >
+                </div>
+
+                <div class="faqanswer${activeCls}" id="${answerId}">
+                    ${answer}
+                </div>
+            </div>
+        `;
+        };
+
+        const buildSection = (section, sectionIndex) => {
+
+            const contentCls =
+                sectionIndex === 0
+                    ? 'content active'
+                    : 'content';
+
+            const questions = section.items
+                .map((item, itemIndex) =>
+                    buildQuestion(item, sectionIndex, itemIndex)
+                )
+                .join('');
+
+            return `
+            <div 
+                id="faqTab-${sectionIndex}" 
+                class="${contentCls}" 
+                data-faq-content-item
+            >
+                ${questions}
+            </div>
+        `;
+        };
+
+
+        $(document).ready(function () {
+
+            const $section =
+                $('.faq.faqWrapBox[data-faq-program]').first();
+
+            if (!$section.length) return;
+
+            // UPDATED HERE
+            const program =
+                ($section.attr('data-faq-program') || 'bharat-summer-fellowship-immersion-driven-programme').trim();
+
+            const $faqWrapper =
+                $section.find('.faqWrapper');
+
+            const $tabs =
+                $section.find('[data-faq-tabs]');
+
+            const $content =
+                $section.find('[data-faq-content]');
+
+            const $states = {
+                loading:
+                    $section.find('[data-faq-state="loading"]'),
+
+                error:
+                    $section.find('[data-faq-state="error"]'),
+
+                empty:
+                    $section.find('[data-faq-state="empty"]'),
+            };
+
+            const showState = (name) => {
+
+                Object.values($states).forEach(($el) =>
+                    $el.addClass('hide')
+                );
+
+                if (name && $states[name]) {
+                    $states[name].removeClass('hide');
+                }
+            };
+
+            const attachInteractions = () => {
+
+                $section
+                    .find('.faqquestionWrap .faqanswer')
+                    .not('.active')
+                    .hide();
+
+                $section
+                    .find('.faqquestionWrap')
+                    .off('click.faqPopup')
+                    .on('click.faqPopup', function (event) {
+
+                        event.stopPropagation();
+
+                        const id =
+                            $(this).attr('data-rel');
+
+                        $(this)
+                            .toggleClass('active')
+                            .siblings()
+                            .removeClass('active');
+
+                        $('#' + id)
+                            .slideToggle()
+                            .parent()
+                            .siblings()
+                            .find('.faqanswer')
+                            .slideUp();
+
+                    });
+
+                $section
+                    .find('.faqtabs li')
+                    .off('click.faqPopup')
+                    .on('click.faqPopup', function () {
+
+                        const id =
+                            $(this).attr('data-rel');
+
+                        if (!id || id.indexOf('inside') !== -1) {
+                            return;
+                        }
+
+                        $(this)
+                            .addClass('active')
+                            .siblings()
+                            .removeClass('active');
+
+                        $section
+                            .find('#' + id)
+                            .addClass('active')
+                            .siblings()
+                            .removeClass('active');
+
+                        const $scroller =
+                            $(this).closest('.tabs');
+
+                        const tabLeft =
+                            $(this).position().left;
+
+                        const tabWidth =
+                            $(this).outerWidth(true);
+
+                        const targetScroll =
+                            $scroller.scrollLeft()
+                            + tabLeft
+                            - ($scroller.width() / 2)
+                            + (tabWidth / 2);
+
+                        $scroller.animate({
+                            scrollLeft: targetScroll
+                        }, 150);
+
+                    });
+            };
+
+            const render = (sections) => {
+
+                const hasTitles = sections.some((section) =>
+                    docToText(section.title).trim()
+                );
+
+                $faqWrapper.toggleClass('faqWrapper--no-tabs', !hasTitles);
+
+                $tabs.html(
+                    hasTitles
+                        ? sections.map(buildTab).join('')
+                        : ''
+                );
+
+                $content
+                    .find('[data-faq-content-item]')
+                    .remove();
+
+                $content.append(
+                    sections.map(buildSection).join('')
+                );
+
+                showState(null);
+
+                attachInteractions();
+
+
+            };
+
+            const loadFaqs = async () => {
+
+                try {
+
+                    // API WILL NOW HIT /pg
+                    const response = await fetch(
+                        FAQ_API + encodeURIComponent(program)
+                    );
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const payload = await response.json();
+
+                    // Data may be a single program object (the
+                    // /program/<name> endpoint) or an array of programs.
+                    const data = payload?.Data;
+
+                    let programData = null;
+
+                    if (Array.isArray(data)) {
+                        programData =
+                            data.find((p) => p && p.programName === program)
+                            || data[0]
+                            || null;
+                    } else if (data && typeof data === 'object') {
+                        programData = data;
+                    }
+
+                    const sections =
+                        (programData?.sections || [])
+                            .filter((section) =>
+                                section
+                                && Array.isArray(section.items)
+                                && section.items.length
+                            );
+
+                    if (!sections.length) {
+
+                        showState('empty');
+
+                        return;
+                    }
+
+                    render(sections);
+
+                } catch (err) {
+
+                    console.error(
+                        `Failed to load FAQs for program "${program}":`,
+                        err
+                    );
+
+                    showState('error');
+                }
+            };
+
+            loadFaqs();
+
+        });
+
+    })();
+
+    function showApplyNowPopUp() {
+
+        const applyNowPopUp =
+            document.getElementById('ApplyNowPopUpNEW');
+
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.add('active');
+        }
+    }
+</script>
+
+<style>
+    .faq .navigationWrapper li {
+        /* Allow long tab labels to wrap inside the box instead of
+           overflowing past its rounded edge. */
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+ .faqWrapBox   .navigationWrapper{
+        max-width:20%;
+
+        @media (max-width: 767px) {
+            max-width: 100%;
+        }
+    }
+
+    .bg-grey {
+        background-color: var(--white3);
+    }
+
+    /* When no section titles exist, drop the tab nav and let the
+       answers span the full width of the wrapper. */
+    .faq .faqWrapper--no-tabs .navigationWrapper {
+        display: none;
+    }
+
+    .faq .faqWrapper--no-tabs .content-section {
+        width: 100%;
+    }
+
+    /* Restore list styling for rich-text answers (theme resets these) */
+    .faq .faqanswer ul {
+        list-style: disc;
+        padding-left: 1.5em;
+        margin: 0.5em 0;
+    }
+
+    .tabs li {
+        font: 0.875rem "go-medium";
+        color: var(--grey6);
+        list-style: none;
+        display: block;
+        cursor: pointer;
+        transition: 0.5s ease-in-out;
+    }
+
+    .navigationWrapper li:hover {
+        background: linear-gradient(102deg, #39b6d8 0%, #f7d344 50%, #e38330 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        outline: none;
+        border: none;
+        position: relative;
+        font-family: "go-semibold";
+    }
+
+    .faq .faqanswer ol {
+        list-style: decimal;
+        padding-left: 1.5em;
+        margin: 0.5em 0;
+    }
+
+    .faq .faqanswer li {
+        list-style: inherit;
+        display: list-item;
+        margin: 0.25em 0;
+    }
+
+    .faq .faqanswer li p {
+        margin: 0;
+        display: inline;
+    }
+
+    /* Keep link underline color matched to the text color */
+    .faq .faqanswer a {
+        color: inherit;
+        text-decoration-color: currentColor;
+    }
+</style>

@@ -1,0 +1,65 @@
+<main>
+    <div class="popupContainerOuter ApplyNow" id="EbapCohortPopUp">
+
+        <div class="popupContainer">
+            <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="ebapCohort_form_heading">Download Cohort Profiles</h2>
+                <div class="popUpCloseBtnWrap">
+                    <img src="https://files.mastersunion.link/resources/svg/crossIcon.svg" class="invert-img" alt="Icon"
+                        onclick="hideEbapCohortPopUp();">
+
+                </div>
+            </div>
+            <div id="ebapCohortDownloadForm">
+
+                <div class="PopupformWrapper" id="ebapCohortLeadformContainer">
+                    <div class="left mob-hide">
+                    <img class="ugPopUpImg" src="https://files.mastersunion.link/media/img/ug-brochure-image.webp" alt="">
+                </div>
+                   <iframe id="20369012-9c58-4b75-a3b5-4f6749929d6e" width="100%" height="400px" ></iframe>
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+
+    function openLeadGenFormBrochureOpm(formTitle, destination) {
+        const form = $('#EbapCohortPopUp');
+        const h2 = document.querySelector("#ebapCohort_form_heading");
+
+        form.removeClass('hide').addClass('active');
+
+        form.attr("data-destination", destination);
+        form.attr("data-title", formTitle || h2?.textContent || "Download Brochure");
+        if (h2 && formTitle) {
+            h2.textContent = formTitle;
+        }
+
+        if (iframe) {
+            iframe.setAttribute("src", destination);
+        }
+
+        $('#ebapCohortSuccessMessage').addClass('hide');
+        $('#ebapCohortDownloadForm').removeClass('hide');
+        $('#ebapCohort_form_heading').removeClass('hide');
+    }
+
+    function hideEbapCohortPopUp() {
+        $('#EbapCohortPopUp').removeClass('active').addClass('hide');
+    }
+
+    function closeEbapCohortSuccess() {
+        $('#ebapCohortSuccessMessage').addClass('hide')
+        $('#ebapCohortDownloadForm').removeClass('hide')
+        hideEbapCohortPopUp();
+    }
+
+
+</script>

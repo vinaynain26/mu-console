@@ -1,0 +1,145 @@
+<section class="faq  risefaqWrapBox">
+    <div class="container">
+        <div class="headingWrap flexbox">
+            <div class="headingsLeft">
+                <h2 class="go-HighlightHeading mt10">
+                            Frequently Asked <br class="mob-hide"> <span class="fr-HeadingItalic">Questions</span>
+                        </h2>
+            </div>
+            <div class="headingsRight hide">
+                <a href="https://cdn.mastersunion.org/assets/img/newmu/Segmented_Employment_Report_PGP_Rise.pdf"
+                    target="_blank" class="gradientButton whiteHover mob-hide">
+                    <button class="button iconButton">
+                        Employment Report
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+                            <path
+                                d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                fill="white"></path>
+                        </svg>
+                    </button>
+                </a>
+            </div>
+        </div>
+        <div class="faqWrapper">
+            <nav class="navigationWrapper hide">
+                <ul class="tabs faqtabs" id="faqtabs2">
+                    <li class="active " data-rel="pgp-rise-tab1">General</li>
+                    {{!-- <li class="" data-rel="tab2">Who are we Looking For?</li> --}}
+                    <li class="" data-rel="pgp-rise-tab3">Eligibility</li>
+                    <li class="" data-rel="pgp-rise-tab4">Application Queries</li>
+                    <li class="" data-rel="pgp-rise-tab5">Entrance and Essays</li>
+                    <li class="" data-rel="pgp-rise-tab6">Admission Policies</li>
+                </ul>
+            </nav>
+
+            <div class="content-section">
+                <div id="pgp-rise-tab1" class="content active">
+
+                    <div class="faqquestionWrap mb30 active hideFortheMENA " data-rel="tab-a-1">
+                        <div class="left ">
+                            <p class="faqHeading">What is included in the programme fee</p>
+
+                            <img  src="https://images.mastersunion.link/uploads/25062025/v1/MainButton3.svg"
+                                class="toggler" alt="Icon">
+                        </div>
+                        <p class="faqanswer" id="tab-a-1">All domestic travel, accommodation, meals, company visits, excursions, entry tickets, 
+                            and 24/7 support are included. International flights and personal insurance are excluded.</p>
+                    </div>
+
+                    <div class="faqquestionWrap mb30" data-rel="tab-a-2">
+                        <div class="left">
+                            <p class="faqHeading">Which cities does the immersion cover?
+                            </p>
+
+                            <img  src="https://images.mastersunion.link/uploads/25062025/v1/MainButton3.svg"
+                                class="toggler" alt="Icon">
+                        </div>
+                        <p class="faqanswer" id="tab-a-2">Delhi-NCR, Agra, Mumbai, and Bangalore.</p>
+                    </div>
+
+                    <div class="faqquestionWrap mb30" data-rel="tab-a-3">
+                        <div class="left">
+                            <p class="faqHeading">What industries will we experience?
+                            </p>
+
+                            <img  src="https://images.mastersunion.link/uploads/25062025/v1/MainButton3.svg"
+                                class="toggler" alt="Icon">
+                        </div>
+                        <p class="faqanswer" id="tab-a-3">Participants will engage with family enterprises, startups, financial hubs, tech companies, and cultural sectors.</p>
+                    </div>
+
+                    <div class="faqquestionWrap mb30" data-rel="tab-a-4">
+                        <div class="left">
+                            <p class="faqHeading">Is this programme suitable for international students?
+                            </p>
+
+                            <img  src="https://images.mastersunion.link/uploads/25062025/v1/MainButton3.svg"
+                                class="toggler" alt="Icon">
+                        </div>
+                        <p class="faqanswer" id="tab-a-4">Yes, it is designed especially for international undergraduates, postgraduates, early professionals, and executive education participants.</p>
+                    </div>
+
+                    <div class="faqquestionWrap mb30" data-rel="tab-a-5">
+                        <div class="left">
+                            <p class="faqHeading"> How should participants prepare for the programme?
+                            </p>
+
+                            <img  src="https://images.mastersunion.link/uploads/25062025/v1/MainButton3.svg"
+                                class="toggler" alt="Icon">
+                        </div>
+                        <p class="faqanswer" id="tab-a-5">We recommend pre-trip briefings and an open mindset to absorb the blend of heritage and innovation.</p>
+                    </div>
+
+
+                </div>
+
+              
+          
+            </div>
+
+            {{!-- <div class="headingsRight">
+                <a href="https://cdn.mastersunion.org/assets/imgV2/Masters’_Union_Placement_Report__Cohort_Of_2023.pdf"
+                    target="_blank" class="gradientButton whiteHover mob-visible">
+                    <button class="button iconButton">
+                        View Placements
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+                            <path
+                                d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                fill="white"></path>
+                        </svg>
+                    </button>
+                </a>
+            </div> --}}
+
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        $('.faqquestionWrap .faqanswer').not(':first').slideUp();
+        $('.faqquestionWrap').off('click').on('click', function (event) {
+            event.stopPropagation(); // Prevent event from propagating up the DOM tree
+            let id = $(this).attr('data-rel');
+            $(this).toggleClass('active').siblings().removeClass('active');
+            $('#' + id).slideToggle().parent().siblings().find('.faqanswer').slideUp();
+        });
+
+
+
+        setTimeout(function () {
+            if (isCountryCodeFound) {
+                $("#pgp-rise-tab1 div.faqquestionWrap").not('.hideFortheMENA.hide').first().addClass('active').siblings().removeClass('active');
+                let activeId = $("#pgp-rise-tab1 div.faqquestionWrap").not('.hideFortheMENA.hide').first().attr('data-rel');
+                $(`#${activeId}`).addClass('active').siblings().removeClass('active');
+                $('#' + activeId).slideToggle().parent().siblings().find('.faqanswer').slideUp();
+            }
+        }, 2000)
+    });
+
+    $(".faqtabs li").click(function () {
+        let id = $(this).attr('data-rel')
+        $(this).addClass('active').siblings().removeClass('active');
+        $(`#${id}`).addClass('active').siblings().removeClass('active');
+    });
+</script>

@@ -1,0 +1,4052 @@
+.boadRoom {
+    .link-red {
+        color: #E38330 !important;
+        font-size: 14px;
+        line-height: 160%;
+    }
+
+
+    .ugclassprofile {
+        margin-bottom: 0 !important;
+    }
+
+    body {
+        background: var(--black);
+    }
+
+    .blackdb svg {
+        filter: invert(1);
+    }
+
+    .masterPlay svg {
+        backdrop-filter: blur(2px);
+        border-radius: 60px;
+    }
+
+    .PopupformWrapper {
+        align-items: flex-start;
+    }
+
+    .startups {
+        background: linear-gradient(var(--white3) 0 0) padding-box, linear-gradient(90deg, #39b6d8 6.41%, #f7d344 51.47%, #e38330 96.52%) border-box;
+        border-bottom: 6px solid transparent;
+        border-image-slice: 1;
+        border-image-repeat: stretch;
+
+        .lensBoxi {
+            width: 100%;
+            max-width: 200px;
+            border-radius: 12px;
+            border: 1px solid var(--grey16);
+            padding: unset;
+        }
+
+        .topStartup {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+    }
+
+    .heroSection {
+        position: relative;
+        line-height: 0;
+        z-index: 9;
+        padding: 0px 0 0;
+        overflow: hidden;
+        min-height: 100vh;
+        background: #020202;
+
+
+        .heroSectionContent .go-HeroSubtitle {
+            color: var(--white);
+        }
+
+        .heroSectionContent {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, -30%);
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            width: 100%;
+        }
+
+        .heroSectionContent.internship{
+            gap: 16px;
+        }
+
+        .heroHeadingBold {
+            font-family: var(--go-semibold);
+        }
+
+        .headingPoints {
+            display: flex;
+            gap: 19px;
+        }
+
+        .subPointer {
+            color: var(--white3);
+            font-size: 16px;
+            font-family: var(--go-medium);
+            line-height: 150%;
+            text-align: center;
+            list-style: disc;
+            padding-right: 18px;
+        }
+
+        .u18HeroPara {
+            color: #ffffff;
+            line-height: 120%;
+
+        }
+
+        .go-HeroSubtitle {
+            margin-top: 16px;
+
+            .textHighlight {
+                color: var(--white);
+            }
+        }
+
+        .heroSectionBtnWrap {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-top: 24px;
+        }
+
+
+    }
+
+    .skyRocket {
+        background: var(--black);
+
+        .skyWrapper {
+            display: flex;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .skyLeft {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            width: 100%;
+            max-width: 50%;
+            justify-content: flex-end;
+        }
+
+        .skyLeft img {
+            line-height: 0;
+        }
+
+        .skyHeadWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .skyright {
+            max-width: 45%;
+            width: 100%;
+        }
+
+        .registerForm {
+            background: var(--white);
+            padding: 20px 25px;
+            display: flex;
+            border-radius: 10px;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+            width: 100%;
+
+            .lightNumber {
+                color: var(--grey10);
+            }
+        }
+
+        .registerForm .phone-input-container {
+            display: flex;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            overflow: hidden;
+            background: white;
+            transition: border-color 0.2s ease;
+            margin-top: 8px;
+        }
+
+        .registerForm .country-code-select {
+            background: var(--white);
+            border: none;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 400;
+            color: #333;
+            cursor: pointer;
+            border-right: 1px solid #ddd;
+            outline: none;
+            max-width: 30%;
+        }
+
+        .registerForm .phone-input {
+            flex: 1;
+            border: none;
+            padding: 12px 16px;
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            outline: none;
+            background: white;
+        }
+
+        .registerForm .form {
+            margin-top: 20px;
+        }
+
+        .skyFormHeading {
+            font-size: 24px;
+            font-family: var(--go-regular);
+            line-height: 120%;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .skyFormHeading {
+            p {
+                background-color: #F5F5F5;
+                border-radius: 4px;
+                padding: 4px 8px;
+                font: 14px 'go-medium';
+                line-height: 150%;
+            }
+        }
+
+        .skyright .select-form-arrow:after {
+            background: url(https://images.mastersunion.link/uploads/10062025/v1/CaretDown.svg);
+            top: 41px;
+        }
+
+        .phone-input-container:focus-within,
+        .phone-input-container:hover,
+        .input:focus-within {
+            background: linear-gradient(var(--white) 0 0) padding-box,
+                var(--gradient) border-box;
+            border: 1px solid transparent;
+        }
+    }
+
+    .germanImmersion {
+        background: var(--grey17);
+        padding: 60px 0 !important;
+
+        .singaporeBtnWrapper {
+            display: flex;
+            gap: 12px;
+        }
+
+        .germanBtnWrapper {
+            display: flex;
+            gap: 12px;
+            align-self: flex-start;
+        }
+
+        .germanImmersionWrapper {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .germanBreatherLeft {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 8px;
+            background: var(--white);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            align-items: center;
+            justify-content: center;
+            min-height: 387px;
+
+        }
+
+        .germanBold {
+            font-family: var(--go-semibold);
+            color: var(--grey17);
+        }
+
+        .masterRight {
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden !important;
+            max-height: 387px;
+        }
+
+        .swiper-slide {
+            overflow: hidden !important;
+        }
+
+        .germanHeadingWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .germanPara {
+            font-size: 16px;
+            line-height: 150%;
+            font-family: var(--go-regular);
+            color: var(--grey3);
+        }
+
+        .germanflagsWrapper {
+            display: flex;
+            gap: 32px;
+            align-items: flex-start;
+        }
+
+        .swiper-pagination-bullet {
+            background: var(--grey18) !important;
+            opacity: 1;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .swiper-pagination-bullet-active {
+            width: 40px !important;
+            background: var(--white4) !important;
+            border-radius: 10px;
+        }
+
+        .swiper-pagination {
+            display: flex;
+            width: fit-content !important;
+            bottom: 30px !important;
+            left: 45% !important;
+            top: unset !important;
+        }
+
+        .germanImageBoxi>img {
+            /* min-height: 352px; */
+            border-radius: 8px;
+        }
+
+        .bottomBlackOverlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        .germanImageBoxi {
+            position: relative;
+            cursor: pointer;
+        }
+    }
+
+    .higherStudies {
+        max-height: 140vh;
+        background: url(https://images.mastersunion.link/uploads/29072025/v1/higherStudyVector.svg), var(--black);
+        background-repeat: no-repeat;
+        background-size: contain;
+        padding-top: 60px !important;
+        border-bottom: 1px solid var(--black5);
+
+        .jobCardLeft {
+            max-width: 148px;
+            max-height: 60px;
+        }
+
+        .companyWrapperNew {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            .companiesLogoDivi {
+                max-width: 148px;
+            }
+
+        }
+
+        .higherMainWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .higherSubText {
+            font-size: 16px;
+            color: var(--white);
+            line-height: 150%;
+            font-family: var(--go-regular);
+            text-align: center;
+        }
+
+        .higherHeadingWrap {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .jobScrollContentRight {
+            display: flex;
+            width: max-content;
+            gap: 12px;
+        }
+
+        .inifiniteJobProspect {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .divrowWrap {
+            display: flex;
+            gap: 8px;
+            flex-direction: column;
+
+            .divrow {
+                display: flex;
+                gap: 8px;
+            }
+        }
+
+        .jobScrollWrapperLeft {
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .jobScrollContentLeft {
+            display: flex;
+            width: max-content;
+            gap: 12px;
+        }
+
+        .higherStudiesWrapper {
+            display: flex;
+            /* gap: 50px; */
+            max-width: 100%;
+            padding: 0;
+        }
+
+        .higherStudiesLeft {
+            width: 100%;
+            max-width: 45%;
+            margin-bottom: -7px;
+            margin-top: 0px;
+            z-index: 5;
+
+        }
+
+        .masterImage {
+            border-radius: unset;
+        }
+
+        .higherStudiesLeft>img {
+            min-height: 755px;
+        }
+
+        .diviCareer {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            /* padding-top: 60px; */
+            padding-bottom: 50px;
+        }
+
+        .tabimgages {
+            height: 100%;
+
+            img {
+                height: auto;
+
+            }
+        }
+
+        .studiesRight {
+            padding: 40px;
+        }
+
+        .techCareerTabs {
+            display: flex;
+            border-bottom: 2px solid var(--grey15);
+        }
+
+        .careerTabUl {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+        }
+
+        .careerTabUl li {
+            /* padding: 0 50px 0px 10px; */
+            color: var(--grey);
+            text-wrap: nowrap;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start !important;
+            padding: 0 8px 10px 6px;
+            font-size: 16px;
+            font-family: var(--go-semibold);
+            cursor: pointer;
+            line-height: 120%;
+        }
+
+        .careerTabUl li.active {
+            position: relative;
+            color: var(--white);
+        }
+
+        .numberTabs {
+            font-size: 13px;
+            font-family: var(--go-regular);
+            font-weight: 400;
+            color: var(--grey15);
+            line-height: 120%;
+        }
+
+        .tabs li {
+            gap: 10px;
+        }
+
+        .careerTabUl li.active .numberTabs {
+            color: var(--white);
+        }
+
+        .careerTabUl li.active::after {
+            /* border-bottom: 2px solid var(--Linear-Gradient, #39B5D7); */
+            background: linear-gradient(91deg, #39B5D7 1.8%, #F7D544 50.99%, #E38330 99.75%);
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+        }
+
+        .careerContentTech {
+            display: flex;
+            flex-direction: column;
+            gap: 37px;
+        }
+
+        .upperContentTab {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+
+
+        }
+
+
+
+        .higherTabContent {
+            color: var(--white);
+            font-size: 14px;
+            line-height: 150%;
+            font-family: var(--go-regular);
+        }
+
+        .impactButton {
+            display: flex;
+            padding: 8px 10px;
+            align-items: center;
+            gap: 4px;
+            border-radius: 40px;
+            background: var(--black5);
+            color: var(--grey18);
+            font-size: 13px;
+            font-family: var(--go-medium);
+            line-height: 120%;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            min-width: max-content;
+        }
+
+        .higherStudyContent {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-start;
+
+            svg {
+                width: 100%;
+                max-width: 52px;
+            }
+        }
+
+        .higherContentText {
+            display: flex;
+            gap: 12px;
+            align-items: baseline;
+        }
+
+        .pointerPara {
+            font-size: 16px;
+            line-height: 150%;
+            color: var(--grey10);
+            font-family: var(--go-regular);
+
+        }
+
+        .circleNumber {
+            align-items: center;
+            padding: 7px 12px;
+            border: 1px solid var(--grey10);
+            max-height: 30px;
+            max-width: 30px;
+            border-radius: 360px;
+            color: var(--white);
+            font-family: var(--go-regular);
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .higherStudyButton {
+            display: flex;
+            align-items: flex-start;
+            margin-top: 8px;
+        }
+
+        .hsPara {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .blackSemiPara {
+            font-size: 20px;
+            font-family: "Fraunces", serif;
+            font-weight: 400;
+            line-height: 140%;
+            color: var(--black);
+        }
+
+        .blackMediumPara {
+            font-size: 14px;
+            line-height: 150%;
+            font-family: "go-regular";
+            color: var(--black);
+        }
+
+        .techUpperHighlightLeft {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .companiesLogoDivi {
+            width: 100%;
+            max-width: 142px;
+            max-height: 60px;
+        }
+    }
+
+    .internshipSection {
+        background: var(--white);
+        padding: 80px 0 !important;
+
+        .internshipSwiperClass {
+            width: 100%;
+            overflow: hidden !important;
+        }
+
+        .internshipSwiperClassCareer {
+            width: 100%;
+            overflow: hidden !important;
+        }
+
+        .internshipSwiperClassTbm {
+            overflow: hidden !important;
+            width: 100%;
+        }
+
+        .internshipHiddenWrapper {
+            width: 100%;
+            overflow: hidden !important;
+        }
+
+        .internshipImage .masterPlay>img {
+            width: 48px;
+            height: 48px;
+        }
+
+        .internshipUpperWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .hTwo {
+
+            margin-bottom: 26px;
+        }
+
+
+        .internshipWrapper {
+            background: var(--black);
+            border-radius: 24px;
+            padding: 50px;
+            gap: 26px;
+        }
+
+        .internshipCardWrapper {
+            display: flex;
+            align-items: stretch;
+            gap: 60px;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .internshipImage {
+            max-width: 395px;
+            max-height: 254px;
+            border-radius: 10px;
+            position: relative;
+            line-height: 0px;
+
+            img {
+                border-radius: 16px;
+            }
+        }
+
+        .internshipStudentDetail {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 686px;
+        }
+
+
+        .internshipStudentUpperDivi {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 4px;
+            width: 100%;
+        }
+
+        .studentNameWrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .studentCompanyWrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .companyName {
+            font-size: 16px;
+            line-height: 120%;
+            font-family: var(--go-medium);
+            color: var(--grey4);
+        }
+
+        .studentClass {
+            font-size: 14px;
+            line-height: 120%;
+            font-family: var(--go-medium);
+            color: var(--grey10);
+        }
+
+        .internshipDivider {
+            width: 100%;
+            height: 1px;
+            background: var(--grey3);
+            max-height: 1px;
+        }
+
+        .studentThoughtPara {
+            font-size: 13px;
+            line-height: 150%;
+            font-family: var(--go-regular);
+            color: var(--grey10);
+            border-top: 1px solid var(--grey3);
+            padding-top: 24px;
+            border-bottom: 1px solid var(--grey3);
+            padding-bottom: 24px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .internshipStudentBelow {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+        .studentNumber {
+            padding: 8px 12px;
+            border-radius: 8px;
+            width: fit-content;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--grey4);
+            text-align: center;
+            font-size: 14px;
+            line-height: 150%;
+            font-family: var(--go-regular);
+            color: var(--grey3);
+        }
+
+        .studentNumberOne {
+            background-color: var(--black5);
+            color: var(--grey18);
+        }
+
+        .insightBtn {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-direction: row-reverse;
+        }
+
+        .internshipSwiper {
+            overflow: hidden !important;
+            width: 100%;
+        }
+    }
+
+    .internshipSection.white {
+        background: var(--black);
+        border-bottom: 1px solid var(--black5);
+
+        .internshipWrapper {
+            background: var(--white);
+        }
+
+        .companyName {
+            color: var(--black5);
+            font-size: 16px;
+            line-height: 120%;
+            font-family: var(--go-medium);
+        }
+
+        .studentThoughtPara {
+            color: var(--grey3);
+        }
+
+        .practCompanies{ 
+            margin-top: 4px;
+            margin-bottom: 10px;
+
+        }
+
+         .studentNameWrapper{ 
+            gap: 2px;
+         }
+         .studentThoughtPara{ 
+            margin-top: 0px;
+         }
+    }
+
+
+    .boardroomApart {
+        padding: 60px 0px !important;
+
+        .apartWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .apartHeading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .apartMarquee {
+            width: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .marquee__inner-wrap {
+            height: 100%;
+            width: 100%;
+        }
+
+        .marquee__inner_reverse {
+            height: 100%;
+            width: max-content;
+            align-items: center;
+            display: flex;
+            position: relative;
+            animation: marqueeReverse 30s linear infinite;
+            will-change: transform;
+            gap: 20px;
+        }
+
+        .aiPackedBoxi {
+            padding: 10px 20px;
+            border: 1px solid var(--grey4);
+            border-radius: 8px;
+        }
+
+        .boardContent {
+            font-size: 24px;
+            font-style: italic;
+            color: var(--black);
+            line-height: 120%;
+            font-family: "Fraunces", serif;
+            text-transform: capitalize;
+            font-weight: 400;
+        }
+
+
+    }
+
+    .germanImmersion.internship {
+        background: var(--grey17);
+        padding: 60px 0 !important;
+
+        .singaporeBtnWrapper {
+            display: flex;
+            gap: 12px;
+        }
+
+        .germanBtnWrapper {
+            display: flex;
+            gap: 12px;
+            align-self: flex-start;
+        }
+
+        .germanImmersionWrapper {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+        }
+
+        .germanBreatherLeft {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 8px;
+            background: var(--white);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            align-items: flex-start;
+            justify-content: center;
+            min-height: 413px;
+
+        }
+
+        .germanBold {
+            font-family: var(--go-semibold);
+            color: var(--grey17);
+        }
+
+        .masterRight {
+            width: 100%;
+            max-width: 600px;
+            overflow: hidden !important;
+            max-height: 413px;
+        }
+
+        .swiper-slide {
+            overflow: hidden !important;
+        }
+
+        .germanHeadingWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .germanPara {
+            font-size: 16px;
+            line-height: 120%;
+            font-family: var(--go-regular);
+            color: var(--grey3);
+        }
+
+        .germanParaNew {
+
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .germanParaMode {
+            color: var(--grey15);
+            font-family: var(--go-semibold);
+            line-height: 150%;
+            font-size: 16px;
+        }
+
+        .germanflagsWrapper {
+            display: flex;
+            gap: 32px;
+            align-items: flex-start;
+        }
+
+        .swiper-pagination-bullet {
+            background: var(--grey18) !important;
+            opacity: 1;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .swiper-pagination-bullet-active {
+            width: 40px !important;
+            background: var(--white4) !important;
+            border-radius: 10px;
+        }
+
+        .swiper-pagination {
+            display: flex;
+            width: fit-content !important;
+            bottom: 30px !important;
+            left: 45% !important;
+            top: unset !important;
+        }
+
+        .germanImageBoxi>img {
+            /* min-height: 352px; */
+            border-radius: 8px;
+        }
+
+        .bottomBlackOverlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        .germanImageBoxi {
+            position: relative;
+            cursor: pointer;
+        }
+    }
+
+    .impactStudents {
+        background: var(--black);
+        padding: 80px 0;
+
+        .impactWrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 48px;
+        }
+
+        .businessHeadLower {
+            display: flex;
+            gap: 42px;
+        }
+
+        .businessHeadBox {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-right: 40px;
+            border-right: 1px solid var(--black5);
+
+        }
+
+        .headingNumber {
+            font-size: 60px;
+            font-family: "Fraunces", serif;
+            font-weight: 400;
+            color: var(--black);
+            line-height: 120%;
+            text-align: center;
+        }
+
+
+        .businessNumberText {
+            font-size: 18px;
+            font-family: var(--go-regular);
+            line-height: 150%;
+            color: var(--grey10);
+            text-align: center;
+        }
+
+        .businessHeadBox:last-child {
+
+
+            border-right: none;
+
+        }
+    }
+
+    .cohortSection {
+        background: var(--black);
+        border-bottom: 1px solid var(--black5);
+        width: 100%;
+        padding-bottom: 0px;
+
+        .cohortWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .profileParent.firstProfile {
+
+            align-items: flex-start;
+        }
+
+        .cohortHeadingWrap {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .profileRight {
+            width: 100%;
+            max-width: 720px;
+            min-height: 720px;
+        }
+
+        .profileLeft {
+            width: 100%;
+            max-width: calc(100% - 600px);
+            display: flex;
+            align-items: flex-start;
+            margin-left: 40px;
+            padding: 40px;
+            min-height: 715px;
+        }
+
+        .leftUpperContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            color: var(--white);
+
+        }
+
+        .impactHeroPara {
+            color: var(--grey10);
+            font-size: 16px;
+            line-height: 150%;
+            font-family: var(--go-regular);
+        }
+
+        .profileParent {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            position: sticky;
+            top: 4rem;
+            background: var(--black);
+            border-radius: 20px;
+        }
+
+        .techCareerTabs {
+            display: flex;
+            /* border-bottom: 1px solid var(--grey18); */
+        }
+
+        .careerTabUl {
+            display: flex;
+            align-items: center;
+        }
+
+        .careerTabUl li {
+            /* padding: 0 50px 0px 10px; */
+            color: var(--grey);
+            text-wrap: nowrap;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start !important;
+            padding: 0 50px 10px 10px;
+            font-size: 16px;
+            font-family: var(--go-semibold);
+            cursor: pointer;
+            gap: 5px;
+        }
+
+        .infiniteProfile {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+        }
+
+        .infiniteProfile-wrapper {
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .infiniteProfile-track {
+            display: flex;
+            width: fit-content;
+            will-change: transform;
+        }
+
+        .infiniteProfile-track .imageBoxi {
+            flex-shrink: 0;
+            margin-right: 8px;
+            /* Adjust spacing between images */
+        }
+
+        .infiniteProfile-track .imageBoxi img {
+            display: block;
+            width: auto;
+            height: auto;
+            max-width: 100%;
+        }
+
+        .leftiContainer {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            flex-direction: column;
+        }
+
+        .roundPillU18 {
+            color: var(--white);
+            background-color: var(--black5);
+            padding: 8px 10px;
+            font-size: 13px;
+            font-family: var(--go-medium);
+            line-height: 120%;
+            text-transform: uppercase;
+            letter-spacing: 5%;
+            border-radius: 40px;
+            width: fit-content;
+        }
+
+        .lowerContentTabSwiper {
+            margin-top: 20px;
+        }
+
+        .careerTabUl li.active {
+            position: relative;
+            color: var(--white);
+
+            .numberTabs {
+                color: var(--black);
+            }
+        }
+
+        .careerTabUl li.active::after {
+            border-bottom: 2px solid;
+            border-image-source: linear-gradient(91.25deg, #39B5D7 1.8%, #F7D544 50.99%, #E38330 99.75%);
+            border-image-slice: 1;
+
+            content: "";
+            position: absolute;
+            bottom: 0px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+        }
+
+        .contentText {
+            font-size: 14px;
+            line-height: 150%;
+            color: var(--white);
+            font-family: var(--go-regular);
+        }
+
+        .contentTextOneLiner {
+            padding-bottom: 16px;
+        }
+
+        .roleListBold {
+            font-size: 18px;
+            line-height: 120%;
+            font-family: var(--go-regular);
+            color: var(--white);
+        }
+
+        .roleHeading {
+            color: var(--black);
+            font-size: 18px;
+            font-family: var(--go-semibold);
+            line-height: 120%;
+        }
+
+        .roleListText {
+            font-size: 16px;
+            line-height: 150%;
+            color: var(--grey10);
+            font-family: var(--go-regular);
+            line-height: 150%;
+            font-weight: 400;
+        }
+
+        .roleList {
+            list-style-type: disc;
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            color: var(--white);
+            margin-top: 10px;
+        }
+
+        .pbsPill {
+            margin: 40px 0px 20px 0px;
+            letter-spacing: 5%;
+            text-transform: uppercase;
+            line-height: 120%;
+            font-size: 13px;
+            font-family: var(--go-medium);
+        }
+
+        .numberTabs {
+            font-size: 13px;
+            font-family: var(--go-regular);
+            font-weight: 400;
+            color: var(--grey10);
+            line-height: 120%;
+        }
+
+        .upperContentTab {
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .profileList {
+            display: flex;
+            align-items: flex-start;
+            gap: 18px;
+            flex-direction: column;
+        }
+
+        .profileItem {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--grey4);
+            padding-bottom: 18px;
+
+            .profileSvg {
+                width: 100%;
+                height: 100%;
+                max-width: 42px;
+                max-height: 42px;
+            }
+        }
+
+        .profileItem:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .infiniteProfile {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .wrapperBoxi {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+        }
+
+        .imageBoxi {
+            width: 100%;
+            max-width: 148px;
+        }
+
+        .hsPara {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .blackSemiPara {
+            font-size: 18px;
+            font-family: "Fraunces", serif;
+            font-weight: 400;
+            line-height: 140%;
+            color: var(--black);
+        }
+
+        .blackMediumPara {
+            font-size: 12px;
+            line-height: 150%;
+            font-family: "go-regular";
+            color: var(--black);
+        }
+
+        .leftiContainer {
+            width: 100%;
+            max-width: 720px;
+        }
+
+        .pbsCardu18 {
+            color: white;
+            padding: 12px;
+            width: 100%;
+            min-width: 194px;
+            min-height: 126px;
+            border-radius: 10px;
+            background: rgba(93, 93, 93, 0.20);
+            background-size: cover;
+            /* or 100% 100% to stretch exactly */
+            background-repeat: no-repeat;
+            background-position: center;
+
+        }
+
+        .instaCardU18 {
+            display: flex;
+            align-items: center;
+            font-size: 15px;
+
+            margin-top: 16px;
+        }
+
+        .followU18 {
+            display: flex;
+            align-items: baseline;
+        }
+
+        .instaCardU18 img {
+            margin-right: 3px;
+            height: 18px;
+            width: 18px;
+
+        }
+
+        .followerHead {
+            font-size: 8px;
+            line-height: 120%;
+            font-family: var(--go-medium);
+            color: var(--white);
+        }
+
+        .pbsCardsu18 {
+            display: flex;
+            gap: 14px;
+
+        }
+
+        .pbsHeadingAndLogo {
+            position: relative;
+
+        }
+
+
+        .pbsLogo img {
+            width: 42px;
+            height: 42px;
+            object-fit: cover;
+            position: absolute;
+            right: 0px;
+            top: 0px;
+        }
+
+        .pbsHeading {
+            min-height: 45px;
+            font: 12px "Fraunces", serif;
+            font-weight: 100;
+
+        }
+
+        .pbsParagraph {
+            font-size: 10px;
+            line-height: 120%;
+            margin-top: 9px;
+
+        }
+
+    }
+
+    .dsaiMasters {
+        background-color: var(--black);
+
+        display: flex;
+        flex-direction: column;
+        /* Hide scrollbar for webkit browsers */
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* Internet Explorer 10+ */
+
+        /* Hide scrollbar for webkit browsers */
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tbmMasterLogo {
+            max-width: 200px;
+            max-height: 35px;
+            min-height: 35px;
+
+            width: 100%;
+        }
+
+        .newMasterDetailsWrap {
+            border-radius: 0px 0px 8px 8px;
+            line-height: 0;
+            margin: -1px 0 0;
+            padding: 16px 8px;
+
+        }
+
+        .newMasterBoxImg {
+            line-height: 0;
+            max-width: 100%;
+            min-width: 16%;
+        }
+
+        .newMasterImgBox {
+            img {
+                width: 100%;
+                border-radius: 10px 10px 0px 0px !important;
+            }
+        }
+
+        .marqueesliders {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 16px;
+            overflow: auto;
+        }
+
+        .expertsDivi {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .expertsDivi h2 {
+            color: var(--white);
+        }
+
+
+        .go-HeroSubtitle {
+            color: var(--grey3);
+        }
+
+        .industrySpan {
+            color: var(--black);
+            font-weight: 600;
+        }
+
+        .mastersScroll {
+            margin-top: 32px;
+        }
+
+        .newMasterDetailsWrap h3 {
+            font: 16px "go-regular";
+        }
+
+        .newMasterDetailsWrap p {
+            font: 12px 'go-regular';
+            line-height: 150%;
+            color: var(--grey18);
+            margin: 4px 0px 10px;
+        }
+
+        .newMasterDetailsWrap svg {
+            margin-top: 10px;
+            max-width: 200px;
+            max-height: 35px;
+            min-height: 35px;
+        }
+
+
+    }
+
+    .curriculumOutclassDs {
+        .greyParaOutclass>svg {
+            min-width: 18px;
+            min-height: 19px;
+        }
+
+        .outdsHead {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: flex-start;
+
+            p .black-medium {
+                font-family: "go-medium";
+            }
+        }
+
+        .outdsHead>h3 {
+            margin-top: 4px;
+        }
+
+        .outclasImgWrap p {
+            font-size: 14px !important;
+        }
+
+        .marginblock20 {
+            margin-block: 8px;
+        }
+
+        .dsBelowLeft>img {
+            position: sticky;
+            top: 14rem;
+        }
+
+        .faq.curriculumOutclassDs {
+            padding: 60px 0;
+        }
+
+        .curriculumOutclassWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .tempText {
+            font: 13px 'go-regular';
+            line-height: 150%;
+        }
+
+        .curriculumDsUpper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 3rem;
+            z-index: 10;
+            background: var(--white3);
+            padding-block: 8px;
+        }
+
+        .curriculumDsBelow {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .dsBelowLeft.masterImage {
+            overflow: unset;
+
+        }
+
+        .dsBelowLeft {
+            width: 100%;
+            max-width: 630px;
+            position: sticky;
+            top: 9rem;
+            height: fit-content;
+        }
+
+        .dsBelowRight {
+            width: 100%;
+            max-width: calc(100% - 680px);
+        }
+
+        .classRomFaqWrap {
+            justify-content: space-between;
+            display: flex;
+            /* gap: 5px; */
+            background: transparent;
+            padding: 0;
+            border-radius: 6px;
+            border: unset !important;
+            flex-direction: column;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .classRomFaqWrap .left {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            align-items: flex-start;
+            background: var(--white);
+            border-radius: 6px;
+            padding: 12px;
+        }
+
+        .leftDsBottom {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .gradientWhiteBtn {
+            border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            border-radius: 16px !important;
+            max-width: fit-content;
+        }
+
+        .faqHeading {
+            font-size: 18px;
+            font-family: "go-semibold";
+            line-height: 160%;
+            color: var(--grey17);
+        }
+
+        .classRomFaqWrap.active .toggler {
+            transform: rotate(45deg);
+            filter: invert(1);
+            transition: 0.4s ease-in;
+        }
+
+        .inclassansUl {
+            display: flex;
+            gap: 20px;
+            background: var(--white3);
+            padding: 0 12px;
+            /* border-bottom: 1px solid var(--grey4); */
+            background: var(--white);
+        }
+
+        .inclassansUl li {
+            font-size: 13px;
+            font-family: var(--go-semibold);
+            line-height: 150%;
+            color: var(--grey10);
+            padding: 8px 0;
+            position: relative;
+        }
+
+        .inclassansUl li.active {
+            transition: all 0.4s ease-in-out;
+            color: black;
+        }
+
+        .inclassansUl li.active::after {
+            content: "";
+            display: block;
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            /* border-bottom: 1px solid var(--black); */
+            z-index: 2;
+
+        }
+
+        .contentOfOutClass {
+            padding: 18px 12px;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            cursor: auto;
+        }
+
+        .dsBelowRight .content-section {
+            width: 100%;
+        }
+
+        .content.active {
+            display: flex;
+        }
+
+        .paraContent {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .inclassDataParent {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .outclassContentDivi {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid var(--grey4);
+            gap: 6px;
+        }
+
+        .lastContentDivi {
+            border-bottom: none;
+        }
+
+        .greyParaOutclass {
+            font-size: 14px;
+            font-family: var(--go-regular);
+            line-height: 150%;
+            color: var(--grey15);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .headingParagraph {
+            font-size: 13px;
+            font-family: var(--go-semibold);
+            line-height: 140%;
+            color: var(--black17);
+        }
+
+        .gradientWhiteBtn button {
+            display: flex;
+            gap: 10px;
+            background: var(--white);
+            color: var(--black);
+            font-size: 12px;
+            font-family: var(--go-regular);
+            border-radius: 16px;
+            line-height: 120%;
+            padding: 4px 12px;
+            border-radius: 60px;
+            font-weight: 400;
+        }
+
+        .viewMoreButton {
+            background: var(--white3);
+            font-family: "fraunces", serif;
+            border-radius: 16px;
+            border: 1px solid var(--grey4);
+            max-width: fit-content;
+            font-size: 13px;
+            display: flex;
+            gap: 10px;
+            color: var(--black);
+            cursor: pointer;
+            align-items: center;
+            padding: 6px 10px;
+        }
+
+        .gradientWhiteBtn {
+            background: linear-gradient(119deg, #39b6d8 -19.47%, #f7d344 47.29%, #e38330 112.78%) border-box;
+            border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            border-radius: 16px !important;
+            max-width: fit-content;
+        }
+
+        .classRomFaqWrap .toggler {
+            cursor: pointer;
+            position: relative;
+            max-width: 42px;
+        }
+    }
+
+    .boardroomApart.New {
+        padding: 60px 0px !important;
+
+        .apartWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .apartHeading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .apartMarquee {
+            width: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .marquee__inner-wrap2 {
+            height: 100%;
+            width: 100%;
+        }
+
+        .marquee__inner_reverse2 {
+            height: 100%;
+            width: max-content;
+            align-items: center;
+            display: flex;
+            position: relative;
+            /* animation: marqueeReverse 30s linear infinite; */
+            will-change: transform;
+            gap: 20px;
+        }
+
+        .aiPackedBoxi2 {
+            padding: 10px 20px;
+            border: 1px solid var(--grey4);
+            border-radius: 8px;
+        }
+
+        .boardContent {
+            font-size: 24px;
+            font-style: italic;
+            color: var(--black);
+            line-height: 120%;
+            font-family: "Fraunces", serif;
+            text-transform: capitalize;
+            font-weight: 400;
+        }
+
+
+    }
+
+    .muJourney {
+        background: url(https://images.mastersunion.link/uploads/19012026/v1/Vector1712.webp) left, url(https://images.mastersunion.link/uploads/19012026/v1/Vector1710.webp) right, var(--white);
+        background-repeat: no-repeat;
+        background-size: contain;
+
+        .journeyWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            align-items: center;
+        }
+
+
+        .fr-HeadingItalic {
+            text-align: right;
+            width: 100%;
+            max-width: 858px;
+        }
+
+        .journeyBtn {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+
+            .btnBlack {
+                width: 237px;
+            }
+        }
+
+        .headingAlign {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .go-HighlightHeading {
+            text-align: center;
+        }
+
+        .journeyUpper {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .journeyBottom {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            padding: 24px 80px;
+        }
+
+        .journeyLinks {
+            display: flex;
+            align-self: center;
+            gap: 8px;
+            font-size: 16px;
+            color: var(--black);
+            line-height: 150%;
+            font-family: var(--go-regular);
+            text-decoration: underline;
+        }
+
+
+    }
+
+    .meetLeaders {
+        padding: 60px 0px !important;
+        background: var(--black);
+        border-bottom: 1px solid var(--black5);
+
+        .leadersWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 43px;
+        }
+
+        .getpreppedSwipCard {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .getimgWrap {
+            line-height: 0;
+        }
+
+        .leadersCardWrapper {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+        }
+
+    }
+
+    .individualFee {
+        background: url(https://images.mastersunion.link/uploads/28072025/v1/feeVector.svg), var(--grey17);
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        .individualWrapper {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .individualContent {
+            background: url(https://files.mastersunion.link/media/img/Leader/costBG.svg), var(--white);
+            padding: 30px 50px;
+            border-radius: 16px 0 0 16px;
+            width: 50%;
+            max-height: 182px;
+            background-repeat: no-repeat;
+            position: relative;
+            /* top: 20px; */
+            left: 53px;
+        }
+
+        .registeredInfo {
+            display: flex;
+            gap: 10px;
+            align-items: baseline;
+            max-width: 80%;
+        }
+
+        .registrationText {
+            font-size: 20px;
+            color: var(--black);
+            line-height: 150%;
+            font-family: var(--go-regular);
+        }
+
+        .feeContent {
+            background: var(--black);
+            border: 1px solid var(--grey3);
+            background-position: right;
+            padding: 30px 60px;
+            border-radius: 16px;
+            width: 58%;
+            position: relative;
+            right: 58px;
+            background-repeat: no-repeat;
+            z-index: 2;
+        }
+
+        .feeText {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .boardroomFeeDetail {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            justify-content: center;
+        }
+
+        .feeDetailUpper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .costPrice {
+            font-size: 32px;
+            color: var(--white);
+            font-family: var(--go-semibold);
+            line-height: 160%;
+        }
+
+        .costGreyPrice {
+            font-size: 20px;
+            color: var(--grey10);
+            font-family: var(--go-medium);
+        }
+
+        .costGreyPricebold {
+            font-size: 20px;
+            color: var(--grey10);
+            font-family: var(--go-bold);
+            text-decoration-line: line-through;
+        }
+
+        .gradientWhiteBtn {
+            background: linear-gradient(119deg, #39b6d8 -19.47%, #f7d344 47.29%, #e38330 112.78%) border-box;
+            border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            border-radius: 16px !important;
+            max-width: fit-content;
+        }
+
+        .gradientWhiteBtn button {
+            display: flex;
+            padding: 6px 16px;
+            gap: 10px;
+            background: var(--grey17);
+            color: var(--grey4);
+            font-size: 14px;
+            font-family: var(--go-medium);
+            border-radius: 20px;
+            line-height: 120%;
+            text-transform: uppercase;
+        }
+    }
+
+    .threeCardSection {
+        background-color: #090909;
+        overflow: hidden;
+        position: relative;
+        padding: 60px 0px !important;
+        border-bottom: 1px solid var(--black5);
+
+        .cardBackgroundVector {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            z-index: 1;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .threeCardWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 5;
+        }
+
+        .threeCardHeadingWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: center;
+        }
+
+        .glassCard {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            position: relative;
+            /* filter: blur(1px); */
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            /* -webkit-backdrop-filter: blur(8px); */
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+
+        .threeCard {
+            max-width: 362px;
+            width: 100%;
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+
+        .cardsWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            justify-content: center;
+        }
+
+        .cardBoxContent {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .boxCardText {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .boxHead {
+            font-size: 18px;
+            color: var(--white);
+            line-height: 120%;
+            font-family: var(--go-semibold);
+            font-weight: 600;
+        }
+
+        .boxPara {
+            font-size: 14px;
+            line-height: 150%;
+            color: var(--grey4);
+            font-family: var(--go-regular);
+            font-weight: 400;
+
+        }
+
+        .cardSubtext {
+            font-size: 16px;
+            color: var(--grey18);
+            line-height: 150%;
+            font-family: var(--go-regular);
+            font-weight: 400;
+        }
+
+        .cardSectionHeading {
+            font-size: 32px;
+            color: var(--white);
+            line-height: 120%;
+            font-family: var(--go-regular);
+            font-weight: 400;
+        }
+
+        .cardBold {
+            font-family: var(--go-semibold);
+            font-weight: 600;
+        }
+
+        .gradientAbsolute {
+            position: absolute;
+            /* right: -104px;
+        top: -494px; */
+            left: -184px;
+            bottom: 520px;
+            /* bottom: 30px; */
+
+            background: linear-gradient(60deg, #39B5D7 18.74%, #F7D544 104.82%);
+            filter: blur(120px);
+            /* backdrop-filter: blur(48.75px); */
+            width: 374px;
+            height: 374px;
+            border-radius: 50%;
+
+        }
+
+        /*  additional css */
+
+        .priceCards {
+            display: flex;
+            align-items: end;
+            gap: 12px;
+
+        }
+
+        .priceCardU18 {
+
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 100%;
+
+            padding: 16px 24px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+        }
+
+        .priceCardU18 h2 {
+            font-size: 24px;
+            line-height: 120%;
+            margin-top: 10px;
+            font-family: var(--go-medium);
+            color: var(--white);
+        }
+
+        .pricePill {
+            background-color: var(--grey3);
+            border-radius: 20px;
+            padding: 4px 16px;
+            color: var(--white);
+            font-size: 12px;
+            width: fit-content;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--go-semibold);
+            line-height: 120%;
+        }
+
+        .positionItems ul {
+            gap: 10px;
+        }
+
+        .positionItems ul li {
+            list-style: disc;
+            margin-left: 24px;
+            color: var(--grey18);
+            font-size: 14px;
+            line-height: 150%;
+            margin-top: 10px;
+        }
+
+        .additionalCard {
+            display: flex;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-radius: 8px;
+
+
+        }
+
+
+
+
+        .pillAndTitle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .pillAndTitle h2 {
+            font-size: 20px;
+            color: var(--white);
+            line-height: 120%;
+            font-family: var(--go-semibold);
+        }
+
+        .cautionWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .cautionBlack {
+            width: 100%;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 8px;
+            background: linear-gradient(var(--grey17) 0 0) padding-box, var(--gradient) border-box;
+            border: 1px solid transparent;
+
+            svg {
+                width: 100%;
+                max-width: 24px;
+            }
+        }
+
+        .cautionPara {
+            font-size: 11px;
+            line-height: 150%;
+            font-family: var(--go-regular);
+            color: var(--grey10);
+        }
+
+        .cardSectionPara {
+            font-size: 20px;
+            line-height: 150%;
+            color: var(--grey18);
+        }
+
+
+
+        .bgGradientShade {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(66.88deg, rgba(139, 53, 0, 0.2) 43.86%, rgba(207, 207, 207, 0.5) 100%);
+        }
+
+        .bgBronze {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #160d0987;
+
+        }
+
+
+        .threeCardWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            margin: 0 auto;
+        }
+
+        .threeCardHeadingWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: center;
+            max-width: 674px;
+            margin: 0 auto;
+        }
+
+        .threeCard {
+            max-width: 362px;
+            width: 100%;
+            padding: 49px 26.667px 37px 21px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border-radius: 12px;
+            position: relative;
+            z-index: 10;
+            /* background: linear-gradient(66.88deg, rgba(89, 89, 89, 0.5) 43.86%, rgba(207, 207, 207, 0.5) 100%); */
+        }
+
+        .cardsWrapper {
+            display: flex;
+            gap: 16px;
+            margin: 0 auto;
+        }
+
+        .threeCardCover {
+            overflow: hidden;
+            position: relative;
+            z-index: 0;
+            border-radius: 12px;
+            min-width: 402px;
+            width: 100%;
+            max-height: 240px;
+            height: 100%;
+        }
+
+        .threeCardGradinetBg {
+            position: absolute;
+            z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(2px);
+            background: linear-gradient(50deg, rgb(143 143 143 / 20%) 63.97%, rgb(255 255 255 / 20%) 98.12%);
+
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
+
+        .threeCardGrainEffect {
+            position: absolute;
+            z-index: 3;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='https://www.w3.org/2000/svg' width='100%' height='100'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            border-radius: 12px;
+        }
+
+        .shadeEffect {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+
+        }
+
+        .threeCardContentHeading {
+            font: 24px "go-medium";
+            font-weight: 500;
+        }
+
+        .threeCardContentSubheading {
+            font: 16px "go-regular";
+            line-height: 150%;
+        }
+
+        .threeCardHeading {
+            font: 30px "go-medium";
+            font-weight: 500;
+        }
+
+        .threeCardSubHeading {
+            font: 16px "go-regular";
+            color: var(--grey18);
+        }
+    }
+
+    .individualFee.internship {
+        background: url(https://images.mastersunion.link/uploads/28072025/v1/feeVector.svg), var(--grey17);
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        .individualWrapper {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .individualContent {
+            background: url(https://files.mastersunion.link/media/img/Leader/costBG.svg), var(--white);
+            padding: 28px 32px;
+            border-radius: 16px;
+            width: 50%;
+            max-height: 280px;
+            background-repeat: no-repeat;
+            position: relative;
+            /* top: 20px; */
+
+            z-index: 3;
+        }
+
+        .registeredInfo {
+            display: flex;
+            gap: 10px;
+            align-items: baseline;
+            margin-top: 10px;
+
+        }
+
+        .registrationText {
+            font-size: 20px;
+            color: var(--black);
+            line-height: 150%;
+            font-family: var(--go-regular);
+        }
+
+        .feeContent {
+            background: var(--black);
+            border: 1px solid var(--grey3);
+            background-position: right;
+            padding: 40px 60px;
+            border-radius: 16px;
+            width: 50%;
+            position: relative;
+            right: 0px;
+            background-repeat: no-repeat;
+            z-index: 2;
+        }
+
+        .contentHeading {
+            font-size: 24px;
+            line-height: 120%;
+            color: var(--black);
+            font-family: var(--go-regular);
+        }
+
+        .feeText {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .boardroomFeeDetail {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            justify-content: center;
+        }
+
+        .feeDetailUpper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .costPrice {
+            font-size: 32px;
+            color: var(--white);
+            font-family: var(--go-semibold);
+            line-height: 160%;
+        }
+
+        .costGreyPrice {
+            font-size: 20px;
+            color: var(--grey10);
+            font-family: var(--go-medium);
+        }
+
+        .costGreyPricebold {
+            font-size: 20px;
+            color: var(--grey10);
+            font-family: var(--go-bold);
+            text-decoration-line: line-through;
+        }
+
+        .gradientWhiteBtn {
+            background: linear-gradient(119deg, #39b6d8 -19.47%, #f7d344 47.29%, #e38330 112.78%) border-box;
+            border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            border-radius: 16px !important;
+            max-width: fit-content;
+        }
+
+        .gradientWhiteBtn button {
+            display: flex;
+            padding: 6px 16px;
+            gap: 10px;
+            background: var(--grey17);
+            color: var(--grey4);
+            font-size: 14px;
+            font-family: var(--go-medium);
+            border-radius: 20px;
+            line-height: 120%;
+            text-transform: uppercase;
+        }
+
+
+    }
+
+    .reachoutBreatherSection {
+        background: linear-gradient(96deg, #39B5D7 -31.01%, #F7D544 49.05%, #E38330 109.58%);
+        padding: 60px 0 !important;
+
+        .reachoutBreatherWrapper {
+            display: flex;
+            gap: 28px;
+            align-items: stretch;
+        }
+
+        .reachoutLefti {
+            width: 100%;
+            max-width: 57.1%;
+            border-radius: 16px;
+            background: var(--white);
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            align-items: flex-start;
+            max-height: 267px;
+            overflow: hidden;
+        }
+
+        .go-BreatherHeading {
+            border-bottom: 2px solid var(--grey4);
+            padding-bottom: 8px;
+            width: 100%;
+        }
+
+        .reachoutRight {
+            width: 100%;
+            max-width: 39.6%;
+            overflow: hidden;
+        }
+
+        .supportInfoWrapper {
+            display: flex;
+            gap: 32px;
+            align-items: flex-start;
+        }
+
+        .supportDivi {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .supportDivi>img {
+            max-width: 40px;
+            max-height: 40px;
+        }
+
+        .supportMailDivi {
+            display: flex;
+            gap: 5px;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .supportBoxiText {
+            font-size: 16px;
+            font-style: italic;
+            font-weight: 400;
+            line-height: 120%;
+            font-family: "fraunces", serif;
+            color: var(--grey);
+            display: none;
+        }
+
+        .supportcontentText {
+            font-size: 16px;
+            line-height: 120%;
+            font-family: var(--go-medium);
+            color: var(--grey17);
+        }
+    }
+
+    .p16 {
+        /* padding-inline: 16px; */
+        margin-bottom: 26px;
+
+    }
+
+
+    footer {
+        position: relative;
+        display: block;
+        background: url(https://files.mastersunion.link/resources/img/footerBG.webp);
+        background-size: cover;
+    }
+
+    .upperFooter {
+        padding: 42px 0 0;
+        border-bottom: none;
+    }
+
+    .bottomFooter {
+        padding-bottom: 20px;
+        margin-top: 43px;
+    }
+
+
+    @media (max-width: 767px) {
+        .pbsPill {
+            margin: 10px 0px 10px 0px !important;
+        }
+
+        .impactHeroPara {
+            font-size: 14px !important;
+            text-align: center !important;
+        }
+
+        .btnBlack {
+            width: fit-content;
+        }
+
+        .cohortHeadingWrap {
+            padding: 0px 26px;
+        }
+
+        .internshipSection.intenshipCareer {
+            .studentThoughtPara {
+                min-height: 162px !important;
+            }
+        }
+
+        .higherStudies {
+            padding-top: 40px !important;
+            max-height: unset;
+            background-size: auto;
+
+            .diviCareer {
+                padding-top: 0px;
+            }
+
+
+            .impactButton {
+                font-size: 12px;
+            }
+
+
+            .companyWrapperNew {
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+
+                .companiesLogoDivi {
+                    max-height: 74px;
+                    max-width: 182px;
+                }
+            }
+
+            .higherHeadingWrap {
+                padding-inline: 16px;
+            }
+
+            .jobCardLeft {
+                max-width: 142px;
+            }
+
+            .divrow {
+                display: flex;
+                gap: 8px;
+
+                .companiesLogoDivi {
+                    min-width: 35%;
+                }
+            }
+
+            .divrowWrap {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                overflow: auto;
+                padding-left: 16px;
+            }
+
+            .higherStudiesLeft {
+                width: 100%;
+                max-width: 100%;
+                margin-bottom: 0;
+                margin-top: -2px;
+                z-index: 1;
+            }
+
+            .studiesRight {
+                padding: 0px;
+            }
+
+            .techCareerTabs {
+                border-bottom: unset;
+            }
+
+            .techUpperHighlightLeft {
+                flex-wrap: wrap !important;
+                row-gap: 8px;
+            }
+
+            .careerTabUl {
+                padding-left: 16px;
+                gap: 0;
+                overflow: auto;
+            }
+
+            .higherStudiesLeft>img {
+                min-height: unset;
+            }
+
+            .higherStudiesWrapper {
+                flex-direction: column !important;
+                gap: 24px;
+
+            }
+
+            .higherStudyContent {
+                flex-direction: column;
+                gap: 10px;
+
+                .blackSemiPara {
+                    font-size: 16px !important;
+                }
+
+                .blackMediumPara {
+                    font-size: 13px !important;
+                }
+            }
+
+            .higherStudiesLeft.masterImage {
+                border-radius: 0;
+
+            }
+
+            .diviCareer {
+                gap: 24px;
+                padding-bottom: unset;
+            }
+
+            .higherStudyContent>svg {
+                max-width: 46px;
+                max-height: 46px;
+            }
+
+            .careerTabUl li {
+                border-bottom: 1px solid var(--grey18);
+                padding: 0 50px 10px 10px;
+            }
+
+            .masterImage>img {
+                border-radius: 0;
+            }
+
+            .companiesLogoDivi {
+                max-height: unset;
+            }
+
+            .techUpperHighlightLeft .companiesLogoDivi {
+                max-width: 140px !important;
+            }
+
+            .bottomCareerContent {
+                overflow: auto !important;
+                justify-content: flex-start;
+                flex-wrap: nowrap !important;
+            }
+        }
+
+        .reachoutBreatherSection {
+            .reachoutBreatherWrapper {
+                flex-direction: column-reverse;
+                gap: 20px;
+                align-items: flex-start;
+            }
+
+            .reachoutLefti,
+            .reachoutRight {
+                max-width: 100%;
+            }
+
+            .reachoutLefti {
+                padding: 20px;
+                gap: 16px;
+            }
+
+            .go-BreatherHeading {
+                padding-bottom: 16px;
+            }
+
+            .supportInfoWrapper {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .supportDivi>img {
+                max-width: 32px;
+                max-height: 32px;
+            }
+
+            .supportcontentText,
+            .supportBoxiText {
+                font-size: 13px;
+            }
+        }
+
+        .individualFee {
+            .individualWrapper {
+                flex-direction: column;
+                gap: unset;
+            }
+
+            .individualContent {
+                width: 100%;
+                max-width: 326px;
+                background-image: unset;
+                padding: 30px;
+                left: 0;
+                border-radius: 16px 16px 0px 0px;
+            }
+
+            .registrationText {
+                font-size: 14px;
+            }
+
+            .feeContent {
+                width: 100%;
+                max-width: 100%;
+                padding: 0px 27px;
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                min-height: 313px;
+                right: 0px;
+            }
+
+            .feeText {
+                align-items: end;
+            }
+
+            .feeText img {
+                position: relative;
+                bottom: 12px;
+            }
+
+            .costPrice {
+                font-size: 24px;
+            }
+
+            .costGreyPrice {
+                font-size: 16px;
+            }
+
+            .gradientWhiteBtn button {
+                font-size: 12px;
+            }
+        }
+
+        .individualFee.internship {
+            .individualWrapper {
+                flex-direction: column;
+                gap: unset;
+            }
+
+            .individualContent {
+                width: 100%;
+                max-width: 326px;
+                padding: 30px;
+                left: 0;
+                border-radius: 16px 16px 0px 0px;
+
+            }
+
+            .registrationText {
+                font-size: 14px;
+            }
+
+            .feeContent {
+                width: 100%;
+                max-width: 100%;
+                padding: 0px 27px;
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                min-height: 164px;
+                right: 0px;
+            }
+
+            .registeredInfo{
+                max-width: 100%;
+            }
+
+            .feeText {
+                align-items: end;
+            }
+
+            .feeText img {
+                position: relative;
+                bottom: 12px;
+            }
+
+            .costPrice {
+                font-size: 24px;
+            }
+
+            .costGreyPrice {
+                font-size: 16px;
+            }
+
+            .gradientWhiteBtn button {
+                font-size: 12px;
+            }
+        }
+
+        .boardroomApart {
+            .aiPackedBoxi {
+                min-width: unset;
+            }
+
+        }
+
+        .boardroomApart.New{
+            .boardContent{
+                font-size: 20px;
+            }
+        }
+
+        .dsaiMasters {
+
+            /* Hide scrollbar for webkit browsers */
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* Internet Explorer 10+ */
+
+            /* Hide scrollbar for webkit browsers */
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            .newMasterBoxImg {
+                min-width: 230px;
+            }
+
+
+
+            .dsaiMastersMobile .container {
+                padding-right: 0 !important;
+            }
+        }
+
+        .skyRocket {
+            .skyWrapper {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .skyright {
+                max-width: 100%;
+            }
+
+            .skyLeft {
+                max-width: 100%;
+            }
+        }
+
+        .threeCardSection {
+            /* background: url("https://images.mastersunion.link/uploads/07082025/v1/Vector1352.webp");  */
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-color: #090909;
+            border-bottom: solid 1px var(--black5);
+            color: white;
+
+            .bgGradientShade {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                max-width: 620px;
+                background: linear-gradient(66.88deg, rgba(139, 53, 0, 0.2) 43.86%, rgba(207, 207, 207, 0.5) 100%);
+            }
+
+            .bgBronze {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background: #160d0987;
+
+            }
+
+
+            .threeCardWrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 32px;
+                margin: 0 auto;
+            }
+
+            .threeCardHeadingWrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+                margin: 0 auto;
+            }
+
+            .threeCard {
+                max-width: 582px;
+                width: 100%;
+                padding: 49px 26.667px 37px 21px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                border-radius: 12px;
+                position: relative;
+                z-index: 10;
+                /* background: linear-gradient(66.88deg, rgba(89, 89, 89, 0.5) 43.86%, rgba(207, 207, 207, 0.5) 100%); */
+            }
+
+            .cardsWrapper {
+                display: flex;
+
+
+                /* flex-wrap: wrap; */
+                margin: 0 auto;
+            }
+
+            .threeCardCover {
+                overflow: hidden;
+                position: relative;
+                z-index: 0;
+                border-radius: 12px;
+                max-width: 610px;
+                width: 100%;
+                min-height: 249px;
+                height: 100%;
+            }
+
+            .threeCardGradinetBg {
+                position: absolute;
+                z-index: 2;
+                border: 1px solid rgba(255, 255, 255, 0.25);
+                backdrop-filter: blur(2px);
+                background: linear-gradient(50deg, rgb(143 143 143 / 20%) 63.97%, rgb(255 255 255 / 20%) 98.12%);
+
+                width: 100%;
+                max-width: 620px;
+                height: 100%;
+                border-radius: 12px;
+            }
+
+            .threeCardGrainEffect {
+                position: absolute;
+                z-index: 3;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='https://www.w3.org/2000/svg' width='100%' height='100'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+                background-repeat: repeat;
+                border-radius: 12px;
+            }
+
+            .shadeEffect {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+
+            }
+
+            .threeCardContentHeading {
+                font: 24px "go-medium";
+                font-weight: 500;
+            }
+
+            .threeCardContentSubheading {
+                font: 16px "go-regular";
+                line-height: 150%;
+            }
+
+            .threeCardHeading {
+                font: 30px "go-medium";
+                font-weight: 500;
+            }
+
+            .threeCardSubHeading {
+                font: 16px "go-regular";
+                color: var(--grey18);
+            }
+
+        }
+
+        .curriculumOutclassDs {
+            padding: 40px 0 !important;
+
+            .curriculumOutclassWrapper {
+                gap: 32px;
+            }
+
+            .dsBelowLeft {
+                position: relative;
+                top: unset;
+            }
+
+            .outdsHead {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+
+            .outclasImgWrap p {
+                font-size: 12px !important;
+            }
+
+            .curriculumDsUpper {
+                gap: 16px;
+                padding-block: 0;
+                flex-direction: column;
+                align-items: flex-start;
+                position: unset;
+            }
+
+            .curriculumDsBelow {
+                gap: 32px;
+                flex-direction: column;
+            }
+
+            .dsBelowRight {
+                max-width: 100%;
+            }
+
+            .curriculumDsBelow .faqHeading {
+                font-size: 13px;
+                line-height: 120%;
+            }
+
+            .greyParaOutclass {
+                font-size: 12px;
+            }
+        }
+
+        .threeCardSection {
+            /* background: url("https://images.mastersunion.link/uploads/07082025/v1/Vector1352.webp"); */
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-color: #090909;
+            border-bottom: solid 1px var(--black5);
+            color: white;
+
+            .bgGradientShade {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                max-width: 620px;
+                background: linear-gradient(66.88deg, rgba(139, 53, 0, 0.2) 43.86%, rgba(207, 207, 207, 0.5) 100%);
+            }
+
+
+            .bgBronze {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background: #160d0987;
+
+            }
+
+
+            .threeCardWrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 32px;
+                margin: 0 auto;
+            }
+
+            .threeCardHeadingWrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+                margin: 0 auto;
+            }
+
+            .threeCard {
+                max-width: 582px;
+                width: 100%;
+                padding: 49px 26.667px 37px 21px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                border-radius: 12px;
+                position: relative;
+                z-index: 10;
+                /* background: linear-gradient(66.88deg, rgba(89, 89, 89, 0.5) 43.86%, rgba(207, 207, 207, 0.5) 100%); */
+            }
+
+            .cardsWrapper {
+                display: flex;
+
+                /* flex-wrap: wrap; */
+                margin: 0 auto;
+            }
+
+            .threeCardCover {
+                overflow: hidden;
+                position: relative;
+                z-index: 0;
+                border-radius: 12px;
+                max-width: 610px;
+                width: 100%;
+                min-height: 249px;
+                height: 100%;
+            }
+
+            .threeCardGradinetBg {
+                position: absolute;
+                z-index: 2;
+                border: 1px solid rgba(255, 255, 255, 0.25);
+                backdrop-filter: blur(2px);
+                background: linear-gradient(50deg, rgb(143 143 143 / 20%) 63.97%, rgb(255 255 255 / 20%) 98.12%);
+
+                width: 100%;
+                max-width: 620px;
+                height: 100%;
+                border-radius: 12px;
+            }
+
+            .threeCardGrainEffect {
+                position: absolute;
+                z-index: 3;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='https://www.w3.org/2000/svg' width='100%' height='100'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+                background-repeat: repeat;
+                border-radius: 12px;
+            }
+
+            .shadeEffect {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+
+            }
+
+            .threeCardContentHeading {
+                font: 24px "go-medium";
+                font-weight: 500;
+            }
+
+            .threeCardContentSubheading {
+                font: 16px "go-regular";
+                line-height: 150%;
+            }
+
+            .threeCardHeading {
+                font: 30px "go-medium";
+                font-weight: 500;
+            }
+
+            .threeCardSubHeading {
+                font: 16px "go-regular";
+                color: var(--grey18);
+            }
+
+        }
+
+
+        .programmeBreatherNew {
+            padding: 40px 0 !important;
+
+            .programmeBreatherWrapper {
+                gap: 20px;
+                flex-direction: column;
+            }
+
+            .firstTbmBoxi {
+                min-height: 109px !important;
+            }
+
+            .programmeBreatherRight {
+                padding: 16px;
+            }
+
+            .boxiUpper {
+                margin-top: 16px;
+                min-height: unset;
+            }
+
+            .eligibilityBoxi {
+                font-size: 10px;
+            }
+
+            .classText {
+                font-size: 18px;
+            }
+
+            .classPara {
+                font-size: 13px;
+            }
+
+            .firstBoxi {
+                gap: 4px;
+            }
+
+            .buttonsParent {
+                margin-top: 24px;
+                gap: 8px;
+                flex-direction: column !important;
+
+
+                a,
+                button {
+                    width: 100%;
+
+                    svg {
+                        max-width: 20px;
+                    }
+                }
+            }
+        }
+
+        .investmentSection {
+            padding: 40px 0 !important;
+
+            .investmentHeadingWrapper {
+                top: 24px;
+                left: 12px;
+                text-align: unset;
+                justify-content: unset;
+                align-items: flex-start;
+            }
+
+            .investmentBtnWrapper {
+                bottom: 24px;
+                right: 12px;
+                justify-content: flex-end;
+            }
+        }
+
+        .insightSection {
+            padding: 60px 0 !important;
+            padding-bottom: 100px !important;
+
+            .insightParaWrapper {
+                gap: 8px;
+            }
+
+            .swiper-pagination {
+                bottom: 54px !important;
+                left: 0 !important;
+                position: absolute !important;
+                width: 100% !important;
+            }
+
+            .swiper-pagination-bullet {
+                background: var(--grey3) !important;
+                opacity: 1;
+                transition: all 0.3s ease;
+            }
+
+            .swiper-pagination-bullet-active {
+                width: 40px !important;
+                background: var(--grey) !important;
+            }
+
+            .insightPara {
+                font-size: 14px;
+            }
+
+            .insightWrapper {
+                gap: 24px;
+            }
+
+            .facultyDetailsWrapper {
+                gap: 12px;
+            }
+
+            .insightNames {
+                font-size: 16px;
+            }
+
+            .inisghtItalic {
+                font-size: 16px;
+            }
+
+            .aboutVideo {
+                padding-top: 12px;
+            }
+
+            .insightBtnWrapperMob {
+                align-self: flex-end;
+            }
+        }
+
+        .insightSection.studentStories {
+            .swiper-pagination-bullet {
+                background: var(--grey10) !important;
+                opacity: 1;
+                transition: all 0.3s ease;
+            }
+
+            .swiper-pagination-bullet-active {
+                width: 40px !important;
+                background: var(--grey4) !important;
+            }
+        }
+
+        .meetLeaders {
+            .mastersScrollMob {
+                gap: 12px !important;
+                display: flex !important;
+                overflow-x: auto;
+                gap: 20px;
+                align-items: flex-start;
+            }
+
+            .getpreppedSwipCard {
+                min-width: 230px;
+            }
+
+
+        }
+
+
+        .podcastSection {
+            .podcastWrapper {
+                flex-direction: column-reverse;
+                gap: 20px;
+                background: unset;
+                padding: 0;
+            }
+
+            .podcastRight,
+            .podcastLeft {
+                max-width: 100%;
+            }
+
+            .podcastLeft {
+                background: var(--white);
+                padding: 20px;
+                border-radius: 10px;
+                gap: 20px;
+                justify-content: flex-end;
+                align-items: flex-end;
+            }
+
+            .podcastHeadingWrapper {
+                gap: 14px;
+            }
+
+            .whiteApplyButton {
+                padding: 9px 14px;
+                font-size: 14px;
+            }
+
+            .whiteApplyButton svg {
+                max-width: 22px;
+                max-height: 22px;
+            }
+
+        }
+
+        .germanImmersion {
+            .germanImmersionWrapper {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .germanBtnWrapper {
+                gap: 16px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .germanBreatherLeft,
+            .masterRight {
+                max-width: 100%;
+            }
+
+            .germanImageBoxi>img {
+                min-height: unset;
+            }
+
+            .btnJapan {
+                margin-top: 8px;
+            }
+
+            .germanBreatherLeft {
+                padding: 16px !important;
+                align-items: flex-start;
+                gap: 16px;
+                justify-content: unset;
+                min-height: fit-content !important;
+
+                .btnBlack {
+                    width: 100%;
+                }
+            }
+
+            .germanPara {
+                font-size: 14px;
+            }
+
+            .btnBlack {
+                /* width: 100%; */
+            }
+
+            .germanflagsWrapper {
+                gap: 12px;
+
+                svg {
+                    max-height: 47px;
+                    max-width: 68px;
+                }
+            }
+
+            .swiper-pagination {
+                bottom: unset !important;
+                margin-top: 8px;
+                left: 42% !important;
+            }
+
+            .bottomBlackOverlay {
+                display: none;
+            }
+        }
+
+        .germanImmersion.internship {
+            .germanBreatherLeft {
+                gap: 16px;
+            }
+
+            .germanBtnWrapper {
+                width: 100%;
+            }
+
+            .germanParaNew {
+                flex-direction: column;
+                gap: unset;
+            }
+        }
+
+        .impactStudents {
+            .businessHeadLower {
+                gap: 10px;
+                flex-wrap: wrap;
+                row-gap: 48px;
+            }
+
+            .businessHeadBox {
+                gap: 0px;
+                padding-right: 10px;
+                align-items: center;
+                justify-content: center;
+                min-width: 47%;
+            }
+
+            .headingNumber {
+                font-size: 24px;
+                line-height: 120%;
+            }
+
+            .businessNumberText {
+                font-size: 12px;
+            }
+
+            .businessHeadBox:nth-child(2) {
+                border-right: unset;
+            }
+        }
+
+        .cohortSection {
+            .profileParent {
+                flex-direction: column;
+                padding: 4px;
+                position: unset;
+                border-radius: 12px;
+            }
+
+            .profileLeft {
+                max-width: unset;
+                min-height: unset;
+                padding: 16px 6px;
+                margin-left: 0;
+            }
+            
+            .roleListBold{
+                font-size: 14px;
+            }
+
+            .roleListText{
+                font-size: 14px;
+            }
+
+            .leftiContainer {
+                max-width: unset;
+                gap: 16px;
+                align-items: unset;
+            }
+
+            .techCareerTabs {
+                width: 100%;
+                overflow: auto;
+            }
+
+            .go-HighlightHeading {
+                font: normal 20px / 1.2 var(--go-regular);
+            }
+
+            .careerTabUl {
+                width: 100%;
+                /* overflow: auto; */
+            }
+
+            .roleList {
+                gap: 12px;
+            }
+
+            .content-section {
+                width: 100%;
+            }
+
+            /* .profileRight{
+            max-height: 200px;
+            border-radius: 16px;
+           } */
+
+            .careerContentTech {
+                padding-inline: unset;
+            }
+
+            .careerTabUl li {
+                padding: 0 20px 10px 10px;
+            }
+
+            .upperContentTab {
+                width: 100%;
+                gap: 16px;
+                padding-inline: unset;
+            }
+
+            .profileRight {
+                min-height: 0;
+            }
+
+            /* drag motion - swipe */
+            .pbsCardsu18 {
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                cursor: grab;
+                user-select: none;
+                scrollbar-width: none;
+                /* hides scrollbar Firefox */
+            }
+
+            .pbsCardsu18::-webkit-scrollbar {
+                display: none;
+            }
+
+            /* hides scrollbar Chrome/Safari */
+            .pbsCardsu18.is-dragging {
+                cursor: grabbing;
+            }
+
+            .pbsCardu18 {
+                scroll-snap-align: start;
+
+            }
+        }
+
+
+        .heroSection {
+            padding-top: 60px !important;
+            padding-bottom: 0px !important;
+
+            .heroSectionContent {
+                width: 100%;
+                padding: 0 12px;
+                transform: translate(-50%, -25%);
+            }
+
+            .heroSectionImg {
+                max-height: 85vh;
+            }
+
+            .go-HeroSubtitle {
+                margin-top: 8px;
+            }
+
+            .heroHeadingBold {
+                font-size: 30px;
+            }
+
+            .heroSectionBtnWrap {
+                margin-top: 24px;
+                width: 100%;
+                align-items: flex-start;
+                gap: 12px;
+                flex-direction: column;
+                padding: 0 16px;
+
+                a {
+                    width: 100%;
+                }
+            }
+
+            .marquee3.mobVisible {
+                display: flex !important;
+                /* margin-top: 23px; */
+                pointer-events: none;
+                overflow: hidden;
+                align-items: center;
+            }
+
+            .marquee__inner-wrap {
+                height: 100%;
+                width: 100%;
+            }
+
+            .marquee__inner_reverse {
+                height: 100%;
+                width: max-content;
+                align-items: center;
+                display: flex;
+                position: relative;
+                animation: marqueeReverse 30s linear infinite;
+                will-change: transform;
+            }
+
+            .subPointer {
+                font-size: 16px;
+                text-wrap: nowrap;
+            }
+        }
+
+        .internshipSection {
+            background: var(--black);
+            padding: 60px 0px !important;
+
+            .container {
+                padding: 0 8px !important;
+            }
+
+            .internshipUpperWrapper {
+                gap: 24px;
+            }
+
+            .p16 {
+                /* padding-inline: 16px; */
+                margin-bottom: 26px;
+
+            }
+
+
+
+            .internshipWrapper {
+                padding: 0px 8px;
+                background: unset;
+            }
+
+            .internshipCardWrapper {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .internshipStudentUpperDivi {
+                gap: 16px;
+                min-height: 166px;
+            }
+
+            .internshipStudentDetail {
+                /* padding-inline: 16px; */
+            }
+
+            .studentCompanyWrapper {
+                gap: 8px;
+            }
+
+            .internshipStudentBelow {
+                margin-top: 16px;
+            }
+
+            .studentThoughtPara {
+                padding-bottom: 16px;
+                padding-top: 16px;
+                min-height: 79px !important;
+            }
+        }
+
+        .internshipSection.white {
+            background: var(--white);
+
+            padding: 60px 0px !important;
+
+            .container {
+                padding: 0 8px !important;
+            }
+        }
+
+        .startups {
+            .lensBoxi {
+                max-width: 125px;
+            }
+        }
+
+        .aiPacked {
+            padding: 60px 0 !important;
+
+            .aiPackedWrapper {
+                gap: 40px !important;
+            }
+
+            .aiPackedLeft {
+                padding: 0 !important;
+            }
+
+            .aiScrollWrapper {
+                overflow: hidden;
+                width: 100%;
+                position: relative;
+            }
+
+            .aiScrollContent {
+                display: flex;
+                width: max-content;
+                animation: aiInfiniteScroll 30s linear infinite;
+                gap: 10px;
+                /* Adjust spacing as needed */
+            }
+
+            .aiPackedBoxi {
+                max-width: fit-content !important;
+                min-width: fit-content !important;
+            }
+        }
+
+        .priceCards {
+            flex-direction: column !important;
+        }
+
+        .additionalCard {
+            flex-direction: column;
+            align-items: start !important;
+        }
+
+        .pillAndTitle {
+            flex-direction: column;
+        }
+
+        .positionItems ul li {
+            margin-left: 0 !important;
+            margin-top: 10px !important;
+        }
+
+        .cardSectionHeading {
+            font-size: 22px !important;
+
+            .fr-HeadingItalic {
+                font-size: 22px;
+            }
+
+
+        }
+
+        .cardSectionPara {
+            font-size: 16px !important;
+        }
+
+        .gradientBackground {
+            position: absolute;
+            top: 0%;
+            right: -20%;
+            /* removed the -120px, overflow:hidden was eating it */
+            transform: translateY(-50%);
+            background: linear-gradient(60deg, #39B5D7 18.74%, #F7D544 104.82%);
+            filter: blur(120px);
+            width: 374px;
+            height: 244px;
+            border-radius: 50%;
+            z-index: 2;
+            /* sits above section bg, below content which is z-index 5 */
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .businessHeadBox {
+            min-width: 44% !important;
+        }
+
+
+
+        .muJourney {
+
+            background: url(https://images.mastersunion.link/uploads/20012026/v1/VectorMob.webp) left, url(https://images.mastersunion.link/uploads/20012026/v1/vectorMob2.webp) right, var(--white);
+            background-repeat: no-repeat;
+            background-size: contain;
+
+            .journeyBottom {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .journeyWrapper {
+                gap: 24px;
+            }
+
+            .journeyUpper {
+                gap: 24px;
+                width: 100%;
+            }
+        }
+    }
+
+    @media (min-width: 320px) and (max-width: 390px) {
+        .heroSection {
+            padding-bottom: unset;
+
+
+            .heroSectionContent {
+                width: 100%;
+                padding: 0 12px;
+                transform: translate(-50%, -23%);
+            }
+        }
+
+        .higherStudies {
+            .impactButton {
+                font-size: 12px;
+            }
+        }
+    }
+}

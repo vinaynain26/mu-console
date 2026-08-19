@@ -1,0 +1,598 @@
+<main>
+    <div class="popupContainerOuter ApplyNow twoColLayout ughssl" id="enrollHsslSchool">
+
+        <div class="popupContainer">
+            <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_heading">Enroll Your School</h2>
+                <div class="flexend">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Icon" onclick="closeHighSchoolEnrollPopup()">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="hssl_enroll_leadformContainer">
+                <div class="right">
+                    <div class="formContainer active">
+                        <div class="flexInput" id="formain">
+                            <div class="inputGroup">
+                                <label for="nameUser" class="font-14 font-medium font-black1"> Name <span
+                                        class="font-red">*</span></label>
+                                <input type="text" id="nameUser" placeholder="Enter your name"
+                                    class="inputBox font-16 font-black1 font-medium "
+                                    onblur="validateNameInput('nameUser','nameError')">
+                                <p class="font-12 font-red font-regular warning" id="nameError">Please
+                                    Enter Valid
+                                    Name</p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="emailUser" class="font-14 font-medium font-black1">Primary Email <span
+                                        class="font-red">*</span></label>
+                                <input type="text" id="emailUser" placeholder="Enter your email"
+                                    class="inputBox font-16 font-black1 font-medium " 
+                                    onblur="validateEmailInput('emailUser','emailError')">
+                                <p class="font-12 font-red font-regular warning" id="emailError">Please
+                                    Enter Valid
+                                    Email
+                                </p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="phoneUser" class="font-14 font-medium font-black1">Primary Contact <span
+                                        class="font-red">*</span></label>
+                                <input type="text" id="phoneUser" placeholder="Enter your mobile number"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                    class="inputBox font-16 font-black1 font-medium " 
+                                    maxlength="10" onblur="validateMobileInput('phoneUser','phoneError')">
+                                <p class="font-12 font-red font-regular warning" id="phoneError">Please
+                                    Enter Valid
+                                    Number
+                                </p>
+                            </div>
+
+                            <div class="inputGroup">
+                                <label for="gradeUser" class="font-14 font-medium">Grade<span
+                                        class="font-red">*</span></label>
+                                <select name="" id="gradeUser" class="inputBox selectInput" onblur="validateSelectInput('gradeUser', 'gradeError')" >
+                                    <option value="" disabled="" selected="">Select your Grade</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="Others"> Others (1-8) </option>
+                                    <option value="College">College</option>
+
+                                </select>
+                                <p id="gradeError" class="font-12 font-red font-regular warning"></p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="schoolUser12" class="font-14 font-medium font-black1">School <span
+                                        class="font-red">*</span></label>
+                                <input type="text" id="schoolUser12" placeholder="Enter your School"
+                                    class="inputBox font-16 font-black1 font-medium "
+                                     onblur="validateTextInput('schoolUser12', 'schoolError12')" >
+                                    
+                                <p class="font-12 font-red font-regular warning" id="schoolError12">Please
+                                    Enter Valid School Name</p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="cityUser" class="font-14 font-medium font-black1">City <span
+                                        class="font-red">*</span></label>
+                                <input type="text" id="cityUser" placeholder="Enter your City"
+                                    class="inputBox font-16 font-black1 font-medium " 
+                                     onblur="validateTextInput('cityUser', 'cityError')"
+                                    >
+                                <p class="font-12 font-red font-regular warning" id="cityError">Please Enter
+                                    Valid
+                                    City Name</p>
+                            </div>
+                            {{!-- <div class="inputGroup">
+                                <label for="caseStudy" class="font-14 font-medium">Selected Case Study<span
+                                        class="font-red">*</span></label>
+                                <select id="caseStudy" class="select inputBox selectInput  input font-16" required>
+                                    <option value="" disabled selected>Select an option</option>
+                                    <option value="Case 1: Build an AI Agent that Flags Fake News">Case 1: Build an AI
+                                        Agent that Flags
+                                        Fake News</option>
+                                    <option value="Case 2: Predict Natural Disasters, and Optimize AI Rescue Routes">
+                                        Case 2: Predict
+                                        Natural Disasters, and Optimize AI Rescue Routes</option>
+                                    <option value="Case 3: AI Marketing Assistant for Youth Brands">Case 3: AI Marketing
+                                        Assistant for
+                                        Youth Brands</option>
+                                    <option value="Case 4: Diagnose and Connect Rural Users to Remote Healthcare">Case
+                                        4: Diagnose and
+                                        Connect Rural Users to Remote Healthcare</option>
+                                    <option value="Case 5: Hyperlocal AI Curation for Tier-2 Cities">Case 5: Hyperlocal
+                                        AI Curation for
+                                        Tier-2 Cities</option>
+                                    <option value="Case 6: Build an AI-Driven Digital Payments Application">Case 6:
+                                        Build an AI-Driven
+                                        Digital Payments Application</option>
+                                    <option value="Case 7: AI Crop Health Assistant">Case 7: AI Crop Health Assistant
+                                    </option>
+                                    <option value="Case 8: Content Moderation for Video Platforms">Case 8: Content
+                                        Moderation for Video
+                                        Platforms</option>
+                                    <!-- Add your options here -->
+                                </select>
+                                <p id="caseStudyError" class="font-12 font-red font-regular"></p>
+                            </div> --}}
+
+                            <div class="inputGroup">
+                                <label for="participants" class="font-14 font-medium">Number of Participants<span
+                                        class="font-red">*</span></label>
+                                <select id="participants" class="select inputBox input selectInput  font-16" required
+                                    onchange="handleMultiParticipants()"
+                                    onblur="validateSelectInput('participants', 'participantsError')">
+                                    <option value="" disabled selected>Select an option</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                                <p id="participantsError" class="font-12 font-red font-regular"></p>
+                            </div>
+                            <div class="inputGroup"></div>
+                            <div class="participant final" id="multiParticipantsBind">
+
+                            <div>
+
+                            </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="consentCheckWrapper">
+                        <div class="consentCheckRow">
+                            <input type="checkbox" id="consentCheckHes">
+                            <label for="consentCheckHes">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+                        </div>
+                        <p id="consentCheckErrorHes" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+                    </div>
+                    <div class="formFooter" id="submitbuttonreport">
+                        <div class="gradientButton whiteHover">
+                            <button class="button iconButton" onclick="submitRegisterationForm()">
+                                Enroll
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="https://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                        fill="white"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="hssl_enroll_SuccessMessage" class="congrats-box hide" style="width: 100%;">
+                <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+
+                <h3 class="thankyouboxHeading mt-10">Got it</h3>
+                <p class="text-2">Our team will reach out to you shortly.</p>
+
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+<script>
+    const enrollSchool = {
+        studentName: document.querySelector("#hsslEnrl_studentName"),
+        studentEmail: document.querySelector("#hsslEnrl_studentEmail"),
+        studentNumber: document.querySelector("#hsslEnrl_studentNumber"),
+        schoolName: document.querySelector("#hsslEnrl_schoolName"),
+        cityName: document.querySelector("#hsslEnrl_cityName"),
+        teacherName: document.querySelector("#hsslEnrl_teacherName"),
+        schoolEmail: document.querySelector("#hsslEnrl_schoolEmail"),
+        schoolNumber: document.querySelector("#hsslEnrl_schoolNumber")
+    }
+
+    function enrollBtnHandler() {
+        console.log('on submit');
+
+        // Validate functions
+        const validateNumber = (number) => /^\d{10}$/.test(number);
+        const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+        let name = enrollSchool.studentName?.value?.trim();
+        let email = enrollSchool.studentEmail?.value?.trim();
+        let number = enrollSchool.studentNumber?.value?.trim();
+        let schoolName = enrollSchool.schoolName?.value?.trim();
+        let city = enrollSchool.cityName?.value?.trim();
+        let teacherName = enrollSchool.teacherName?.value?.trim();
+        let schoolEmail = enrollSchool.schoolEmail?.value?.trim();
+        let schoolNumber = enrollSchool.schoolNumber?.value?.trim();
+
+
+        // print all
+
+        // Check name validity
+        if(!validateNameInput("hsslEnrl_studentName", "hsslEnrl_studentNameVal")) return;
+
+        // Check email validity
+        if (!validateEmail(email)) {
+            console.log("email check fail")
+            $('#hsslEnrl_studentEmailVal').text("Please enter a valid email address.");
+            $('#hsslEnrl_studentEmailVal').removeClass('warning');
+            return false; 
+        } else {
+            $('#hsslEnrl_studentEmailVal').addClass('warning');
+        }
+
+        if (!validateNumber(number)) {
+            console.log("phone number check fail")
+            $('#hsslEnrl_studentNumberVal').text("Please enter valid 10 digits phone number.");
+            $('#hsslEnrl_studentNumberVal').removeClass('warning');
+            return false; 
+        } else {
+            $('#hsslEnrl_studentNumberVal').addClass('warning');
+        }
+////////////////////////////////////////
+
+
+        if (!schoolName) {
+            $('#hsslEnrl_schoolNameVal').text("Please enter your school name.");
+            $('#hsslEnrl_schoolNameVal').removeClass('warning');
+            return false; 
+        } else {
+            $('#hsslEnrl_schoolNameVal').addClass('warning');
+        }
+
+        if (!city) {
+            $('#hsslEnrl_cityNameVal').text("Please enter city.");
+            $('#hsslEnrl_cityNameVal').removeClass('warning');
+            return false; 
+        } else {
+            $('#hsslEnrl_cityNameVal').addClass('warning');
+        }
+
+        if (!teacherName) {
+            $('#hsslEnrl_teacherNameVal').text("Please enter Principal/Teacher's name");
+            $('#hsslEnrl_teacherNameVal').removeClass('warning');
+            return false; 
+        } else {
+            $('#hsslEnrl_teacherNameVal').addClass('warning');
+        }
+
+        if (!validateEmail(schoolEmail)) {
+            $('#hsslEnrl_schoolEmailVal').text("Please enter a valid email address.");
+            $('#hsslEnrl_schoolEmailVal').removeClass('warning');
+            return false; 
+        } else {
+            $('#hsslEnrl_schoolEmailVal').addClass('warning');
+        }
+
+        if (!schoolNumber) {
+            $('#hsslEnrl_schoolNumberVal').text("Please enter valid 10 digits phone number.");
+            $('#hsslEnrl_schoolNumberVal').removeClass('warning');
+            return false; 
+        } else {
+            $('#hsslEnrl_schoolNumberVal').addClass('warning');
+        }
+
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const utmSource = params.utm_source || 'Website';
+        const utmMedium = params.utm_medium;
+        const utmCampaign = params.utm_campaign;
+        let url = window.location.pathname.substring(1);
+        let formname = "Enroll Your School";
+        let medium = `UG High School Startup - ${formname} Popup`;
+        //let course = 'UG High School Startup';
+        let course = 'UG Programme in TBM or PSM';
+   
+
+        let device = 'PC';
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            device = "Mobile";
+        } else {
+            device = "Desktop";
+        }
+
+
+        $.ajax({
+            url: "{{apiBaseURL}}/api/registerForEvent",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                event_Id:"67a9b3c2b824a6c33081eb97", // old hssl id replaced "668cbe6361bf2340668d4207",
+                eventName: "High School Startup League",
+                field_device_type: device,
+                linkedinProfile: "",
+                medium: utmMedium || medium,
+                campaign: utmCampaign || null,
+                source: utmSource,
+                course: course,
+                sendMail: false,
+                field_utm_url: window.location.href,
+                name: name,
+                email: email,
+                mobile: number,
+                school: schoolName,
+                city: city,
+                principalTeacherName: teacherName,
+                schoolEmail: schoolEmail,
+                schoolMobile: schoolNumber,
+            }),
+            dataType: "json",
+            success: function (result) {
+                document.querySelector("#hssl_enroll_SuccessMessage").classList.remove("hide");
+                document.querySelector("#hssl_enroll_leadformContainer").classList.add("hide");
+            }
+        });
+
+ 
+
+        $.ajax({
+            url: "{{apiBaseURL}}/api/leads/pushToNPF_UG",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                field_device_type: device,
+                email: email,
+                name: name,
+                mobile: number,
+                linkedinProfile: "",
+                medium: utmMedium || medium,
+                campaign: utmCampaign || null,
+                source: utmSource,
+                //course: course,
+                course: "course",
+                Specialization: course,
+                //"Course Preference": "Psychology and Marketing",
+                sendMail: false,
+                field_utm_url: window.location.href,
+                leadSource: medium
+
+            }),
+            dataType: "json"
+        });
+
+
+        
+
+
+    }
+
+    function validateInputBlur(fieldId, fieldName) {
+        const inputValue = $(`#${fieldId}`).val().trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const numberRegex = /^\d+$/;
+
+        if (inputValue === "") {
+            $(`#${fieldName}ReportVal`).removeClass('warning');
+        } else {
+            $(`#${fieldName}ReportVal`).addClass('warning');
+        }
+    }
+
+
+
+
+    function closeHighSchoolEnrollPopup() {
+        let applyNowPopUp = document.getElementById("enrollHsslSchool");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+        // Restore body scrolling when popup is closed
+        document.body.style.overflow = 'auto';
+        $('#consentCheckHes').prop('checked', false);
+        $('#consentCheckErrorHes').addClass('warning');
+        resetEnrollForm();
+    }
+
+    function openHighSchoolEnrollMainPopup() {
+        document.getElementById("enrollHsslSchool").classList.add("active");
+        document.querySelector("#hssl_enroll_SuccessMessage").classList.add("hide");
+        document.querySelector("#hssl_enroll_leadformContainer").classList.remove("hide");
+        // Prevent body scrolling when popup is active
+        document.body.style.overflow = 'hidden';
+    }
+
+</script>
+
+
+
+
+{{!-- ai Hackathon script --}}
+
+<script>
+    // Validation functions
+
+
+// Main validation function
+function validateForm() {
+    let isValid = true;
+
+    // Validate main fields
+    if (!validateNameInput('nameUser', 'nameError')) isValid = false;
+    if (!validateEmailInput('emailUser', 'emailError')) isValid = false;
+    if (!validateMobileInput('phoneUser', 'phoneError')) isValid = false;
+    if (!validateSelectInput('gradeUser', 'gradeError')) isValid = false;
+    if (!validateTextInput('schoolUser12', 'schoolError12')) isValid = false;
+    if (!validateTextInput('cityUser', 'cityError')) isValid = false;
+    if (!validateSelectInput('participants', 'participantsError')) isValid = false;
+
+    // Validate additional participants if any
+    const totalMembers = parseInt(document.getElementById('participants').value || "1");
+    for (let i = 2; i <= totalMembers; i++) {
+        const nameField = `participantName${i}`;
+        const emailField = `participantEmail${i}`;
+        
+        if (!validateTextInput(nameField, `${nameField}Error`)) isValid = false;
+        if (!validateEmailInput(emailField, `${emailField}Error`)) isValid = false;
+        if (!validateMobileInput(phoneField, `${phoneField}Error`)) isValid = false;
+        if (!validateSelectInput(gradeField, `${gradeField}Error`)) isValid = false;
+
+    }
+
+    return isValid;
+}
+
+// Submit function with validation
+function submitRegisterationForm() {
+    let isValid = validateForm();
+    if (!document.getElementById('consentCheckHes')?.checked) { document.getElementById('consentCheckErrorHes').classList.remove('warning'); isValid = false; } else { document.getElementById('consentCheckErrorHes').classList.add('warning'); }
+    if (!isValid) {
+        return;
+    }
+
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+    const utmSource = params.source || '';
+    const utmMedium = params.medium || '';
+    const utmCampaign = params.campaign || '';
+    const deviceType = window.innerWidth < 767 ? 'mobile' : 'desktop';
+
+    const name = $('#nameUser').val().trim();
+    const email = $('#emailUser').val().trim();
+    const phone = $('#phoneUser').val().trim();
+    const grade = $('#gradeUser').val().trim();
+    const school = $('#schoolUser12').val().trim();
+    const city = $('#cityUser').val().trim();
+    const selectedParticipant = $('#participants').val();
+
+    const teamMembers = [];
+    const totalMembers = parseInt(selectedParticipant);
+
+    for (let i = 1; i <= totalMembers; i++) {
+        const memberName = i === 1 ? name : $(`#participantName${i}`).val().trim();
+        const memberEmail = i === 1 ? email : $(`#participantEmail${i}`).val().trim();
+        teamMembers.push({ name: memberName, email: memberEmail });
+    }
+
+    const FormData = {
+        email,
+        name,
+        mobile: phone,
+        yourGrade: grade,
+        school,
+        city,
+        selectedParticipant,
+        medium: utmMedium||"High School Startup League - Register For Event Form Popup",
+        source: utmSource || "website",
+        campaign: utmCampaign,
+        device: deviceType,
+        event_Id: "67a9b3c2b824a6c33081eb97",
+        eventName: "High School Startup League",
+        leadSource: "High School Startup League - Register For Event Form Popup",
+        Specialization: "UG Programme in Data Science & AI",
+        course: "Course",
+        form_steps_email: "1",
+        teamMembers,
+        consentCheck: document.getElementById('consentCheckHes')?.checked || false
+    };
+
+    const post_url = `{{apiBaseURL}}/api/updateDataOfRegisteredEventUserData`;
+
+    $.ajax({
+        url: post_url,
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(FormData),
+        success: function(res) {
+            $('#hssl_enroll_leadformContainer').hide();
+            $('#hssl_enroll_SuccessMessage').removeClass('hide');
+        },
+        error: function(err) {
+            console.error("There was an error submitting the form. Please try again.");
+            console.error(err);
+        }
+    });
+}
+
+// Handle additional participants
+function handleMultiParticipants() {
+    const selectedParticipantsCount = parseInt($('#participants').val().trim());
+    const teamDetails = $("#multiParticipantsBind");
+    teamDetails.empty();
+
+    const primaryName = $('#nameUser').val().trim();
+    const primaryEmail = $('#emailUser').val().trim();
+    const primaryPhone = $('#phoneUser').val().trim();
+    const primaryGrade = $('#gradeUser').val().trim();
+
+    for (let i = 1; i <= selectedParticipantsCount; i++) {
+        const isPrimary = i === 1;
+        const nameValue = isPrimary ? primaryName : '';
+        const emailValue = isPrimary ? primaryEmail : '';
+        const phoneValue = isPrimary ? primaryPhone : '';
+        const gradeValue = isPrimary ? primaryGrade : '';
+        const nameAttr = `participantName${i}`;
+        const emailAttr = `participantEmail${i}`;
+        const phoneAttr = `participantPhone${i}`;
+        const gradeAttr = `participantGrade${i}`;
+        
+        const nameReadonly = isPrimary ? 'readonly' : '';
+        const emailReadonly = isPrimary ? 'readonly' : '';
+        const phoneReadonly = isPrimary ? 'readonly' : '';
+        const gradeReadonly = isPrimary ? 'readonly' : '';
+        const labelText = isPrimary ? `Participant ${i} (Primary Member)` : `Participant ${i}`;
+
+        const participantBlock = `
+            <p class="participantLabel">${labelText}</p>
+            <div class="PopupformWrapper">
+                    <div class="InputGroup">
+                        <label class="font-14 font-medium">Name<span class="font-red">*</span></label>
+                        <input type="text" id="${nameAttr}" name="${nameAttr}" placeholder="Enter the name"
+                            value="${nameValue}" ${nameReadonly}
+                            class="inputBox input font-16 font-black1 font-medium"
+                            onblur="validateTextInput('${nameAttr}', '${nameAttr}Error')"
+                            required>
+                        <p id="${nameAttr}Error" class="font-12 font-red font-regular"></p>
+                    </div>
+
+                    <div class="InputGroup">
+                        <label class="font-14 font-medium">Email<span class="font-red">*</span></label>
+                        <input type="email" id="${emailAttr}" name="${emailAttr}" placeholder="Enter the email"
+                            value="${emailValue}" ${emailReadonly}
+                            class="inputBox input font-16 font-black1 font-medium"
+                            onblur="validateEmailInput('${emailAttr}', '${emailAttr}Error')"
+                            required>
+                        <p id="${emailAttr}Error" class="font-12 font-red font-regular"></p>
+                    </div>
+                    <div class="InputGroup">
+                        <label class="font-14 font-medium">Contact<span class="font-red">*</span></label>
+                        <input type="email" id="${phoneAttr}" name="${phoneAttr}" placeholder="Enter the mobile"
+                            value="${phoneValue}" ${phoneReadonly}
+                            class="inputBox input font-16 font-black1 font-medium"
+                            onblur="validateEmailInput('${phoneAttr}', '${phoneAttr}Error')"
+                            required>
+                        <p id="${phoneAttr}Error" class="font-12 font-red font-regular"></p>
+                    </div>
+
+                    <div class="InputGroup">
+                        <label for="${gradeAttr}" class="font-14 font-medium">
+                            Grade<span class="font-red">*</span>
+                            </label>
+                        <select 
+                             id="${gradeAttr}" 
+                             name="${gradeAttr}" 
+                             class="inputBox selectInput" 
+                             onblur="validateSelectInput('${gradeAttr}', '${gradeAttr}Error')" 
+                             ${gradeReadonly}>
+        
+                            <option value="" disabled selected>Select your Grade</option>
+                            <option value="9" ${gradeValue === '9' ? 'selected' : ''}>9</option>
+                            <option value="10" ${gradeValue === '10' ? 'selected' : ''}>10</option>
+                            <option value="11" ${gradeValue === '11' ? 'selected' : ''}>11</option>
+                            <option value="12" ${gradeValue === '12' ? 'selected' : ''}>12</option>
+                            <option value="Others" ${gradeValue === 'Others' ? 'selected' : ''}>Others (1–8)</option>
+                            <option value="College" ${gradeValue === 'College' ? 'selected' : ''}>College</option>
+    </select>
+    <p id="${gradeAttr}Error" class="font-12 font-red font-regular"></p>
+</div>
+
+            </div>
+        `;
+
+        teamDetails.append(participantBlock);
+    }
+}
+
+
+
+</script>

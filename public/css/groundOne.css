@@ -1,0 +1,756 @@
+.nonZeroPage.nonzero-1 {
+    .lensParent {
+        background: var(--black);
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+
+        .lensWrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .lensCardSWiper {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 16px;
+        }
+
+        .lensSlider {
+            display: flex;
+            gap: 20px;
+        }
+
+        .lensBoxi {
+            background: var(--white);
+            padding: 10px 10px 17px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 300px;
+
+        }
+
+        .lensPara {
+            font-size: 16px;
+
+            font-weight: 400;
+            line-height: 120%;
+            text-align: center;
+            font-family: "Fraunces", serif;
+            color: var(--grey17);
+        }
+
+        .buildingImage picture>img {
+            width: 100%;
+        }
+
+        .joinNewsletter {
+            background: url(https://images.mastersunion.link/uploads/19032025/v1/blackVector.svg),
+                black;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            .JoinNewsWrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .NewsHeadingWrapper {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .sectionHeadingTech {
+                text-align: center;
+            }
+
+            .NewsPara {
+                text-align: center;
+                color: var(--grey4);
+            }
+
+            .Newswrapper {
+                padding: 40px;
+                border-radius: 16px;
+                background: var(--white);
+                box-shadow: 0px 0px 36px 2px rgba(192, 192, 192, 0.25);
+                width: 100%;
+                max-width: 647px;
+                display: flex;
+                gap: 20px;
+            }
+
+            .textForm {
+                border-radius: 5px;
+                border: 1px solid var(--grey4);
+                background: var(--white);
+                width: 100%;
+                max-width: 399px;
+                padding: 16px 0px 12px 26px;
+            }
+
+            .lensCardParent {
+                width: 100%;
+                overflow: auto;
+                pointer-events: none;
+            }
+
+            .lensCardSWiper {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 16px;
+            }
+
+            .lensBoxi {
+                background: var(--white);
+                padding: 10px 10px 17px 10px;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                max-width: 2.3%;
+                padding: 10px 10px 40px 10px !important;
+                min-width: 300px;
+            }
+        }
+    }
+
+    .heroSection {
+        .overlay {
+            height: 30%;
+        }
+    }
+
+    .reachoutBreatherSection {
+        .supportBoxiText {
+            display: block;
+        }
+    }
+
+    /* definition section css */
+    .definition {
+        background-image: url('https://images.mastersunion.link/uploads/30032026/v1/Vector1351.svg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        padding: 80px 0px;
+
+        .definitionHeading {
+            font: 72px "Fraunces", serif;
+            font-weight: 600;
+        }
+
+        .definitionSubhead {
+            color: #017AFF;
+            font-size: 24px;
+            letter-spacing: -2%;
+            line-height: 120%;
+            margin-top: 10px;
+
+        }
+
+        .definitionSubhead h4 {
+            font-weight: 400;
+        }
+
+        .subheadingSpan {
+            font: 24px "Fraunces", serif;
+            color: var(--black);
+        }
+
+        .definitionTitle h6 {
+            font-size: 24px;
+            line-height: 120%;
+            text-transform: uppercase;
+            border-bottom: 2px solid #D3D1D1;
+            padding: 36px 0px 24px;
+            font-family: var(--go-regular);
+            font-weight: 400;
+
+        }
+
+        .definitionContent p {
+            font-size: 22px;
+            line-height: 160%;
+            letter-spacing: -2%;
+            color: var(--grey15);
+            padding-top: 24px;
+        }
+
+
+    }
+
+    .builtSection {
+        background: url("https://images.mastersunion.link/uploads/28112025/v1/Vector1374.svg"),
+            var(--black);
+        padding: 60px 0 !important;
+        background-size: cover;
+        background-repeat: no-repeat;
+
+        .builtWrapper {
+            display: flex;
+            align-items: stretch;
+            gap: 28px;
+        }
+
+        .builtParaContainer {
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .builCard {
+            background: var(--white);
+            padding: 44px 34px;
+            display: flex;
+            align-items: flex-start;
+            gap: 28px;
+            flex-direction: column;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 660px;
+        }
+
+        .builtBig.builtPara {
+            font-size: 24px;
+        }
+
+        .buildNUmber {
+            width: 100%;
+            max-width: 550px;
+            padding: 36px 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 28px;
+            flex-direction: column;
+            background: var(--white);
+            border-radius: 10px;
+            background-color: var(--grey17);
+            color: var(--white);
+        }
+
+        .boxiUpper {
+            display: flex;
+            gap: 24px;
+            align-items: stretch;
+            width: 100%;
+
+        }
+
+        .numberDivs {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--black5);
+            padding: 32px 44px;
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        .numberDivs h2 {
+            font-size: 52px;
+            font-weight: var(--go-medium);
+            line-height: 100%;
+        }
+
+        .numberDivs p {
+            font-size: 14px;
+            font-weight: var(--go-medium);
+            color: #A3A3A3;
+            line-height: 120%;
+
+        }
+
+        .pricePool {
+            border-right: 1px solid #525252;
+            padding-right: 32px;
+        }
+
+        .topCollege {
+            border-right: 1px solid #525252;
+            padding-right: 32px;
+        }
+
+        .boxiLower {
+            background-color: var(--black5);
+            border-radius: 12px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image:
+                url('https://images.mastersunion.link/uploads/30032026/v1/Grid.webp'),
+                linear-gradient(277.37deg, #1F1F1F 16.82%, #3D3D3D 102.99%);
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .d2cChamp {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .numberBig h2 {
+            background: linear-gradient(173.09deg, #F7D344 -2.16%, #E38330 69.64%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 94px;
+            line-height: 120%;
+            margin-left: 20px;
+            font-weight: 600;
+        }
+
+        .numberDesc p {
+            margin-left: 4px;
+            color: #E5E5E5;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .boxiUpperLeft {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+            max-width: 55%;
+        }
+
+
+
+        .smallBoxi {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-start;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .eligibilityBoxi {
+            color: var(--grey15);
+            line-height: 150%;
+            font-size: 12px;
+            font-family: var(--go-regular);
+            text-transform: uppercase;
+        }
+
+        .classContentBoxi {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .classText {
+            line-height: 120%;
+            font-size: 64px;
+            color: var(--grey17);
+            font-family: var(--go-medium);
+            font-weight: 500;
+        }
+
+        .classPara {
+            font-size: 14px;
+            line-height: 120%;
+            color: var(--grey15);
+            font-family: var(--go-medium);
+        }
+
+        .lineDuration {
+            background-color: var(--grey4);
+            width: 1px;
+        }
+
+        .rightBoxiSection {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 45%;
+            gap: 15px;
+        }
+
+        .firstBoxi {
+            border-bottom: 1px solid var(--grey4);
+            padding-bottom: 16px;
+        }
+
+        .font-semibold {
+            font-family: "go-semibold" !important;
+        }
+
+        .buildHeading {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            flex-direction: column;
+        }
+
+
+
+        .builtPara {
+            font-size: 18px;
+            line-height: 150%;
+            font-family: var(--go-regular);
+            color: var(--grey3);
+        }
+
+
+
+    }
+
+    .buildingBrand {
+        .brandContainer {
+            align-items: center;
+            margin-top: 32px;
+        }
+
+        .brandRight {
+            max-width: 38%;
+        }
+
+        .brandLeft {
+            gap: 24px;
+        }
+    }
+
+    .individualFee {
+        .individualWrapper {
+            gap: 0 !important;
+            width: 100%;
+        }
+
+        .individualContent {
+            left: 0 !important;
+        }
+
+        .feeContent {
+            right: 25px !important;
+        }
+    }
+
+
+    .gameSection {
+        padding-bottom: 0 !important;
+    }
+
+
+    /* mobile responsiveness  */
+    @media (max-width:767px) {
+        .gameSectionMobile {
+            .superRed {
+                color: #EA1111;
+            }
+        }
+
+        .yellowBannerParent {
+            .bannerPara {
+                animation: bannerScroll 5s linear infinite;
+            }
+        }
+
+        .heroSection {
+            .overlay {
+                height: 50%;
+            }
+        }
+
+        .builtSection {
+
+            .numberDivs h2 {
+                font-size: 34px;
+            }
+
+            .builtBig.builtPara {
+                font-size: 16px;
+            }
+
+            .numberDivs p {
+                font-size: 9px;
+            }
+
+            .numberBig h2 {
+                font-size: 60px;
+                font-weight: 900;
+            }
+
+            .boxiUpper {
+                padding: 20px 14px 0px;
+                margin-top: 20px;
+            }
+
+            .boxiLower {
+                min-height: 140px;
+
+                width: auto;
+                margin: 20px 14px;
+            }
+
+            .buildNUmber {
+                min-height: 300px;
+            }
+
+
+
+            .pricePool {
+                border-right: 1px solid #525252;
+                padding-right: 0px;
+
+            }
+
+            .topCollege {
+                border-right: 1px solid #525252;
+                padding-right: 0px;
+            }
+
+            .pricePool .topCollege .finalists {
+                display: flex;
+                flex-direction: col;
+                align-items: center;
+                justify-content: center;
+                flex: 1;
+            }
+
+            .numberDivs {
+                justify-content: space-between;
+                padding: 24px 16px;
+                gap: 0;
+            }
+
+            .pricePool,
+            .topCollege,
+            .finalists {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                flex: 1;
+                text-align: center;
+            }
+
+            .builCard {
+                padding: unset;
+                gap: 16px;
+            }
+
+            .buildNUmber {
+                padding: unset;
+                gap: 24px;
+            }
+
+            /* Remove the padding-right that was causing uneven spacing */
+            .pricePool {
+                padding-right: 0;
+            }
+
+            .topCollege {
+                padding-right: 0;
+            }
+
+            .builtPara {
+                font-size: 16px;
+            }
+        }
+
+
+        .buildingBrand {
+            .brandContainer {
+                display: flex;
+                flex-direction: column-reverse;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .brandRight {
+                max-width: 100%;
+            }
+
+            .brandLeft {
+                max-width: 100%;
+            }
+
+            .brandSubText {
+                font-size: 18px;
+            }
+        }
+
+        .internshipSection {
+            background: var(--black);
+            padding-block: 20px !important;
+
+            .downloadMobBtn {
+                width: 100%;
+
+                .btnWhite {
+                    width: 100%;
+                }
+            }
+
+            .studentName {
+                font-size: 20px;
+            }
+
+            .container {
+                padding: 0 8px !important;
+            }
+
+            .insightBtn {
+                width: 100%;
+                padding-right: 10px;
+            }
+
+            .internshipWrapper {
+                padding: 40px 8px;
+
+                a {
+                    width: 100%;
+                    /* display: flex !important; */
+                }
+            }
+
+            .internshipCardWrapper {
+                flex-direction: column;
+                gap: 24px;
+            }
+
+            .internshipStudentUpperDivi {
+                gap: 16px;
+            }
+
+            .studentCompanyWrapper {
+                gap: 8px;
+                min-height: 38px;
+            }
+
+            .internshipStudentBelow {
+                margin-top: 16px;
+            }
+
+            .studentThoughtPara {
+                padding-bottom: 16px;
+                padding-top: 16px;
+            }
+        }
+
+        .lensParent {
+            .lensWrapper {
+                margin-bottom: 28px;
+            }
+        }
+
+        .individualFee {
+            .individualWrapper {
+                flex-direction: column;
+                gap: unset;
+            }
+
+            .individualContent {
+                width: 100%;
+                max-width: 326px;
+                background-image: unset;
+                padding: 30px;
+                left: 0;
+                border-radius: 16px 16px 0px 0px;
+            }
+
+            .registrationText {
+                font-size: 14px;
+            }
+
+            .feeContent {
+                width: 100%;
+                max-width: 100%;
+                padding: 0px 27px;
+                align-items: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                min-height: 313px;
+                right: 0px;
+            }
+
+            .feeText {
+                align-items: end;
+            }
+
+            .feeText img {
+                position: relative;
+                bottom: 12px;
+            }
+
+            .costPrice {
+                font-size: 24px;
+            }
+
+            .costGreyPrice {
+                font-size: 16px;
+            }
+
+            .gradientWhiteBtn button {
+                font-size: 12px;
+            }
+
+            .feeContent {
+                right: unset !important;
+            }
+
+            .individualContent {
+                min-height: unset;
+                padding: 20px;
+            }
+
+            .feeContent {
+                min-height: unset;
+                padding: 18px 27px;
+            }
+
+            .prizePara {
+                font-size: 16px;
+                font-family: 500;
+            }
+
+        }
+
+
+        .definition {
+            .definitionHeading h2 {
+                font-size: 48px;
+                line-height: 120%;
+
+            }
+
+            .definitionSubhead {
+                font-size: 20px;
+            }
+
+            .definitionTitle h6 {
+                font-size: 20px;
+                padding: 24px 0px 18px;
+            }
+
+            .definitionContent p {
+                font-size: 14px;
+                padding-top: 18px;
+            }
+        }
+
+    }
+
+
+}

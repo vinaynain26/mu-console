@@ -1,0 +1,165 @@
+<section class="cohortTabs">
+    <div class="container">
+        <div class="headingWrap">
+            <p class="headingSmall">
+                <img  src="https://files.mastersunion.link/resources/svg/star.svg" alt="Icon">
+                COHORT PROFILES
+            </p>
+            <h2 class="sectionHeading ">
+                Inspiring Path <br class="mob-hide"> <span class="lightMuVector">Traced </span> by our
+                Students
+            </h2>
+        </div>
+
+        <nav class="navigationWrapper">
+            <ul class="tabs faqtabs  blackTabs">
+                <li class=" active" data-rel="cohort2024">COHORT 2024</li>
+                <li class="" data-rel="cohort2023">COHORT 2023 (placed)</li>
+                <li class="" data-rel="cohort2022">COHORT 2022 (placed)</li>
+                <li class="" data-rel="cohort2021">COHORT 2021</li>
+            </ul>
+        </nav>
+
+        <div class="content-section">
+            <div id="cohort2024" class="content active">
+                <div class="cohortwrapper">
+
+
+                </div>
+            </div>
+
+            <div id="cohort2023" class="content">
+                <div class="cohortwrapper">
+
+
+                </div>
+            </div>
+
+            <div id="cohort2022" class="content">
+                <div class="cohortwrapper">
+                </div>
+            </div>
+
+            <div id="cohort2021" class="content">
+                <div class="cohortwrapper">
+
+
+                </div>
+            </div>
+
+            <div class="mt45 center">
+                <div class="gradientButton whiteHover">
+                    <button class="button iconButton" id="loadBtn">
+                        <span>View All</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+                            <path
+                                d="M20.781 8.78013L13.281 16.2801C13.2114 16.3499 13.1287 16.4052 13.0376 16.4429C12.9466 16.4807 12.849 16.5001 12.7504 16.5001C12.6519 16.5001 12.5543 16.4807 12.4632 16.4429C12.3722 16.4052 12.2894 16.3499 12.2198 16.2801L4.71979 8.78013C4.57906 8.6394 4.5 8.44852 4.5 8.2495C4.5 8.05048 4.57906 7.85961 4.71979 7.71888C4.86052 7.57815 5.05139 7.49908 5.25042 7.49908C5.44944 7.49908 5.64031 7.57815 5.78104 7.71888L12.7504 14.6892L19.7198 7.71888C19.7895 7.64919 19.8722 7.59392 19.9632 7.55621C20.0543 7.51849 20.1519 7.49908 20.2504 7.49908C20.349 7.49908 20.4465 7.51849 20.5376 7.55621C20.6286 7.59392 20.7114 7.64919 20.781 7.71888C20.8507 7.78856 20.906 7.87128 20.9437 7.96233C20.9814 8.05337 21.0008 8.15096 21.0008 8.2495C21.0008 8.34805 20.9814 8.44563 20.9437 8.53667C20.906 8.62772 20.8507 8.71044 20.781 8.78013Z"
+                                fill="black" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+
+<script>
+    //cohort profile changes
+    getAllStudents();
+    let students = [];
+    let isShowMore = true;
+
+    $('#loadBtn').click(function (e) {
+        e.preventDefault();
+        let divName = $('ul.cohortTabs').find('li.active').attr('data-rel')
+        let year = divName.substring(6);
+        bindStudents(year, !isShowMore);
+
+        //$(window).scrollTop(0)
+        if ($('#loadBtn span').text() == 'Load Less') {
+            $('#loadBtn span').text('Load All')
+        } else {
+            $('#loadBtn span').text('Load Less')
+        }
+        isShowMore = !isShowMore;
+
+    })
+
+    $('ul.cohortTabs li').click(function () {
+        let divName = $(this).attr('data-rel')
+
+        bindStudents('2021', true);
+        bindStudents('2022', true);
+        bindStudents('2023', true);
+        bindStudents('2024', true);
+        $('#loadBtn span').text('Load All')
+        isShowMore = true;
+        //$(window).scrollTop(0)
+    })
+    function bindStudents(year, isLimit) {
+        $('#cohort' + year + ' .cohortwrapper').empty();
+        let newStudents;
+        if (year == '2021') {
+            newStudents = students.filter((std) => std.batch !== "2022" && std.batch !== "2023" && std.batch !== "2024" && std.course !== "Product Management");
+        } else if (year == '2022' || year == '2023' || year == '2024') {
+            newStudents = students2.filter((std) => std.batch == year && std.course !== "Product Management");
+        }
+        if (isLimit) newStudents = newStudents.splice(0, 12);
+
+        newStudents.forEach((student, index) => {
+            var html = `<div class="box2col">
+                                    <img   src="${student.studentProfilePic}" alt="std-img">
+                                    <div class="box">
+                                        <div class="flexbox">
+                                            <p>${student.studentName}</p>
+                                            <div >`
+            if (student.linkedIn != undefined && student.linkedIn != '') {
+                html += `<a href="${student.linkedIn}" rel="nofollow noindex" target="_blank"> <img   src="https://images.mastersunion.link/uploads/31072025/v1/Frame427321756.svg" alt=""></a>`
+            }
+            if (student.resume_url != undefined && student.resume_url != '') {
+                html += `<a href="${student.resume_url}" rel="nofollow noindex" target="_blank"> <img   src="https://files.mastersunion.link/resources/img/cohortcv.webp" alt=""></a>`
+            }
+
+            html += `</div>
+                                        </div>
+                                        <hr class="lineSpace">
+                                        <div class="line-clamp">`
+            if (student.role_company != undefined && student.role_company != '') {
+                html += `<p class="cohortCompany "><b>${student.role_company}</b></p>`
+            }
+
+            html += `<p class="cohortCompany">`
+            if (student.campusOrgComingFrom.length > 0) {
+                student.campusOrgComingFrom.forEach((campusOrg, i) => {
+                    html += `${campusOrg} `
+                    if (i < student.campusOrgComingFrom.length - 1) html += `<span class="spnPipe"> / </span>`
+                })
+            }
+            html += `</p>
+                </div>
+                                    </div>
+                                </div>`;
+            $('#cohort' + year + ' .cohortwrapper').append(html);
+        });
+    }
+
+    function getAllStudents() {
+        $.ajax({
+            url: '{{apiBaseURL}}/api/studentResume'
+        }).done(function (response) {
+            if (response.IsSuccess == true) {
+                students = response.Data;
+                students2 = response.Data;
+                bindStudents('2021', true);
+                bindStudents('2022', true);
+                bindStudents('2023', true);
+                bindStudents('2024', true);
+            }
+        })
+    }
+    var roasters = [];
+
+</script>

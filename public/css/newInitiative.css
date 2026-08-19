@@ -1,0 +1,1746 @@
+.newInitiativeMain {
+
+    .intersectHero.techHeroSection {
+        padding-top: 80px !important;
+        padding-bottom: 0px !important;
+    }
+
+    .mastersScroll {
+        overflow: hidden;
+        margin-top: 32px;
+    }
+
+    .studentEnterMaster .marqueesliders {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 16px;
+        white-space: unset !important;
+        overflow-y: clip;
+
+    }
+
+    .cSection {
+        background: var(--black);
+        border-bottom: 1px solid var(--black5);
+        padding: 80px 0;
+
+        .cWrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 32px;
+        }
+
+        .masterPlay>img {
+            backdrop-filter: blur(2px);
+            border-radius: 60px;
+        }
+
+        .headWrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .cPara {
+            line-height: 150%;
+            font-size: 16px;
+            font-family: var(--go-regular);
+            color: var(--grey10);
+        }
+
+        .cSwiper {
+            width: 100%;
+            overflow: hidden !important;
+        }
+
+        .cBoxi {
+            position: relative;
+
+        }
+
+        .paraHover {
+            position: absolute;
+            bottom: 18px;
+            left: 18px;
+            line-height: 150%;
+            font-size: 16px;
+            font-family: var(--go-medium);
+            color: var(--white);
+        }
+
+        .btnWrapper {
+            display: flex;
+            align-items: flex-end;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .programSwiperBtn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-direction: row-reverse;
+        }
+
+    }
+
+
+    .studentEnterMaster .newMasterImgBox {
+        position: relative;
+        height: 457px;
+        /* max-width: 100%; */
+        min-width: 18%;
+    }
+
+    @media (min-width:1280px) and (max-width:1600px) {
+        .studentEnterMaster .newMasterImgBox {
+            min-width: 23%;
+            height: 468px;
+        }
+    }
+
+    @media (min-width:1200px) and (max-width:1280px) {
+        .studentEnterMaster .newMasterImgBox {
+            min-width: 23%;
+            height: 436px;
+        }
+
+
+
+    }
+
+    .heroSection {
+        position: relative;
+        line-height: 0;
+        z-index: 9;
+        padding: 0px 0 0;
+        overflow: hidden;
+        max-height: 100vh;
+        background: #020202;
+
+        .heroSectionContent {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, -30%);
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            width: 60%;
+            z-index: 3;
+        }
+
+        .heroSectionContent::before {
+            content: "";
+            position: absolute;
+            inset: -60px -150px;
+            /* ellipse spread */
+            z-index: -1;
+            pointer-events: none;
+
+            border-radius: 50%;
+            /* perfect ellipse */
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 40%, rgba(0, 0, 0, 0.3) 30%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, 0.0) 100%, rgba(0, 0, 0, 0.0) 100%)
+        }
+
+
+        /* .heroSection::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.0) 60%);
+    } */
+
+        .heroSectionContent .go-HeroSubtitle {
+            color: var(--grey4);
+        }
+
+        .heroSectionContent {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translate(-50%, -30%);
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            width: 60%;
+            z-index: 3;
+        }
+
+        .go-HeroSubtitle {
+            margin-top: 16px;
+
+            .textHighlight {
+                color: var(--white);
+            }
+        }
+
+        .heroSectionBtnWrap {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            margin-top: 24px;
+            width: 100%;
+            justify-content: center;
+        }
+
+
+    }
+
+    @media screen and (min-width: 1920px) {
+        .studentEnterMaster .newMasterImgBox {
+
+            height: 460px;
+        }
+    }
+
+    .initiativeHeroSection {
+        background:
+            url(https://images.mastersunion.link/uploads/04062025/v2/initiativeVector.svg) no-repeat right top,
+            url(https://images.mastersunion.link/uploads/04062025/v2/initiativeVector2.svg) no-repeat left center,
+            var(--black);
+        padding-top: 100px;
+        padding-bottom: 40px;
+
+        .heroHeading {
+            display: flex;
+            flex-direction: column;
+            gap: 11px;
+        }
+    }
+
+    .textFlow {
+        background:
+            url(https://images.mastersunion.link/uploads/04062025/v2/initiativeVector.svg) no-repeat right top,
+            url(https://images.mastersunion.link/uploads/04062025/v2/initiativeVector2.svg) no-repeat left bottom,
+            var(--black);
+        padding: 80px 0;
+
+        .textFlowWrapper {
+
+            max-width: 801px;
+            width: 100%;
+            margin: 0 auto;
+
+            .textFlowWG {
+                font-size: 32px;
+                font-weight: 400;
+                line-height: 180%;
+                letter-spacing: 0;
+                color: #404040;
+                font-family: "Fraunces", serif;
+            }
+        }
+
+        .textFlowWG>div {
+            background: linear-gradient(to right,
+                    rgb(255, 255, 255) 50%,
+                    rgb(37, 37, 37) 50%);
+            background-size: 200% 100%;
+            background-position-x: 100%;
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+
+
+        }
+
+    }
+
+    .textCardScroll {
+        background: var(--black);
+        color: white;
+        padding-top: 0;
+        padding-bottom: 0px !important;
+        overflow: hidden;
+
+        .container {
+            padding-top: 0;
+        }
+
+        .textAndCard {
+            position: relative;
+            height: 480px;
+            /* background-color: green; */
+        }
+
+        .textCardTXT {
+            position: absolute;
+            font-size: 60px;
+            font-family: "Fraunces", serif;
+            line-height: 120%;
+            right: 468px;
+            z-index: 99;
+
+        }
+
+        .textCardCARDwrapper {
+            max-width: 1240px;
+            width: 100%;
+            min-height: 368px;
+            height: 100%;
+            /* background-color: red; */
+            position: absolute;
+            top: 50px;
+        }
+
+        .textCardCARDwrapperInner {
+            /* background-color: blue; */
+            display: flex;
+            /* justify-content: */
+            gap: 24px;
+
+        }
+
+        .innerCard {
+            max-width: 606px;
+            width: 100%;
+            /* scale: 0.7; */
+        }
+
+        .innerCardRelative {
+            position: relative;
+        }
+
+        .innerCardAbsoluteTxt {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: #FFFFFF;
+            font-size: 18px;
+            line-height: 120%;
+            font-weight: 500;
+        }
+
+        .innerCardSvg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: fit-content;
+        }
+    }
+
+    .unionTextFlowSection {
+        background:
+            url(https://images.mastersunion.link/uploads/04062025/v2/initiativeVector.svg) no-repeat right top,
+            url(https://images.mastersunion.link/uploads/04062025/v2/initiativeVector2.svg) no-repeat left bottom,
+            var(--black);
+        padding: 80px 0;
+
+        .unionTextFlowWrapper {
+            max-width: 824px;
+            width: 100%;
+            margin: 0 auto;
+
+            .unionTextLR {
+                font-size: 32px;
+                font-weight: 400;
+                line-height: 180%;
+                letter-spacing: 0;
+                color: #404040;
+                font-family: "Fraunces", serif;
+            }
+
+            .unionTextLR>div {
+                background: linear-gradient(to right, #fff 50%, #252525 50%);
+                background-size: 200% 100%;
+                background-position-x: 100%;
+                background-clip: text;
+                -webkit-background-clip: text;
+                color: transparent;
+            }
+        }
+    }
+
+
+
+
+    .heroTitleItalic {
+        font-size: 60px;
+        line-height: 120%;
+        font-weight: 350;
+        font-family: "Fraunces", serif;
+        font-style: italic;
+    }
+
+    .techHeroSection .heroWrapperHeadingDiv {
+        left: 31.5% !important;
+    }
+
+    .lifeLongPage .businessSharkSection .networkHeading {
+        font-weight: 400;
+    }
+
+    .yearButton {
+        font-style: italic;
+    }
+
+    .techHeroSectionWrapper .go-HeroTitle {
+        line-height: 120%;
+    }
+
+    .techHeroSectionWrapper .go-HeroSubtitle {
+        color: var(--grey4);
+    }
+
+    #flipbook {
+        width: 800px;
+        height: 600px;
+        margin: auto;
+    }
+
+    .buildingImage {
+        video {
+            position: relative;
+            top: -7rem;
+        }
+    }
+
+    .video-container {
+        max-height: 580px !important;
+    }
+
+    .initiateOverlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-height: 580px;
+        border-radius: 0px;
+        width: 100%;
+    }
+
+    .video-container {
+        border-radius: unset !important;
+    }
+
+    .revenueWrapper {
+        z-index: 0;
+        width: 100%;
+        max-width: 100%;
+        margin-top: -21px;
+        position: relative;
+    }
+
+    .seriesHeadingDivi {
+        z-index: 1;
+        position: relative;
+    }
+
+    .magsine {
+        min-height: 70vh;
+    }
+
+    .revenueWrapper .swiper-slide-prev {
+        filter: brightness(0.5);
+    }
+
+    .revenueWrapper .swiper-slide-next {
+        filter: brightness(0.5);
+    }
+
+    .heroParaDsai {
+        opacity: 0.8;
+    }
+
+    .studentBuilding .sectionHeadingTech {
+        text-align: unset;
+    }
+
+    .initiativeMainWrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 120px;
+    }
+
+    .initiativeMainWrapper .flowingText {
+        font-size: 30px;
+        font-weight: 400;
+        line-height: 180%;
+        font-family: "Fraunces", serif;
+        color: var(--grey3) !important;
+        transition: color 0.3s ease;
+        display: inline-block;
+        max-width: 100%;
+    }
+
+    .unionWrapper .flowText {
+        font-size: 32px;
+        font-weight: 400;
+        line-height: 180%;
+        font-family: "Fraunces", serif;
+        color: var(--grey3) !important;
+        transition: color 0.3s ease;
+        display: inline-block;
+        max-width: 100%;
+
+    }
+
+    .initiateSecHeading {
+        font-size: 60px;
+        line-height: 120%;
+        text-align: center;
+        font-family: "Fraunces", serif;
+        font-weight: 400;
+    }
+
+    .founderFellowHead {
+        font-size: 60px;
+        line-height: 120%;
+        text-align: center;
+        font-family: "Fraunces", serif;
+        font-weight: 400;
+    }
+
+    .launchWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: -10px;
+        align-items: center;
+        /* overflow: hidden !important; */
+    }
+
+    .initiateColor {
+        color: var(--grey3);
+    }
+
+    .launchCardWrapper {
+        display: flex;
+        gap: 20px;
+    }
+
+    .launchCard {
+        width: 100%;
+        max-width: calc(50% - 10px);
+        flex: 1;
+    }
+
+    .launchCard .masterPlay img {
+        max-width: 46px;
+        max-height: 46px;
+    }
+
+    .launchCardContent {
+        position: absolute;
+        width: 100%;
+        bottom: 16px;
+        left: 16px;
+    }
+
+    .launchCardText {
+        font-size: 18px;
+        color: var(--white);
+        font-family: var(--go-medium);
+        line-height: 120%;
+    }
+
+    .unionWrapper {
+        background:
+            url(https://images.mastersunion.link/uploads/04062025/v2/initiativeVector.svg) no-repeat right top,
+            url(https://images.mastersunion.link/uploads/04062025/v2/initiativeVector2.svg) no-repeat left bottom,
+            var(--black);
+        padding-bottom: 120px;
+    }
+
+    .flowingWrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .fellowShipWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        align-items: center;
+    }
+
+    .newMasterImgBox .cardInner {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transition: transform 0.5s;
+        transform-style: preserve-3d;
+    }
+
+    .cardInner.rotated {
+        transform: rotateY(180deg);
+    }
+
+    .cardFront,
+    .cardBack {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+    }
+
+    .cardBack {
+        transform: rotateY(180deg);
+        display: flex;
+        padding: 24px;
+        border-radius: 12px;
+        background: url(https://images.mastersunion.link/uploads/29052025/v1/greySvg.svg), var(--white);
+        background-repeat: no-repeat;
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border: 1px solid var(--grey10);
+    }
+
+    .cardContentFlip {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .flipLogos {
+        max-width: fit-content;
+    }
+
+    .flipFix {
+        height: 100%;
+        max-height: 60px;
+    }
+
+    .flipIcons {
+        display: flex;
+        align-self: flex-end;
+        width: unset !important;
+        justify-content: unset !important;
+    }
+
+    .flipIcons img {
+        max-width: 40px;
+    }
+
+    .flipCardText {
+        font-size: 16px;
+        line-height: 150%;
+        color: var(--black5);
+        font-family: var(--go-regular);
+        font-weight: 400;
+        align-self: flex-end;
+    }
+
+    .founderDivi {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 24px;
+
+
+        .initiateSecHeading {
+            font-size: 60px;
+        }
+    }
+
+    .fellowShipSection {
+        background: var(--black);
+        padding-top: 0;
+        border-bottom: 1px solid var(--grey3);
+        padding-bottom: 80px;
+
+        .detailsWrapper {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .detailsWrapper .masterName {
+            font-size: 28px;
+            font-family: var(--go-semibold);
+            line-height: 120%;
+            color: var(--black);
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        .masterDesig {
+            font-size: 16px;
+            color: var(--black5);
+            font-family: var(--go-regular);
+            line-height: 140%;
+            font-weight: 400;
+        }
+    }
+
+    .founderText {
+        font-size: 30px;
+        line-height: 160%;
+        /* text-transform: lowercase; */
+        font-family: var(--go-regular);
+        color: var(--grey3) !important;
+    }
+
+    .lifeLongPage .businessSharkSection .mentorText {
+        color: var(--grey3);
+        font-family: var(--go-semibold);
+    }
+
+    .lifeLongPage .businessSharkSection .networkDivi {
+        padding: 71px 24px 24px 24px;
+        ;
+    }
+
+    .lifeLongPage .businessSharkSection .networkDivi:nth-child(2) {
+        padding: 49px 24px 24px 25px;
+    }
+
+    .lifeLongPage .businessSharkSection .networkDivi:nth-child(3) {
+        padding: 51px 25px 25px 25px;
+    }
+
+    .doorsWrapper .sectionHeadingItalic {
+        font-style: italic;
+        font-size: 34px;
+        line-height: 120%;
+        font-weight: 350;
+    }
+
+    .doorsWrapper .sectionParaTech {
+        line-height: 150%;
+        text-transform: unset;
+        text-align: center;
+        color: var(--grey10);
+        font-size: 16px;
+        font-family: var(--go-regular);
+        ;
+    }
+
+    .buildingImage .watchVideo {
+        font-size: 24px !important;
+        line-height: 120% !important;
+        font-family: var(--go-medium) !important;
+
+    }
+
+    .headingBuilding .sectionHeadingItalic {
+        font-style: italic;
+        line-height: 140%;
+        font-weight: 350;
+
+    }
+
+    .lifeLongPage .businessSharkSection .businessSharkWrapper {
+        max-height: 80vh;
+    }
+
+    .exclusiveHeading {
+        font-size: 28px;
+        line-height: 120%;
+        color: var(--black);
+        font-family: var(--go-regular);
+        font-weight: 400;
+    }
+
+    .exclusiveHeadingItalic {
+        font-size: 32px;
+        line-height: 120%;
+        font-family: "Fraunces", serif;
+        font-weight: 350;
+        font-style: italic;
+    }
+
+    .founderSpan {
+        font-family: "Fraunces", serif;
+        text-transform: capitalize;
+    }
+
+    .foundersWrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .ourWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        margin-top: 60px;
+    }
+
+    .netText {
+        font-size: 34px;
+        line-height: 120%;
+        font-family: var(--go-thin);
+    }
+
+    .netSpanText {
+        font-family: "Fraunces", serif;
+        font-weight: 350;
+    }
+
+    .fundsWrapper {
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 40px;
+        align-items: center;
+    }
+
+    .fundBoxi {
+        padding: 20px 20px 40px 0;
+        border-left: 4px solid #F7D344;
+    }
+
+    .fundsWrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 40px;
+        max-width: 75%;
+        margin: 60px auto 0;
+        margin-right: 70px;
+    }
+
+    .fundBoxi {
+        padding: 12px 40px;
+        min-width: 40%;
+
+        h2 {
+            font-size: 60px;
+            line-height: 120%;
+            color: white;
+            font-family: "Fraunces", serif;
+            font-weight: 400;
+        }
+
+        p {
+            font: 18px 'go-regular';
+            line-height: 160%;
+            color: var(--grey10);
+        }
+    }
+
+    .businessSharkSection {
+        padding: 0;
+    }
+
+    .enterPreneurshipParent {
+        justify-content: flex-end !important;
+        padding: 0 30px !important;
+
+        .sectionParaTech {
+            max-width: 45%;
+            line-height: 150%;
+        }
+    }
+
+    .seriesSection {
+        background: url('https://images.mastersunion.link/uploads/25072025/v2/Vector1351.svg'), var(--black);
+        background-repeat: no-repeat;
+        background-size: cover;
+        padding-top: 60px !important;
+        padding-bottom: 80px;
+
+    }
+
+    .seriesWrapper {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .seriesHeadingDivi {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        flex-direction: column;
+    }
+
+    .seriesHeading {
+        font-family: "Fraunces", serif;
+        font-size: 34px;
+        font-weight: 400;
+        line-height: 120%;
+    }
+
+    .seriesHeadNormal {
+        font-family: var(--go-regular);
+        font-size: 30px;
+    }
+
+    .gradientUnderline::after {
+        background: url(https://images.mastersunion.link/uploads/11042025/v1/Vector1347.svg);
+        background-repeat: no-repeat;
+        bottom: -72%;
+    }
+
+    .insightTextInitiative {
+        font-size: 42px;
+        line-height: 120%;
+        font-family: var(--go-regular);
+        text-align: center;
+    }
+
+    .revenueWrapper {
+        overflow: hidden !important;
+    }
+
+    .podcastDivi {
+        position: relative;
+    }
+
+    .profitablePara {
+        font-size: 16px;
+        line-height: 150%;
+        font-family: var(--go-medium);
+    }
+
+    .cardPara {
+        position: absolute;
+        left: 5%;
+        bottom: 5%;
+    }
+
+    .doorsWrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+
+        p {
+            color: var(--grey4);
+            text-transform: capitalize;
+        }
+    }
+
+    .buildInitiative {
+        background: url(https://images.mastersunion.link/uploads/24072025/v1/Vector13481.svg), var(--black);
+        background-repeat: no-repeat;
+        background-size: cover;
+        padding-bottom: 0px !important;
+        padding-top: 80px;
+
+        .relatingWrapper::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.6) 40%, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0) 100%);
+        }
+
+        .watchHead {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+            flex-direction: column;
+        }
+
+        .sectionHeadingTech {
+            font-size: 30px;
+            line-height: 120%;
+            font-family: var(--go-regular);
+        }
+
+        .sectionParaTech {
+            line-height: 150%;
+            text-transform: unset;
+            text-align: center;
+            color: var(--grey10);
+            font-size: 16px;
+            font-family: var(--go-regular);
+            z-index: 3;
+        }
+
+        .sectionHeadingItalic {
+            font-style: italic;
+            font-size: 34px;
+            line-height: 120%;
+            font-weight: 350;
+            font-family: "Fraunces", serif;
+        }
+
+        .videoWrapper {
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+            margin-top: 60px;
+
+
+        }
+
+        .videoEach {
+            position: sticky;
+            top: 4rem;
+            width: 100%;
+            height: calc(100vh - 4rem);
+        }
+
+        .relatingWrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .relatingWrapper::after{
+            content: unset;
+        }
+
+        .headingBuilding {
+            display: flex;
+            align-items: flex-end;
+            position: absolute;
+            top: 8%;
+            width: 100%;
+            justify-content: space-between;
+            padding: 0 50px;
+            z-index: 3;
+        }
+
+
+        .headingBuilding h2 {
+            font-size: 28px;
+            font-family: var(--go-regular);
+            line-height: 120%;
+            color: var(--white);
+            font-weight: 400;
+            z-index: 3;
+        }
+
+        .enterPreneurshipParent {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            width: 100%;
+            padding: 0 40px;
+            bottom: 8%;
+            justify-content: flex-end !important;
+            padding: 0 30px !important;
+        }
+
+        .sectionParaTech {
+            max-width: 45%;
+            line-height: 150%;
+            font-size: 16px;
+            font-family: var(--go-regular);
+            position: relative;
+            color: var(--white);
+            text-align: unset;
+            z-index: 3;
+        }
+
+        .watchPlayText {
+            height: unset;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: fit-content;
+            display: flex;
+            gap: 9px;
+            align-items: center;
+            cursor: pointer;
+            z-index: 3;
+        }
+
+        .watchVideo {
+            font-size: 24px !important;
+            line-height: 120% !important;
+            font-family: var(--go-medium) !important;
+            color: var(--white);
+        }
+    }
+
+    .cardsGroupScroll {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        justify-content: space-between;
+        padding-block: 40px;
+
+        .cards {
+            min-width: 22%;
+        }
+    }
+
+    .magazineSection {
+        background: linear-gradient(to bottom, var(--black) 45%, var(--white) 45%);
+        position: relative;
+        padding: 80px 0;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 45%;
+            background: url('https://images.mastersunion.link/uploads/05082025/v1/Vector1351.svg') no-repeat center top;
+            background-size: cover;
+        }
+
+
+
+
+        .magazineWrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 32px;
+            flex-direction: column;
+        }
+
+        .scratchText {
+            font-size: 30px;
+            line-height: 120%;
+            font-family: var(--go-regular);
+        }
+
+        .magazineHeadingDivi {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            text-align: center;
+        }
+
+        .mastersText {
+            line-height: 150%;
+            color: var(--grey10);
+            font-family: var(--go-regular);
+        }
+
+        .magazineTabsWrapper {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 78%;
+        }
+
+        .magazineLeft {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .magazineRight {
+            width: 100%;
+            max-width: calc(83% - 10px);
+            border-radius: 12px;
+        }
+
+        .magazineImageWrapper {
+            border: 4px solid var(--grey10);
+            border-radius: 4px;
+            cursor: pointer;
+            max-width: 100%;
+            max-height: 218px;
+            filter: brightness(0.5);
+            transition: all 0.3s ease;
+        }
+
+        .magazineImage {
+            background-size: contain;
+            min-height: 211px;
+        }
+
+        .magazineImageWrapper.active {
+            filter: brightness(1);
+            border-radius: 4px;
+            border: 4px solid transparent;
+            background: linear-gradient(var(--black) 0) padding-box, linear-gradient(90deg, #39B6D8 6.41%, #F7D344 51.47%, #E38330 96.52%) border-box;
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+
+        }
+    }
+
+    .foundWhiteText {
+        font-size: 50px;
+        font-family: "Fraunces", serif;
+        line-height: 120%;
+        font-weight: 400;
+        color: var(--white);
+        text-transform: capitalize;
+    }
+
+
+}
+
+.brightnesspoint4 {
+    filter: brightness(1.4);
+}
+
+@media (max-width: 767px) {
+    .newInitiativeMain {
+        .initiativeHeroSection {
+            padding-top: 70px !important;
+            background: var(--black);
+            padding-bottom: 30px !important;
+        }
+
+        .cSection {
+            .swiper-pagination {
+                width: 100% !important;
+                margin-top: 12px;
+            }
+
+            .swiper-pagination {
+                position: relative !important;
+                top: auto !important;
+                bottom: auto !important;
+                left: auto !important;
+                right: auto !important;
+                width: 100% !important;
+            }
+
+            .swiper-pagination-bullet-active {
+                width: 30px !important;
+                border-radius: 10px !important;
+                transition: 0.4s ease-in-out !important;
+            }
+
+            .swiper-pagination-bullet {
+                background: var(--swiper-pagination-bullet-inactive-color, grey) !important;
+            }
+
+            .paraHover {
+                font-size: 12px;
+                left: 8px;
+                bottom: 12px;
+                right: 12px;
+            }
+
+            .cPara {
+                font-size: 14px;
+            }
+        }
+
+        .buildInitiative {
+            .watchHead {
+                align-items: center;
+                flex-direction: column;
+                gap: 12px;
+                padding-inline: 16px;
+            }
+
+            .sectionParaTech {
+                max-width: 100%;
+            }
+
+            .relatingWrapper{
+                border-radius: 0;
+            }
+
+            .sectionHeadingTech {
+                font-size: 22px !important;
+            }
+
+            .sectionHeadingItalic {
+                font-size: 24px;
+            }
+
+            .headingBuilding {
+                padding: 0 20px !important;
+            }
+
+            .watchVideo {
+                font-size: 20px !important;
+            }
+
+            .enterPreneurshipParent .sectionParaTech {
+                max-width: 100%;
+                font-size: 13px;
+                text-align: unset;
+            }
+
+            .masterPlay img {
+                max-width: 46px;
+                max-height: 46px;
+            }
+        }
+
+        .textCardScroll {
+            padding-top: 40px !important;
+            padding-bottom: 0px !important;
+
+            .textCardCARDwrapper {
+                min-height: 300px;
+            }
+        }
+
+        .intersectHero.techHeroSection {
+            padding-top: 50px !important;
+        }
+
+        .techHeroSectionWrapper {
+            height: 100%;
+        }
+
+        .textCardScroll {
+            .innerCardAbsoluteTxt {
+                font-size: 14px;
+            }
+
+            .innerCardRelative {
+                overflow: hidden;
+                max-height: 318px;
+            }
+        }
+
+        .techHeroSection .heroWrapperHeadingDiv {
+            left: 0 !important;
+            width: 100%;
+            top: -249px;
+        }
+
+        .initiativeHeroSection {
+            padding-top: 60px !important;
+        }
+
+
+        .studentEnterMaster .newMasterImgBox {
+            position: relative;
+            height: 451px;
+            max-width: 100%;
+            min-width: 339px;
+            pointer-events: none;
+        }
+
+        .fundsWrapper {
+            max-width: 100%;
+            margin-right: 0;
+            gap: 32px;
+        }
+
+        .fundBoxi {
+            width: 100%;
+            max-width: 40%;
+        }
+
+        .heroHeading {
+            gap: 16px;
+        }
+
+        .founderFellowHead {
+            font-size: 32px;
+        }
+
+        .unionWrapper .flowText {
+            font-size: 24px;
+        }
+
+        .heroTitleItalic {
+            font-size: 32px;
+        }
+
+        .doorsWrapper {
+            align-items: center;
+            flex-direction: column;
+            gap: 12px;
+            padding-inline: 16px;
+        }
+
+        .enterPreneurshipParent .sectionParaTech {
+            max-width: 100%;
+        }
+
+        .heroWrapperHeadingDiv {
+            position: absolute !important;
+            left: 0;
+        }
+
+        .magazineSection {
+            padding: 40px 0px !important;
+            background: linear-gradient(to bottom, var(--black) 61%, var(--white) 30%);
+
+            &::before {
+                background: unset;
+                z-index: -1;
+            }
+
+            .magazineRight {
+                min-height: 316px;
+            }
+        }
+
+        .dsaiMobView .heroHeadingTech {
+            font-size: 30px !important;
+        }
+
+        .heroHeading {
+            gap: 16px !important;
+        }
+
+        .go-HeroSubtitle {
+            margin-top: unset;
+            font-size: 16px;
+            line-height: 150%;
+        }
+
+        .dsaiMobView .heroParaTech {
+            font-size: 16px;
+        }
+
+        .magazineTabsWrapper {
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .dsaiMobView .heroeadingFr {
+            font-size: 34px;
+        }
+
+        .dsaiMobView .heroHeadingItalic {
+            font-size: 34px;
+        }
+
+        .magazineRight {
+            max-width: 100%;
+        }
+
+        .initiativeMainWrapper .flowingText {
+            font-size: 24px;
+        }
+
+        .initiativeMainWrapper {
+            gap: 40px;
+        }
+
+        .magazineLeftMob {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid transparent;
+            background: linear-gradient(var(--black) 0 0) padding-box, var(--gradient) border-box;
+            border-radius: 32px;
+            padding: 8px;
+        }
+
+        .scratchBtn {
+            border-radius: 60px;
+            display: flex;
+            padding: 4px 15px 6px 15px;
+            justify-content: center;
+            align-items: center;
+            width: fit-content;
+            background: var(--black);
+            cursor: pointer;
+        }
+
+        .magazineSection {
+            .scratchText {
+                font-size: 22px;
+            }
+
+        }
+
+        .scratchTextMob {
+            font-size: 14px;
+
+            font-weight: 400;
+            line-height: 120%;
+            font-family: "Fraunces", serif;
+            color: var(--grey16);
+        }
+
+        .scratchBtn:hover,
+        .scratchBtn.active {
+            background-color: var(--white);
+            transition: 0.4s ease-in-out;
+
+            .scratchTextMob {
+                color: var(--black);
+            }
+        }
+
+        .unionWrapper {
+            background: var(--black);
+        }
+
+        .unionWrapper .flowingText {
+            font-size: 24px;
+        }
+
+        .launchWrapper .initiateSecHeading {
+            font-size: 32px !important;
+        }
+
+        .revenueWrapper {
+            margin-top: -16px;
+        }
+
+        .flowingText {
+            font-size: 23px;
+            max-width: 100%;
+        }
+
+        .studentBuilding.intersectJournyMain {
+            /* background-image: unset; */
+            background-size: auto;
+            padding-bottom: 55px !important;
+        }
+
+        .studentBuildingWrapper {
+            position: sticky;
+            top: 3rem;
+        }
+
+
+        .buildingImage .watchVideo {
+            font-size: 20px !important;
+        }
+
+        .launchCardWrapper {
+            flex-direction: column;
+        }
+
+        .launchCard {
+            max-width: 100%;
+        }
+
+        .launchCardText {
+            font-size: 14px;
+        }
+
+        .seriesHeading {
+            font-size: 24px;
+        }
+
+        .seriesHeadNormal {
+            font-size: 22px;
+        }
+
+        .scratchText {
+            font-size: 22px;
+        }
+
+        .profitablePara {
+            font-size: 13px;
+        }
+
+        .fellowShipSection {
+            padding-top: 30px !important;
+        }
+
+        .founderText {
+            font-size: 13px;
+            line-height: 150%;
+        }
+
+        .alumniButton {
+            padding-inline: 21px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .initiateColor {
+            color: var(--white);
+        }
+
+        .founderDivi {
+            gap: 8px;
+        }
+
+        .netSpanText {
+            color: var(--white);
+            font-size: 24px;
+        }
+
+        .ourWrapper {
+            margin-top: 40px;
+        }
+
+        .foundWhiteText {
+            font-size: 24px;
+        }
+
+        .businessHeadingWrapper .yearButton {
+            font-size: 14px;
+            padding: 4px 15px 6px 15px;
+        }
+
+        .exclusiveHeading {
+            font-size: 22px;
+        }
+
+        .exclusiveHeadingItalic {
+            font-size: 24px;
+        }
+
+        .doorsWrapper .sectionHeadingItalic {
+            font-size: 24px;
+        }
+
+        .studentBuilding .sectionHeadingTech {
+            font-size: 22px;
+            line-height: 120%;
+        }
+
+        .studentBuilding .sectionHeadingItalic {
+            font-size: 24px;
+
+        }
+
+        .headingBuilding .sectionHeadingTech {
+            font-size: 18px !important;
+        }
+
+        .headingBuilding .sectionHeadingItalic {
+            font-size: 20px !important;
+        }
+
+        .fundsWrapper {
+            max-width: 100%;
+            margin-right: 0;
+            gap: 32px;
+        }
+
+        .fundBoxi {
+            padding: 12px 20px;
+
+            h2 {
+                font-size: 32px;
+            }
+
+            p {
+                font: 12px 'go-regular';
+            }
+        }
+
+        .insightTextInitiative {
+            font-size: 30px;
+        }
+
+        .intersectHero.techHeroSection {
+            height: 87vh !important;
+        }
+
+        .textFlowWG,
+        .unionTextLR,
+        .textCardTXT {
+            font-size: 24px !important;
+        }
+
+        .textCardCARDwrapper {
+            top: 30px !important;
+        }
+
+        .textCardCARDwrapperInner {
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .textAndCard {
+            height: 740px !important;
+        }
+
+        .textCardTXT {
+            font-size: 32px !important;
+            right: 26% !important;
+        }
+
+        .textCardScrollWrapper {
+            overflow: hidden;
+        }
+
+        .initiateSecHeading {
+            font-size: 32px !important;
+        }
+
+        .unionTextFlowSection {
+            background-image: unset !important;
+            padding-bottom: 40px !important;
+            padding-top: 0 !important;
+
+        }
+
+        .textFlow {
+            background-image: unset !important;
+            padding-bottom: 0px !important;
+        }
+
+        .heroSection {
+            padding-top: 50px !important;
+            padding-bottom: 0 !important;
+            max-height: 90vh !important;
+            overflow: hidden;
+
+            .heroSectionContent {
+                width: 100%;
+                padding: 0 12px;
+                transform: translate(-50%, -20%);
+            }
+
+            .heroSectionBtnWrap {
+                margin-top: 24px;
+                width: 100%;
+                align-items: flex-start;
+                gap: 12px;
+                flex-direction: column;
+
+                a {
+                    width: 100%;
+                }
+            }
+        }
+
+        @media (min-width: 320px) and (max-width: 390px) {
+
+            .heroSection {
+                max-height: 100vh !important;
+            }
+
+
+            .studentEnterMaster .newMasterImgBox {
+                position: relative;
+                height: 451px;
+                max-width: 100%;
+                min-width: 339px;
+            }
+        }
+
+        /* @media (min-width: 430px) and (max-width:932px) {
+            .intersectHero.techHeroSection {
+                height: 100vh !important;
+            }
+        } */
+    }
+
+
+}
+
+@media (min-width:1200px) and (max-width:1280px) {
+
+    .newInitiativeMain .heroSection {
+        max-height: 112vh;
+    }
+}

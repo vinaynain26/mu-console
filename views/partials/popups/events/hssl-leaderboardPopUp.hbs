@@ -1,0 +1,105 @@
+<main>
+    <div class="popupContainerOuter hsslLeaderboardWaitPopup" id="leaderboardWaitlist">
+
+        <div class="popupContainer">
+            <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_heading"></h2>
+                <div class="flexend">
+                    <img  src="https://files.mastersunion.link/media/svg/dark-close-icon.svg" class="invert-img" alt=""
+                        onclick="closeHsslLeaderboardPopup();">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="leadformContainer">
+                <div class="left">
+                    <img src="https://files.mastersunion.link/media/img/hssl/hssl-leaderboardGraphic.png" alt="hssl-leaderboardGraphic">
+                </div>
+                <div class="hsslLeaderBoardPopBottm">
+                    <p class="votingPill-hssl gradientText">Voting Lines Will Open In:</p>
+
+                    <div class="hsslTimer">
+
+                        <div class="time-box">
+                            <span class="font-white font56" id="days">00</span>
+                            <span class="label">DAYS</span>
+                        </div>
+
+                        <span class="font-white font56 timeFix">:</span>
+
+                        <div class="time-box">
+                            <span class="font-white font56" id="hours">00</span>
+                            <span class="label">HRS</span>
+                        </div>
+
+                        <span class="font-white font56 timeFix">:</span>
+
+                        <div class="time-box">
+                            <span class="font-white font56" id="minutes">00</span>
+                            <span class="label">MINS</span>
+                        </div>
+
+                        <span class="font-white font56 timeFix">:</span>
+
+                        <div class="time-box">
+                            <span class="font-white font56" id="seconds">00</span>
+                            <span class="label">SECS</span>
+                        </div>
+
+                    </div>
+
+                    <p class="masterBoxSubheading font-14 mt15">Stay tuned for more updates!</p>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+
+    function closeHsslLeaderboardPopup() {
+        let applyNowPopUp = document.getElementById("leaderboardWaitlist");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+    }
+
+
+    function openHsslLeaderboardPopup(formTitle, destination) {
+        const form = document.getElementById("leaderboardWaitlist");
+        const h2 = document.querySelector("#form_heading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        document.querySelector("#SuccessMessage").classList.add("hide");
+        document.querySelector("#leadformContainer").classList.remove("hide");
+
+    }
+
+    const targetDate = new Date('December 7, 2024 14:00:00').getTime();
+
+    const countdown = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance > 0) {
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerText = days.toString().padStart(2, '0');
+            document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+        } else {
+            clearInterval(countdown);
+            document.querySelector('.hsslTimer').innerText = 'Time’s up!';
+        }
+    }, 1000);
+
+</script>

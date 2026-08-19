@@ -1,0 +1,415 @@
+<section class="faq bg-grey faqWrapBox" data-faq-program="pg">
+    <div class="container">
+        <div class="headingWrap flexbox">
+            <div class="headingsLeft">
+                <h2 class="go-HighlightHeading mt10">
+                    Frequently Asked <br class="mob-hide"> 
+                    <span class="fr-HeadingItalic">Questions</span>
+                </h2>
+            </div>
+        </div>
+
+        <div class="faqWrapper">
+            <nav class="navigationWrapper">
+                <ul class="tabs faqtabs" data-faq-tabs></ul>
+            </nav>
+
+            <div class="content-section" data-faq-content>
+                <p class="faqHeading" data-faq-state="loading">
+                    Loading FAQs...
+                </p>
+
+                <p class="faqHeading hide" data-faq-state="error">
+                    We couldn’t load the FAQs right now. Please try again later.
+                </p>
+
+                <p class="faqHeading hide" data-faq-state="empty">
+                    No FAQs are available at the moment.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+(function () {
+
+    const FAQ_API = 'https://api.mastersunion.org/api/faq/program/';
+    const TOGGLER_ICON =
+        'https://images.mastersunion.link/uploads/25062025/v1/MainButton3.svg';
+
+    const escapeHtml = (value) => {
+        if (value == null) return '';
+
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    };
+
+    /* ──────────────────────────────────────────────────────────────
+       NEW: linkifyAnswer
+       Mirrors the admin preview exactly. Converts plain-text answers
+       to safe HTML with:
+         • http(s):// URLs   → <a target="_blank" rel="noopener noreferrer">
+         • www.…  URLs       → <a target="_blank" rel="noopener noreferrer">
+         • emails           → <a href="mailto:…">
+         • markdown [text](url) and [text](mailto:…)
+         • newlines          → <br>
+       XSS-safe: input is HTML-escaped first; anchors are inserted
+       via placeholder tokens so already-linkified text is never re-
+       processed.
+       ────────────────────────────────────────────────────────────── */
+    const linkifyAnswer = (text) => {
+
+        if (!text) return '';
+
+        let safe = escapeHtml(text);
+
+        const tokens = [];
+
+        const placeholder = (html) => {
+            tokens.push(html);
+            return `\u0000${tokens.length - 1}\u0000`;
+        };
+
+        // Markdown-style [label](url) and [label](mailto:…)
+        safe = safe.replace(
+            /\[([^\]]+)\]\((https?:\/\/[^\s)<]+|mailto:[^\s)<]+)\)/g,
+            (_, label, url) => {
+
+                const isMail = url.startsWith('mailto:');
+
+                return placeholder(
+                    isMail
+                        ? `<a href="${url}">${label}</a>`
+                        : `<a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a>`
+                );
+            }
+        );
+
+        // Bare http(s):// URLs
+        safe = safe.replace(
+            /\bhttps?:\/\/[^\s<]+[^\s<.,;:!?)\]'"]/g,
+            (m) => placeholder(
+                `<a href="${m}" target="_blank" rel="noopener noreferrer">${m}</a>`
+            )
+        );
+
+        // www.* URLs (no protocol — prefix https:// in the href)
+        safe = safe.replace(
+            /\b(www\.[^\s<]+[^\s<.,;:!?)\]'"])/g,
+            (m) => placeholder(
+                `<a href="https://${m}" target="_blank" rel="noopener noreferrer">${m}</a>`
+            )
+        );
+
+        // Emails
+        safe = safe.replace(
+            /\b[\w.+-]+@[\w-]+\.[\w.-]+\b/g,
+            (m) => placeholder(
+                `<a href="mailto:${m}">${m}</a>`
+            )
+        );
+
+        // Restore placeholders
+        safe = safe.replace(
+            /\u0000(\d+)\u0000/g,
+            (_, i) => tokens[Number(i)]
+        );
+
+        // Preserve line breaks
+        safe = safe.replace(/\n/g, '<br>');
+
+        return safe;
+    };
+
+    const buildTab = (section, index) => {
+
+        const activeCls = index === 0 ? 'active' : '';
+        const title = escapeHtml(section.title || `Section ${index + 1}`);
+
+        return `
+            <li 
+                class="${activeCls}" 
+                data-rel="faqTab-${index}" 
+                data-index="${index}"
+            >
+                ${title}
+            </li>
+        `;
+    };
+
+    const buildQuestion = (item, sectionIndex, itemIndex) => {
+
+        const answerId = `faqTab-${sectionIndex}-a-${itemIndex}`;
+        const isFirst = sectionIndex === 0 && itemIndex === 0;
+
+        const activeCls = isFirst ? ' active' : '';
+
+        const question = escapeHtml(item.question || '');
+
+        // UPDATED: answer is now linkified (URLs + emails → clickable)
+        const answer = linkifyAnswer(item.answer || '');
+
+        return `
+            <div 
+                class="faqquestionWrap mb30${activeCls}" 
+                data-rel="${answerId}"
+            >
+                <div class="left">
+
+                    <p class="faqHeading">
+                        ${question}
+                    </p>
+
+                    <img 
+                        src="${TOGGLER_ICON}" 
+                        class="toggler" 
+                        alt="Icon"
+                    >
+                </div>
+
+                <div class="faqanswer${activeCls}" id="${answerId}">
+                    ${answer}
+                </div>
+            </div>
+        `;
+    };
+
+    const buildSection = (section, sectionIndex) => {
+
+        const contentCls =
+            sectionIndex === 0
+                ? 'content active'
+                : 'content';
+
+        const questions = section.items
+            .map((item, itemIndex) =>
+                buildQuestion(item, sectionIndex, itemIndex)
+            )
+            .join('');
+
+        return `
+            <div 
+                id="faqTab-${sectionIndex}" 
+                class="${contentCls}" 
+                data-faq-content-item
+            >
+                ${questions}
+            </div>
+        `;
+    };
+
+    
+    $(document).ready(function () {
+
+        const $section =
+            $('.faq.faqWrapBox[data-faq-program]').first();
+
+        if (!$section.length) return;
+
+        // UPDATED HERE
+        const program =
+            ($section.attr('data-faq-program') || 'pg').trim();
+
+        const $tabs =
+            $section.find('[data-faq-tabs]');
+
+        const $content =
+            $section.find('[data-faq-content]');
+
+        const $states = {
+            loading:
+                $section.find('[data-faq-state="loading"]'),
+
+            error:
+                $section.find('[data-faq-state="error"]'),
+
+            empty:
+                $section.find('[data-faq-state="empty"]'),
+        };
+
+        const showState = (name) => {
+
+            Object.values($states).forEach(($el) =>
+                $el.addClass('hide')
+            );
+
+            if (name && $states[name]) {
+                $states[name].removeClass('hide');
+            }
+        };
+
+        const attachInteractions = () => {
+
+            $section
+                .find('.faqquestionWrap .faqanswer')
+                .not('.active')
+                .hide();
+
+            $section
+                .find('.faqquestionWrap')
+                .off('click.faqPopup')
+                .on('click.faqPopup', function (event) {
+
+                    // Don't toggle the row when the user clicked
+                    // a link inside the answer — let the link work.
+                    if ($(event.target).closest('a').length) {
+                        return;
+                    }
+
+                    event.stopPropagation();
+
+                    const id =
+                        $(this).attr('data-rel');
+
+                    $(this)
+                        .toggleClass('active')
+                        .siblings()
+                        .removeClass('active');
+
+                    $('#' + id)
+                        .slideToggle()
+                        .parent()
+                        .siblings()
+                        .find('.faqanswer')
+                        .slideUp();
+
+                });
+
+            $section
+                .find('.faqtabs li')
+                .off('click.faqPopup')
+                .on('click.faqPopup', function () {
+
+                    const id =
+                        $(this).attr('data-rel');
+
+                    if (!id || id.indexOf('inside') !== -1) {
+                        return;
+                    }
+
+                    $(this)
+                        .addClass('active')
+                        .siblings()
+                        .removeClass('active');
+
+                    $section
+                        .find('#' + id)
+                        .addClass('active')
+                        .siblings()
+                        .removeClass('active');
+
+                    const $scroller =
+                        $(this).closest('.tabs');
+
+                    const tabLeft =
+                        $(this).position().left;
+
+                    const tabWidth =
+                        $(this).outerWidth(true);
+
+                    const targetScroll =
+                        $scroller.scrollLeft()
+                        + tabLeft
+                        - ($scroller.width() / 2)
+                        + (tabWidth / 2);
+
+                    $scroller.animate({
+                        scrollLeft: targetScroll
+                    }, 150);
+
+                });
+        };
+
+        const render = (sections) => {
+
+            $tabs.html(
+                sections.map(buildTab).join('')
+            );
+
+            $content
+                .find('[data-faq-content-item]')
+                .remove();
+
+            $content.append(
+                sections.map(buildSection).join('')
+            );
+
+            showState(null);
+
+            attachInteractions();
+
+           
+        };
+
+        const loadFaqs = async () => {
+
+            try {
+
+                // API WILL NOW HIT /pg
+                const response = await fetch(
+                    FAQ_API + encodeURIComponent(program)
+                );
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const payload = await response.json();
+
+                const sections =
+                    (payload?.Data?.sections || [])
+                    .filter((section) =>
+                        section
+                        && Array.isArray(section.items)
+                        && section.items.length
+                    );
+
+                if (!sections.length) {
+
+                    showState('empty');
+
+                    return;
+                }
+
+                render(sections);
+
+            } catch (err) {
+
+                console.error(
+                    `Failed to load FAQs for program "${program}":`,
+                    err
+                );
+
+                showState('error');
+            }
+        };
+
+        loadFaqs();
+
+    });
+
+})();
+
+function showApplyNowPopUp() {
+
+    const applyNowPopUp =
+        document.getElementById('ApplyNowPopUpNEW');
+
+    if (applyNowPopUp) {
+        applyNowPopUp.classList.add('active');
+    }
+}
+</script>
+
+<style>
+    .faq .navigationWrapper li{
+            text-wrap: nowrap;
+    }
+    .faqanswer a { color: #53534e; text-decoration: underline; text-underline-offset: 2px; }
+.faqanswer a:hover { color: #050000; }
+</style>

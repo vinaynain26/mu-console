@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pages · MU Console</title>
+<link rel="stylesheet" href="/console-ui/app.css">
+</head><body>
+<div class="shell">
+  <nav class="side"></nav>
+  <main>
+    <div class="phead">
+      <div>
+        <h1>Pages</h1>
+        <div class="sub">Edit copy in the studio, or open a page and edit it in place.</div>
+      </div>
+    </div>
+    <div id="ai"></div>
+    <div class="card"><div id="list"><div class="empty">Loading pages…</div></div></div>
+  </main>
+</div>
+<script type="module">
+import { chrome, api, esc, ago, $ } from '/console-ui/shell.js';
+
+const acct = await chrome('pages');
+
+if (!acct.ai) {
+  $('ai').innerHTML = `<div class="banner warn">
+    <b>AI writer is off.</b> Set <code>ANTHROPIC_API_KEY</code> in the environment and restart
+    to enable rewriting, variants and section passes.</div>`;
+}
+
+try {
+  const pages = await api('/api/pages');
+  $('list').innerHTML = pages.length ? pages.map(p => `
+    <a class="rrow" href="/console/page/${esc(p.slug)}">
+      <div style="flex:1">
+        <h3>${esc(p.title)}</h3>
+        <div class="meta">${p.fields} fields · ${p.sections} sections ·
+          last published ${p.last_publisher ? esc(p.last_publisher) + ' ' + ago(p.last_published) : 'never'}</div>
+      </div>
+      ${p.unpublished > 0
+        ? `<span class="badge warn"><span class="dot"></span>${p.unpublished} unpublished</span>`
+        : `<span class="badge ok">Published</span>`}
+      <a class="btn sm" href="/page/${esc(p.slug)}" target="_blank" onclick="event.stopPropagation()">Open live ↗</a>
+    </a>`).join('') : '<div class="empty">No pages yet.</div>';
+} catch (e) {
+  $('list').innerHTML = '<div class="empty">Could not load pages: ' + esc(e.message) + '</div>';
+}
+</script></body></html>

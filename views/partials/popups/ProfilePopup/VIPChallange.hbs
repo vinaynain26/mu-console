@@ -1,0 +1,179 @@
+<main>
+    <div class="popupContainerOuter introPopup vipPopup" id="vipChallangePop">
+
+        <div class="popupContainer">
+
+            <div class="fromTophead">
+                <h2>VIP Challange</h2>
+                <div class="pointer" onclick="closeVIPChallange()">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0.5" y="0.5" width="31" height="31" rx="5.5" fill="white" />
+                        <rect x="0.5" y="0.5" width="31" height="31" rx="5.5" stroke="#FAFAFA" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M11.0506 11.0499C11.3544 10.7462 11.8468 10.7462 12.1506 11.0499L20.9501 19.8495C21.2538 20.1532 21.2538 20.6457 20.9501 20.9494C20.6464 21.2531 20.1539 21.2531 19.8502 20.9494L11.0506 12.1499C10.7469 11.8461 10.7469 11.3537 11.0506 11.0499Z"
+                            fill="#525252" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M20.9494 11.0499C21.2531 11.3537 21.2531 11.8461 20.9494 12.1499L12.1498 20.9494C11.8461 21.2531 11.3536 21.2531 11.0499 20.9494C10.7462 20.6457 10.7462 20.1532 11.0499 19.8495L19.8494 11.0499C20.1532 10.7462 20.6456 10.7462 20.9494 11.0499Z"
+                            fill="#525252" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="PopupformWrapper" id="leadformContainer">
+                <form action="">
+                    <div id="vipChallengeContainer"></div>
+                </form>
+
+                <div class="submitWrapper">
+                    <div class="gradientButton whiteHover">
+                        <button class="button iconButton" id="vipChallengeSubmitButton">
+                            Save
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z"
+                                    fill="#090909" />
+                                <path
+                                    d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z"
+                                    fill="#090909" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+$(document).ready(function () {
+    $('#vipChallengeSubmitButton').on('click', async function (e) {
+        e.preventDefault();
+
+        const $entry = $('.vipChallengeItem');
+        if ($entry.length === 0) {
+            alert('No VIP Challenge entry found.');
+            return;
+        }
+
+        const entryId = $entry.data('id');
+        const initialEntry = window.initialVipChallengesData?.vipChallenges?.find(e => e._id === entryId) || {};
+
+        console.log('initialEntry', initialEntry)
+        // Validate required fields
+        const requiredFields = [
+            { id: `vipSchool_${entryId}`, message: "Please add school name" },
+            { id: `vipSchool_${entryId}`, message: "Please add school name" },
+            { id: `vipProduct_${entryId}`, message: "Please add product" },
+            { id: `vipCategory_${entryId}`, message: "Please select category" }
+        ];
+
+        let isValid = true;
+        requiredFields.forEach(({ id, message }) => {
+            const result = validateField(id, message);
+            if (!result) isValid = false;
+        });
+
+        if (!isValid) return;
+
+        const $submitBtn = $('#vipChallengeSubmitButton');
+        $submitBtn.prop('disabled', true).text('Submitting...');
+
+        try {
+            // Get current input values
+            const schoolName = $(`#vipSchool_${entryId}`).val().trim();
+            const product = $(`#vipProduct_${entryId}`).val().trim();
+            const category = $(`#vipCategory_${entryId}`).val().trim();
+            const currentlyActive = $(`#vipActive_${entryId}`).is(':checked');
+
+            // Detect deck changes
+            const deckInput = document.getElementById(`vipDeck_${entryId}`);
+            const newDeckFiles = deckInput?.files?.length > 0;
+            const deck = newDeckFiles
+                ? await handleMultipleFilestackUpload(`vipDeck_${entryId}`, initialEntry.deck || [])
+                : (initialEntry.deck || []);
+
+
+            // Detect photo change
+            const photoInput = document.getElementById(`vipPhoto_${entryId}`);
+            const newPhotoFile = photoInput?.files?.length > 0;
+            const photo = newPhotoFile
+                ? await handleFilestackUpload(`vipPhoto_${entryId}`, initialEntry, 'photo')
+                : (initialEntry.photo || '');
+
+
+            // Build final payload
+            const payload = {
+                schoolName,
+                product,
+                category,
+                currentlyActive,
+                photo,
+                uploadDecks : deck
+            };
+
+            // Change detection
+            const isChanged =
+                schoolName !== (initialEntry.schoolName || '') ||
+                product !== (initialEntry.product || '') ||
+                category !== (initialEntry.category || '') ||
+                Boolean(currentlyActive) !== Boolean(initialEntry.currentlyActive) ||
+                photo !== (initialEntry.photo || '') ||
+                JSON.stringify(deck) !== JSON.stringify(initialEntry.deck || []);
+
+            if (!isChanged) {
+                alert('No changes detected.');
+                return;
+            }
+
+            const userId = window.location.pathname.split('/').pop();
+            const requestPayload = {
+                section: 'vipChallenges',
+                actions: [{
+                    action: initialEntry._id ? 'update' : 'add',
+                    data: payload,
+                    ...(initialEntry._id ? { targetId: entryId } : {})
+                }]
+            };
+
+            // Uncomment when ready to submit
+            await $.ajax({
+                url: `{{apiBaseURL}}/api/student-profile/${userId}/draft`,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(requestPayload),
+                success: function (res) {
+                    renderProfile(res.draft)
+                    closeVIPChallange();
+                },
+                error: function (err) {
+                    console.error('Submission failed:', err);
+                    alert(err?.responseJSON?.Message || 'Submission failed.');
+                }
+            });
+
+        } catch (error) {
+            console.error("Upload or submission failed:", error);
+            alert("Something went wrong during submission.");
+        } finally {
+            $submitBtn.prop('disabled', false).html(`Save
+                    <svg  
+                    width="18"
+                    height="18"
+                    viewBox="0 0 18 18"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                    >
+                    <path
+                        d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z"
+                        fill="#090909"
+                    />
+                    <path
+                        d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z"
+                        fill="#090909"
+                    />
+                    </svg>`);
+        }
+    });
+});
+</script>
+

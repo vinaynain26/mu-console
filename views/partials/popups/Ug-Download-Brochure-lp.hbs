@@ -1,0 +1,532 @@
+<main>
+    <div class="popupContainerOuter   ApplyNow lpugform" id="UgdownloadBrochure">
+
+        <div class="popupContainer">
+            <div class="fromTophead ">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="Ug_form_heading"> Download Programme
+                    Brochure </h2>
+                <div class="popUpCloseBtnWrap">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Icon" onclick="hideApplyNowPopUpMainUG();">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="leadformContainer">
+                {{!-- <div class="left mob-hide">
+                    <img class="ugPopUpImg" src="https://files.mastersunion.link/media/img/ug-brochure-image.webp" alt="">
+                </div> --}}
+                <div class="right">
+                    <div class="formContainer active">
+                        <div class="flexInput" id="formain">
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Full Name <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your name"
+                                    class="inputBox font-16 font-black1 font-medium " id="nameReport"
+                                    onblur="validateNameInput('nameReport', 'nameReportVal')">
+                                <p class="font-12 font-red font-regular warning" id="nameReportVal">Please Check the
+                                    input</p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Email ID <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your email"
+                                    class="inputBox font-16 font-black1 font-medium " id="emailReport"
+                                    onblur="validateEmailInput('emailReport', 'emailReportVal')">
+                                <p class="font-12 font-red font-regular warning" id="emailReportVal">Please Enter Valid
+                                    Email
+                                </p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Contact Number <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your mobile number" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                    class="inputBox font-16 font-black1 font-medium " id="numberReport" maxlength="10"
+                                    onblur="validateMobileInput('numberReport', 'numberReportVal')">
+                                <p class="font-12 font-red font-regular warning" id="numberReportVal">Please Enter Valid
+                                    Number
+                                </p>
+                            </div>
+
+                            <div class="inputGroup">
+                                <label class="font-14 font-medium">Professional Qualification <span
+                                        class="font-red">*</span></label>
+                                <select  onblur="validateSelectInput('qualificationReport', 'qualificationReportVal')"  name="" id="qualificationReport" class="inputBox safariFix">
+                                    <option value="" selected hidden >Select Professional Qualification</option>
+                                    <option value="Grade 12th/Incoming College Student">Grade 12th/Incoming College
+                                        Student</option>
+                                    <option value="Grade 11th and Below">Grade 11th and Below</option>
+                                    <option value="Others">Others</option>
+
+                                </select>
+
+                                <p class="font-12 font-red font-regular warning" id="qualificationReportVal" >
+                                    Please
+                                    check the input
+                                </p>
+                            </div>
+
+                            <div class="inputGroup">
+                                <label for="schoolName" class="font-14 font-medium font-black1">School Name <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your school name"
+                                    class="inputBox font-16 font-black1 font-medium " id="schoolNameReport"
+                                    onblur="validateSchoolNameInput('schoolNameReport', 'schoolNameReportVal')">
+                                <p class="font-12 font-red font-regular warning" id="schoolNameReportVal">Please Enter Valid
+                                    School Name
+                                </p>
+                            </div>
+
+                            <div class="consentCheckWrapper">
+                                <div class="consentCheckRow">
+                                    <input type="checkbox" id="consentCheckUgLP">
+                                    <label for="consentCheckUgLP">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+                                </div>
+                                <p id="consentCheckErrorUgLP" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="formFooter" id="submitbuttonreport">
+                        <div class="gradientButton whiteHover" onclick="onButtonClickSubmitReportMain()">
+                            <button class="button iconButton gtmUgDwnBroPop" id="gtmUgDwnBroPopId">
+                                Download
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="https://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                        fill="white"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="SuccessMessage" class="congrats-box text-center hide">
+                <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+
+                <h3 class="thankyouboxHeading mt-10 gtmUgDwnBroGotit" id="gtmUgDwnBroGotitId">Got it</h3>
+                {{!-- <p class="text-2 gtmUgDwnBroGotPara" id="gtmUgDwnBroGotParaId">The Report will be downloaded shortly. --}}
+                <p class="text-2"> Feel free to write to us at <a class="link-red"
+                        href="mailto:ugadmissions@mastersunion.org" target="_blank">ugadmissions@mastersunion.org</a>
+                </p>
+
+                <p class="text-2"> or call on <span class="font-bold">+91 76691 86660</span> in case of any queries.
+                </p>
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+
+
+    function UgdownloadBrochure(formTitle, destination) {
+        const form = document.getElementById("UgdownloadBrochure");
+        const h2 = document.querySelector("#Ug_form_heading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        document.querySelector("#SuccessMessage").classList.add("hide");
+        document.querySelector("#submitbuttonreport").classList.remove("hide");
+        document.querySelector("#leadformContainer").classList.remove("hide");
+        document.querySelector("#Ug_form_heading").classList.remove("hide");
+        
+        // Disable scrolling when popup is open
+        document.body.style.overflow = 'hidden';
+    }
+    // let name = $('#nameReport').val();
+    // let email = $('#emailReport').val();
+    // let number = $('#numberReport').val();
+    function onButtonClickSubmitReportMain() {
+        console.log('on submit top main 121');
+
+        // Validate functions
+        const validateNumber = (number) => /^\d+$/.test(number);
+        const validateEmail = (email) => email.includes("@") && email.includes(".");
+
+        let name = $('#nameReport').val().trim();
+        name = name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : "";
+        let nameParts = name.split(/\s+/);
+        let firstName = "";
+        let lastName = "";
+        if (nameParts.length === 1) {
+            firstName = nameParts[0];
+            lastName = "";
+            } 
+            else {
+                lastName = nameParts.pop();
+                firstName = nameParts.join(" ");
+                }
+        let email = $('#emailReport').val().trim();
+        let number = $('#numberReport').val().trim();
+       //let otp = $('#otpReport').val().trim();
+        let qualification = $('#qualificationReport').val();
+        let schoolName = $('#schoolNameReport').val().trim();
+
+
+        let isValid = true;
+
+        isValid = validateNameInput('nameReport', 'nameReportVal') && isValid;
+        isValid = validateEmailInput('emailReport', 'emailReportVal') && isValid;
+        isValid = validateMobileInput('numberReport', 'numberReportVal') && isValid;
+      //  isValid = validateOtpInput('otpReport', 'otpReportVal') && isValid;
+        isValid = validateSelectInput('qualificationReport', 'qualificationReportVal') && isValid;
+        isValid = validateSchoolNameInput('schoolNameReport', 'schoolNameReportVal') && isValid;
+
+        if (!document.getElementById('consentCheckUgLP')?.checked) { document.getElementById('consentCheckErrorUgLP').classList.remove('warning'); isValid = false; } else { document.getElementById('consentCheckErrorUgLP').classList.add('warning'); }
+
+        if (!isValid) return;
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const utmSource = params.utm_source ;
+        const utmMedium = params.utm_medium;
+        const utmCampaign = params.utm_campaign;
+
+        const gclid = params.gclid ;
+        const fbclid = params.fbclid ;
+        const utmTerm = params.utm_term ; 
+        const utmPlacement = params.utm_placement ;
+        const utmContent = params.utm_content ;
+        const utmCampaignId = params.utm_campaign_id ;
+        const utmAdGroupId = params.utm_adgroup_id ;
+        const utmCreativeId = params.utm_creative_id ;
+
+        let url = window.location.pathname.substring(1);
+        let formname = document.querySelector("#UgdownloadBrochure").getAttribute("data-title") || "Download Placement Report";
+        let medium = `UGP TBM - ${formname} - Popup`;
+        let leadSource = `UGP TBM - ${formname} - Popup`;
+
+        let course = 'UG Programme in TBM or PSM';
+       // if (url.startsWith("pgp-rise")) {
+       //     course = 'PGP Rise';
+       //     medium = `PGP Rise - ${formname} Popup`;
+       // } else if (url.startsWith("ug-")) {
+       //     course = 'Undergraduate Programme';
+       //     medium = `UG - ${formname} Popup`;
+       // }
+
+        let device = 'PC';
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            device = "Mobile";
+        } else {
+            device = "Desktop";
+        }
+
+        // api for our Data base
+        var post_url = '{{apiBaseURL}}/api/courseRegister';
+        var request_method = 'POST'; //get form GET/POST method
+        $.ajax({
+            url: post_url,
+            type: request_method,
+            contentType: "application/json",
+            data: JSON.stringify({
+                "email": email,
+               
+                "name": name,
+                "mobile": number,
+             //   "otp": otp,
+                "courseName": course,
+                "qualification": qualification,
+                "school": schoolName,
+                "consentCheck": document.getElementById('consentCheckUgLP')?.checked || false,
+                "full_utm_url": window.location.href || "N/A",
+                "leadSource": leadSource,
+                "leadOrigin": leadSource || "N/A",// for lead matrix
+                 "medium": utmMedium || null,
+                "campaign": utmCampaign || null,
+                "source": utmSource || null,
+                "gclid" : gclid || null,
+                "fbclid" : fbclid || null,
+                "utmTerm" : utmTerm || null,
+                "utmPlacement" : utmPlacement || null,
+                "utmContent" : utmContent || null,
+                "utmCampaignId" : utmCampaignId || null,
+                "utmAdGroupId" : utmAdGroupId || null,
+                "utmCreativeId" : utmCreativeId || null,
+
+            }),
+            dataType: "json",
+            success: function (result) {
+                console.log("Second api after first success")
+                //const post_url = '{{apiBaseURL}}/api/leads/pushToNPF_UG';
+                const post_url = "https://api-lead.mastersunion.org/api/leadAndApplicantApis/ugDownloadBrochureApi";
+
+                const request_method = 'POST';
+
+                $.ajax({
+                    url: post_url,
+                    type: request_method,
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        device: device,
+                        email: email,
+                        name: name,
+                        mobile: number,
+                     //   otp: otp,
+                      //  linkedinProfile: "",
+                       
+                        fullUrl: window.location.href||"N/A",
+                        
+                        course: "course",
+                        field_professional_qualification: qualification,
+                        schoolName: schoolName,
+                        consentCheck: document.getElementById('consentCheckUgLP')?.checked || false,
+                        Specialization: course,
+                        "Course Preference": "Psychology and Marketing",
+                       // sendMail: false,
+                        leadSource: medium,
+                        leadOrigin: medium|| "N/A",// for lead matrix
+                        source: utmSource || null,
+                        medium: utmMedium || null,
+                        campaign: utmCampaign || null,
+                        formId : 100,
+                        gclid : gclid  || null,
+                        fbclid : fbclid  || null,
+                        utmTerm : utmTerm  || null,
+                        utmPlacement : utmPlacement  || null ,
+                        utmContent : utmContent  || null,
+                        utmCampaignId :utmCampaignId  || null,
+                        utmAdGroupId : utmAdGroupId  || null,
+                        utmCreativeId : utmCreativeId  || null,
+                    }),
+                    dataType: "json",
+                    success: function (result) {
+                         window.dataLayer = window.dataLayer || [];
+              window.dataLayer.push({
+                  event: "formSubmitted",
+                  leadsUserData: {
+                      email: email,
+                      phone_number: `+91${number}`,
+                      first_name: firstName,
+                      last_name: lastName,
+                  }
+              });   
+
+                    }
+                });
+
+            }
+        });
+
+        const form = document.getElementById("UgdownloadBrochure");
+        const destination = form.getAttribute("data-destination") || "https://files.mastersunion.link/uploads/09102025/v1/UGTBMBrochure.pdf";
+        setTimeout(() => {
+            window.open(destination, "_blank");
+        }, 3000);
+        document.querySelector("#SuccessMessage").classList.remove("hide");
+        document.querySelector("#submitbuttonreport").classList.add("hide");
+        document.querySelector("#leadformContainer").classList.add("hide");
+        document.querySelector("#Ug_form_heading").classList.add("hide");
+
+
+    }
+
+    function validateInputBlur(fieldId, fieldName) {
+        const inputValue = $(`#${fieldId}`).val().trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const numberRegex = /^\d+$/;
+
+        if (inputValue === "") {
+            $(`#${fieldName}ReportVal`).removeClass('warning');
+        } else {
+            $(`#${fieldName}ReportVal`).addClass('warning');
+        }
+    }
+
+  // function validateOtpInput(elementId, errorElementId) {
+  //     const inputValue = $(`#${elementId}`).val().trim();
+  //     const errorElement = $(`#${errorElementId}`);
+  //     console.log("Validating OTP", inputValue, errorElement);
+
+  //     errorElement.addClass("warning").text("OTP cannot be empty");
+  //     $(errorElement).css("visibility", "hidden");
+
+  //     if (inputValue === "") {
+  //         $(errorElement).css("visibility", "visible");
+   //         errorElement.removeClass("warning").text("OTP cannot be empty");
+   //         return false;
+   //     }
+
+  //      const otpPattern = /^[0-9]{6}$/;
+  //      if (!otpPattern.test(inputValue)) {
+  //          $(errorElement).css("visibility", "visible");
+  //          errorElement.removeClass("warning").text("OTP must be 6 digits");
+  //          return false;
+  //      }
+//
+  //      errorElement.removeClass("warning").text("");
+  //      $(errorElement).css("visibility", "hidden");
+  //      return true;
+  //  }
+
+    function validateCityInput(elementId, errorElementId) {
+        const inputValue = $(`#${elementId}`).val().trim();
+        const errorElement = $(`#${errorElementId}`);
+        console.log("Validating City", inputValue, errorElement);
+
+        errorElement.addClass("warning").text("City cannot be empty");
+        $(errorElement).css("visibility", "hidden");
+
+        if (inputValue === "") {
+            $(errorElement).css("visibility", "visible");
+            errorElement.removeClass("warning").text("City cannot be empty");
+            return false;
+        }
+
+        if (inputValue.length < 2) {
+            $(errorElement).css("visibility", "visible");
+            errorElement.removeClass("warning").text("City name is too short");
+            return false;
+        }
+
+        const cityPattern = /^[A-Za-z\s]+$/;
+        if (!cityPattern.test(inputValue)) {
+            $(errorElement).css("visibility", "visible");
+            errorElement.removeClass("warning").text("City contains invalid characters");
+            return false;
+        }
+
+        errorElement.removeClass("warning").text("");
+        $(errorElement).css("visibility", "hidden");
+        return true;
+    }
+
+    function validateSchoolNameInput(elementId, errorElementId) {
+        const inputValue = $(`#${elementId}`).val().trim();
+        const errorElement = $(`#${errorElementId}`);
+        console.log("Validating School Name", inputValue, errorElement);
+
+        errorElement.addClass("warning").text("School Name cannot be empty");
+        $(errorElement).css("visibility", "hidden");
+
+        if (inputValue === "") {
+            $(errorElement).css("visibility", "visible");
+            errorElement.removeClass("warning").text("School Name cannot be empty");
+            return false;
+        }
+
+        if (inputValue.length < 3) {
+            $(errorElement).css("visibility", "visible");
+            errorElement.removeClass("warning").text("School Name is too short");
+            return false;
+        }
+
+        errorElement.removeClass("warning").text("");
+        $(errorElement).css("visibility", "hidden");
+        return true;
+    }
+
+ //  function sendOtpReport() {
+ //      const email = $('#emailReport').val().trim();
+ //      const number = $('#numberReport').val().trim();
+ //      const name = $('#nameReport').val().trim();
+
+ //      // Validate email and mobile before sending OTP
+ //      if (!validateEmailInput('emailReport', 'emailReportVal')) {
+ //          return;
+ //      }
+
+ //      if (!validateMobileInput('numberReport', 'numberReportVal')) {
+ //          return;
+ //      }
+
+ //      // Disable button and show loading state
+ //      const sendOtpBtn = $('#sendOtpBtn');
+ //      const buttonText = sendOtpBtn.find('.button');
+ //      buttonText.text('Sending...');
+   //     sendOtpBtn.prop('disabled', true);
+
+        // TODO: Replace with your actual OTP API endpoint
+        // Example API call (uncomment and modify as needed):
+        /*
+        fetch('{{apiBaseURL}}/api/sendOtp', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                mobile: number,
+                name: name
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success || data.IsSuccess) {
+                buttonText.text('OTP Sent');
+                setTimeout(() => {
+                    buttonText.text('Resend OTP');
+                    sendOtpBtn.prop('disabled', false);
+                }, 30000); // Enable after 30 seconds
+            } else {
+                alert(data.message || 'Failed to send OTP. Please try again.');
+                buttonText.text('Send OTP');
+                sendOtpBtn.prop('disabled', false);
+            }
+        })
+        .catch(error => {
+            console.error('Error sending OTP:', error);
+            alert('Failed to send OTP. Please try again.');
+            buttonText.text('Send OTP');
+            sendOtpBtn.prop('disabled', false);
+        });
+        */
+
+        // Placeholder: For now, just enable the button after a delay
+        // Remove this when you integrate the actual OTP API
+ //     setTimeout(() => {
+ //         buttonText.text('OTP Sent');
+ //         alert('OTP functionality needs to be integrated with your OTP API endpoint.');
+ //         setTimeout(() => {
+ //             buttonText.text('Resend OTP');
+ //             sendOtpBtn.prop('disabled', false);
+ //         }, 30000);
+ //     }, 1000);
+ // }
+
+
+    function hideApplyNowPopUpMainUG() {
+        let applyNowPopUp = document.getElementById("UgdownloadBrochure");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+
+        // Re-enable scrolling when popup is closed
+        document.body.style.overflow = 'auto';
+      
+        $('#nameReport').val("");
+        $('#emailReport').val("");
+        $('#numberReport').val("");
+        $('#qualificationReport').val("").trigger("change");
+        $('#schoolNameReport').val("");
+    
+        const nameReportVal = document.querySelector("#nameReportVal");
+        const emailReportVal = document.querySelector("#emailReportVal");
+        const numberReportVal = document.querySelector("#numberReportVal");
+        const qualificationReportVal = document.querySelector("#qualificationReportVal");
+        const schoolNameReportVal = document.querySelector("#schoolNameReportVal");
+        
+        if (nameReportVal) nameReportVal.classList.add("warning");
+        if (emailReportVal) emailReportVal.classList.add("warning");
+        if (numberReportVal) numberReportVal.classList.add("warning");
+        if (qualificationReportVal) qualificationReportVal.classList.add("warning");
+        if (schoolNameReportVal) schoolNameReportVal.classList.add("warning");
+
+        const consentCheckUgLP = document.getElementById("consentCheckUgLP");
+        if (consentCheckUgLP) consentCheckUgLP.checked = false;
+        const consentCheckErrorUgLP = document.getElementById("consentCheckErrorUgLP");
+        if (consentCheckErrorUgLP) consentCheckErrorUgLP.classList.add("warning");
+    }
+
+
+
+</script>

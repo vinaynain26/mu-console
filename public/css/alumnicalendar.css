@@ -1,0 +1,374 @@
+.homepage.alumniCalendar {
+  padding-top: 0;
+  padding-bottom: 0 !important;
+  background: var(--black);
+
+
+  .mastersGraph {
+    background: url(https://images.mastersunion.link/uploads/04072025/v1/certifiedSebiVector.svg), linear-gradient(to top, var(--white) 44%, var(--black) 43%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 60px;
+  }
+
+
+}
+.cohortTabs.tbm{
+  background: var(--white);
+}
+
+.alumniCalendar {
+  .reachoutBreatherSection {
+    background: linear-gradient(96deg, #39B5D7 -31.01%, #F7D544 49.05%, #E38330 109.58%);
+    padding: 60px 0 !important;
+
+    .reachoutBreatherWrapper {
+      display: flex;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .reachoutLefti {
+      width: 100%;
+      max-width: 57.1%;
+      border-radius: 16px;
+      background: var(--white);
+      padding: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      align-items: flex-start;
+      max-height: 267px;
+      overflow: hidden;
+    }
+
+    .go-BreatherHeading {
+      border-bottom: 2px solid var(--grey4);
+      padding-bottom: 8px;
+      width: 100%;
+    }
+
+    .reachoutRight {
+      width: 100%;
+      max-width: 39.6%;
+      overflow: hidden;
+      border-radius: 16px;
+      overflow: hidden;
+
+      img{
+        border-radius: 16px;
+      }
+    }
+
+    .supportInfoWrapper {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    .supportDivi {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .supportDivi>img {
+      max-width: 40px;
+      max-height: 40px;
+    }
+
+    .supportMailDivi {
+      display: flex;
+      gap: 5px;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .supportBoxiText {
+      font-size: 16px;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 120%;
+      font-family: "fraunces", serif;
+      color: var(--grey);
+    }
+
+    .supportcontentText {
+      font-size: 16px;
+      line-height: 120%;
+      font-family: var(--go-medium);
+      color: var(--grey17);
+    }
+  }
+}
+
+.MUVheroSection {
+  position: relative;
+  padding: 0;
+  line-height: 0;
+  max-height: 100vh;
+  overflow: hidden;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 50%);
+    opacity: 1;
+  }
+
+  .heroSectionContentContainer {
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+
+  .heroSectionContent .go-HeroSubtitle {
+    color: var(--white);
+  }
+
+  .heroSectionContent {
+    position: absolute;
+    bottom: 80px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    text-align: center;
+    gap: 40px;
+    z-index: 2;
+  }
+.heroSectionImg .mob-hide{
+width: 100%;
+}
+ 
+
+  .heroTag {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 12px 24px;
+    border-radius: 40px;
+    background: var(--grey17);
+    backdrop-filter: blur(2px);
+    border: 1px solid var(--black5);
+    font-size: 13px;
+    font-family: var(--go-medium);
+    font-weight: 500;
+    text-transform: uppercase;
+    line-height: 120%;
+    color: var(--grey4);
+    letter-spacing: 0.65px;
+    max-width: max-content;
+
+  }
+
+  .ventureHeroHeading {
+    text-align: left;
+    font-size: 52px;
+    line-height: 100%;
+    font-family: var(--go-semibold);
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .ventureSubTitle {
+    font-size: 18px;
+    color: var(--grey4);
+    line-height: 150%;
+    font-family: var(--go-regular);
+    font-weight: 400;
+    text-align: start;
+
+  }
+
+
+  .boldTitle {
+    color: var(--grey18);
+    font-family: var(--go-semibold);
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 120%;
+  }
+
+  .go-HeroSubtitle {
+    margin-top: 16px;
+    text-align: start;
+
+    .textHighlight {
+      color: var(--white);
+    }
+  }
+
+  .heroSectionBtnWrap {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .ventureSubheading {
+    font: 52px "go-regular";
+    color: #FFFFFF;
+    line-height: 100%;
+  }
+
+  .heroSectionContentWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+
+  .heroSectionTextWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+}
+.cohortwrapper p{
+  font: 12px "go-regular";
+}
+.cohortCompanyName{
+  font-size: 13.08px !important;
+}
+
+.viewAllBtn {
+  padding: 14px 20px;
+  color: #000;
+  font-size: 16px;
+  font-family: var(--go-medium);
+  line-height: 24px;
+  background: transparent;
+  border-radius: 54px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  border: 1px solid var(--black);
+  width: 100%;
+  max-width: fit-content;
+  cursor: pointer;
+  gap: 8px;
+  max-width: fit-content;
+  max-height: fit-content;
+  margin-inline: auto;
+}
+.downloadBroucherButton:hover img {
+  transform: translateY(4px);
+}
+.downloadBroucherButton img {
+  transition: 0.3s;
+}
+
+
+
+@media (max-width: 767px) {
+
+  .MUVheroSection::after {
+    background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 80%);
+}
+  .homepage.alumniCalendar .mastersGraph {
+
+      padding-top: 0px !important;
+    }
+  .MUVheroSection {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    max-height: 100vh !important;
+    position: relative;
+    overflow: hidden;
+
+    .heroSectionContent {
+      width: 100%;
+      padding: 0 16px;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .heroSectionBtnWrap {
+      width: 100%;
+      align-items: flex-start;
+      gap: 12px;
+      flex-direction: column;
+      margin-top: unset;
+
+      a {
+        width: 100%;
+      }
+    }
+
+    
+    .ventureHeroHeading {
+      font-size: 30px;
+      text-align: center;
+      align-items: center;
+      margin-bottom: 0;
+    }
+
+    .ventureSubTitle {
+      text-align: center;
+      max-width: 358px;
+    }
+
+    .ventureSubheading {
+      font: 30px "go-regular";
+      line-height: 120%;
+    }
+
+    .heroSectionContentWrapper {
+      align-items: unset;
+    }
+
+    .heroSectionTextWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .heroTag {
+      align-self: center;
+    }
+  }
+  .alumniCalendar {
+    .reachoutBreatherSection {
+      .reachoutBreatherWrapper {
+        flex-direction: column-reverse;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .reachoutLefti,
+      .reachoutRight {
+        max-width: 100%;
+      }
+     
+
+      .reachoutLefti {
+        padding: 20px;
+        gap: 16px;
+      }
+
+      .go-BreatherHeading {
+        padding-bottom: 16px;
+      }
+
+      .supportInfoWrapper {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .supportDivi>img {
+        max-width: 32px;
+        max-height: 32px;
+      }
+
+      .supportcontentText,
+      .supportBoxiText {
+        font-size: 13px;
+      }
+    }
+  }
+}

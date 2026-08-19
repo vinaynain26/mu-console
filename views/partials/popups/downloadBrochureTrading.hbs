@@ -1,0 +1,252 @@
+<main>
+    <div class="popupContainerOuter ApplyNow" id="ApplyNowPopUpNEW">
+
+        <div class="popupContainer">
+            <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_heading">Download Brochure</h2>
+                <div class="popUpCloseBtnWrap">
+                    <img src="https://files.mastersunion.link/resources/svg/crossIcon.svg" class="invert-img" alt="Icon"
+                        onclick="hideApplyNowPopUp();">
+
+                </div>
+            </div>
+            <div id="tradingDownloadBrochureForm">
+
+                <div class="PopupformWrapper" id="leadformContainer">
+                    <div class="left mob-hide">
+                        {{!-- <img src="https://files.mastersunion.link/resources/img/formleft.webp" alt=""> --}}
+                        <img src="https://files.mastersunion.link/resources/img/pgpRisePopFbm.webp" alt="">
+                    </div>
+                    {{!-- <div class="right">
+                        <iframe id="1eedc5bf-eb53-484a-922f-2462f5c97495" width="100%" height="388px"></iframe>
+                        <script src="https://cdn.mastersunion.org/widget/iframe.js"></script>
+                        <script>
+                            new LoadWidget("1eedc5bf-eb53-484a-922f-2462f5c97495");
+                        </script>
+                    </div> --}}
+                    <div class="right">
+                        <div id="your-element-id"></div>
+
+                        <script data-target="#your-element-id" data-widget="1f87edd7-3681-4364-be06-b7f41c359e17"
+                            src="https://widgets-v2.mastersunion.org/loader.js"></script>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<script>
+
+    function openLeadGenFormBrochure(formTitle, destination) {
+        const form = $('#ApplyNowPopUpNEW');
+        const h2 = document.querySelector("#form_heading");
+
+        form.removeClass('hide').addClass('active');
+
+        form.attr("data-destination", destination);
+        form.attr("data-title", h2.textContent);
+
+        $('#tradingBrochureSuccessMessage').addClass('hide');
+        $('#tradingDownloadBrochureForm').removeClass('hide');
+        $('#form_heading').removeClass('hide');
+
+        const downloadBtn = document.getElementById("gtmUgDwnBroPopId");
+        downloadBtn.disabled = false;
+        downloadBtn.style.opacity = "1";
+        downloadBtn.style.cursor = "pointer";
+        downloadBtn.innerHTML = `Download 
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+            xmlns="https://www.w3.org/2000/svg">
+            <path
+            d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+            fill="white"></path>
+            </svg>`;
+
+        $('#tradingBrochureName').val("");
+        $('#tradingBrochureEmail').val("");
+        $('#tradingBrochurePhone').val("");
+
+        $('#tradingBrochureNameError').html("");
+        $('#tradingBrochureEmailError').html("");
+        $('#tradingBrochurePhoneError').html("");
+        $('#consentCheckTrading').prop("checked", false);
+        $('#consentCheckErrorTrading').addClass("warning");
+    }
+
+    function onButtonClickSubmitReportBro() {
+
+        console.log('on submit top main 121');
+
+        let name = $('#tradingBrochureName').val().trim();
+        name = name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : "";
+        let nameParts = name.split(/\s+/);
+        let firstName = "";
+        let lastName = "";
+        if (nameParts.length === 1) {
+            firstName = nameParts[0];
+            lastName = "";
+        }
+        else {
+            lastName = nameParts.pop();
+            firstName = nameParts.join(" ");
+        }
+        let email = $('#tradingBrochureEmail').val().trim();
+        let number = $('#tradingBrochurePhone').val().trim();
+
+        let isValid = true;
+        isValid = validateNameInput('tradingBrochureName', 'tradingBrochureNameError') && isValid;
+        isValid = validateEmailInput('tradingBrochureEmail', 'tradingBrochureEmailError') && isValid;
+        isValid = validateMobileInput('tradingBrochurePhone', 'tradingBrochurePhoneError') && isValid;
+
+        if (!document.getElementById('consentCheckTrading')?.checked) { document.getElementById('consentCheckErrorTrading').classList.remove('warning'); isValid = false; } else { document.getElementById('consentCheckErrorTrading').classList.add('warning'); }
+
+        if (!isValid) return;
+
+        const downloadBtn = document.getElementById("gtmUgDwnBroPopId");
+        // Disable the button immediately to prevent multiple clicks
+        downloadBtn.disabled = true;
+        downloadBtn.style.opacity = "0.7";
+        downloadBtn.style.cursor = "not-allowed"
+        downloadBtn.textContent = "Downloading...."
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const utmSource = params.utm_source;
+        const utmMedium = params.utm_medium;
+        const utmCampaign = params.utm_campaign;
+        const gclid = params.gclid || "";
+        const fbclid = params.fbclid || "";
+        const utmTerm = params.utm_term || "";
+        const utmPlacement = params.utm_placement || "";
+        const utmContent = params.utm_content || "";
+        const utmCampaignId = params.utm_campaign_id || "";
+        const utmAdGroupId = params.utm_adgroup_id || "";
+        const utmCreativeId = params.utm_creative_id || "";
+
+
+        let formname = document.querySelector("#ApplyNowPopUpNEW")?.getAttribute("data-title") || "Download Placement Report";
+        let medium = `PGP Rise: Capital Markets & Trading - ${formname} - Popup`;
+        let leadSource = `PGP Rise: Capital Markets & Trading - ${formname} - Popup`;
+        let course = 'PGP Rise: Capital Markets & Trading';
+
+        let full_utm_url = window.location.href;
+        let device = window.matchMedia("(max-width: 768px)").matches ? "Mobile" : "Desktop";
+
+        let formData = {
+            name: name,
+            email: email,
+            mobile: number,
+            formId: "31",
+            consentCheck: document.getElementById('consentCheckTrading')?.checked || false,
+            leadSource: leadSource,
+            leadOrigin: leadSource || "N/A",// for lead matrix
+
+            fullUrl: full_utm_url,
+            source: utmSource || null,
+            medium: utmMedium || null,
+            campaign: utmCampaign || null,
+            gclid: gclid || null,
+            fbclid: fbclid || null,
+            utmTerm: utmTerm || null,
+            utmPlacement: utmPlacement || null,
+            utmContent: utmContent || null,
+            utmCampaignId: utmCampaignId || null,
+            utmAdGroupId: utmAdGroupId || null,
+            utmCreativeId: utmCreativeId || null,
+        };
+
+        // First API call
+        var post_url = '{{apiBaseURL}}/api/courseRegister'; // Replace this with your actual API URL
+        $.ajax({
+            url: post_url,
+            type: 'POST',
+            contentType: "application/json",
+            data: JSON.stringify({
+                email: email,
+                name: name,
+                mobile: number,
+                courseName: course,
+                full_utm_url: full_utm_url,
+                source: utmSource || null,
+                medium: utmMedium || null,
+                campaign: utmCampaign || null,
+                leadSource: leadSource,
+                leadOrigin: leadSource || "N/A",// for lead matrix
+
+                device: device,
+                gclid: gclid || null,
+                fbclid: fbclid || null,
+                utmTerm: utmTerm || null,
+                utmPlacement: utmPlacement || null,
+                utmContent: utmContent || null,
+                utmCampaignId: utmCampaignId || null,
+                utmAdGroupId: utmAdGroupId || null,
+                utmCreativeId: utmCreativeId || null,
+                consentCheck: document.getElementById('consentCheckTrading')?.checked || false,
+
+            }),
+            dataType: "json",
+            success: function (response) {
+                console.log("response...", response);
+
+                // if (response?.Message === "Already registered") {
+                //     $('#tradingBrochureEmailError')
+                //         .text("User with this email is already registered")
+                //         .css("visibility", "visible") // or use display if needed
+                //         .show(); // ensures it's displayed even if previously hidden
+                //     return;
+                // }
+
+
+                // Second API call only if not already registered
+                $.ajax({
+                    url: 'https://api-lead.mastersunion.org/api/manageLeads/masterCampContactUs',
+                    type: 'POST',
+                    contentType: "application/json",
+                    data: JSON.stringify(formData),
+                    dataType: "json"
+                });
+
+                // Open PDF after delay
+                const form = document.getElementById("UgdownloadBrochure");
+                const destination = form?.getAttribute("data-destination") || "https://files.mastersunion.link/CMT_Brochure.pdf";
+
+                setTimeout(() => {
+                    window.open(destination, "_blank");
+                }, 3000);
+
+                // Show success message, hide form
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    event: "formSubmitted",
+                    leadsUserData: {
+                        email: email,
+                        phone_number: `+91${number}`,
+                        first_name: firstName,
+                        last_name: lastName,
+                    }
+                });
+                document.querySelector("#tradingBrochureSuccessMessage")?.classList.remove("hide");
+                document.querySelector("#tradingDownloadBrochureForm")?.classList.add("hide");
+                document.querySelector("#form_heading")?.classList.add("hide");
+            }
+        });
+    }
+
+    function hideApplyNowPopUp() {
+        $('#ApplyNowPopUpNEW').removeClass('active').addClass('hide');
+    }
+
+
+    function closeSuccessSubmit() {
+        $('#tradingBrochureSuccessMessage').addClass('hide')
+        $('#tradingDownloadBrochureForm').removeClass('hide')
+        hideApplyNowPopUp();
+    }
+
+
+</script>

@@ -1,0 +1,314 @@
+<main>
+    <div class="popupContainerOuter  ApplyNow" id="leaderform">
+
+        <div class="popupContainer">
+            <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_heading">Fill the Interest Form</h2>
+                <div class="popUpCloseBtnWrap">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Icon" onclick="hideApplyNowPopUp();">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="leadformContainer">
+                <div class="left mob-hide">
+                    <img src="https://files.mastersunion.link/resources/img/formleft.webp" alt="">
+                </div>
+                <div class="right">
+                    <div class="formContainer active">
+                        <div class="flexInput" id="formain">
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Full Name <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your name"
+                                    class="inputBox font-16 font-black1 font-medium " id="nameReportLeader"
+                                    onblur="validateInputBlurLeader('nameReportLeader','name')">
+                                <p class="font-12 font-red font-regular warning" id="nameReportLeaderVal">Please Check
+                                    the input</p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="email" class="font-14 font-medium font-black1">Email ID <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your email"
+                                    class="inputBox font-16 font-black1 font-medium " id="emailReportLeader"
+                                    onblur="validateInputBlurLeader('emailReportLeader','email')">
+                                <p class="font-12 font-red font-regular warning" id="emailReportLeaderVal">Please Enter
+                                    Valid Email</p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="number" class="font-14 font-medium font-black1">Contact Number <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your mobile number" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                    class="inputBox font-16 font-black1 font-medium " id="numberReportLeader"
+                                    maxlength="10" onblur="validateInputBlurLeader('numberReportLeader','number')">
+                                <p class="font-12 font-red font-regular warning" id="numberReportLeaderVal">Please Enter
+                                    Valid Number</p>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="consentCheckWrapper">
+    <div class="consentCheckRow">
+        <input type="checkbox" id="consentCheckYLF">
+        <label for="consentCheckYLF">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+    </div>
+    <p id="consentCheckErrorYLF" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+</div>
+                    <div class="formFooter" id="submitbuttonreport">
+                        <div class="gradientButton whiteHover" onclick="onButtonClickSubmitReportYoung()">
+                            <button class="button iconButton">
+                                Submit
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="https://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                        fill="white"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="SuccessMessage" class="congrats-box hide"
+                style="margin-left: auto; margin-right: auto; width: 100%;">
+                <div>
+                    <img  src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+                </div>
+
+                <h3 class="thankyouboxHeading">Got it</h3>
+                <p class="text-2">Our team will reach out to you shortly.</p>
+                <a href="https://form.typeform.com/to/h443uu6b" target="_blank" class="popupLink">For seat confirmation
+                    fill the form here
+
+                    <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                            fill="url(#paint0_linear_564_36001)"></path>
+                        <defs>
+                            <linearGradient id="paint0_linear_564_36001" x1="12.0104" y1="6" x2="12.0104" y2="18.0208"
+                                gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#39B6D8"></stop>
+                                <stop offset="0.5" stop-color="#F7D344"></stop>
+                                <stop offset="1" stop-color="#E38330"></stop>
+                            </linearGradient>
+                        </defs>
+                    </svg></a>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    // let name = $('#nameReportLeader').val();
+    // let email = $('#emailReportLeader').val();
+    // let number = $('#numberReportLeader').val();
+    function onButtonClickSubmitReportYoung() {
+        console.log('on submit');
+
+        // Validate functions
+        const validateNumber = (number) => /^\d+$/.test(number);
+        const validateEmail = (email) => email.includes("@") && email.includes(".");
+
+        let name = $('#nameReportLeader').val().trim();
+        let email = $('#emailReportLeader').val().trim();
+        let number = $('#numberReportLeader').val().trim();
+
+        // Check name validity using regex
+        if (!/^[a-zA-Z\s]+$/.test(name)) { // Allow only letters and spaces
+            $('#nameReportLeaderVal').text("Please enter a valid name");
+            $('#nameReportLeaderVal').removeClass('warning');
+            return false;
+        } else {
+            $('#nameReportLeaderVal').addClass('warning');
+        }
+
+        // Check email validity using regex
+        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) { // Standard email regex pattern
+            $('#emailReportLeaderVal').text("Please enter a valid email address.");
+            $('#emailReportLeaderVal').removeClass('warning');
+            return false; // Prevent form submission
+        } else {
+            $('#emailReportLeaderVal').addClass('warning');
+        }
+
+        // Check number validity using regex
+        if (!/^\d+$/.test(number)) { // Allow only digits (numbers only)
+            $('#numberReportLeaderVal').text("Please enter a valid contact number (numbers only).");
+            $('#numberReportLeaderVal').removeClass('warning');
+            return false; // Prevent form submission
+        } else {
+            $('#numberReportLeaderVal').addClass('warning');
+        }
+
+        if (!document.getElementById('consentCheckYLF')?.checked) {
+            document.getElementById('consentCheckErrorYLF').classList.remove('warning');
+            return false;
+        } else {
+            document.getElementById('consentCheckErrorYLF').classList.add('warning');
+        }
+
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const utmSource = params.utm_source || 'Website';
+        const utmMedium = params.utm_medium;
+        const utmCampaign = params.utm_campaign;
+        let source = "https://mastersunion.org/ - winter-week - Register Event PopUp";
+
+        let url = window.location.pathname.substring(1);
+        let formname = document.querySelector("#leaderform").getAttribute("data-title") || "Download Placement Report";
+        let medium = `winter-week - Register Event PopUp`;
+
+        let course = 'K-12';  // changed 
+
+
+        let device = 'PC';
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            device = "Mobile";
+        } else {
+            device = "Desktop";
+        }
+
+        // api for our Data base
+        var post_url = '{{apiBaseURL}}/api/registerForEvent';
+        var request_method = 'POST'; //get form GET/POST method
+        $.ajax({
+            url: post_url,
+            type: request_method,
+            contentType: "application/json",
+            data: JSON.stringify({
+                "email": email,
+                "event_Id": "66e186a3d72362abb77337dc",
+                "name": name,
+                "mobile": number,
+                "medium": utmMedium || source,
+                "campaign": utmCampaign || null,
+                "course": course || "UG",
+                "source": utmSource || "Website",
+                consentCheck: document.getElementById('consentCheckYLF')?.checked || false
+            }),
+            dataType: "json",
+            success: function (result) {
+                console.log("Second api after first success")
+                const post_url = '{{apiBaseURL}}/api/leads/pushToNPF_UG';
+                const request_method = 'POST';
+
+                $.ajax({
+                    url: post_url,
+                    type: request_method,
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        field_device_type: device,
+                        email: email,
+                        name: name,
+                        mobile: number,
+                        linkedinProfile: "",
+                        medium: utmMedium || medium,
+                        campaign: utmCampaign || null,
+                        source: utmSource || "Website",
+                        field_course_preference: course,
+                        field_utm_url: window.location.href,
+                        sendMail: false,
+                        leadSource: "https://mastersunion.org/ - winter-week - Register Event PopUp",
+                        consentCheck: document.getElementById('consentCheckYLF')?.checked || false
+                    }),
+                    dataType: "json",
+                    success: function (result) {
+                        console.log("In success block", result);
+
+                        const destination = "https://cdn.mastersunion.org/assets/img/newmu/placementreport2023.pdf";
+                        document.querySelector("#SuccessMessage").classList.remove("hide");
+                        document.querySelector("#submitbuttonreport").classList.add("hide");
+                        document.querySelector("#leadformContainer").classList.add("hide");
+                        document.querySelector("#form_heading").classList.add("hide");
+                        window.open('https://form.typeform.com/to/h443uu6b');
+                    }
+                });
+
+            }
+        });
+
+
+
+    }
+    function validateInputBlurLeader(inputId, inputType) {
+        var value = document.getElementById(inputId).value.trim(); // Get input value and trim whitespace
+        var isValid = false;
+        var errorMessage = "";
+        var warningElement = document.getElementById(inputId + 'Val');
+
+        // Define regex patterns for each input type
+        var regexPatterns = {
+            name: /^[a-zA-Z\s]+$/, // Allows only letters and spaces
+            email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Standard email regex pattern
+            number: /^\d+$/ // Allows only digits (numbers only)
+        };
+
+        // Determine the validation logic based on input type
+        switch (inputType) {
+            case 'name':
+                isValid = regexPatterns.name.test(value);
+                errorMessage = "Please enter a valid name (letters and spaces only).";
+                break;
+            case 'email':
+                isValid = regexPatterns.email.test(value);
+                errorMessage = "Please enter a valid email address.";
+                break;
+            case 'number':
+                isValid = regexPatterns.number.test(value);
+                errorMessage = "Please enter a valid contact number (numbers only).";
+                break;
+            default:
+                console.error("Invalid input type specified.");
+                return;
+        }
+
+        // Handle validation results
+        if (isValid) {
+            warningElement.classList.add('warning'); // Add warning class to hide the error message
+            warningElement.textContent = ""; // Clear any existing error message
+        } else {
+            warningElement.classList.remove('warning'); // Remove warning class to show the error message
+            warningElement.textContent = errorMessage; // Display the appropriate error message
+        }
+    }
+
+
+
+
+
+    function hideApplyNowPopUp() {
+        let applyNowPopUp = document.getElementById("leaderform");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+        $('#nameReportLeader').val("");
+        $('#emailReportLeader').val("");
+        $('#numberReportLeader').val("");
+        $('#consentCheckYLF').prop('checked', false);
+        $('#consentCheckErrorYLF').addClass('warning');
+    }
+
+
+    function openLeadGenForm(formTitle, destination) {
+        const form = document.getElementById("leaderform");
+        // const h2 = document.querySelector("#form_heading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        // Reset form
+        document.querySelector("#SuccessMessage").classList.add("hide");
+        document.querySelector("#submitbuttonreport").classList.remove("hide");
+        document.querySelector("#leadformContainer").classList.remove("hide");
+        document.querySelector("#form_heading").classList.remove("hide");
+
+    }
+
+</script>

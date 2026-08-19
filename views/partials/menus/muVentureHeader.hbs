@@ -1,0 +1,1367 @@
+<link rel="stylesheet" href="/assets/css/menu.css">
+
+<style>
+    .enterList {
+        padding: 10px 8px;
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--grey17);
+        cursor: pointer;
+    }
+
+    .dropdownItems {
+        justify-content: center;
+    }
+
+    .dropdownItems.droEvent::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 100%;
+        height: 2px;
+        background: var(--grey3) !important;
+        transform: scaleX(0);
+        transform-origin: left center;
+        transition: transform 0.35s ease;
+
+    }
+
+    .shapeText {
+        font-size: 14px;
+        line-height: 120%;
+        font-family: var(--go-regular);
+        color: var(--grey4);
+
+    }
+
+    .enterDrop {
+        padding: 16px 8px;
+        background: var(--black);
+        border-radius: 12px;
+        width: 100%;
+        max-width: 202px;
+        border: 1px solid var(--grey3);
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .menuDown::after {
+        background: unset;
+    }
+
+    .menuDown {
+        background: unset;
+    }
+
+    .enterDrop {
+        position: absolute;
+        right: 23%;
+    }
+
+    .enterDrop2 {
+        position: absolute;
+        right: 15%;
+    }
+
+    .navList {
+        width: 100%;
+        max-width: 50%;
+    }
+
+    .navMenu {
+        width: 100%;
+        max-width: 40%;
+        justify-content: space-between;
+
+        .megaLink.active {
+            .dropdownItems {
+                color: var(--white);
+            }
+
+            .dropdownItems::after {
+                background: var(--grey3) !important;
+                transform: scaleX(1);
+            }
+
+            .dropdownItems .dropdown-icon path {
+                stroke: #ffffff;
+            }
+        }
+    }
+
+    .mu-home-countdown {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(0, 0, 0, 0.4);
+        /* very light background for white banner */
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+        padding: 4px 10px;
+    }
+
+    .dropImage {
+        display: none;
+        transition: 0.4s ease;
+    }
+
+    .dropdownItems {
+        position: relative;
+        padding: 8px;
+        border-bottom: 2px solid transparent;
+    }
+
+    .dropdownItems::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(91deg, #39B5D7 -6.14%, #F7D544 47.02%, #E38330 99.71%);
+        transform: scaleX(0);
+        transform-origin: left center;
+        transition: transform 0.35s ease;
+    }
+
+
+    .dropdownItems.active::after {
+        transform: scaleX(1);
+    }
+
+    .navMenu .megaLink.menu-open>.dropdownItems.droEvent::after {
+        background: var(--grey3) !important;
+        transform: scaleX(1);
+    }
+
+
+    .topHeader.shrikIt {
+        top: 0px !important;
+        border-bottom: unset;
+    }
+
+    .navMenu .dropdownItems:hover {
+        color: var(--white);
+        font-family: "go-regular";
+        font-weight: 600;
+
+    }
+
+    .navMenu .dropdownItems.active {
+        color: var(--white);
+        font-family: "go-regular";
+        font-weight: 600;
+
+        .dropImage {
+            display: block;
+        }
+    }
+
+    body.enterprise-nav-loading {
+        cursor: progress;
+    }
+
+    body.enterprise-nav-loading .navMenu .dropdownItems {
+        pointer-events: none;
+    }
+
+    .belowHeader {
+        padding: 8px 0;
+    }
+
+    .mu-time-item {
+        display: flex;
+        align-items: baseline;
+        gap: 2px;
+    }
+
+    .navMenu .dropdownItems {
+        font-size: 14px;
+        font-family: var(--go-regular);
+        color: var(--grey4);
+        text-transform: capitalize;
+        transition: 0.4s ease all;
+    }
+
+    .mu-time-item span:first-child {
+        font-size: 13px;
+        font-weight: 700;
+        font-feature-settings: "tnum";
+        font-variant-numeric: tabular-nums;
+        color: white;
+    }
+
+    .mu-time-lbl {
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--grey10, #666);
+    }
+
+    .mu-colon {
+        font-weight: 700;
+        color: var(--grey10, #666);
+        position: relative;
+        top: -1px;
+    }
+
+    .menuLogo {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        max-width: fit-content;
+    }
+
+    .homeDirect {
+        width: 100%;
+        max-width: 20px;
+    }
+
+    .enterLinking {
+        width: 100%;
+        max-width: 206px;
+    }
+
+    @media (max-width: 480px) {
+        .mu-home-countdown {
+            padding: 3px 6px;
+            gap: 4px;
+        }
+
+        .mu-time-item span:first-child {
+            font-size: 11px;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .mobileMenu .menuLogo {
+            width: 100%;
+            gap: 0px;
+        }
+
+        .mobileMenu .hamburgerParent {
+            padding: 8px 0;
+        }
+
+        .mobileMenu .hamburgerParent {
+            padding: 8px 0;
+        }
+
+        .mobileMenu .heading {
+            text-transform: capitalize;
+        }
+
+        .mobileMenu .mobMenuHeader .logo {
+            width: 52%;
+        }
+
+
+    }
+</style>
+
+
+
+<header class="topHeader forhomepage">
+    <div class="container">
+
+
+        <div class="belowHeader">
+
+            <div class="menuLogo">
+                <a href="/" class="homeDirect">
+                    <img src="https://images.mastersunion.link/uploads/21042026/v1/Vector.svg" alt="Icon">
+                </a>
+
+                <a href="https://ventures.mastersunion.org/" class="enterLinking">
+                    <img loading="lazy" src="https://images.mastersunion.link/uploads/22042026/v1/MUVentures8.gif"
+                        alt="MU Logo" />
+                </a>
+            </div>
+
+            <ul class="navMenu">
+                <li class="navList">
+                    <a class="dropdownItems" href="https://ventures.mastersunion.org/" data-menu-slug="home">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="dropImage" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M21 11.2503V20.2503C21 20.4492 20.921 20.64 20.7803 20.7806C20.6397 20.9213 20.4489 21.0003 20.25 21.0003H15C14.8011 21.0003 14.6103 20.9213 14.4697 20.7806C14.329 20.64 14.25 20.4492 14.25 20.2503V15.3753C14.25 15.2758 14.2105 15.1804 14.1402 15.1101C14.0698 15.0398 13.9745 15.0003 13.875 15.0003H10.125C10.0255 15.0003 9.93016 15.0398 9.85983 15.1101C9.78951 15.1804 9.75 15.2758 9.75 15.3753V20.2503C9.75 20.4492 9.67098 20.64 9.53033 20.7806C9.38968 20.9213 9.19891 21.0003 9 21.0003H3.75C3.55109 21.0003 3.36032 20.9213 3.21967 20.7806C3.07902 20.64 3 20.4492 3 20.2503V11.2503C3.00018 10.8525 3.15834 10.4711 3.43969 10.19L10.9397 2.68997C11.221 2.40888 11.6023 2.25098 12 2.25098C12.3977 2.25098 12.779 2.40888 13.0603 2.68997L20.5603 10.19C20.8417 10.4711 20.9998 10.8525 21 11.2503Z"
+                                fill="white" />
+                        </svg>
+                        Home
+
+                    </a>
+                </li>
+                <li class="navList">
+                    <a href="https://ventures.mastersunion.org/" class="dropdownItems" data-menu-slug="courses">
+                        <img class="dropImage" src="https://images.mastersunion.link/uploads/22042026/v1/Vector1.svg">
+                        About MUV
+
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+</header>
+
+
+
+<div class="blurScreen" onclick="closeMenu()"></div>
+
+<div class="mobileMenu">
+    <header class="mobileHeader">
+        <div class="container">
+            <div class="hamburgerParent">
+                <div class="menuLogo">
+                    <a href="/" class="homeDirect">
+                        <img src="https://images.mastersunion.link/uploads/21042026/v1/Vector.svg" alt="Icon">
+                    </a>
+
+                    <a href="https://ventures.mastersunion.org/" class="enterLinking">
+                        <img loading="lazy" src="https://images.mastersunion.link/uploads/22042026/v1/MUVentures8.gif"
+                            alt="MU Logo" />
+                    </a>
+                </div>
+                <div class="hamburger" id="mobileHamburgerBtn" tabindex="0" aria-label="Open menu" role="button">
+                    <img loading="lazy" src="https://files.mastersunion.link/resources/svg/hamburger.svg"
+                        alt="Open menu" />
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="mobileHeaderContent" id="mobileHeaderContent">
+        <div class="headerContentMob">
+            <div class="mobMenuHeader">
+                <div class="menuLogo">
+                    <a href="/" class="homeDirect">
+                        <img src="https://images.mastersunion.link/uploads/21042026/v1/Vector.svg" alt="Icon">
+                    </a>
+
+                    <a href="https://ventures.mastersunion.org/" class="enterLinking">
+                        <img loading="lazy" src="https://images.mastersunion.link/uploads/22042026/v1/MUVentures8.gif"
+                            alt="MU Logo" />
+                    </a>
+                </div>
+                <div class="closeIcon" id="mobileMenuCloseBtn" tabindex="0" aria-label="Close menu" role="button">
+                    <img loading="lazy" src="https://files.mastersunion.link/resources/svg/menuCloseIcon.svg"
+                        alt="Close menu" />
+                </div>
+            </div>
+
+            <div class="mobMenuBody">
+                <a href="https://ventures.mastersunion.org/" class="directMobLinks">
+                    <p class="heading">Home</p>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.0156 7.06066L5.56066 13.5156L4.5 12.455L10.9549 6H5.26561V4.5H13.5156V12.75H12.0156V7.06066Z"
+                            fill="white"></path>
+                    </svg>
+                </a>
+
+                <a href="https://ventures.mastersunion.org/" class="directMobLinks">
+                    <p class="heading">About MUV</p>
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M12.0156 7.06066L5.56066 13.5156L4.5 12.455L10.9549 6H5.26561V4.5H13.5156V12.75H12.0156V7.06066Z"
+                            fill="white"></path>
+                    </svg>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    (function () {
+        const hamburger = document.getElementById("mobileHamburgerBtn");
+        const mobileMenu = document.getElementById("mobileHeaderContent");
+        const closeBtn = document.getElementById("mobileMenuCloseBtn");
+
+        function openMobileMenu() {
+            if (mobileMenu) {
+                mobileMenu.classList.add("active");
+                document.body.style.overflow = "hidden";
+            }
+        }
+        function closeMobileMenu() {
+            if (mobileMenu) {
+                mobileMenu.classList.remove("active");
+                document.body.style.overflow = "";
+            }
+        }
+
+        if (hamburger) {
+            hamburger.addEventListener("click", openMobileMenu);
+            hamburger.addEventListener("keydown", function (e) {
+                if (e instanceof KeyboardEvent && (e.key === "Enter" || e.key === " "))
+                    openMobileMenu();
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener("click", closeMobileMenu);
+            closeBtn.addEventListener("keydown", function (e) {
+                if (e instanceof KeyboardEvent && (e.key === "Enter" || e.key === " "))
+                    closeMobileMenu();
+            });
+        }
+
+        document.addEventListener("mousedown", function (e) {
+            const target = e.target;
+            if (
+                mobileMenu &&
+                mobileMenu.classList.contains("active") &&
+                !mobileMenu.contains(target instanceof Node ? target : null) &&
+                !(hamburger && hamburger.contains(target instanceof Node ? target : null))
+            ) {
+                closeMobileMenu();
+            }
+        });
+
+        document.addEventListener("keydown", function (e) {
+            if (
+                e instanceof KeyboardEvent &&
+                e.key === "Escape" &&
+                mobileMenu &&
+                mobileMenu.classList.contains("active")
+            ) {
+                closeMobileMenu();
+            }
+        });
+
+        function closeAllMobMenuItems(except = null) {
+            const allItems = document.querySelectorAll(".mobMenuItem");
+            allItems.forEach((item) => {
+                if (!(item instanceof HTMLElement)) return;
+                const body = item.querySelector(".mobMenuItemBody");
+                const header = item.querySelector(".mobMenuItemHeader");
+
+                if (item !== except) {
+                    if (body && body instanceof HTMLElement) {
+                        body.style.overflow = "hidden";
+                        body.style.transition =
+                            "max-height 0.45s cubic-bezier(0.4,0,0.2,1)";
+
+                        if (!body.classList.contains("open")) {
+                            body.style.setProperty("max-height", "0px", "important");
+                            body.classList.remove("open");
+                        } else {
+                            body.style.maxHeight = body.scrollHeight + "px";
+                            void body.offsetHeight;
+                            body.style.setProperty("max-height", "0px", "important");
+
+                            const removeOpen = function () {
+                                body.classList.remove("open");
+                                body.removeEventListener("transitionend", removeOpen);
+                            };
+                            body.addEventListener("transitionend", removeOpen);
+                        }
+                    }
+                    if (header && header instanceof HTMLElement) {
+                        header.classList.remove("active");
+                    }
+                    item.classList.remove("active");
+                }
+            });
+        }
+
+        function activateMobMenuItemSmoothly(item) {
+            const body = item.querySelector(".mobMenuItemBody");
+            const header = item.querySelector(".mobMenuItemHeader");
+            if (!body || !header) return;
+
+            closeAllMobMenuItems(item);
+
+            if (body instanceof HTMLElement) {
+                body.style.overflow = "hidden";
+                body.style.transition =
+                    "max-height 0.45s cubic-bezier(0.4,0,0.2,1)";
+                if (body.classList.contains("open")) return;
+
+                body.style.setProperty("max-height", "0px", "important");
+                void body.offsetHeight;
+
+                body.classList.add("open");
+                body.style.maxHeight = body.scrollHeight + "px";
+            }
+
+            header.classList.add("active");
+            item.classList.add("active");
+        }
+
+        function deactivateMobMenuItemSmoothly(item) {
+            const body = item.querySelector(".mobMenuItemBody");
+            const header = item.querySelector(".mobMenuItemHeader");
+            if (!body || !header) return;
+
+            if (body instanceof HTMLElement) {
+                body.style.overflow = "hidden";
+                body.style.transition =
+                    "max-height 0.45s cubic-bezier(0.4,0,0.2,1)";
+                body.style.maxHeight = body.scrollHeight + "px";
+                void body.offsetHeight;
+                body.style.setProperty("max-height", "0px", "important");
+
+                const removeOpen = function () {
+                    body.classList.remove("open");
+                    body.removeEventListener("transitionend", removeOpen);
+                };
+                body.addEventListener("transitionend", removeOpen);
+            }
+
+            header.classList.remove("active");
+            item.classList.remove("active");
+        }
+
+        function toggleMobMenuItem(item) {
+            const body = item.querySelector(".mobMenuItemBody");
+            if (!body) return;
+
+            if (body.classList.contains("open")) {
+                deactivateMobMenuItemSmoothly(item);
+            } else {
+                activateMobMenuItemSmoothly(item);
+            }
+        }
+
+        document.querySelectorAll(".mobMenuItem").forEach((item) => {
+            if (!(item instanceof HTMLElement)) return;
+            const header = item.querySelector(".mobMenuItemHeader");
+            const body = item.querySelector(".mobMenuItemBody");
+
+            if (header && body) {
+                body.style.overflow = "hidden";
+                body.style.transition =
+                    "max-height 0.45s cubic-bezier(0.4,0,0.2,1)";
+                body.style.setProperty("max-height", "0px", "important");
+                body.classList.remove("open");
+
+                const toggler = header.querySelector(".togglerDown");
+                if (toggler) {
+                    toggler.style.cursor = "pointer";
+                    toggler.addEventListener("click", function (e) {
+                        e.stopPropagation();
+                        toggleMobMenuItem(item);
+                    });
+                }
+
+                header.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    toggleMobMenuItem(item);
+                });
+            }
+        });
+
+        if (closeBtn) {
+            closeBtn.addEventListener("click", function () {
+                closeAllMobMenuItems();
+            });
+        }
+    })();
+</script>
+
+
+<script>
+    // Mobile-only subParent dropdown toggle functionality
+    (function () {
+        // Check if mobile (typically 768px or below)
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
+
+        // Toggle subDropContent visibility
+        function toggleSubDropContent(subParent) {
+            const subDropContent = subParent.querySelector(".subDropContent");
+            if (!subDropContent) return;
+
+            const isVisible = subDropContent.style.display === "block";
+            subDropContent.style.display = isVisible ? "none" : "block";
+
+            // Optional: toggle active class on subDropdown for styling
+            const subDropdown = subParent.querySelector(".subDropdown");
+            if (subDropdown) {
+                subDropdown.classList.toggle("active", !isVisible);
+            }
+        }
+
+        // Initialize event listeners for all subParent elements
+        function initSubParentDropdowns() {
+            if (!isMobile()) return;
+
+            document.querySelectorAll(".subParent").forEach((subParent) => {
+                const subDropdown = subParent.querySelector(".subDropdown");
+                const subDropContent = subParent.querySelector(".subDropContent");
+
+                if (!subDropdown || !subDropContent) return;
+
+                // Ensure subDropContent is hidden initially
+                subDropContent.style.display = "none";
+
+                // Add click event to subDropdown
+                subDropdown.addEventListener("click", function (e) {
+                    e.stopPropagation();
+                    toggleSubDropContent(subParent);
+                });
+
+                // Make subDropdown keyboard accessible
+                subDropdown.setAttribute("tabindex", "0");
+                subDropdown.style.cursor = "pointer";
+                subDropdown.addEventListener("keydown", function (e) {
+                    if (
+                        e instanceof KeyboardEvent &&
+                        (e.key === "Enter" || e.key === " ")
+                    ) {
+                        e.preventDefault();
+                        toggleSubDropContent(subParent);
+                    }
+                });
+            });
+        }
+
+        // Initialize on page load
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initSubParentDropdowns);
+        } else {
+            initSubParentDropdowns();
+        }
+
+        // Re-initialize on window resize (in case user switches between mobile/desktop)
+        let resizeTimer;
+        window.addEventListener("resize", function () {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function () {
+                // Re-initialize to handle mobile/desktop switch
+                if (isMobile()) {
+                    initSubParentDropdowns();
+                } else {
+                    // Reset on desktop - remove event listeners and show content
+                    document.querySelectorAll(".subParent").forEach((subParent) => {
+                        const subDropContent = subParent.querySelector(".subDropContent");
+                        if (subDropContent) {
+                            subDropContent.style.display = "";
+                        }
+                        const subDropdown = subParent.querySelector(".subDropdown");
+                        if (subDropdown) {
+                            subDropdown.classList.remove("active");
+                        }
+                    });
+                }
+            }, 250);
+        });
+    })();
+</script>
+
+<script>
+    // Show/hide dropdowns on click for top nav only
+    function showMenu(id) {
+        $(".menuDown").removeClass("active");
+        if (id) {
+            $("#" + id).addClass("active");
+            $("header").addClass("menuActive");
+            $(".blurScreen").addClass("active");
+            $("body").css("overflow", "hidden");
+        }
+    }
+    function hideMenu() {
+        $(".menuDown").removeClass("active");
+        $("header").removeClass("menuActive");
+        $(".blurScreen").removeClass("active");
+        $("body").css("overflow", "auto");
+    }
+
+    const ENTERPRISE_ACTIVE_MENU_KEY = "enterpriseActiveMenuSlug";
+    const MEGA_MENU_OPEN_CLASS = "menu-open";
+    const PAGE_ACTIVE_CLASS = "page-active";
+    const NON_PERSISTENT_MENU_SLUGS = new Set(["industries", "organizations"]);
+    const $topMenuItems = $(".navMenu > .navList");
+    const $topMenuLinks = $topMenuItems.find("> .dropdownItems");
+
+    function isPersistableMenuSlug(slug) {
+        return !!slug && !NON_PERSISTENT_MENU_SLUGS.has(slug);
+    }
+
+    function setTopMenuActive(slug) {
+        $topMenuItems.removeClass(`active ${PAGE_ACTIVE_CLASS}`);
+        $topMenuLinks.removeClass(`active ${PAGE_ACTIVE_CLASS}`);
+        if (!isPersistableMenuSlug(slug)) return;
+        const $activeLink = $topMenuLinks.filter(`[data-menu-slug="${slug}"]`).first();
+        $activeLink.addClass(`active ${PAGE_ACTIVE_CLASS}`);
+        $activeLink.closest(".navList").addClass(`active ${PAGE_ACTIVE_CLASS}`);
+    }
+
+    function normalizePath(pathname) {
+        const normalizedPath = (pathname || "/").toLowerCase().replace(/\/+$/, "");
+        return normalizedPath || "/";
+    }
+
+    function getSlugFromPath(pathname) {
+        const path = normalizePath(pathname);
+
+        if (path === "/" || path === "https://ventures.mastersunion.org/") return "home";
+        if (path === "https://ventures.mastersunion.org/") return "courses";
+
+
+        return "";
+    }
+
+    function persistMenuSlug(slug) {
+        if (!isPersistableMenuSlug(slug)) return;
+        try {
+            localStorage.setItem(ENTERPRISE_ACTIVE_MENU_KEY, slug);
+        } catch (e) {
+            // Ignore storage failures in private mode or restricted environments.
+        }
+    }
+
+    function getInitialMenuSlug() {
+        const slugFromPath = getSlugFromPath(window.location.pathname);
+        if (slugFromPath) return slugFromPath;
+
+        try {
+            const storedSlug = localStorage.getItem(ENTERPRISE_ACTIVE_MENU_KEY) || "";
+            return isPersistableMenuSlug(storedSlug) ? storedSlug : "";
+        } catch (e) {
+            return "";
+        }
+    }
+
+    function restorePersistentMenuActiveState() {
+        setTopMenuActive(getInitialMenuSlug());
+    }
+
+    function activateEnterpriseSubtab(tabId) {
+        if (!tabId) return;
+        const $enterpriseMenu = $("#enterprise");
+        const $secondaryTab = $enterpriseMenu.find(".tabSecondary").first();
+        if (!$secondaryTab.length) return;
+
+        $secondaryTab.find(".aboutTabs .aboutItems").removeClass("active");
+        $secondaryTab.find(`.aboutTabs .aboutItems[data-rel="${tabId}"]`).first().addClass("active");
+        $secondaryTab.find(".sub-academic-content").removeClass("active");
+        $secondaryTab.find("#" + tabId).addClass("active");
+    }
+
+    restorePersistentMenuActiveState();
+
+    // Remove hover events for top nav
+    $(".megaLink").off("mouseenter mouseleave");
+
+    $(".navMenu > .navList:not(.megaLink) .dropdownItems")
+        .off("click")
+        .on("click", function () {
+            const slug = $(this).attr("data-menu-slug");
+            persistMenuSlug(slug);
+            hideMenu();
+            $(".megaLink").removeClass(MEGA_MENU_OPEN_CLASS);
+            $("body").addClass("enterprise-nav-loading");
+        });
+
+    // Top nav: open/close menu on click only
+    $(".megaLink").off("click");
+    $(".megaLink").on("click", function (e) {
+        e.preventDefault();
+        const $menuLink = $(this).find(".dropdownItems").first();
+        const slug = $menuLink.attr("data-menu-slug");
+        const id = $(this).attr("data-rel");
+        const submenuTarget = $(this).attr("data-submenu-target");
+        if (!id) return;
+        if ($(this).hasClass(MEGA_MENU_OPEN_CLASS)) {
+            hideMenu();
+            $(".megaLink").removeClass(MEGA_MENU_OPEN_CLASS);
+            restorePersistentMenuActiveState();
+        } else {
+            $(".megaLink").removeClass(MEGA_MENU_OPEN_CLASS);
+            // Hide persistent page highlight while dropdown menu is open.
+            setTopMenuActive("");
+            $(this).addClass(MEGA_MENU_OPEN_CLASS);
+            showMenu(id);
+            activateEnterpriseSubtab(submenuTarget);
+        }
+    });
+
+    // Academic tab switching: hover only (no click)
+    $(".academicTabs .aboutItems")
+        .off("mouseenter click")
+        .on("mouseenter", function (e) {
+            // Only switch tab on hover, not on click
+            const id = $(this).attr("data-rel");
+            if (!id) return;
+            $(this).addClass("active").siblings().removeClass("active");
+            const $tabAcademic = $(this).closest(".tabAcademic");
+            $tabAcademic.find(".academic-content").removeClass("active");
+            $tabAcademic.find("#" + id).addClass("active");
+        });
+
+    // Sub-tabs inside academic tab: hover only (no click)
+    $(".tabSecondary .aboutTabs .aboutItems")
+        .off("mouseenter click")
+        .on("mouseenter", function (e) {
+            // Only switch sub-tab on hover, not on click
+            const id = $(this).attr("data-rel");
+            if (!id) return;
+            $(this).addClass("active").siblings().removeClass("active");
+            const $tabSecondary = $(this).closest(".tabSecondary");
+            $tabSecondary.find(".sub-academic-content").removeClass("active");
+            $tabSecondary.find("#" + id).addClass("active");
+        });
+
+    // Ensure program links inside academic tab redirect on click
+    // Remove e.preventDefault() from program links
+    // This is handled by not binding click events to .tabSecondary .aboutTabs .aboutItems > a
+
+    // Clicking blurScreen closes menu
+    function closeMenu() {
+        hideMenu();
+        $(".megaLink").removeClass(MEGA_MENU_OPEN_CLASS);
+        restorePersistentMenuActiveState();
+    }
+
+    // Clicking on menuDown closes menu
+    $(".menuDown")
+        .off("click")
+        .on("click", function (e) {
+            // Only close if user clicks directly on menuDown, not on its children
+            if (e.target === this) {
+                closeMenu();
+            }
+        });
+
+    // Prevent menuDown from closing when interacting inside
+    $(".menuDown")
+        .off("mousedown")
+        .on("mousedown", function (e) {
+            e.stopPropagation();
+        });
+
+    // Prevent menuDown from closing on mouseleave
+    $(".menuDown").off("mouseleave");
+
+    // Clicking anywhere outside menuDown or nav closes menu
+    $(document).on("mousedown", function (e) {
+        if (
+            !$(e.target).closest(".menuDown").length &&
+            !$(e.target).closest(".megaLink").length &&
+            !$(e.target).closest(".navMenu").length &&
+            $(".menuDown.active").length
+        ) {
+            closeMenu();
+        }
+    });
+
+    // Keep top nav active state in sync with current URL on page load.
+    function setActiveClassHeader() {
+        const slugFromPath = getSlugFromPath(window.location.pathname);
+        if (slugFromPath) {
+            setTopMenuActive(slugFromPath);
+            persistMenuSlug(slugFromPath);
+            return;
+        }
+
+        const persistedSlug = getInitialMenuSlug();
+        if (persistedSlug) {
+            setTopMenuActive(persistedSlug);
+            return;
+        }
+
+        const currentPath = normalizePath(window.location.pathname).split("/")[1];
+        const legacyElem = document.querySelector(`#nav__${currentPath}`);
+        if (legacyElem) {
+            legacyElem.classList.add("active");
+            const parentLi = legacyElem.closest(".navList");
+            if (parentLi) {
+                parentLi.classList.add("active");
+            }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", setActiveClassHeader);
+
+    function prefetchEnterpriseTopNavLinks() {
+        const prefetchedHrefSet = new Set();
+        $(".navMenu > .navList:not(.megaLink) .dropdownItems").each(function () {
+            const href = $(this).attr("href");
+            if (!href || href === "#" || prefetchedHrefSet.has(href)) return;
+
+            prefetchedHrefSet.add(href);
+            const prefetchLink = document.createElement("link");
+            prefetchLink.rel = "prefetch";
+            prefetchLink.href = href;
+            prefetchLink.as = "document";
+            document.head.appendChild(prefetchLink);
+        });
+    }
+
+    if ("requestIdleCallback" in window) {
+        requestIdleCallback(prefetchEnterpriseTopNavLinks);
+    } else {
+        setTimeout(prefetchEnterpriseTopNavLinks, 400);
+    }
+
+    // Header shrink on scroll logic with smooth transition
+    (function () {
+        const $menu = $("header.topHeader");
+        let lastScrollTop = 0;
+        const menuHeight = safeNumber($menu.outerHeight());
+        const windowHeight = safeNumber($(window).height());
+
+        function getBannerOffset() {
+            // If you have a banner above header, return its height, else 0
+            const $banner = $(".bannerTop");
+            const bannerHeight = $banner.length ? safeNumber($banner.outerHeight()) : 0;
+
+            // Also account for hero banner if visible
+            const $heroBanner = $("#heroBanner");
+            const heroBannerHeight = ($heroBanner.length && $heroBanner.hasClass("active"))
+                ? safeNumber($heroBanner.outerHeight())
+                : 0;
+
+            return bannerHeight + heroBannerHeight;
+        }
+
+        $(window).on("scroll", function () {
+            const stRaw = $(this).scrollTop();
+            const st = safeNumber(stRaw);
+            const bannerOffset = getBannerOffset();
+            const currentOffset = Math.max(0, bannerOffset - st);
+
+            // Remove shrikIt if we reach top 80px or less
+            if (st <= 80) {
+                $menu.css("top", currentOffset + "px");
+                $menu.removeClass("shrikIt");
+                // Remove custom -2.25rem top if present
+                if ($menu.css("top") === "-2.25rem") {
+                    $menu.css("top", currentOffset + "px");
+                }
+                lastScrollTop = st;
+                return;
+            }
+
+            const $highlight = $(".highlightsec");
+            const highlightHeight = $highlight.length
+                ? safeNumber($highlight.height())
+                : 0;
+
+            if ($highlight.length > 0) {
+                if (st < highlightHeight) {
+                    if (st > lastScrollTop) {
+                        // Scrolling down
+                        if (
+                            st > menuHeight &&
+                            st + windowHeight < safeNumber($(document).height())
+                        ) {
+                            $menu.css("top", "-2.25rem");
+                            $menu.addClass("shrikIt");
+                        }
+                    } else {
+                        // Scrolling up
+                        // Only unshrink if at the top 80px
+                        if (st <= 80) {
+                            $menu.css("top", currentOffset + "px");
+                            $menu.removeClass("shrikIt");
+                        }
+                        // Otherwise, keep it shrunk
+                    }
+                    lastScrollTop = st;
+                }
+            } else {
+                if (st > lastScrollTop) {
+                    // Scrolling down
+                    if (
+                        st > menuHeight &&
+                        st + windowHeight < safeNumber($(document).height())
+                    ) {
+                        $menu.css("top", "-2.25rem");
+                        $menu.addClass("shrikIt");
+                    }
+                } else {
+                    // Scrolling up
+                    // Only unshrink if at the top 80px
+                    if (st <= 80) {
+                        $menu.css("top", currentOffset + "px");
+                        $menu.removeClass("shrikIt");
+                    }
+                    // Otherwise, keep it shrunk
+                }
+                lastScrollTop = st;
+            }
+        });
+    })();
+
+    // Note: For PGP Rise extended nav, ensure data-rel and menuDown id match exactly in HTML.
+</script>
+
+
+<script>
+    // menu scroller
+
+    $(document).ready(function () {
+        const currentPath = window.location.pathname;
+        const deviceWidth = window.innerWidth;
+        // Disable scroll-based shrikIt movement on mobile, but keep banner offset sync
+        if (deviceWidth <= 767) {
+            $("header").css({ "position": "fixed", "width": "100%", "z-index": "9999" });
+            $("#ugBanner").css({ "top": "0", "position": "fixed", "width": "100%", "z-index": "1001" });
+
+            function updateMobileHeaderTop() {
+                var st = $(window).scrollTop() || 0;
+                var offset = 0;
+                const heroBanner = document.getElementById('heroBanner');
+                if (heroBanner && heroBanner.classList.contains('active')) {
+                    offset += heroBanner.offsetHeight;
+                }
+
+                var currentOffset = Math.max(0, offset - st);
+                $("header").css("top", currentOffset + "px");
+
+                const mobileHeaderContent = document.getElementById("mobileHeaderContent");
+                if (mobileHeaderContent) {
+                    mobileHeaderContent.style.top = currentOffset + "px";
+                }
+            }
+
+            $(window).scroll(function () {
+                updateMobileHeaderTop();
+            });
+            updateMobileHeaderTop();
+
+            return;
+        }
+        if (deviceWidth >= 768 && deviceWidth <= 822) return;
+
+        var lastScrollTop = 0;
+        var $menu = $("header");
+        var menuHeight = $menu.height() - 60;
+        var windowHeight = $(window).height();
+        var sectionHeight = $(".highlightsec").height();
+        var documentHeight = $(document).scrollTop();
+
+        // Function to get banner offset
+        function getBannerOffset() {
+            let offset = 0;
+
+            // Account for ugBanner if visible
+            const banner = document.getElementById('ugBanner');
+            if (banner && banner.classList.contains('ug-banner--visible')) {
+                const rect = banner.getBoundingClientRect();
+                offset += rect.height;
+            }
+
+            // Also account for hero banner if visible
+            const heroBanner = document.getElementById('heroBanner');
+            if (heroBanner && heroBanner.classList.contains('active')) {
+                offset += heroBanner.offsetHeight;
+            }
+
+            return offset;
+        }
+
+        $(window).scroll(function () {
+            var st = $(this).scrollTop();
+            var bannerOffset = getBannerOffset();
+            var currentOffset = Math.max(0, bannerOffset - st);
+
+            // Remove shrikIt if we reach top 80px or less
+            if (st <= 80) {
+                $menu.css("top", currentOffset + "px");
+                $menu.removeClass("shrikIt");
+                lastScrollTop = st;
+                return;
+            }
+
+            if ($(".highlightsec").length > 0) {
+                if (st < $(".highlightsec").height()) {
+                    if (st > lastScrollTop) {
+                        // Scrolling down
+                        if (st > menuHeight && st + windowHeight < $(document).height()) {
+                            $menu.css("top", -menuHeight + "px");
+                            $menu.addClass("shrikIt");
+                        }
+                    } else {
+                        // Scrolling up
+                        // Only unshrink if at the top 80px
+                        if (st <= 80) {
+                            $menu.css("top", currentOffset + "px");
+                            $menu.removeClass("shrikIt");
+                        }
+                        // Otherwise, keep it shrunk
+                    }
+                    lastScrollTop = st;
+                }
+            } else {
+                if (st > lastScrollTop) {
+                    // Scrolling down
+                    if (st > menuHeight && st + windowHeight < $(document).height()) {
+                        $menu.css("top", -menuHeight + "px");
+                        $menu.addClass("shrikIt");
+                    }
+                } else {
+                    // Scrolling up
+                    // Only unshrink if at the top 80px
+                    if (st <= 80) {
+                        $menu.css("top", currentOffset + "px");
+                        $menu.removeClass("shrikIt");
+                    }
+                    // Otherwise, keep it shrunk
+                }
+                lastScrollTop = st;
+            }
+        });
+
+        if (documentHeight > sectionHeight) {
+            $menu.css("top", -menuHeight + "px");
+            $menu.addClass("darkHeader");
+        } else {
+            // Set initial position based on banner visibility (includes hero banner)
+            var bannerOffset = getBannerOffset();
+            if (bannerOffset > 0) {
+                $menu.css("top", bannerOffset + "px");
+            }
+        }
+    });
+</script>
+
+<style>
+    header.topHeader {
+        transition: background 0.6s ease;
+    }
+</style>
+
+
+<script>
+    // This script enables tab switching for the "Other Tabs" section (used in Student Life, Innovation, etc.)
+    // It works for any .tabMenuOther with .otherTabs > .aboutItems and .otherSecondaryContent siblings
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // For each .tabMenuOther on the page (handles multiple, e.g. Student Life, Innovation, etc.)
+        document.querySelectorAll(".tabMenuOther").forEach(function (tabMenu) {
+            // Get all tab items and content panels within this tabMenuOther
+            const tabList = tabMenu.querySelectorAll(".otherTabs .aboutItems");
+            const contents = tabMenu.querySelectorAll(".otherSecondaryContent");
+
+            // Helper: Remove all active classes and hide all contents
+            function clearActive() {
+                tabList.forEach(function (li) {
+                    li.classList.remove("active");
+                });
+                contents.forEach(function (c) {
+                    c.classList.remove("active");
+                    // Fix: Check if c is an HTMLElement before accessing style
+                    if (c instanceof HTMLElement) {
+                        c.style.display = "none";
+                    }
+                });
+            }
+
+            // Helper: Show content for target
+            function showContent(target) {
+                contents.forEach(function (c) {
+                    if (c.id === target) {
+                        c.classList.add("active");
+                        // Fix: Check if c is an HTMLElement before accessing style
+                        if (c instanceof HTMLElement) {
+                            c.style.display = "";
+                        }
+                    }
+                });
+            }
+
+            // Set initial state: first tab and content active/visible
+            let firstTab = tabList[0];
+            if (firstTab) {
+                clearActive();
+                firstTab.classList.add("active");
+                showContent(firstTab.getAttribute("data-target"));
+            }
+
+            tabList.forEach(function (li) {
+                // Hover: switch active tab and content
+                li.addEventListener("mouseenter", function () {
+                    clearActive();
+                    li.classList.add("active");
+                    showContent(li.getAttribute("data-target"));
+                });
+
+                // Click: go to the link
+                li.addEventListener("click", function (e) {
+                    const link = li.querySelector("a");
+                    if (link && link.href) {
+                        window.location.href = link.href;
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+
+<style>
+    /* Hero Banner Styles */
+    .heroBanner {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        background: rgb(41, 107, 255);
+        z-index: 10000;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .heroBanner.active {
+        display: block;
+    }
+
+    .heroBannerContent {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 24px;
+        flex-wrap: wrap;
+    }
+
+    .heroBannerText {
+        color: white;
+        font-family: 'go-medium';
+        font-size: 13px;
+        line-height: 1.5;
+        margin: 0;
+        letter-spacing: 0.02em;
+    }
+
+    .heroBannerLink {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        /* color: var(--darkOrange, #E38330); */
+        color: #fff;
+        text-decoration: none;
+        font-family: 'go-medium';
+        font-size: 12px;
+        line-height: 1.5;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .heroBannerLink:hover {
+        /* color: var(--darkOrange, #E38330); */
+        color: #fff;
+        gap: 12px;
+    }
+
+    .heroBannerLink svg {
+        width: 18px;
+        height: 18px;
+        transition: transform 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    .heroBannerLink:hover svg {
+        transform: translate(2px, -2px);
+    }
+
+    .heroBannerLink span {
+        position: relative;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 767px) {
+        .heroBanner {
+            padding: 8px 0;
+            position: absolute;
+        }
+
+        .heroBannerContent {
+            flex-direction: row;
+            gap: 4px;
+            text-align: flex-start;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: unset;
+
+            .heroBannerLink {
+                width: 100%;
+                max-width: fit-content;
+            }
+        }
+
+        .heroBannerText {
+            font-size: 12px;
+            justify-content: center;
+            max-width: 75%;
+        }
+
+        .heroBannerLink {
+            font-size: 13px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .heroBannerText {
+            font-size: 11px;
+        }
+
+        .heroBannerLink {
+            font-size: 12px;
+        }
+    }
+</style>
+
+<script>
+    // Show hero banner only on homepage
+    (function () {
+        const heroBanner = document.getElementById('heroBanner');
+        if (!heroBanner) return;
+
+        function checkAndShowBanner() {
+            const currentPath = window.location.pathname;
+            // Show only on homepage "/"
+            if (currentPath === '/' || currentPath === '') {
+                heroBanner.classList.add('active');
+
+                // Trigger scroll event to recalculate header position
+                // This ensures the existing scroll logic accounts for the banner
+                setTimeout(function () {
+                    $(window).trigger('scroll');
+                }, 100);
+            } else {
+                heroBanner.classList.remove('active');
+
+                // Trigger scroll event to recalculate header position
+                setTimeout(function () {
+                    $(window).trigger('scroll');
+                }, 100);
+            }
+        }
+
+        // Check on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', checkAndShowBanner);
+        } else {
+            checkAndShowBanner();
+        }
+
+        // Check on navigation (for SPA-like behavior if applicable)
+        window.addEventListener('popstate', checkAndShowBanner);
+
+        // Also check when location changes (for frameworks that use pushState)
+        let lastPath = window.location.pathname;
+        setInterval(function () {
+            if (window.location.pathname !== lastPath) {
+                lastPath = window.location.pathname;
+                checkAndShowBanner();
+            }
+        }, 100);
+    })();
+</script>

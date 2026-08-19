@@ -1,0 +1,76 @@
+<main>
+    <div class="popupContainerOuter displyScreenResolution  ApplyNow scrollPopup newHomePagePopup homeCrossPopup" id="downloadReportDropShipping">
+
+        <div class="popupContainer">
+            <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_heading">
+                    Download Dropshippping Report
+                </h2>
+
+                <div class="popUpCloseBtnWrap homeCrossfix">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Icon" onclick="hideApplyNowPopUpDrop();">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="formContainerDrop">
+                <div class="left mob-hide">
+                    <img  src="https://images.mastersunion.link/brochures/18022025/v1/StudentsWork.webp" alt="MU Students">
+                </div>
+                <div class="right">
+                    <div id="pgpDropshippingReportWidget" style="width: 100%;"></div>
+                    <script data-target="#your-element-id" data-widget="8596e412-3fdc-4470-bec4-a28a1a23e69a" src="https://widgets-v2.mastersunion.org/loader.js"></script>
+                </div>
+            </div>
+
+            <div id="SuccessMessageDrop" class="congrats-box hide">
+                <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+
+                <h3 class="thankyouboxHeading mt-10 gtmUgDwnBroGotit" id="gtmUgDwnBroGotitId">Thank You</h3>
+                <p class="text-2 gtmUgDwnBroGotPara" id="gtmUgDwnBroGotParaId">You've successfully downloaded our Dropshipping Report</p>
+                <p class="text-2">For any queries please contact us at <a class="font-red" href="mailto:admissions@mastersunion.org">admissions@mastersunion.org</a></p>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+
+    function pgpDropshippingReport(formTitle, destination) {
+        const form = document.getElementById("downloadReportDropShipping");
+        const h2 = document.querySelector("#form_heading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        document.querySelector("#SuccessMessageDrop").classList.add("hide");
+        document.querySelector("#formContainerDrop").classList.remove("hide");
+        document.querySelector("#form_heading").classList.remove("hide");
+    }
+
+    function hideApplyNowPopUpDrop() {
+        let applyNowPopUp = document.getElementById("downloadReportDropShipping");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+
+    }
+
+
+ function validationOnblurPgpTbmCommon(field, errorId, errorMessage) {
+            var input = $("#" + field);  // Get the field by ID
+            var error = $("#" + errorId);  // Get the error element by ID
+
+            if (input.val() === "") {
+                error.removeClass("warning");  // Add the warning class if applicable
+                error.text(errorMessage);  // Set the dynamic error message
+            } else {
+                error.hide();  // Hide the error message if input is valid
+            }
+        }
+
+</script>

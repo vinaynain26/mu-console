@@ -1,0 +1,548 @@
+.components {
+    padding: 120px 0;
+    background: var(--grey);
+}
+
+.buttonsWrap {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    border: 1px solid #d4d4d4;
+    padding: 15px 0;
+    flex-direction: column;
+}
+
+
+/* Buttons */
+.btnClose {
+    border-radius: 54px;
+    background: #FADFE1;
+    padding: 14px 24px;
+    font: 16px 'go-medium';
+    line-height: 150% !important;
+    color: #DF2935;
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+}
+
+.btnHold {
+    border-radius: 54px;
+    background: var(--white4);
+    padding: 14px 24px;
+    font: 16px 'go-medium';
+    line-height: 150% !important;
+    color: var(--grey);
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+}
+
+.btnWhite {
+    border-radius: 54px;
+    background: white;
+    padding: 14px 24px;
+    font: 16px 'go-medium';
+    line-height: 150% !important;
+    color: #090909;
+    border: 1px solid #d4d4d4;
+    cursor: pointer;
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrowWrap {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    overflow: hidden;
+}
+
+
+/* Initial positions */
+.arrow1 {
+    transform: translate(0%, 0%);
+    z-index: 2;
+}
+
+.arrow2 {
+    transform: translate(-100%, 100%);
+    z-index: 1;
+}
+
+.arrowhorizontal {
+    transform: translateX(0%);
+    z-index: 2;
+    transition: transform 0.4s ease;
+}
+
+.arrowhorizontalClone {
+    transform: translateX(-100%);
+    z-index: 1;
+    transition: transform 0.4s ease;
+}
+
+.btnBlack:hover .arrowhorizontal {
+    transform: translateX(100%);
+}
+
+.btnBlack:hover .arrowhorizontalClone {
+    transform: translateX(0%);
+}
+
+/* On hover - Diagonal movement */
+.btnWhite:hover .arrow1 {
+    transform: translate(100%, -100%);
+}
+
+.btnWhite:hover .arrow2 {
+    transform: translate(0%, 0%);
+}
+
+.btnBlack:hover .arrow1 {
+    transform: translate(100%, -100%);
+}
+
+.btnBlack:hover .arrow2 {
+    transform: translate(0%, 0%);
+}
+
+.btnWhite:hover .arrowDownload {
+    transform: translateY(2px);
+}
+
+.arrowDownload {
+    transition: transform 0.3s ease;
+}
+
+.btnBlack:hover .arrowDownload {
+    transform: translateY(2px);
+}
+
+.arrowWrapper {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+}
+
+.arrow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* ✅ left side since icon is before text */
+    width: 100%;
+    height: 100%;
+    transition: transform 0.25s ease-in-out;
+}
+
+.arrowMain {
+    transform: translate(0%, 0%);
+    z-index: 2;
+}
+
+.arrowClone {
+    transform: translate(100%, 100%);
+    /* 👈 start from bottom-right */
+    z-index: 1;
+}
+
+.btnBlack:hover .arrowMain {
+    transform: translate(-100%, -100%);
+    /* 👈 go to top-left */
+}
+
+.btnBlack:hover .arrowClone {
+    transform: translate(0%, 0%);
+    /* 👈 come in diagonally from bottom-right */
+}
+
+.btnWhite.btnLink {
+    color: white;
+    border: none;
+    background: transparent;
+
+    svg path {
+        fill: white;
+    }
+}
+
+.btnBlack.btnLink {
+    color: #090909;
+    border: none;
+    background: transparent;
+
+    svg path {
+        fill: #090909;
+    }
+}
+
+
+.btnWhite.outline {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+
+    svg path {
+        fill: white;
+    }
+}
+
+.btnBlack.outline {
+    background: transparent;
+    border: 1px solid #090909;
+    color: #090909;
+
+    svg path {
+        fill: #090909;
+    }
+}
+
+.btnWhite.blurBg {
+    background: rgba(255, 255, 255, 0.20);
+    backdrop-filter: blur(2.5px);
+    border: 1px solid white;
+    color: white;
+
+    svg path {
+        fill: white;
+    }
+}
+
+.btnBlack.blurBg {
+    background: rgba(255, 255, 255, 0.20);
+    backdrop-filter: blur(2.5px);
+    border: 1px solid #090909;
+    color: #090909;
+
+    svg path {
+        fill: #090909;
+    }
+}
+
+.btnWhite.borderGradient {
+    border: 1px solid transparent;
+    background: linear-gradient(var(--white) 0 0) padding-box,
+        linear-gradient(119deg, #39b6d8 -2.47%, #f7d344 47.29%, #e38330 112.78%) border-box;
+    backdrop-filter: blur(2.5px);
+    color: #090909;
+
+    svg path {
+        color: #090909;
+    }
+}
+
+
+.btnBlack.borderGradient {
+    border: 1px solid transparent;
+    background: linear-gradient(var(--black) 0 0) padding-box,
+        linear-gradient(119deg, #39b6d8 -2.47%, #f7d344 47.29%, #e38330 112.78%) border-box;
+    backdrop-filter: blur(2.5px);
+    color: white;
+
+    svg path {
+        fill: white;
+    }
+}
+
+
+
+.btnBlack {
+    border-radius: 54px;
+    background: #090909;
+    padding: 14px 24px;
+    font: 16px 'go-medium';
+    line-height: 150% !important;
+    color: white;
+    border: 1px solid #262626;
+    cursor: pointer;
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+}
+
+.btnWhite.btnMd {
+    padding: 12px 22px;
+    font: 14px 'go-medium';
+
+    svg {
+        max-width: 20px;
+        max-height: 20px;
+    }
+}
+
+.btnWhite.btnSm {
+    padding: 10px 20px;
+    font: 12px 'go-medium';
+
+    svg,
+    img {
+        max-width: 18px;
+    }
+}
+
+.btnBlack.btnMd {
+    padding: 12px 22px;
+    font: 14px 'go-medium';
+
+    svg {
+        max-width: 20px;
+        max-height: 20px;
+    }
+}
+
+.btnBlack.btnSm {
+    padding: 10px 20px;
+    font: 12px 'go-medium';
+
+    svg,
+    img {
+        max-width: 18px;
+    }
+}
+
+/* Buttons end */
+
+
+
+/* responsive */
+
+
+@media (max-width: 767px) {
+
+    .btnClose {
+        border-radius: 54px;
+        background: #FADFE1;
+        padding: 10px 20px;
+        font: 12px 'go-medium';
+        line-height: 150% !important;
+        color: #DF2935;
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            max-width: 18px;
+        }
+    }
+
+    .btnHold {
+        border-radius: 54px;
+        background: var(--white4);
+       padding: 10px 20px;
+        font: 16px 'go-medium';
+        line-height: 150% !important;
+        color: var(--grey);
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            max-width: 18px;
+        }
+    }
+
+    .btnWhite.btnWhiteMdMob {
+        padding: 12px 22px;
+        font: 14px 'go-medium';
+    }
+
+    .btnWhite.btnWhiteSmMOb {
+        padding: 10px 20px;
+        font: 14px 'go-medium';
+    }
+
+    .btnBlack.btnBlackMdMOb {
+        padding: 12px 22px;
+        font: 14px 'go-medium';
+    }
+
+    .btnBlack.btnSmMOb {
+        padding: 10px 20px;
+        font: 14px 'go-medium';
+    }
+
+    .btnWhite.btnWhiteMdMobFont {
+        padding: 12px 22px;
+        font: 12px 'go-medium';
+    }
+
+    .btnWhite.btnWhiteSmMObFont {
+        padding: 10px 20px;
+        font: 12px 'go-medium';
+    }
+
+    .btnBlack.btnBlackMdMObFont {
+        padding: 12px 22px;
+        font: 12px 'go-medium';
+    }
+
+    .btnBlack.btnSmMObFont {
+        padding: 10px 20px;
+        font: 12px 'go-medium';
+    }
+
+}
+
+
+
+/* UG Banner Styles */
+.ug-banner {
+    background: #F7D544;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    font-family: 'go-medium';
+    border-bottom: 1px solid var(--black);
+
+
+    .mergeCount {
+        display: flex;
+        gap: 80px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ug-bannerLeft {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+    }
+
+    .ug-bannerHead {
+        font: 16px 'go-semibold';
+        line-height: 100%;
+        color: var(--black);
+    }
+
+    .ug-banner-content {
+        font: 16px 'go-regular';
+        line-height: 100%;
+        color: var(--black);
+
+        span {
+            font: 16px 'go-semibold';
+        }
+    }
+
+    .verticlelineUg {
+        height: 20px;
+        width: 1px;
+        background: var(--black);
+    }
+}
+
+@media (max-width: 767px) {
+
+
+    .ug-banner {
+        padding-inline: 0;
+        padding-top: 6px;
+
+        .mergeCount {
+            gap: 16px;
+            justify-content: space-between;
+        }
+
+        .ug-bannerLeft {
+            gap: 8px;
+        }
+
+        .ug-banner-content,
+        .ug-bannerHead {
+            font-size: 12px;
+
+            span {
+                font-size: 12px;
+            }
+        }
+
+        .ug-bannerLeft {
+            max-width: 70%;
+            width: 100%;
+        }
+
+        .btnBlack {
+            padding: 8px 10px;
+            min-width: max-content;
+        }
+
+        .verticlelineUg {
+            height: 40px;
+            position: relative;
+            top: -2px;
+        }
+
+    }
+}
+
+.btn:hover .arrow1 {
+    transform: translate(100%, -100%);
+}
+
+.btn:hover .arrow2 {
+    transform: translate(0%, 0%);
+}
+
+/* Consent checkbox (shared across lead-capture forms) */
+.consentCheckWrapper {
+    width: 100%;
+    align-self: stretch;
+    box-sizing: border-box;
+    margin-top: 16px;
+    margin-bottom: 8px;
+    text-align: left;
+}
+
+.consentCheckWrapper .consentCheckRow {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+}
+
+.consentCheckWrapper label {
+    flex: 1;
+}
+
+.consentCheckWrapper input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    margin: 2px 0 0 0;
+    flex-shrink: 0;
+    cursor: pointer;
+    accent-color: #E38330;
+}
+
+.consentCheckWrapper label {
+    margin: 0;
+    line-height: 1.5;
+    cursor: pointer;
+    color: #6b6b6b;
+    font-size: 12px;
+}
+
+.consentCheckWrapper label a {
+    color: #E38330;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.consentCheckWrapper .consentCheckError {
+    margin-top: 6px;
+}

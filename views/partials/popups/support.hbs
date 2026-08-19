@@ -1,0 +1,82 @@
+<main>
+    <div class="popupContainerOuter applyNowJob" id="applyJob">
+
+        <div class="popupContainer techDsaiHomePage dsaiMobView">
+            <div class="supportSection">
+                <div class="supportLeft">
+                    <img src="https://images.mastersunion.link/uploads/02042025/v1/Frame1321316688.webp">
+                </div>
+                <div class="supportRight">
+
+                    <div class="popClose" onclick="hideApplyNowPopUp();">
+                        <img src="https://images.mastersunion.link/uploads/02042025/v1/Frame1321316696.svg">
+                    </div>
+
+                    <div class="wrapperInt">
+
+                        <div class="rightDiviHeading ">
+                            <h2 class="sectionHeadingTech "><span class="font-medium">Reach out</span> to the<br>
+                                <span class="sectionHeadingFr font_italic  italicMob ">Support Team</span>
+                            </h2>
+                        </div>
+
+                        <div class="contactWrapper">
+                            <div class="txtBox">
+                                <img 
+                                    src="https://files.mastersunion.link/media/img/ugPsychology/darkEmailIcon.svg"
+                                    alt="">
+                                <div class="txtWrapper">
+                                    <h6>Email ID</h6>
+                                    <p>pummy.ralli@mastersunion.org</p>
+                                </div>
+                            </div>
+                            <div class="txtBox">
+                                <img 
+                                    src="https://files.mastersunion.link/media/img/ugPsychology/darkPhoneIcon.svg"
+                                    alt="">
+                                <div class="txtWrapper">
+                                    <h6>Mobile no.</h6>
+                                    <p>+91 9717905685</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+
+    function applyJob() {
+        const form = document.getElementById("applyJob");
+        const h2 = document.querySelector("#form_heading");
+
+
+        form.classList.add("active");
+        form.setAttribute("data-destination", destination);
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        document.querySelector("#leadformContainer").classList.remove("hide");
+        document.querySelector("#form_heading").classList.remove("hide");
+
+    }
+
+
+    function hideApplyNowPopUp() {
+        let applyNowPopUp = document.getElementById("applyJob");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+
+        $('#nameReport').val("");
+        $('#emailReport').val("");
+        $('#numberReport').val("");
+
+    }
+
+</script>

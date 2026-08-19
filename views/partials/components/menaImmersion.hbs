@@ -1,0 +1,173 @@
+<section class="mission menaMission">
+    <div class="missionButtonWrap" id="makeHidden">
+        <button class="missionBtn" id="scroll1Btn">Global Immersion</button>
+        <button class="missionBtn" id="scroll2Btn">Industry Immersion</button>
+    </div>
+
+    <span id="scrl2"></span>
+
+    <div class="fixedMission active" id="fxCld1">
+        <div class="container">
+
+            <div class="flexbox missionFlex">
+                <div class="missionLeft">
+                    <h2 class="missionHeading whiteBgHead">
+                        Global Immersion at
+                        <span class="lightMuVector font-bold">INSEAD, France</span>
+                    </h2>
+                    <p class="missionText">
+                        Step Into the Future of Business at One of the World’s Top B-Schools
+                    </p>
+                </div>
+
+                <div class="missionCenter">
+                    <img  src="https://files.mastersunion.link/media/img/menaImages/menaGlobalImmersion.png" alt="">
+                </div>
+
+                <div class="missionRight black">
+
+                    <p class="tabtext">Embark on an exciting adventure at one of the world’s leading B-Schools! Discover
+                        a
+                        thriving hub of innovation, gain real-world insights, and sharpen your leadership skills</p>
+
+                    <div class="box2col gap5 align-start">
+                        <img  src="https://files.mastersunion.link/resources/svg/littleStar.svg"
+                            class="opacity05" alt="">
+                        <p class="tabtext"><span class="psyText">Learn from the Best: </span>Dive deep into a
+                            cutting-edge, globally focused curriculum.</p>
+                    </div>
+
+                    <div class="box2col gap5 align-start">
+                        <img  src="https://files.mastersunion.link/resources/svg/littleStar.svg"
+                            class="opacity05" alt="">
+                        <p class="tabtext"><span class="psyText">Meet Industry Titans: </span>Get exclusive access to
+                            Europe's top business leaders and their success secrets.</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <span id="scrl1"></span>
+
+    <div class="fixedMission" id="fxCld2">
+        <div class="container">
+            <div class="flexbox missionFlex">
+                <div class="missionLeft">
+                    <h2 class="missionHeading">
+                        Explore <span class="lightMuVector">Global Giants
+                        </span> in the GCC
+
+                    </h2>
+                    <p class="missionText">
+                        Get behind-the-scenes with Fortune 500 powerhouses and innovative startups!
+                    </p>
+                </div>
+
+                <div class="missionCenter">
+                    <img  src="https://files.mastersunion.link/media/img/menaImages/menaIndustryImmersion.png" alt="">
+                </div>
+
+                <div class="missionRight black">
+
+                    <p class="subText">Step into the booming GCC market, where innovation meets opportunity and global
+                        business is reshaped!</p>
+
+                    <div class="box2col gap5 align-start">
+                        <img  src="https://files.mastersunion.link/resources/svg/littleStar.svg"
+                            class="opacity05" alt="">
+                        <p class="tabtext font-grey10"><span class="white-medium">Inside the Action: </span>Visit HQs of giants like
+                            Emirates and Aramco to see global operations up close.</p>
+                    </div>
+
+                    <div class="box2col gap5 align-start">
+                        <img  src="https://files.mastersunion.link/resources/svg/littleStar.svg"
+                            class="opacity05" alt="">
+                        <p class="tabtext font-grey10"><span class="white-medium">Learn from Innovators: </span> Engage with top execs
+                            driving change in aviation, energy, and tech!</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<script>
+    $(document).ready(function () {
+        function adjustScrolling() {
+            var parentOffset = $('.mission').offset().top;
+            console.log(`parentOffset is ${parentOffset}`);
+            var windowHeight = $(window).height();
+            var isMobile = $(window).width() <= 767;
+
+            $(window).scroll(function () {
+                var scrollPosition = $(window).scrollTop();
+                //console.log(`scroll position is ${scrollPosition}`);
+
+                var sectionHeight = $('.mission').outerHeight();
+                //console.log(`section height is ${sectionHeight}`);
+
+                // Scroll values for desktop
+                var desktopScrollPosition1 = 1155;
+                var desktopScrollPosition2 = 1040;
+
+                // Scroll values for mobile
+                var mobileScrollPosition1 = 1320; 
+                var mobileScrollPosition2 = 1264;
+
+                var scrollPosition1 = isMobile ? mobileScrollPosition1 : desktopScrollPosition1;
+                var scrollPosition2 = isMobile ? mobileScrollPosition2 : desktopScrollPosition2;
+
+                // Adjust element visibility based on scroll position
+                if (scrollPosition > scrollPosition1) {
+                  //  console.log("Scroll position reached for hiding element");
+                    $('#makeHidden').addClass('hidden');
+                } else {
+                    $('#makeHidden').removeClass('hidden');
+                }
+
+                if (scrollPosition >= scrollPosition2) {
+                    $('#fxCld1').removeClass('active');
+                    $('#fxCld2').addClass('active');
+                    $('.mission').addClass('darkTheme');
+                    $('.missionButtonWrap').addClass('active');
+                } else {
+                    $('#fxCld1').addClass('active');
+                    $('#fxCld2').removeClass('active');
+                    $('.mission').removeClass('darkTheme');
+                    $('.missionButtonWrap').removeClass('active');
+                }
+
+                if (scrollPosition >= scrollPosition2) {
+                    $('#scroll1Btn').off('click').click(function () {
+                        $('#fxCld2').removeClass('active');
+                        $('.mission').removeClass('darkTheme');
+                        $('#fxCld1').addClass('active');
+                        $('.missionButtonWrap').removeClass('active');
+                    });
+                }
+
+                if (scrollPosition >= scrollPosition2) {
+                    $('#scroll2Btn').off('click').click(function () {
+                        $('#fxCld1').removeClass('active');
+                        $('.mission').addClass('darkTheme');
+                        $('#fxCld2').addClass('active');
+                        $('.missionButtonWrap').addClass('active');
+                    });
+                }
+            });
+        }
+
+        adjustScrolling();
+
+        $(window).resize(function () {
+            adjustScrolling();
+        });
+    });
+</script>

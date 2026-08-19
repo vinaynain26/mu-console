@@ -1,0 +1,297 @@
+
+<section class="worldClassSection">
+    <div class="container">
+        <div class="worldClassWrapper">
+            <div class="worldHeadingWrapper">
+                <h2 class="go-sectionHeading font-black">{{#if headingPrefix}}{{headingPrefix}}{{else}}World-class
+                    Campus
+                    in the{{/if}} <span class="font-semibold">{{#if headingHighlight}}{{headingHighlight}}{{else}}Heart
+                        of
+                        Gurugram{{/if}}</span></h2>
+                <a class="btnBlack" href="{{#if ctaLink}}{{ctaLink}}{{else}}/book-a-campus-tour{{/if}}">{{#if
+                    ctaText}}{{ctaText}}{{else}}Book a Visit{{/if}}
+
+                    <span class="arrowWrap">
+                        <img class="arrow arrow1"
+                            src="https://images.mastersunion.link/uploads/18022025/v1/Frame1321316511.svg" alt="arrow">
+                        <img class="arrow arrow2"
+                            src="https://images.mastersunion.link/uploads/18022025/v1/Frame1321316511.svg" alt="arrow">
+                    </span>
+
+                </a>
+            </div>
+
+            <nav class="navigationWrapper ">
+                <ul class="tabs faqtabs">
+                    <li class="active" data-rel="urban-campus5">CDS Tower </li>
+                    <li class="" data-rel="urban-campus55">CDS Tower - 2nd Floor </li>
+                    <li class="" data-rel="urban-campus1">Tower A </li>
+                    <li class="" data-rel="urban-campus2"> Tower C</li>
+                    <li class="" data-rel="urban-campus3"> Auditorium </li>
+                    <li class="" data-rel="urban-campus4"> Food Court</li>
+                </ul>
+
+
+                <div class="content-section">
+
+                    <div class="worldCampusFrame active content" id="urban-campus5">
+                        <iframe width="100%" height="400px" title="CDS Tower 360&deg; tour"
+                            data-src="https://my.matterport.com/show/?m=H94FKdNQbTi&play=1&brand=1" frameborder="0"
+                            allowfullscreen
+                            allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer; magnetometer; vr"></iframe>
+                        <div class="worldCampusLoader" aria-hidden="true">Loading 360&deg; tour&hellip;</div>
+                    </div>
+
+                    <div class="worldCampusFrame content" id="urban-campus55">
+                        <iframe width="100%" height="400px" title="CDS Tower - 2nd Floor 360&deg; tour"
+                            data-src="https://my.matterport.com/show/?m=zjAw7AksqvZ" frameborder="0" allowfullscreen
+                            allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer; magnetometer; vr"></iframe>
+                        <div class="worldCampusLoader" aria-hidden="true">Loading 360&deg; tour&hellip;</div>
+                    </div>
+
+
+                    <div class="worldCampusFrame content" id="urban-campus1">
+                        <iframe width="100%" height="400px" title="Tower A 360&deg; tour"
+                            data-src="https://my.matterport.com/show/?m=fvbzUtwNH1B" frameborder="0" allowfullscreen
+                            allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer; magnetometer; vr"></iframe>
+                        <div class="worldCampusLoader" aria-hidden="true">Loading 360&deg; tour&hellip;</div>
+                    </div>
+
+                    <div class="worldCampusFrame content" id="urban-campus2">
+                        <iframe width="100%" height="400px" title="Tower C 360&deg; tour"
+                            data-src="https://my.matterport.com/show/?m=jQcZmR1BxFc&play=1&brand=1" frameborder="0"
+                            allowfullscreen
+                            allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer; magnetometer; vr"></iframe>
+                        <div class="worldCampusLoader" aria-hidden="true">Loading 360&deg; tour&hellip;</div>
+                    </div>
+
+                    <div class="worldCampusFrame content" id="urban-campus3">
+                        <iframe width="100%" height="400px" title="Auditorium 360&deg; tour"
+                            data-src="https://s3.mastersunion.link/assets/mu-vr/index.html" frameborder="0"
+                            allowfullscreen
+                            allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer; magnetometer; vr"></iframe>
+                        <div class="worldCampusLoader" aria-hidden="true">Loading 360&deg; tour&hellip;</div>
+                    </div>
+
+                    <div class="worldCampusFrame content" id="urban-campus4">
+                        <iframe width="100%" height="400px" title="Food Court 360&deg; tour"
+                            data-src="https://s3.mastersunion.link/assets/food-court/index.html" frameborder="0"
+                            allowfullscreen
+                            allow="fullscreen; xr-spatial-tracking; gyroscope; accelerometer; magnetometer; vr"></iframe>
+                        <div class="worldCampusLoader" aria-hidden="true">Loading 360&deg; tour&hellip;</div>
+                    </div>
+
+                </div>
+            </nav>
+
+
+        </div>
+    </div>
+</section>
+
+
+
+<style>
+    .worldClassSection {
+        background: linear-gradient(to bottom, var(--white) 50%, var(--black) 50%);
+        border-bottom: 1px solid var(--black5);
+
+        .worldClassWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            align-items: flex-start;
+        }
+
+
+        .navigationWrapper {
+            width: 100%;
+            margin-bottom: 0;
+            margin-top: 0;
+        }
+
+        .navigationWrapper ul {
+            padding: 16px 30px;
+            width: 100%;
+            background: var(--black);
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            justify-content: space-around;
+            background: var(--grey17);
+            margin-top: 30px;
+            border-radius: 12px;
+            margin-top: 0;
+        }
+
+        .content-section {
+            width: 100%;
+            margin-top: 24px;
+        }
+
+        .worldHeadingWrapper {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+        }
+
+        .worldCampusFrame {
+            width: 100%;
+            position: relative;
+            background: var(--black);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .worldCampusFrame iframe {
+            height: 65vh;
+            border-radius: 8px;
+            width: 100%;
+            display: block;
+        }
+
+        .worldCampusLoader {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--white);
+            background: var(--black);
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .worldCampusFrame.is-loaded .worldCampusLoader {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s;
+        }
+    }
+
+
+    @media (max-width: 767px) {
+        .worldClassSection {
+            .worldHeadingWrapper {
+                flex-direction: column;
+                gap: 18px;
+                align-items: flex-start;
+            }
+
+            .navigationWrapper {
+                margin-top: 0;
+            }
+
+            .navigationWrapper ul {
+                margin-top: 0;
+                overflow:auto;
+            }
+
+            .tabs li{
+                min-width:max-content;
+            }
+        }
+    }
+</style>
+
+<script>
+    /**
+     * The campus tours are all WebGL (Matterport + krpano). Mobile GPUs cap how
+     * many live WebGL contexts a page may hold, and the browser silently drops
+     * the oldest ones when that cap is hit -- which is what surfaces as krpano's
+     * "graphics context lost" error. So: keep exactly one tour loaded at a time,
+     * start it only once the section is near the viewport, and tear the old one
+     * down on every tab switch.
+     */
+    (function () {
+        var SMALL_SCREEN = "(max-width: 1024px)";
+
+        function initCampusTours(section) {
+            if (section.dataset.campusToursInit === "1") return;
+            section.dataset.campusToursInit = "1";
+
+            var panes = Array.prototype.slice.call(
+                section.querySelectorAll(".worldCampusFrame")
+            );
+            if (!panes.length) return;
+
+            function paneById(id) {
+                for (var i = 0; i < panes.length; i++) {
+                    if (panes[i].id === id) return panes[i];
+                }
+                return null;
+            }
+
+            function activePane() {
+                return section.querySelector(".worldCampusFrame.active") || panes[0];
+            }
+
+            function unload(pane) {
+                var iframe = pane.querySelector("iframe");
+                if (!iframe || !iframe.getAttribute("src")) return;
+                // Swapping in a fresh node destroys the tour's document (and its
+                // WebGL context) right away, and -- unlike src="about:blank" --
+                // leaves no session-history entry to break the back button.
+                var fresh = iframe.cloneNode(false);
+                fresh.removeAttribute("src");
+                iframe.parentNode.replaceChild(fresh, iframe);
+                pane.classList.remove("is-loaded");
+            }
+
+            function load(pane) {
+                if (!pane) return;
+                var iframe = pane.querySelector("iframe");
+                if (!iframe || iframe.getAttribute("src")) return;
+                for (var i = 0; i < panes.length; i++) {
+                    if (panes[i] !== pane) unload(panes[i]);
+                }
+                iframe.addEventListener("load", function () {
+                    pane.classList.add("is-loaded");
+                });
+                iframe.setAttribute("src", iframe.getAttribute("data-src"));
+            }
+
+            section.addEventListener("click", function (event) {
+                var target = event.target;
+                if (!target || !target.closest) return;
+                var tab = target.closest(".faqtabs li[data-rel]");
+                if (!tab || !section.contains(tab)) return;
+                load(paneById(tab.getAttribute("data-rel")));
+            });
+
+            if (!("IntersectionObserver" in window)) {
+                load(activePane());
+                return;
+            }
+
+            new IntersectionObserver(
+                function (entries) {
+                    for (var i = 0; i < entries.length; i++) {
+                        if (entries[i].isIntersecting) {
+                            load(activePane());
+                        } else if (window.matchMedia(SMALL_SCREEN).matches) {
+                            // Hand the GPU back on phones/tablets so other media
+                            // further down these long pages still gets a context.
+                            panes.forEach(unload);
+                        }
+                    }
+                },
+                { rootMargin: "300px 0px" }
+            ).observe(section);
+        }
+
+        function initAll() {
+            var sections = document.querySelectorAll(".worldClassSection");
+            for (var i = 0; i < sections.length; i++) initCampusTours(sections[i]);
+        }
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initAll);
+        } else {
+            initAll();
+        }
+    })();
+</script>

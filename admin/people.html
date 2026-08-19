@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>People &amp; roles · MU Console</title>
+<link rel="stylesheet" href="/console-ui/app.css">
+</head><body>
+<div class="shell">
+  <nav class="side"></nav>
+  <main>
+    <div class="phead">
+      <div><h1>People &amp; roles</h1>
+        <div class="sub">Roles are enforced on the server. Nothing here can be changed from the browser.</div></div>
+    </div>
+    <div class="card">
+      <header><h2>Team</h2><div class="grow"></div></header>
+      <div id="list"><div class="empty">Loading…</div></div>
+    </div>
+    <div class="card">
+      <header><h2>Add someone</h2></header>
+      <div class="inner">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">
+          <div><label class="lbl">Name</label><input type="text" id="n"></div>
+          <div><label class="lbl">Email</label><input type="email" id="e"></div>
+          <div><label class="lbl">Password</label><input type="text" id="p" value="mastersunion"></div>
+          <div><label class="lbl">Role</label><select id="r"></select></div>
+        </div>
+        <div id="rblurb" class="hint"></div>
+        <div style="margin-top:13px"><button class="btn primary" id="add">Add person</button>
+          <span class="hint" id="addmsg" style="margin-left:10px"></span></div>
+      </div>
+    </div>
+    <div class="card">
+      <header><h2>What each role can do</h2></header>
+      <div class="inner" id="matrix"></div>
+    </div>
+  </main>
+</div>
+<script type="module">
+import { chrome, api, esc, ago, $, ROLE_TONE } from '/console-ui/shell.js';
+const acct = await chrome('people');
+if (acct.user.role !== 'admin') { document.querySelector('main').innerHTML =
+  '<div class="banner crit">Only an admin can manage people.</div>'; throw new Error('nope'); }
+
+$('r').innerHTML = acct.roles.map(r => `<option value="${esc(r.key)}">${esc(r.label)}</option>`).join('');
+$('r').value = 'editor';
+const blurb = () => { const r = acct.roles.find(x => x.key === $('r').value); $('rblurb').textContent = r ? r.blurb : ''; };
+$('r').addEventListener('change', blurb); blurb();
+
+$('matrix').innerHTML = acct.roles.map(r =>
+  `<div style="display:flex;gap:11px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line)">
+    <span class="badge ${ROLE_TONE[r.key] || ''}" style="min-width:82px;justify-content:center">${esc(r.label)}</span>
+    <span style="color:var(--ink-sub);font-size:13.5px">${esc(r.blurb)}</span>
+  </div>`).join('');
+
+async function load() {
+  const users = await api('/api/account/users');
+  $('list').innerHTML = users.map(u => `
+    <div class="rrow">
+      <div class="avatar">${esc((u.name || '?').split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase())}</div>
+      <div style="flex:1">
+        <h3>${esc(u.name)}${u.email === acct.user.email ? ' <span class="badge">you</span>' : ''}</h3>
+        <div class="meta">${esc(u.email)} · last seen ${ago(u.last_seen)}</div>
+      </div>
+      <select data-role="${u.id}" style="width:auto">
+        ${acct.roles.map(r => `<option value="${esc(r.key)}" ${r.key === u.role ? 'selected' : ''}>${esc(r.label)}</option>`).join('')}
+      </select>
+    </div>`).join('');
+  $('list').querySelectorAll('[data-role]').forEach(sel => sel.addEventListener('change', async () => {
+    try {
+      await api('/api/account/users/' + sel.dataset.role, { method: 'PUT', body: JSON.stringify({ role: sel.value }) });
+      await load();
+    } catch (e) { alert(e.message); await load(); }
+  }));
+}
+
+$('add').addEventListener('click', async () => {
+  $('addmsg').textContent = '';
+  try {
+    await api('/api/account/users', { method: 'POST', body: JSON.stringify({
+      name: $('n').value, email: $('e').value, password: $('p').value, role: $('r').value }) });
+    $('n').value = ''; $('e').value = '';
+    $('addmsg').textContent = 'Added.';
+    await load();
+  } catch (e) { $('addmsg').textContent = e.message; }
+});
+
+await load();
+</script></body></html>

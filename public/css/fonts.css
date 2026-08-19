@@ -1,0 +1,192 @@
+/*
+ * Montserrat is loaded via a non-blocking <link rel="stylesheet" media="print" onload="...">
+ * from views/partials/header/newheader.hbs (combined with Fraunces in a single Google Fonts request).
+ * The previous @import here forced a serial CSS-then-import download chain that blocked first paint.
+ */
+
+:root {
+    --go-thin: 'go-thin';
+    --go-regular: 'go-regular';
+    --go-medium: 'go-medium';
+    --go-semibold: 'go-semibold';
+    --go-bold: 'go-bold';
+    --go-extrabold: 'go-extrabold';
+    --ss-semibold: 'ss-semibold';
+
+    --fr-thin: 'fr-thin';
+    --fr-light: 'fr-light';
+    --fr-regular: 'fr-regular';
+    --fr-medium: 'fr-medium';
+    --fr-semibold: 'fr-semibold';
+    --fr-bold: 'fr-bold';
+    --fr-extrabold: 'fr-extrabold';
+}
+
+@font-face {
+    font-family: 'go-thin';
+    src: url('https://files.mastersunion.link/resources/fonts/GalanoGrotesqueThin.otf');
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'go-regular';
+    src: url('https://files.mastersunion.link/resources/fonts/GalanoGrotesqueRegular.otf');
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'go-medium';
+    src: url('https://files.mastersunion.link/resources/fonts/GalanoGrotesqueMedium.otf');
+    font-style: normal;
+    font-display: swap;
+    font-weight: 500;
+
+}
+
+@font-face {
+    font-family: 'go-semibold';
+    src: url('https://files.mastersunion.link/resources/fonts/GalanoGrotesqueSemiBold.otf');
+    font-style: normal;
+    font-display: swap;
+    font-weight: 600;
+
+}
+
+@font-face {
+    font-family: 'go-bold';
+    src: url('https://files.mastersunion.link/resources/fonts/GalanoGrotesqueBold.otf');
+    font-style: normal;
+    font-display: swap;
+    font-weight: 700;
+
+}
+
+
+@font-face {
+    font-family: 'go-extrabold';
+    src: url('https://files.mastersunion.link/resources/fonts/GalanoGrotesqueExtraBold.otf');
+    font-style: normal;
+    font-display: swap;
+    font-weight: 800;
+
+}
+
+
+
+
+/* ss  */
+@font-face {
+    font-family: 'ss-semibold';
+    src: url('https://cdn.mastersunion.link/assets/fontV2/SourceSerifPro-SemiBold.eot');
+    src: url('https://cdn.mastersunion.link/assets/fontV2/SourceSerifPro-SemiBold.eot?#iefix') format('embedded-opentype'), url('https://cdn.mastersunion.link/assets/fontV2/SourceSerifPro-SemiBold.woff2') format('woff2'), url('https://cdn.mastersunion.link/assets/fontV2/SourceSerifPro-SemiBold.woff') format('woff'), url('https://cdn.mastersunion.link/assets/fontV2/SourceSerifPro-SemiBold.ttf') format('truetype'), url('https://cdn.mastersunion.link/assets/fontV2/SourceSerifPro-SemiBold.svg#SourceSerifPro-SemiBold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+/* Fraunces Fonts */
+@font-face {
+    font-family: 'Fraunces';
+    src: url('https://files.mastersunion.link/uploads/21022025/v1/Fraunces_72ptThin.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'Fraunces';
+    src: url('https://files.mastersunion.link/uploads/21022025/v1/Fraunces_72ptRegular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'Fraunces';
+    src: url('https://files.mastersunion.link/uploads/21022025/v1/Fraunces_144ptSemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'Fraunces';
+    src: url('https://files.mastersunion.link/uploads/21022025/v1/Fraunces_72ptBold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  /* Fraunces Fonts End */
+  
+  
+
+@font-face {
+  font-family: "NeueKaine";
+  src: url("https://files.mastersunion.link/Fonts/NeueKaine-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NeueKaine";
+  src: url("https://files.mastersunion.link/Fonts/NeueKaine-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NeueKaine";
+  src: url("https://files.mastersunion.link/Fonts/NeueKaine-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NeueKaine";
+  src: url("https://files.mastersunion.link/Fonts/NeueKaine-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/* Orbitiron */
+@font-face {
+  font-family: "Orbitron";
+  src: url("https://files.mastersunion.link/Fonts/Orbitron-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("https://files.mastersunion.link/Fonts/Orbitron-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("https://files.mastersunion.link/Fonts/Orbitron-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Orbitron";
+  src: url("https://files.mastersunion.link/Fonts/Orbitron-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+

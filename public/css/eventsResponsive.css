@@ -1,0 +1,4551 @@
+@media (max-width: 767px) {
+  .eventSection .eventAdmissionsClosed {
+    padding: 30px 20px;
+    border-radius: 12px;
+  }
+
+  .eventSection .eventAdmissionsClosed__iconWrap {
+    width: 72px;
+    height: 72px;
+  }
+
+  .eventSection .eventAdmissionsClosed__icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .eventSection .eventAdmissionsClosed__title {
+    font-size: 22px;
+  }
+
+  .eventSection .eventAdmissionsClosed__subtitle {
+    font-size: 14px;
+  }
+
+  .eventSection .eventAdmissionsClosed__divider {
+    margin: 20px 0;
+    max-width: 100%;
+  }
+
+  .eventSection .eventAdmissionsClosed__desc {
+    font-size: 13px;
+    max-width: 100%;
+  }
+
+  .eventSection .eventAdmissionsClosed__footer {
+    margin-top: 24px;
+    gap: 8px;
+  }
+
+  .eventSection .eventAdmissionsClosed__line {
+    max-width: 48px;
+  }
+
+  .buildingProgramme .buildingCardHead {
+    min-height: 51px !important;
+  }
+
+  .whiteupload.new {
+    .right-panel {
+      overflow: unset;
+    }
+
+    .buttonDivi {
+      padding-bottom: 0 !important;
+    }
+
+    .form-container {
+      max-width: 100%;
+    }
+  }
+
+  .hsslSection.whiteupload {
+    max-height: 100% !important;
+    overflow: unset !important;
+    min-height: 150vh !important;
+  }
+
+  .highSchoolStartup.latesthssl {
+    .highAbout {
+      padding: 40px 0 !important;
+    }
+
+    .hSchoolWrapper {
+      animation: 5s linear infinite scroll !important;
+    }
+
+    .reachoutBreatherSection {
+      .reachoutBreatherWrapper {
+        flex-direction: column-reverse;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .reachoutLefti,
+      .reachoutRight {
+        max-width: 100%;
+      }
+
+      .reachoutLefti {
+        padding: 20px;
+        gap: 16px;
+      }
+
+      .go-BreatherHeading {
+        padding-bottom: 16px;
+      }
+
+      .supportInfoWrapper {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .supportDivi > img {
+        max-width: 32px;
+        max-height: 32px;
+      }
+
+      .supportcontentText,
+      .supportBoxiText {
+        font-size: 13px;
+      }
+    }
+
+    .heroSection {
+      padding-top: 60px !important;
+      min-height: 100vh;
+
+      .heroInfoList.mob-visible {
+        display: flex !important;
+      }
+
+      .heroInfoList li {
+        min-width: max-content !important;
+      }
+
+      .btnWhite {
+        width: 100%;
+      }
+
+      .heroSectionContent {
+        width: 100%;
+        padding: 0 12px;
+        transform: translate(-50%, -20%);
+      }
+
+      .heroSectionImg {
+        max-height: 85vh;
+      }
+
+      .go-HeroSubtitle {
+        margin-top: 8px;
+      }
+
+      .heroSectionBtnWrap {
+        margin-top: 24px;
+        width: 100%;
+        align-items: flex-start;
+        gap: 12px;
+        flex-direction: column;
+        padding: 0 16px;
+
+        a {
+          width: 100%;
+        }
+      }
+    }
+
+    .highSchool {
+      max-width: 45%;
+    }
+
+    .missionCenter {
+      padding-block: 32px;
+    }
+
+    .highDescp {
+      padding-top: 0 !important;
+      flex-direction: column-reverse;
+
+      .highDescpWrapper {
+        width: 100%;
+        padding: 32px 16px 16px;
+      }
+    }
+
+    .highQualifier {
+      background: var(--white3);
+      padding: 40px 0 !important;
+    }
+
+    .hSchoolBg p:last-child {
+      font-size: 24px;
+
+      span {
+        font-size: 22px;
+      }
+    }
+
+    .highStartupWeekndRight {
+      gap: 0;
+    }
+
+    .hSchoolBg {
+      padding-inline: 12px;
+      align-items: center;
+    }
+
+    .hSchoolBg p:first-child {
+      font-size: 12px;
+    }
+
+    .skyRocket {
+      .skyWrapper {
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .skyLeft {
+        max-width: unset !important;
+        gap: 40px;
+      }
+
+      .skyright {
+        max-width: unset !important;
+      }
+
+      .skyHeadWrapper {
+        gap: 8px;
+      }
+    }
+  }
+
+  .heroSectionImg {
+    height: 60vh;
+  }
+
+  .heroWrapper .heroright {
+    overflow: visible !important;
+  }
+
+  .hsslVotePopup {
+    top: 5%;
+  }
+
+  .hsslLeaderboardSharePopup .popupContainer {
+    max-width: 100%;
+  }
+
+  .highQualifyCard:nth-child(2) .highCardImg {
+    padding-bottom: 10px;
+  }
+
+  .hssl__wrapper {
+    flex-direction: column;
+  }
+
+  .hsslNewLeaderboard .hssl__wrapper .hsslCountDownBox {
+    max-width: 100%;
+    height: 420px;
+  }
+
+  .hsslNewLeaderboard .hssl__wrapper .hsslCountDownBox svg {
+    width: 100%;
+  }
+
+  .hsslVotePopup .popupContainer {
+    width: 90%;
+    padding: 15px;
+    overflow-y: auto;
+    height: 70%;
+  }
+
+  .hsslSocialMedia {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .hsslXploreUGProgrammes .programme-cards-wrapper {
+    justify-content: flex-start;
+  }
+
+  .hsslXploreUGProgrammes .programme-cards-wrapper .programme-cards {
+    min-width: 330px;
+  }
+
+  .feeProcessContainer {
+    margin-top: 30px;
+  }
+
+  .pgpRise-Mena .growing-fix-mena {
+    margin-top: 0px;
+  }
+
+  .text-24 {
+    font-size: 1.125rem;
+  }
+
+  .text-28 {
+    font-size: 1.25rem;
+  }
+
+  .text-16 {
+    font-size: 0.8rem;
+  }
+
+  .Monsoon .procedureImgGrad {
+    left: -8px !important;
+  }
+
+  .Monsoon .challengesHeadWrap {
+    flex-direction: row;
+  }
+
+  .Monsoon .gradientUnderline::after {
+    bottom: -60%;
+    background: url("https://files.mastersunion.link/resources/svg/degreeSection.svg");
+    background-repeat: no-repeat;
+  }
+
+  .Monsoon .mastersListDetails {
+    padding: 10px 20px 0;
+  }
+
+  .Monsoon .agendawrapper {
+    width: 100%;
+  }
+
+  .Monsoon .agendawrapper .agendainner {
+    width: 100%;
+  }
+
+  .Monsoon .mob-contain {
+    overflow: hidden;
+  }
+
+  .Monsoon .reelPoster {
+    height: 323px;
+  }
+
+  .Monsoon .rightSection .feeBox {
+    min-width: 300px;
+  }
+
+  .Monsoon .Tag.gradient {
+    width: 30%;
+    text-align: center;
+  }
+
+  .Monsoon .timeline .faqtabs {
+    overflow: auto;
+  }
+
+  .Monsoon .timeline .faqtabs li {
+    min-width: max-content;
+  }
+
+  .mob-col {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .fixingthanku {
+    padding: 0;
+  }
+
+  .milestoneWrapper {
+    display: flex;
+    overflow: auto;
+    gap: 20px;
+  }
+
+  .programmeGreyCard {
+    right: 0;
+    bottom: 0;
+  }
+
+  .milestoneWrapper {
+    overflow: auto;
+    gap: 20px;
+  }
+
+  .milestoneWrapper .BootcampCard {
+    min-width: 330px;
+  }
+
+  .LeaderProgramme .mastermindBodWrapper {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .heroWrapper {
+    flex-direction: column !important;
+  }
+
+  .youngleader {
+    padding-top: 80px !important;
+  }
+
+  .milestoneWrapper .BootcampCard {
+    min-width: 330px;
+  }
+
+  .rightSection .feeBox {
+    min-width: unset;
+  }
+
+  .mastermindBodWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .Leaderlogistics .mastermindBodWrapper {
+    gap: 20px;
+  }
+
+  .w-46 {
+    width: 100%;
+  }
+
+  .costDetails {
+    width: 100%;
+    padding: 20px;
+    border-radius: 16px;
+    top: 0;
+    left: 0;
+  }
+
+  .logisticsDetails {
+    padding: 20px;
+    width: 100%;
+  }
+
+  .reelWrapper {
+    min-height: 320px;
+  }
+
+  /* HSSL-LEADERBORD-MOBILE-DESIGN START */
+
+  .populatedteamList .searchBarWrapper {
+    border-radius: 4px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #171717;
+    padding-left: 11px;
+    margin-bottom: 20px;
+  }
+
+  .populatedteamList .searchBarWrapper input {
+    color: #737373;
+    padding: 11px 8px;
+    width: 100%;
+    background: transparent;
+  }
+
+  .populatedteamList .searchBarWrapper input::placeholder {
+    color: #737373 !important;
+  }
+
+  .populatedteamList .ranking-cardsWrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .populatedteamList .ranking-cardsWrap .ranking-Cards {
+    background: #171717;
+    padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 30px;
+    row-gap: 15px;
+    border-radius: 5px;
+    font-family: "go-regular";
+    font-size: 14px;
+  }
+
+  .populatedteamList .ranking-cardsWrap .ranking-Cards .left {
+    max-width: 25%;
+    color: var(--grey10);
+  }
+
+  .populatedteamList .ranking-cardsWrap .ranking-Cards .left.hFirst span,
+  .populatedteamList .ranking-cardsWrap .ranking-Cards .left.hSecond span,
+  .populatedteamList .ranking-cardsWrap .ranking-Cards .left.hThird span {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .populatedteamList .ranking-cardsWrap .ranking-Cards .right {
+    max-width: calc(75% - 30px);
+    width: 100%;
+    color: var(--grey10);
+  }
+
+  .populatedteamList .ranking-cardsWrap .ranking-Cards .right span {
+    color: var(--white);
+    font-family: "go-regular";
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .populatedteamList .ranking-cardsWrap .ranking-Cards .bottom {
+    max-width: 100%;
+    width: 100%;
+    color: var(--grey10);
+  }
+
+  .populatedteamList .ranking-cardsWrap .ranking-Cards .bottom span {
+    color: var(--white);
+    font-family: "go-regular";
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 120%;
+  }
+
+  .populatedteamList .ranking-cardsWrap .ranking-Cards .buttonSection {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .populatedteamList
+    .ranking-cardsWrap
+    .ranking-Cards
+    .buttonSection
+    .gradientButton {
+    max-width: 130px;
+    min-width: 140px;
+    width: 100%;
+  }
+
+  .populatedteamList .ranking-cardsWrap .ranking-Cards .buttonSection .seeMore {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .populatedteamList .gradientButton button {
+    padding: 10px 12px;
+    justify-content: center;
+  }
+
+  /* HSSL-LEADERBORD-MOBILE-DESIGN END */
+
+  /* hssl changes start */
+  .vHsslLeaderHeading .hide {
+    display: block !important;
+  }
+
+  /* hssl changes end */
+
+  /* new Winter week start */
+
+  .newWinter {
+    /* .newCourseSchedule #growingDiv {
+          top: 3.5%;
+          max-height: 2319px !important;
+      } */
+
+    /* new Winter Week end */
+  }
+
+  .newWinter .container {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .newWinter .newCourseSchedule .rightSection::before {
+    content: "";
+    width: 5px;
+    height: calc(100% + 80px);
+    background: var(--grey4);
+    position: absolute;
+    left: 4.2%;
+    z-index: 0;
+  }
+
+  .newWinter .newCourseSchedule #growingDiv {
+    left: 8%;
+    content: "";
+    width: 4px;
+    max-height: 363%;
+    background: linear-gradient(180deg, #f7d344, #e38330);
+    position: absolute;
+    z-index: 1;
+    top: 45px;
+  }
+
+  .newWinter .applicationProcessWrapper {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .newWinter .applicationRight,
+  .newWinter .applicationLeft {
+    max-width: unset;
+  }
+
+  .newWinter .newCourseDetail .costDetails {
+    min-height: 170px;
+  }
+
+  .newWinter .programmeGreyCard {
+    position: absolute;
+    bottom: 3px;
+    right: 2px;
+    background: var(--black5);
+    padding: 10px 15px;
+    border-radius: 10px;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .newWinter .mastermindText {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 160%;
+  }
+
+  .newWinter .masterContent {
+    font-family: "go-regular";
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 160%;
+  }
+
+  .newWinter .v_mastermindHeading .left {
+    max-width: unset;
+    width: 100%;
+  }
+
+  .newWinter .applicationProcess .contentWrap {
+    margin-top: 15px;
+  }
+
+  .newWinter .applicationContent {
+    margin-top: 15px;
+  }
+
+  /* MENA LANDING PAGE START */
+
+  .menaLanding .menaherolanding .left {
+    max-width: none;
+  }
+
+  .menaLanding .menaherolanding .rightmena {
+    max-width: none;
+    margin-top: 20px;
+  }
+
+  .menaLanding .menaWhitebg {
+    background: none;
+  }
+
+  .menaLanding .menaWhitebg .menaLandingsGrid {
+    max-width: 100%;
+    margin-top: 27px;
+  }
+
+  .menaLanding .menaWhitebg .menaLandingsGrid .BootcampCard {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .menaLanding .menaWhitebg .menaLandingsGrid .BootcampCard:not(:last-child) {
+    margin-bottom: 20px;
+  }
+
+  .menaLanding .menaWhitebg .menaLandingsGrid .BootcampCard img {
+    border-radius: 6px;
+  }
+
+  .menaLanding .heroWrapper {
+    gap: 0;
+  }
+
+  .menaLanding .detailsBox {
+    max-width: fit-content;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .menaLanding .feeProcess {
+    padding: 55px 0 !important;
+  }
+
+  .menaLanding .collaboration .innerBox1 {
+    flex-wrap: wrap;
+    width: 100%;
+    align-items: stretch;
+    margin-top: 20px;
+  }
+
+  .menaLanding .collaboration .innerBox1 .wrapperinner {
+    max-width: calc(50% - 10px);
+  }
+
+  /* MENA LANDING PAGE End */
+
+  /* summerstartup start */
+
+  .ssWeek .sectionHeading {
+    font: 1.25rem "go-bold";
+  }
+
+  .summerStartupEvent .mastermindBodWrapper .left {
+    width: unset;
+  }
+
+  .summerStartupEvent .mastermindBodWrapper .right {
+    width: unset;
+    max-width: 100%;
+  }
+
+  .summerStartupEvent .mastermindBodWrapper .right::after {
+    width: 263px;
+    right: 0;
+    top: -16%;
+  }
+
+  .certificationProgramme {
+    .winPriceWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .winPriceLeft {
+      width: 100%;
+      max-width: unset;
+    }
+
+    .winPriceRight {
+      margin-top: 30px;
+    }
+
+    .gradientBox {
+      padding: 20px;
+    }
+
+    .cardDetails {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .businessesBuilt .logoImg {
+      max-width: unset;
+    }
+
+    .skillFocus {
+      background: var(--black);
+    }
+  }
+
+  .newEventsShowcase .rightEventWrapper {
+    width: 100%;
+  }
+
+  .Leaderlogistics .costPrice {
+    font-size: 20px !important;
+  }
+
+  .certificationProgramme .imageWrapper {
+    margin-top: 20px;
+  }
+
+  /* Ai hackathon */
+
+  .techDsaiHomePage.dsaiRedesign.aiHackathon {
+    .impactLeftBoxInner img {
+      border-radius: 4px;
+    }
+
+    .techHeroSection {
+      padding-top: 50px !important;
+      padding-bottom: 0px !important;
+      border-bottom: 1px solid var(--grey3);
+    }
+
+    .go-HighlightHeading {
+      font-size: 22px;
+    }
+
+    .aiGeadientPoint {
+      font-size: 13px;
+    }
+
+    .heroSectionImg {
+      height: unset;
+    }
+
+    .gradientBackground.gradientBoxiSection .go-HighlightHeading {
+      font-size: 22px;
+      line-height: 120%;
+    }
+
+    .aiSubHeading {
+      font-size: 14px;
+    }
+
+    .claimCardParent .gridBox {
+      min-height: 400px;
+    }
+
+    .claimSwiper {
+      padding: 0;
+      padding-left: 5px;
+      margin-top: 40px;
+    }
+
+    .expertsDivi {
+      gap: 4px;
+    }
+
+    .techHeroSectionWrapper {
+      height: 100%;
+    }
+
+    .heroWrapperHeadingDiv.new {
+      /* width: 100%; */
+      max-width: unset !important;
+      left: 0;
+    }
+
+    .edgeWrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .buttonsParent {
+      flex-direction: column !important;
+      gap: 8px;
+    }
+
+    .waitingSection {
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .waitingImage {
+      max-width: unset !important;
+    }
+
+    .waitingRight {
+      max-width: unset !important;
+      padding-top: unset;
+    }
+
+    .waitingBoxiWrapper {
+      flex-wrap: nowrap;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .waitingBoxi {
+      max-width: unset !important;
+    }
+
+    .edgeRight {
+      max-width: 100%;
+    }
+
+    .edgeLogo {
+      max-width: 48%;
+    }
+
+    .masterLogos {
+      margin-top: 12px;
+      width: 100%;
+      /* max-width: 60px; */
+    }
+
+    .podcastSection.white {
+      .container {
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    .podcastSection.white .podcastWrapper {
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .time-box {
+      padding-inline: 12px !important;
+    }
+
+    .podcastSection.white .time-box h1 {
+      font-size: 74px;
+    }
+
+    .podcastSection.white .time-box p {
+      font-size: 16px;
+    }
+
+    .skyWrapper {
+      flex-direction: column;
+    }
+
+    .skyLeft {
+      max-width: unset !important;
+      gap: 40px;
+    }
+
+    .skyHeadWrapper,
+    .headingBuilding,
+    .podcastHeadingWrapper {
+      gap: 8px;
+    }
+
+    .skyright {
+      max-width: unset !important;
+    }
+
+    .studentBuildingWrapper .watchPlayText {
+      top: 92%;
+      left: 70%;
+      width: 100%;
+    }
+
+    .ugHeading {
+      font-size: 22px;
+      min-height: 86px;
+    }
+
+    .ugTextEvent {
+      font-size: 13px;
+    }
+
+    .heroWrapperButtons .btnWhite {
+      width: 100%;
+    }
+
+    .faqquestionWrap {
+      gap: 8px;
+    }
+
+    .claimSection {
+      background: var(--black);
+    }
+
+    .skySubHead {
+      font-size: 16px;
+    }
+
+    .skyWrapper {
+      gap: 40px;
+    }
+
+    .podcastSection.white {
+      padding-bottom: 0 !important;
+    }
+
+    .marquee3 {
+      overflow: hidden !important;
+    }
+
+    .heroWrapperButtons {
+      gap: 12px;
+    }
+
+    .blurBgButton {
+      border: 1px solid var(--white);
+      width: 100%;
+      max-width: unset !important;
+    }
+
+    .whiteApplyButton,
+    .downloadBroucherButton {
+      padding: 12px 22px;
+      max-width: fit-content;
+    }
+
+    .floatingText {
+      font-size: 18px;
+    }
+
+    .borderGradient .gridBox::after {
+      background: unset;
+    }
+
+    .gridBox:hover .overLayDetail {
+      display: flex;
+    }
+
+    .innovatorBelowWrap {
+      flex-direction: column;
+    }
+
+    .skyFormHeading {
+      font-size: 18px;
+      font-family: var(--go-regular);
+      font-weight: 400;
+      margin-bottom: unset !important;
+    }
+
+    .registerForm .form {
+      margin-top: 16px;
+    }
+
+    .waitingRight {
+      padding-left: 15px;
+      padding-right: 15px;
+    }
+
+    .impactHeading {
+      gap: 4px;
+    }
+
+    .impactScroll .impactLeftBoxInner {
+      margin-top: 40px;
+    }
+
+    .priceHeading {
+      font-size: 20px;
+    }
+
+    .aiGradientUpper {
+      gap: unset;
+    }
+
+    .aiSubHeading {
+      margin-top: 8px;
+    }
+
+    .aiPoints {
+      margin-top: 16px;
+    }
+
+    .gradientRightDivi {
+      padding: 16px;
+    }
+
+    .teachingHeadWrap .headingWrap {
+      gap: 8px;
+    }
+
+    .edgeLeft {
+      max-width: unset;
+    }
+
+    .aiMasterLogo {
+      margin-top: 10px;
+      width: 120px;
+    }
+
+    .overlayHeading {
+      color: var(--black) !important;
+    }
+
+    .faqquestionWrap .toggler {
+      max-width: 36px;
+    }
+
+    .downloadBroucherButton {
+      font-size: 14px !important;
+    }
+
+    .podcastLeft {
+      padding: 0 15px;
+    }
+
+    .faqquestionWraps,
+    .faqquestionWrap {
+      gap: 0;
+    }
+
+    .exploreUgWrapper {
+      width: 100%;
+    }
+
+    .ugCardsWrapper {
+      width: 100%;
+      overflow: auto;
+      gap: 10px;
+    }
+
+    .ugEventBoxi {
+      min-width: 320px;
+      min-height: 400px;
+    }
+
+    .exploreUg .buttonPlay {
+      left: 110px;
+      top: 36px;
+    }
+
+    .whiteFillButton {
+      max-width: 100%;
+      justify-content: center;
+    }
+
+    .ugTextEvent {
+      min-height: 63px;
+    }
+
+    .LogoFixed {
+      width: 56px;
+    }
+
+    .LogoWidth {
+      width: 71px;
+    }
+
+    .buttonsParent {
+      margin-top: unset;
+    }
+
+    .gradientRightDivi {
+      gap: 24px;
+    }
+
+    .sectionParaTech {
+      font-size: 14px;
+      line-height: 150%;
+      color: var(--grey16) !important;
+    }
+
+    .innovatorBelowWrap .diviName {
+      font-size: 18px;
+    }
+
+    .pointerPara {
+      font-size: 13px;
+    }
+
+    .go-BlockHeading {
+      font-size: 20px;
+    }
+
+    .fr-BlockHeading {
+      font-size: 18px;
+    }
+
+    .waitingContent {
+      gap: 4px;
+    }
+
+    .headingBuilding {
+      padding: 0px 16px !important;
+    }
+
+    .registerForm {
+      padding: 16px;
+    }
+
+    .thanku .thankyouText p {
+      padding-inline: 16px !important;
+    }
+
+    @media (min-width: 320px) and (max-width: 390px) {
+      .heroWrapperHeadingDiv {
+        top: -271px;
+      }
+    }
+
+    .whiteupload {
+      .formLeftHead {
+        font-size: 30px !important;
+      }
+    }
+  }
+
+  .bluePrint {
+    .muHeroButtonWrap {
+      margin-top: 24px !important;
+    }
+
+    .homeHeroSection {
+      .heroSubHeading {
+        font-size: 14px;
+      }
+
+      .homeheroHeading {
+        font: 30px "go-regular";
+
+        .FrHeading {
+          font-size: 32px;
+        }
+      }
+
+      .overlayHero {
+        padding-inline: 16px;
+        bottom: 77px;
+      }
+
+      .bgHeroImage {
+        filter: grayscale(0);
+      }
+
+      .bgHeroVideoWrap {
+        height: 90vh;
+      }
+
+      .heroTag {
+        padding-block: 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: unset;
+      }
+
+      .heroImpactButton {
+        gap: 8px;
+        align-items: center;
+        padding: 8px 14px;
+      }
+
+      .impactText {
+        font-size: 13px;
+        font-family: var(--go-medium);
+      }
+
+      .impactMob {
+        font-size: 10px;
+        font-family: var(--go-regular);
+        line-height: 120%;
+        text-transform: uppercase;
+        align-items: center;
+        letter-spacing: 1px;
+        color: var(--grey4);
+      }
+
+      .mobBtn {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    .skyRocket {
+      .skyBelowWrap {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+      }
+    }
+
+    .aboutRajiv {
+      padding: 0px !important;
+      padding-top: 60px !important;
+      background: url("https://images.mastersunion.link/uploads/16072025/v1/Vectorimage.webp")
+        no-repeat;
+      background-size: cover;
+
+      .rajivSubText {
+        font-size: 14px !important;
+      }
+
+      .rajivWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: unset;
+      }
+
+      .rajivLeft {
+        max-width: 100%;
+      }
+
+      .rajivRight {
+        max-width: 100%;
+      }
+
+      .masterBox {
+        padding: 14px 20px;
+        bottom: 17px;
+        right: 0;
+        gap: 4px;
+      }
+
+      .masterHeading {
+        font-size: 20px;
+      }
+
+      .masterButton {
+        border-radius: 4px;
+        font-size: 10px;
+        text-align: left;
+      }
+    }
+
+    .enrollmentSection {
+      background: var(--black);
+
+      .fourCards {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .gridCardBlack {
+        display: none;
+      }
+
+      .threeCards {
+        grid-template-columns: 1fr;
+      }
+
+      .gridCard {
+        max-height: 100%;
+      }
+
+      .gridCard:hover {
+        .lifeCardOverlay {
+          opacity: unset;
+          bottom: unset;
+        }
+      }
+
+      .onhoverOverlay {
+        opacity: 1 !important;
+        gap: 12px;
+        background: unset;
+        bottom: 0 !important;
+      }
+
+      .overlayMob {
+        font-size: 13px;
+      }
+
+      .overlayText {
+        font-size: 14px !important;
+        width: 90%;
+      }
+
+      .enrollOverlay {
+        top: 75%;
+      }
+    }
+
+    .graduatePrestigiousSection {
+      .container {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+
+      .degreeHeadingWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .graduatePrestigiousWrapper {
+        padding: 24px 12px;
+        top: -6rem;
+      }
+
+      .degreeListWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .degreePara {
+        font-size: 13px;
+      }
+
+      .degreeHeading {
+        font-size: 18px;
+      }
+    }
+
+    .higherStudies {
+      max-height: 170vh;
+      padding-top: 0px !important;
+
+      .higherStudiesLeft {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 0;
+        margin-top: -2px;
+        z-index: 1;
+      }
+
+      .techUpperHighlightLeft {
+        flex-wrap: wrap !important;
+        row-gap: 8px;
+      }
+
+      .careerTabUl {
+        padding-left: 16px;
+        gap: 0;
+        overflow: auto;
+      }
+
+      .higherStudiesLeft > img {
+        min-height: unset;
+      }
+
+      .higherStudiesWrapper {
+        flex-direction: column !important;
+        gap: 24px !important;
+      }
+
+      .higherStudiesLeft.masterImage {
+        border-radius: 0;
+      }
+
+      .higherStudyContent > svg {
+        max-width: 46px;
+        max-height: 46px;
+      }
+
+      .careerTabUl li {
+        border-bottom: 1px solid var(--grey18);
+      }
+
+      .masterImage > img {
+        border-radius: 0;
+      }
+
+      .companiesLogoDivi {
+        max-height: unset;
+      }
+
+      .techUpperHighlightLeft .companiesLogoDivi {
+        max-width: 140px !important;
+      }
+
+      .bottomCareerContent {
+        overflow: auto !important;
+        justify-content: flex-start;
+        flex-wrap: nowrap !important;
+      }
+
+      .diviCareer {
+        padding: unset;
+        padding-inline: 16px;
+      }
+
+      .upperContentTab {
+        padding-inline: unset;
+      }
+    }
+
+    .tetrStartupSection {
+      padding-left: 16px !important;
+      padding-right: 16px !important;
+
+      .tetrTextBold {
+        color: var(--grey18);
+      }
+
+      .container {
+        padding: 32px 16px;
+        background-image: unset;
+      }
+
+      .startUpWrapBlock {
+        background: unset;
+        gap: 32px;
+      }
+
+      .startUpWrapBlock {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        max-height: unset;
+
+        .leftWrapStartup {
+          max-width: 100%;
+          transform: unset;
+        }
+
+        .rightWrapStartup {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+
+          .go-HighlightHeading {
+            color: var(--white);
+          }
+
+          p {
+            color: var(--grey10);
+            margin-top: unset;
+          }
+        }
+      }
+    }
+
+    .roundTable {
+      background-image: unset;
+      height: 85dvh;
+
+      .roundHeading {
+        font-size: 23px;
+      }
+
+      .roundItalic {
+        font-size: 28px;
+      }
+
+      .roundSubHead {
+        font-size: 13px;
+      }
+
+      .roundHeadWrap {
+        padding-inline: 16px;
+      }
+
+      .roundImgDivi {
+        left: 0;
+        max-width: 326px;
+      }
+
+      .roundImgDiviBottom {
+        left: 0;
+        max-width: 185px;
+      }
+
+      .roundImgDiviRight {
+        right: 0;
+        top: 597px;
+        max-width: 180px;
+      }
+
+      .roundWrapper {
+        position: relative;
+        z-index: 1;
+      }
+    }
+
+    .traderManager {
+      .traderCardsBox {
+        max-width: 300px;
+        min-height: 230px;
+      }
+    }
+  }
+
+  .weekendStartup {
+    .heroSection {
+      padding-top: 60px !important;
+      padding-bottom: 0px !important;
+
+      .heroSectionContent {
+        width: 100%;
+        padding: 0 12px;
+        transform: translate(-50%, -25%);
+
+        .go-HeroTitle {
+          margin-top: 8px !important;
+        }
+      }
+
+      .herosectionLogoWrapper{
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .heroSectionLogo{
+      max-width: 78px;
+      width: 100%;
+    }
+    .heroSectionX{
+      max-width: 12px;
+      width: 100%;
+    }
+
+
+      .heroSectionImg {
+        height: 85vh;
+      }
+
+      .go-HeroSubtitle {
+        margin-top: 8px;
+      }
+
+      .heroHeadingBold {
+        font-size: 30px;
+      }
+
+      .heroSectionBtnWrap {
+        margin-top: 24px;
+        width: 100%;
+        align-items: flex-start;
+        gap: 12px;
+        flex-direction: column;
+        padding: 0 16px;
+
+        a,
+        button {
+          width: 100%;
+        }
+      }
+
+      .marquee3.mobVisible {
+        display: flex !important;
+        margin-top: 23px;
+        pointer-events: none;
+        overflow: hidden;
+        align-items: center;
+      }
+
+      .marquee__inner-wrap {
+        height: 100%;
+        width: 100%;
+      }
+
+      .marquee__inner_reverse {
+        height: 100%;
+        width: max-content;
+        align-items: center;
+        display: flex;
+        position: relative;
+        animation: marqueeReverse 30s linear infinite;
+        will-change: transform;
+      }
+
+      .subPointer {
+        font-size: 16px;
+        text-wrap: nowrap;
+      }
+    }
+
+    .germanImmersion {
+      .germanImmersionWrapper {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .germanBtnWrapper {
+        gap: 16px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .germanBreatherLeft,
+      .masterRight {
+        max-width: 100%;
+      }
+
+      .germanImageBoxi > img {
+        min-height: unset;
+      }
+
+      .btnJapan {
+        margin-top: 8px;
+      }
+
+      .germanBreatherLeft {
+        padding: 16px;
+        align-items: flex-start;
+        gap: 16px;
+        justify-content: unset;
+        min-height: unset;
+
+        .btnBlack {
+          width: 100%;
+        }
+      }
+
+      .germanPara {
+        font-size: 14px;
+      }
+
+      .btnBlack {
+        width: 100%;
+      }
+
+      .germanflagsWrapper {
+        gap: 12px;
+
+        svg {
+          max-height: 47px;
+          max-width: 68px;
+        }
+      }
+
+      .swiper-pagination {
+        bottom: unset !important;
+        margin-top: 8px;
+        left: 42% !important;
+      }
+
+      .bottomBlackOverlay {
+        display: none;
+      }
+    }
+
+    .cityBreather {
+      .cityBelowWrap {
+        flex-direction: column;
+      }
+
+      .cityLeft {
+        max-width: 100%;
+      }
+
+      .cityRight {
+        max-width: 100%;
+      }
+    }
+
+    .programFlowMob {
+      background: var(--black);
+
+      .flowUpperWrap {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        align-items: center;
+      }
+
+      .campusButtonDivi {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 2px solid var(--grey3);
+        /* background: linear-gradient(var(--black) 0 0) padding-box, var(--gradient) border-box; */
+        border-radius: 32px;
+        padding: 6px;
+      }
+
+      .withoutArrowWhiteBgBtn {
+        display: flex;
+        padding: 12px 40px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 54px;
+        border: 1px solid var(--black);
+        color: var(--white) !important;
+        font-size: 16px;
+        font-family: var(--go-medium);
+        line-height: 120%;
+        max-width: fit-content;
+        background: var(--black);
+        cursor: pointer;
+        transition: 0.4s ease-in-out;
+      }
+
+      .withoutArrowWhiteBgBtn.active {
+        background-color: var(--white);
+        color: black !important;
+        transition: 0.4s ease-in-out;
+      }
+
+      .timelineItem {
+        position: relative;
+        padding-left: 50px;
+      }
+
+      .timelineWrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        margin-top: 24px;
+      }
+
+      .timelineWrapper::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 20px;
+        width: 2px;
+        height: 100%;
+        border-left: 2px dashed #3bc4d2;
+      }
+
+      .timelineContent {
+        color: #e0e0e0;
+        font-family: Arial, sans-serif;
+      }
+
+      .dayTag {
+        display: inline-block;
+        background: var(--black5);
+        padding: 6px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: var(--go-medium);
+        color: var(--white);
+        margin-bottom: 8px;
+        line-height: 120%;
+      }
+
+      .timelineContent p {
+        font-size: 13px;
+        line-height: 150%;
+        color: var(--grey18);
+      }
+
+      .timelineItem:after {
+        content: "";
+        background: url(https://images.mastersunion.link/uploads/05092025/v1/circleImg.svg);
+        position: absolute;
+        height: 100%;
+        width: 5%;
+        left: 13px;
+        background-repeat: no-repeat;
+        top: 0px;
+      }
+    }
+
+    .startups {
+      overflow: hidden !important;
+
+      .lensBoxi {
+        max-width: 125px;
+      }
+    }
+
+    .futureInvest {
+      padding-bottom: 234px !important;
+
+      .futureInvestContent {
+        display: flex;
+        flex-direction: column;
+        padding: 37px 16px;
+        align-items: flex-start;
+        gap: 12px;
+        border-radius: 16px;
+      }
+
+      .futureInvsetbox {
+        border-bottom: 1px solid var(--grey3);
+        border-right: unset;
+        padding-bottom: 12px;
+        padding-left: unset;
+        padding-right: unset;
+      }
+
+      .futureInvsetbox:nth-child(3) {
+        border-bottom: unset;
+      }
+
+      .futurePercent {
+        font-size: 20px;
+      }
+
+      .futureText {
+        font-size: 13px;
+      }
+
+      .futureInvestTextWrap {
+        bottom: -55%;
+      }
+    }
+
+    .individualFee {
+      .individualWrapper {
+        flex-direction: column;
+        gap: unset;
+      }
+
+      .individualContent {
+        width: 100%;
+        max-width: 326px;
+        background-image: unset;
+        padding: 30px;
+        left: 0;
+        border-radius: 16px 16px 0px 0px;
+      }
+
+      .registrationText {
+        font-size: 14px;
+      }
+
+      .feeContent {
+        width: 100%;
+        max-width: 100%;
+        padding: 50px 27px;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 313px;
+        right: 0px;
+      }
+
+      .boardroomFeeDetail {
+        gap: 24px;
+      }
+
+      .feeNote {
+        font-size: 16px;
+      }
+
+      .feeText {
+        align-items: end;
+      }
+
+      .feeText img {
+        position: relative;
+        bottom: 12px;
+      }
+
+      .costPrice {
+        font-size: 24px;
+      }
+
+      .costGreyPrice {
+        font-size: 16px;
+      }
+
+      .gradientWhiteBtn button {
+        font-size: 12px;
+      }
+
+      .feeDetailUpper .gradientWhiteBtn {
+        min-width: max-content;
+      }
+
+      .registeredInfo {
+        align-items: flex-start;
+
+        img {
+          margin-top: 2px;
+        }
+      }
+    }
+
+    .skyRocket {
+      .skyWrapper {
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .skyright {
+        max-width: 100%;
+      }
+
+      .skyLeft {
+        max-width: 100%;
+      }
+    }
+
+    .internshipSection {
+      background: var(--black);
+      padding: 60px 0px !important;
+
+      .container {
+        padding: 0 8px !important;
+      }
+
+      .internshipUpperWrapper {
+        gap: 24px;
+      }
+
+      .p16 {
+        padding-inline: 16px;
+      }
+
+      .internshipWrapper {
+        padding: 0px 8px;
+        background: unset;
+      }
+
+      .internshipCardWrapper {
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .internshipStudentUpperDivi {
+        gap: 16px;
+        min-height: 166px;
+      }
+
+      .internshipStudentDetail {
+        padding-inline: 16px;
+      }
+
+      .studentCompanyWrapper {
+        gap: 8px;
+      }
+
+      .internshipStudentBelow {
+        margin-top: 16px;
+      }
+
+      .studentThoughtPara {
+        padding-bottom: 16px;
+        padding-top: 16px;
+        min-height: 79px !important;
+      }
+    }
+
+    .highDescp {
+      padding-top: 0 !important;
+      flex-direction: column-reverse;
+
+      .highDescpWrapper {
+        width: 100%;
+        padding: 32px 16px 16px;
+      }
+
+      .h-list p {
+        font-size: 16px;
+      }
+    }
+
+    .dsaiMasters {
+      /* Hide scrollbar for webkit browsers */
+      scrollbar-width: none;
+      /* Firefox */
+      -ms-overflow-style: none;
+      /* Internet Explorer 10+ */
+
+      /* Hide scrollbar for webkit browsers */
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .newMasterBoxImg {
+        min-width: 254px;
+      }
+
+      .newMasterImgBox > img {
+        min-height: 192px;
+      }
+
+      .dsaiMastersMobile .container {
+        padding-right: 0 !important;
+      }
+    }
+
+    .buildingProgramme {
+      padding: 0px !important;
+      padding-top: 60px !important;
+      padding-bottom: 100px !important;
+
+      .swiper-pagination {
+        width: 90% !important;
+        position: absolute !important;
+        z-index: 10;
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        justify-content: center;
+        bottom: 8% !important;
+        overflow: hidden !important;
+        left: 8% !important;
+      }
+
+      .buildingSwipeWrap {
+        padding-left: 4%;
+      }
+    }
+
+    .reachoutBreatherSection {
+      .reachoutBreatherWrapper {
+        flex-direction: column-reverse;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .reachoutLefti,
+      .reachoutRight {
+        max-width: 100%;
+      }
+
+      .reachoutLefti {
+        padding: 20px;
+        gap: 16px;
+      }
+
+      .go-BreatherHeading {
+        padding-bottom: 16px;
+      }
+
+      .supportInfoWrapper {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .supportDivi > img {
+        max-width: 32px;
+        max-height: 32px;
+      }
+
+      .supportcontentText,
+      .supportBoxiText {
+        font-size: 13px;
+      }
+    }
+
+   
+  }
+
+  .winterSkill.weekendStartup {
+    .impactScroll {
+      padding: 40px 0 !important;
+      padding-bottom: 60px !important;
+
+      .impactLeft {
+        width: 100% !important;
+      }
+
+      .masterPlay > img {
+        backdrop-filter: blur(2px);
+        border-radius: 60px;
+      }
+
+      .impactHeadingWrapper {
+        padding: 0 0 32px 0 !important;
+      }
+
+      .impactMobCard {
+        display: flex;
+        padding: 12px;
+        background: var(--grey17);
+        border: 1px solid var(--grey3);
+        border-radius: 12px;
+        flex-direction: column;
+        gap: 24px;
+        position: sticky;
+        top: 5rem;
+        min-height: 452px;
+      }
+
+      .impactMobCard:last-child {
+        min-height: 535px;
+      }
+
+      .mobImpactImage {
+        max-height: 260px;
+        overflow: hidden !important;
+      }
+
+      .circleNumber {
+        max-height: 30px !important;
+      }
+
+      .impactLeftBoxInner {
+        gap: 60px;
+        margin-top: 60px;
+        margin-top: 32px !important;
+      }
+
+      .pointerPara {
+        font-size: 13px !important;
+      }
+
+      .techPointerChild {
+        align-items: center;
+      }
+
+      .impactLeftBox {
+        position: relative;
+        padding-left: 0 !important;
+      }
+
+      .impactLeftBox::after {
+        scale: 0.8;
+        left: -10px;
+        display: none;
+      }
+
+      .impactLeftBoxInner::before {
+        left: 10px;
+        display: none;
+      }
+
+      .ulListWrapper {
+        margin-top: 12px !important;
+
+        .appliedPara {
+          font-size: 14px;
+        }
+
+        .poweredDivi > img {
+          max-width: 16px;
+        }
+
+        .techPointersParent {
+          gap: 5px !important;
+        }
+      }
+
+      .impactButton {
+        padding: 6px 12px !important;
+        font-size: 12px !important;
+        line-height: unset !important;
+        font-family: var(--go-regular);
+      }
+
+      .impactLeftBoxInner {
+        gap: 40px;
+      }
+
+      .impactLeftUpper {
+        display: flex;
+        flex-direction: column;
+        gap: 8px !important;
+        align-items: flex-start;
+      }
+
+      .poweredDivi {
+        gap: 12px !important;
+      }
+
+      .circleNumberMob {
+        width: 100%;
+        height: 100%;
+        max-width: 24px;
+        max-height: 24px;
+        align-items: center;
+        padding: 7px;
+        border: 1px solid #525252;
+        border-radius: 60px;
+        color: var(--white);
+        font-family: var(--go-regular);
+        font-size: 11px;
+        display: flex;
+        justify-content: center;
+      }
+    }
+
+    .waitingSection {
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .waitingImage {
+      max-width: unset !important;
+    }
+
+    .waitingRight {
+      max-width: unset !important;
+      padding-top: unset;
+    }
+
+    .waitingBoxiWrapper {
+      flex-wrap: nowrap;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .waitingBoxi {
+      max-width: unset !important;
+    }
+
+    .waitingRight {
+      padding: 0 15px !important;
+    }
+
+    .priceHeading {
+      font-size: 20px !important;
+    }
+  }
+
+  .caseUnionThird {
+    .textFlow {
+      .textFlowWrapper {
+        .textFlowWG {
+          font-size: 24px;
+          line-height: 120%;
+          font-family: var(--go-medium);
+        }
+
+        .textFlowBelow {
+          margin-top: 32px;
+          font-size: 18px;
+          line-height: 120%;
+        }
+      }
+    }
+
+    .podcastSection {
+      .container {
+        margin: 0;
+        padding: 0;
+      }
+
+      .podcastBelow {
+        padding: 0 15px;
+      }
+
+      .podcastWrapper {
+        gap: 24px;
+      }
+
+      .podcastUpper {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .podcastBelow {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .time-box h1 {
+        font-size: 74px;
+      }
+
+      .time-box {
+        width: 32%;
+        padding-inline: 12px !important;
+      }
+
+      .podcastDate {
+        font-size: 16px;
+      }
+
+      .podcastVenue {
+        font-size: 16px;
+      }
+
+      .time-box p {
+        font: 16px "go-regular";
+      }
+
+      .podcastContent {
+        font-size: 14px;
+      }
+
+      .btnWhite {
+        align-items: center;
+      }
+    }
+
+    .futureTiltSection {
+      .futureTiltWrapper {
+        flex-direction: column-reverse;
+        gap: 32px;
+      }
+
+      .swiper-slide-active {
+        max-height: unset !important;
+        border: unset !important;
+      }
+
+      .swiper-pagination-bullet-active {
+        width: 40px !important;
+        background: var(--grey) !important;
+      }
+
+      .swiper-pagination-bullet {
+        background: var(--grey) !important;
+        opacity: 1;
+        transition: 0.4s ease;
+      }
+
+      .swiper-slide-prev {
+        margin-right: 0px !important;
+      }
+
+      .swiper-slide-next {
+        margin-left: 0px !important;
+      }
+
+      .futureRight {
+        max-width: 100%;
+      }
+
+      .futureLeftList {
+        gap: 12px;
+      }
+
+      .futureUpperLefti {
+        gap: 20px;
+      }
+    }
+
+    .caseUnion {
+      padding: 60px 0;
+
+      .caseUnionWrapper {
+        gap: 8px;
+      }
+
+      .heroParaTech {
+        font-size: 13px;
+      }
+
+      .gradientAmountWrapper {
+        margin-top: 16px;
+        gap: 11px;
+      }
+
+      .gradientAmountBoxi:not(:last-child) {
+        padding-right: 11px;
+        width: 100%;
+        max-width: 25%;
+      }
+
+      .digitsPara {
+        font-size: 20px;
+        padding-top: 10px;
+      }
+
+      .unitsAmount {
+        font-size: 20px;
+      }
+
+      .cashPara {
+        font-size: 12px;
+      }
+    }
+
+    .sponsorsSection {
+      .companyLogo {
+        max-width: 115px;
+        max-height: 46px;
+      }
+    }
+
+    .insightSection {
+      padding-bottom: 100px !important;
+
+      .swiper-pagination {
+        bottom: 54px !important;
+        left: 0 !important;
+        position: absolute !important;
+        width: 100% !important;
+      }
+    }
+
+    .reachoutBreatherSection {
+      .reachoutBreatherWrapper {
+        flex-direction: column-reverse;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .reachoutLefti,
+      .reachoutRight {
+        max-width: 100%;
+      }
+
+      .reachoutLefti {
+        padding: 20px;
+        gap: 16px;
+      }
+
+      .go-BreatherHeading {
+        padding-bottom: 16px;
+      }
+
+      .supportInfoWrapper {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .supportDivi > img {
+        max-width: 32px;
+        max-height: 32px;
+      }
+
+      .supportcontentText,
+      .supportBoxiText {
+        font-size: 13px;
+      }
+    }
+
+    .heroSection {
+      padding-top: 0px !important;
+
+      .herotextPoints {
+        font-size: 30px;
+      }
+
+      .heroSectionSubheading {
+        font: 12px var(--go-medium);
+        margin-bottom: 32px;
+      }
+
+      .starPointers {
+        max-width: 12px;
+        width: 100%;
+      }
+
+      .headingPointsWrapper {
+        gap: 4px;
+      }
+    }
+  }
+
+  .weekendStartup.aiBuildathon {
+    .heroSection {
+      padding-top: 60px !important;
+      padding-bottom: 0px !important;
+
+      .heroSectionContent {
+        width: 100%;
+        padding: 0 12px;
+        transform: translate(-50%, -25%);
+
+        .go-HeroTitle {
+          margin-top: 8px !important;
+        }
+      }
+
+      .heroSectionImg {
+        height: 85vh;
+      }
+
+      .go-HeroSubtitle {
+        margin-top: 8px;
+      }
+
+      .heroHeadingBold {
+        font-size: 30px;
+      }
+
+      .heroSectionBtnWrap {
+        margin-top: 24px;
+        width: 100%;
+        align-items: flex-start;
+        gap: 12px;
+        flex-direction: column;
+        padding: 0 16px;
+
+        a,
+        button {
+          width: 100%;
+        }
+      }
+
+      .marquee3.mobVisible {
+        display: flex !important;
+        margin-top: 23px;
+        pointer-events: none;
+        overflow: hidden;
+        align-items: center;
+      }
+
+      .marquee__inner-wrap {
+        height: 100%;
+        width: 100%;
+      }
+
+      .marquee__inner_reverse {
+        height: 100%;
+        width: max-content;
+        align-items: center;
+        display: flex;
+        position: relative;
+        animation: marqueeReverse 30s linear infinite;
+        will-change: transform;
+      }
+
+      .subPointer {
+        font-size: 16px;
+        text-wrap: nowrap;
+      }
+    }
+
+    .germanImmersion {
+      .germanImmersionWrapper {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .germanBtnWrapper {
+        gap: 16px;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .germanBreatherLeft,
+      .masterRight {
+        max-width: 100%;
+      }
+
+      .germanImageBoxi > img {
+        min-height: unset;
+      }
+
+      .btnJapan {
+        margin-top: 8px;
+      }
+
+      .germanBreatherLeft {
+        padding: 16px;
+        align-items: flex-start;
+        gap: 16px;
+        justify-content: unset;
+        min-height: unset;
+
+        .btnBlack {
+          width: 100%;
+        }
+      }
+
+      .germanPara {
+        font-size: 14px;
+      }
+
+      .btnBlack {
+        width: 100%;
+      }
+
+      .germanflagsWrapper {
+        gap: 12px;
+
+        svg {
+          max-height: 47px;
+          max-width: 68px;
+        }
+      }
+
+      .swiper-pagination {
+        bottom: unset !important;
+        margin-top: 8px;
+        left: 42% !important;
+      }
+
+      .bottomBlackOverlay {
+        display: none;
+      }
+    }
+
+    .reachoutBreatherSection {
+      .reachoutBreatherWrapper {
+        flex-direction: column-reverse;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .reachoutLefti,
+      .reachoutRight {
+        max-width: 100%;
+      }
+
+      .reachoutLefti {
+        padding: 20px;
+        gap: 16px;
+      }
+
+      .go-BreatherHeading {
+        padding-bottom: 16px;
+      }
+
+      .supportInfoWrapper {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .supportDivi > img {
+        max-width: 32px;
+        max-height: 32px;
+      }
+
+      .supportcontentText,
+      .supportBoxiText {
+        font-size: 13px;
+      }
+    }
+
+    .dsaiMasters {
+      /* Hide scrollbar for webkit browsers */
+      scrollbar-width: none;
+      /* Firefox */
+      -ms-overflow-style: none;
+      /* Internet Explorer 10+ */
+
+      /* Hide scrollbar for webkit browsers */
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .newMasterBoxImg {
+        min-width: 254px;
+      }
+
+      .newMasterImgBox > img {
+        min-height: 192px;
+      }
+
+      .dsaiMastersMobile .container {
+        padding-right: 0 !important;
+      }
+    }
+
+    .individualFee {
+      .individualWrapper {
+        flex-direction: column;
+        gap: unset;
+      }
+
+      .individualContent {
+        width: 100%;
+        max-width: 326px;
+        background-image: unset;
+        padding: 30px;
+        left: 0;
+        border-radius: 16px 16px 0px 0px;
+      }
+
+      .registrationText {
+        font-size: 14px;
+      }
+
+      .feeContent {
+        width: 100%;
+        max-width: 100%;
+        padding: 50px 27px;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 313px;
+        right: 0px;
+      }
+
+      .boardroomFeeDetail {
+        gap: 24px;
+      }
+
+      .feeNote {
+        font-size: 16px;
+      }
+
+      .feeText {
+        align-items: end;
+      }
+
+      .feeText img {
+        position: relative;
+        bottom: 12px;
+      }
+
+      .costPrice {
+        font-size: 24px;
+      }
+
+      .costGreyPrice {
+        font-size: 16px;
+      }
+
+      .gradientWhiteBtn button {
+        font-size: 12px;
+      }
+
+      .feeDetailUpper .gradientWhiteBtn {
+        min-width: max-content;
+      }
+
+      .registeredInfo {
+        align-items: flex-start;
+
+        img {
+          margin-top: 2px;
+        }
+      }
+    }
+
+    .skyRocket {
+      .skyWrapper {
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .skyright {
+        max-width: 100%;
+      }
+
+      .skyLeft {
+        max-width: 100%;
+      }
+    }
+
+    .waitingSection {
+      flex-direction: column;
+      gap: 40px;
+
+      .waitingImage {
+        max-width: unset !important;
+      }
+
+      .waitingRight {
+        max-width: unset !important;
+        padding-top: unset;
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+
+      .waitingContent {
+        gap: 4px;
+      }
+
+      .waitingBoxiWrapper {
+        flex-wrap: nowrap;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .waitingBoxi {
+        max-width: unset !important;
+      }
+
+      .edgeRight {
+        max-width: 100%;
+      }
+    }
+
+    .edgeSection {
+      .edgeWrapper {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .edgeLeft {
+        max-width: unset;
+      }
+
+      .edgeRight {
+        max-width: 100%;
+      }
+
+      .edgeLogo {
+        max-width: 48%;
+      }
+    }
+
+    .curriculumImmersionDs {
+      .innovatorBelowWrap {
+        flex-direction: column;
+      }
+
+      .highlightTechBelowChild {
+        min-width: 300px;
+        max-height: 500px;
+      }
+    }
+
+    .startups {
+      overflow: hidden !important;
+
+      .lensBoxi {
+        max-width: 125px;
+      }
+    }
+  }
+}
+
+/* Media query for ug-Achivers*/
+
+@media (max-width: 767px) {
+  .ugAchivers {
+    .vertical-text.three {
+      bottom: 59px !important;
+    }
+
+    .getGoingLeft {
+      max-width: 100% !important;
+    }
+
+    .ugAchiversHero {
+      background: url("https://images.mastersunion.link/uploads/03072025/v1/P1095742.webp");
+      min-height: 652px;
+
+      .aboveImg {
+        /* top: -60px; */
+      }
+
+      /* onScroll css */
+      .bgHeroImg {
+        top: 80px;
+        right: 0;
+        position: absolute;
+        right: unset;
+      }
+
+      .aboveImg img {
+        width: 100%;
+      }
+
+      /* end of onScroll css */
+
+      .lensBoxi img {
+        width: 100%;
+      }
+
+      .above-txt-mob {
+        position: absolute;
+        bottom: 44px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 4;
+        max-width: 240px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .above-txt-mob p {
+        line-height: 120%;
+        font-size: 22px;
+        font-weight: 400;
+        font-family: var(--go-regular);
+        color: #fff;
+      }
+    }
+
+    .lensSection .highSchoolHeadWrapper {
+      gap: 32px;
+    }
+
+    .lensWrapper {
+      gap: 32px;
+    }
+
+    .lensBoxi > img {
+      max-height: 160px;
+    }
+
+    .lensSection .lensBoxi {
+      max-width: unset;
+    }
+
+    .nicheNetwork {
+      .nicheTXT {
+        font-size: 16px;
+        font-weight: 400;
+      }
+
+      .nicheTxtItalic {
+        font-size: 18px;
+      }
+
+      .nicheNetworkContent {
+        padding: 0 26px;
+      }
+
+      .nicheNetworkContentWrapper {
+        gap: 48px;
+      }
+
+      .nicheBold {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .btbBlack {
+        max-width: auto;
+        width: 100%;
+        width: auto;
+      }
+
+      .flexList {
+        flex-direction: column;
+      }
+
+      .flexList li {
+        font-size: 12px;
+      }
+
+      .leftcard {
+        left: -16px;
+        max-width: 87px;
+        top: 236px;
+      }
+
+      .rightcard {
+        max-width: 87px;
+        right: -16px;
+      }
+
+      .line {
+        max-width: 212px;
+      }
+    }
+
+    .builderTribe {
+      padding: 80px 0 0 0 !important;
+
+      .buildTribeText {
+        font-size: 20px;
+      }
+
+      .container {
+        padding: 0;
+      }
+
+      .builderTribeUpper {
+        justify-content: center;
+      }
+
+      .builderTribeCard img {
+        height: 320px;
+      }
+
+      .builderTribeContent {
+        overflow: auto;
+      }
+
+      .builderTribeCard {
+        min-width: 103px;
+        width: 100%;
+        border: 1px solid #404040;
+        border-radius: 6px;
+      }
+
+      .builderTribeCard {
+        filter: grayscale(0%);
+        color: #ffffff;
+      }
+
+      .ml16 {
+        margin-left: 16px;
+      }
+
+      .mr16 {
+        margin-right: 16px;
+      }
+
+      .builderTribeCard:hover {
+        filter: grayscale(0%);
+        color: #ffff;
+
+        transform: scale(1);
+      }
+
+      .mob-ml16 {
+        margin-left: 16px;
+      }
+
+      .builderTribeLeft {
+        text-align: center;
+      }
+    }
+
+    .builderTribeWrapper {
+      gap: 32px !important;
+    }
+
+    .beforeClg {
+      .upperdiv h1 {
+        font-size: 24px;
+      }
+
+      .lowerdiv h1 {
+        font-size: 24px;
+      }
+
+      .beforeClgWrapper {
+        overflow: hidden;
+      }
+    }
+
+    .builderTribe {
+      padding-bottom: 80px 0 0 0 !important;
+    }
+
+    .beforeClg {
+      padding-top: 80px !important;
+      padding-bottom: 80px !important;
+    }
+
+    .cardSectionscMob {
+      background-color: black;
+      color: white;
+
+      .flowLogo {
+        position: relative;
+        height: 212px;
+      }
+
+      /* .swiper-pagination{
+        justify-self: center;
+      } */
+      /* .swiper-pagination {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center;
+  width: 100%;
+  position: absolute; 
+  bottom: 10px;
+  left: 0;
+} */
+      .cPaginationWrapper {
+        margin: 0 auto;
+        max-width: 150px;
+        width: 100%;
+      }
+
+      .customPagination .dot {
+        width: 10px;
+        height: 10px;
+        background-color: gray;
+        border-radius: 50%;
+        margin: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      .customPagination .dot.active {
+        background-color: #e38330;
+      }
+
+      .flowLogoAbsolute {
+        position: absolute;
+      }
+
+      .f20Italic {
+        font-family: "Fraunces", serif;
+        font-size: 20px;
+        font-weight: 400;
+        font-style: italic;
+        line-height: 120%;
+        color: #ffffff;
+      }
+
+      .g14 {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 150%;
+        font-family: var(--go-regular);
+        color: #a3a3a3;
+      }
+
+      .cardSecMainWrapper {
+        top: 88px;
+        left: 104px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .mainContentWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .u18ExclusiveHeading {
+        font-weight: 400;
+        font-family: var(--go-regular);
+        font-size: 22px;
+        line-height: 120%;
+      }
+
+      .u18ExclusiveSub {
+        font-size: 24px;
+        line-height: 120%;
+        font-style: italic;
+        font-family: "Fraunces", serif;
+        color: #e38330;
+      }
+    }
+
+    .getGoing {
+      .getGoingCard {
+        /* border: unset; */
+
+        border: 1px solid var(--grey3);
+      }
+
+      .getGoingInnerWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .container {
+        padding: 0px;
+      }
+
+      .getGoingCardp {
+        font-size: 12px;
+      }
+
+      .getGoingCardh2 {
+        font-size: 20px;
+      }
+
+      .getGoingSvg {
+        max-width: 30px;
+      }
+
+      .getGoingWrapper {
+        padding: 0 16px;
+        gap: 20px;
+      }
+
+      .getGoingContent {
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        border-radius: 16px;
+      }
+
+      .getGoingCard {
+        min-width: 277px;
+      }
+
+      .getGoingCard img {
+        border-radius: 14px;
+        scale: 1.01;
+      }
+
+      .btnBlack {
+        min-width: 100%;
+        width: auto;
+      }
+
+      .getGoingtxt {
+        gap: 8px;
+      }
+    }
+
+    .lensSection {
+      font-size: 22px;
+      overflow: hidden;
+
+      .headingNumber {
+        font-size: 20px;
+      }
+
+      .businessNumberText {
+        font-size: 12px;
+      }
+
+      .businessHeadLower {
+        gap: 15px;
+      }
+
+      .businessHeadBox {
+        padding-right: 15px;
+      }
+
+      .highSchlHeading {
+        font-size: 22px;
+      }
+    }
+
+    .startups {
+      .fr-HeadingItalic {
+        font-size: 22pxs;
+      }
+
+      .lensBoxi {
+        max-width: 125px;
+      }
+    }
+
+    .achieverFaq {
+      .container {
+        padding: 14px;
+      }
+    }
+  }
+
+  .sixMonthDSAI {
+    .heroSection {
+      padding-top: 60px !important;
+
+      .heroSectionContent {
+        width: 100%;
+        padding: 0 12px;
+        transform: translate(-50%, -20%);
+      }
+
+      .heroSectionImg {
+        max-height: 85vh;
+      }
+
+      .go-HeroSubtitle {
+        margin-top: 8px;
+      }
+
+      .heroSectionBtnWrap {
+        margin-top: 24px;
+        width: 100%;
+        align-items: flex-start;
+        gap: 12px;
+        flex-direction: column;
+        padding: 0 16px;
+
+        a,
+        button {
+          width: 100%;
+          line-height: 0 !important;
+        }
+      }
+    }
+
+    .programmeBreatherNew {
+      padding: 40px 0 !important;
+
+      .programmeBreatherWrapper {
+        gap: 20px;
+        flex-direction: column;
+      }
+
+      .programmeBreatherSpan {
+        font: 14px "go-regular";
+      }
+
+      .firstTbmBoxi {
+        min-height: 118px !important;
+      }
+
+      .programmeBreatherRight {
+        padding: 16px;
+      }
+
+      .boxiUpper {
+        margin-top: 16px;
+        min-height: unset;
+      }
+
+      .eligibilityBoxi {
+        font-size: 10px;
+      }
+
+      .classText {
+        font-size: 18px;
+      }
+
+      .classPara {
+        font-size: 13px;
+      }
+
+      .firstBoxi {
+        gap: 4px;
+      }
+
+      .buttonsParent {
+        margin-top: 24px;
+        gap: 8px;
+        flex-direction: column !important;
+
+        a,
+        button {
+          width: 100%;
+
+          svg {
+            max-width: 20px;
+          }
+        }
+      }
+    }
+
+    .traderManager {
+      background: var(--black);
+
+      .traderWrapper {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .traderHeading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .marqueeCards {
+        width: 100%;
+        pointer-events: none;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        margin-top: 32px;
+      }
+
+      .marqueeInnerWrap {
+        width: 100%;
+        height: 100%;
+      }
+
+      .marqueeReverse {
+        height: 100%;
+        width: max-content;
+        align-items: center;
+        display: flex;
+        position: relative;
+        animation: marqueeReverse 20s linear infinite;
+        will-change: transform;
+        gap: 20px;
+      }
+
+      .traderCardsBox {
+        border: 1px solid var(--grey4);
+        background: var(--grey16);
+        border-radius: 8px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+        min-height: 221px;
+        max-width: 300px;
+        width: 100%;
+      }
+
+      .traderDetails {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+      }
+
+      .traderCardHeading {
+        font-size: 22px;
+        line-height: 120%;
+        color: var(--black);
+        font-family: "Fraunces", serif;
+        font-weight: 350;
+      }
+
+      .traderSubText {
+        font-size: 14px;
+        line-height: 150%;
+        font-family: var(--go-regular);
+        color: var(--grey3);
+      }
+    }
+
+    .impactScroll {
+      padding: 40px 0 !important;
+      padding-bottom: 60px !important;
+
+      .impactLeft {
+        width: 100% !important;
+      }
+
+      .masterPlay > img {
+        backdrop-filter: blur(2px);
+        border-radius: 60px;
+      }
+
+      .impactHeadingWrapper {
+        padding: 0 0 32px 0 !important;
+      }
+
+      .impactMobCard {
+        display: flex;
+        padding: 12px;
+        background: var(--grey17);
+        border: 1px solid var(--grey3);
+        border-radius: 12px;
+        flex-direction: column;
+        gap: 24px;
+        position: sticky;
+        top: 13rem;
+        min-height: 452px;
+      }
+
+      .impactMobCard:last-child {
+        min-height: 535px;
+      }
+
+      .mobImpactImage {
+        max-height: 260px;
+        overflow: hidden !important;
+      }
+
+      .circleNumber {
+        max-height: 30px !important;
+      }
+
+      .impactLeftBoxInner {
+        gap: 60px;
+        margin-top: 60px;
+        margin-top: 32px !important;
+      }
+
+      .pointerPara {
+        font-size: 13px !important;
+      }
+
+      /* .techPointerChild {
+      align-items: center;
+    } */
+
+      .impactLeftBox {
+        position: relative;
+        padding-left: 0 !important;
+      }
+
+      .impactLeftBox::after {
+        scale: 0.8;
+        left: -10px;
+        display: none;
+      }
+
+      .impactLeftBoxInner::before {
+        left: 10px;
+        display: none;
+      }
+
+      .ulListWrapper {
+        margin-top: 12px !important;
+
+        .appliedPara {
+          font-size: 14px;
+        }
+
+        .poweredDivi > img {
+          max-width: 16px;
+        }
+
+        .techPointersParent {
+          gap: 5px !important;
+        }
+      }
+
+      .impactButton {
+        padding: 6px 12px !important;
+        font-size: 12px !important;
+        line-height: unset !important;
+        font-family: var(--go-regular);
+      }
+
+      .impactLeftBoxInner {
+        gap: 40px;
+      }
+
+      .impactLeftUpper {
+        display: flex;
+        flex-direction: column;
+        gap: 8px !important;
+        align-items: flex-start;
+      }
+
+      .poweredDivi {
+        gap: 12px !important;
+      }
+
+      .circleNumberMob {
+        width: 100%;
+        height: 100%;
+        max-width: 24px;
+        max-height: 24px;
+        align-items: center;
+        padding: 7px;
+        border: 1px solid #525252;
+        border-radius: 60px;
+        color: var(--white);
+        font-family: var(--go-regular);
+        font-size: 11px;
+        display: flex;
+        justify-content: center;
+      }
+    }
+
+    .impactScroll .video-container:hover img.fade-img {
+      opacity: 1 !important;
+    }
+
+    .tradeWithExpert {
+      background: linear-gradient(
+        to bottom,
+        var(--white) 78%,
+        var(--black) 31%
+      );
+
+      .tradeExpertUpper {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .tradeExpertWrapper {
+        gap: 40px;
+      }
+
+      .tradeExpertLeft {
+        max-width: 100%;
+      }
+
+      .tradeExpertRight {
+        max-width: 100%;
+      }
+
+      .tradeSubHeading {
+        font-size: 14px;
+      }
+
+      .tradePointer {
+        align-items: flex-start;
+      }
+
+      .numberIcons {
+        max-width: 18px;
+        max-height: 18px;
+        font-size: 11px;
+        line-height: 0;
+      }
+    }
+
+    .feeProcess {
+      #growingDiv {
+        left: 33px !important;
+        top: 66px !important;
+        width: 4.1px !important;
+      }
+
+      .feeProcessContainer .rightSection::before {
+        left: 4.6% !important;
+      }
+    }
+
+    .feeProcess {
+      .feeProcessContainer .feeBox .body {
+        padding: 16px 12px !important;
+      }
+
+      .feeSectionMOb {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+      }
+
+      .detailsList .subHeading {
+        font-size: 18px;
+      }
+
+      .detailsList .list li {
+        font-size: 13px;
+      }
+
+      .curriculumHead {
+        font-size: 13px;
+      }
+    }
+
+    .feeProcess {
+      #growingDiv {
+        left: 34px !important;
+        top: 66px !important;
+        width: 4.1px !important;
+      }
+    }
+
+    .feeStructureSection {
+      .feeStructureParent {
+        overflow-x: scroll;
+      }
+
+      .feeStructureParent::-webkit-scrollbar-thumb {
+        display: block;
+        background: var(--grey3);
+      }
+
+      .feeStructureWrapper {
+        flex-direction: column;
+        gap: 60px;
+      }
+
+      .feeStructureLeft,
+      .feeStructureRight {
+        max-width: 100%;
+      }
+
+      .feeDivider {
+        display: none;
+      }
+
+      .feeStructureTable {
+        min-width: 670px;
+      }
+
+      .feeStructureRight .feeStructureTable {
+        min-width: 450px;
+      }
+    }
+
+    .enrollmentSectionNew {
+      background: var(--black);
+
+      .fourCards {
+        display: flex !important;
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .onhoverOverlay .overlayNumber {
+        margin-top: 0;
+      }
+
+      .gridCardBlack {
+        display: none;
+      }
+
+      .threeCards {
+        grid-template-columns: 1fr;
+      }
+
+      .gridCard {
+        max-height: 100%;
+      }
+
+      .enrollOverlay {
+        display: none;
+      }
+
+      .gridCard:hover {
+        .lifeCardOverlay {
+          opacity: unset;
+          bottom: unset;
+        }
+      }
+
+      .onhoverOverlay {
+        opacity: 1 !important;
+        gap: 12px;
+        background: unset;
+        bottom: 0 !important;
+      }
+
+      .overlayMob {
+        font-size: 13px;
+      }
+
+      .overlayText {
+        font-size: 22px !important;
+      }
+    }
+
+    .threeCardSection {
+      border-top: 1px solid var(--black5);
+
+      .cardsWrapper {
+        flex-direction: column;
+        max-width: 100%;
+      }
+
+      .threeCardHeadingWrapper {
+        text-align: center;
+      }
+
+      .threeCardWrapper {
+        gap: 32px;
+      }
+
+      .threeCardCover {
+        max-width: 100%;
+        min-width: unset;
+        min-height: unset;
+      }
+
+      .shadeEffect {
+        max-width: 100%;
+        border-radius: 12px;
+      }
+
+      .threeCardGradinetBg {
+        max-width: 100%;
+      }
+
+      .threeCard {
+        max-width: 100%;
+        padding: 20px 19px;
+      }
+
+      .threeCardHeading {
+        font: 22px "go-medium";
+      }
+
+      .threeCardSubHeading {
+        font: 16px "go-regular";
+        line-height: 150%;
+      }
+
+      .threeCardContentHeading {
+        font: 20px "go-medium";
+      }
+
+      .threeCardContentSubheading {
+        font: 14px "go-regular";
+        line-height: 150%;
+      }
+    }
+
+    .scholarshipSection {
+      .scholarshipSectionHeading {
+        font: 22px "go-regular";
+        color: #090909;
+      }
+
+      .scholarshipSectionSubHeading {
+        font: 14px "go-regular";
+        color: #090909;
+      }
+
+      .scholarshipBoxWrapper {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .scholarshipHeading {
+        font-size: 24px;
+      }
+    }
+
+    .feeStructureSection {
+      background: var(--black);
+      border-block: 1px solid var(--black5);
+
+      h2 .fr-BreatherHeading {
+        font-style: normal;
+      }
+
+      .feeStructureWrapper {
+        display: flex;
+        gap: 32px;
+        align-items: stretch;
+      }
+
+      /* .feeStructureLeft {
+    max-width: 60%;
+  }
+
+  .feeStructureRight {
+    max-width: 40%;
+  } */
+
+      .feeStructureLeft,
+      .feeStructureRight {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        align-items: flex-start;
+      }
+
+      .feeStructureTable {
+        border-collapse: collapse;
+      }
+
+      .feeDivider {
+        width: 1px;
+        background: var(--black5);
+      }
+
+      .feeStructureParent {
+        width: 100%;
+      }
+
+      .feeStructureTable {
+        width: 100%;
+      }
+
+      .feeHeadRow {
+        border-radius: 16px 16px 0px 0px;
+        background: var(--grey17);
+      }
+
+      .feeHeadCol {
+        text-align: start;
+        padding-right: 20px;
+        padding: 12px 16px;
+        vertical-align: bottom;
+        line-height: 120%;
+      }
+
+      .feeHeadCol:first-child {
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+
+        /* or whatever px you want */
+      }
+
+      .feeHeadCol:last-child {
+        border-top-right-radius: 4px;
+        /* or whatever px you want */
+        border-bottom-right-radius: 4px;
+      }
+
+      .feeYearText {
+        font-size: 14px;
+        line-height: 150%;
+        font-family: var(--go-semibold);
+        color: var(--white);
+      }
+
+      .feeYearGradient {
+        font-size: 10px;
+        line-height: 150%;
+        font-family: var(--go-regular);
+        text-transform: uppercase;
+        background: var(
+          --Linear-Gradient,
+          linear-gradient(91deg, #39b5d7 1.8%, #f7d544 50.99%, #e38330 99.75%)
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 4px;
+      }
+
+      .bodyFeeCol {
+        padding: 16px;
+        text-align: start;
+        font-size: 16px;
+        line-height: 150%;
+        font-family: var(--go-regular);
+        color: var(--grey4);
+        font-weight: 400;
+        text-wrap: nowrap;
+      }
+
+      .bodyFeesRow {
+        border-bottom: 1px solid var(--black5);
+      }
+
+      .feeColColor {
+        color: var(--grey10);
+      }
+
+      .totalFee {
+        color: var(--white);
+        font-family: var(--go-semibold);
+      }
+
+      .cautionBlack {
+        width: 100%;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-radius: 8px;
+        background:
+          linear-gradient(var(--grey17) 0 0) padding-box,
+          var(--gradient) border-box;
+        border: 1px solid transparent;
+
+        svg {
+          width: 100%;
+          max-width: 24px;
+        }
+      }
+
+      .cautionPara {
+        font-size: 10px;
+        line-height: 150%;
+        font-family: var(--go-regular);
+        color: var(--white);
+      }
+
+      .feeStructureRightImg {
+        max-width: 470px;
+        width: 100%;
+      }
+    }
+
+    .worldClassSection {
+      .worldHeadingWrapper {
+        flex-direction: column;
+        gap: 18px;
+        align-items: flex-start;
+      }
+    }
+
+    .curriculumOutclassDsNew {
+      .termHeading {
+        font-size: 13px;
+      }
+
+      .inClassAns {
+        font-size: 12px !important;
+      }
+
+      .curriculumOutclassWrapper {
+        gap: 32px;
+      }
+
+      .curriculumDsUpper {
+        position: unset;
+        padding-block: unset;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .portfolioSubHead {
+        font-size: 14px;
+        max-width: 100%;
+      }
+
+      .curriculumDsBelow {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .portfolioStepWrapper.step1 {
+        max-width: 358px;
+      }
+
+      .portfolioStepWrapper.step2 {
+        max-width: 331px;
+      }
+
+      .portfolioStepWrapper.step3 {
+        max-width: 304px;
+      }
+
+      .portfolioStepWrapper.step4 {
+        max-width: 277px;
+      }
+
+      .portfolioStepWrapper.step5 {
+        max-width: 250px;
+      }
+
+      .portfolioStepWrapper.step6 {
+        max-width: 223px;
+      }
+
+      .tradingHeading {
+        font-size: 18px;
+      }
+
+      .faqHeadingsWrapper.mobView {
+        display: flex;
+        padding-top: 20px;
+        overflow-y: auto;
+        position: sticky;
+        top: 3.4rem;
+        z-index: 10;
+        gap: 24px;
+        background: var(--white);
+      }
+
+      .classRomFaqWrapNew.steps:last-child {
+        margin-bottom: 0px !important;
+      }
+
+      .dsBelowRight {
+        max-width: 100%;
+        background: var(--white);
+        padding: 16px 8px;
+      }
+
+      .faqHeadingItem {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        border-bottom: 1px solid var(--grey20);
+        min-width: max-content;
+        padding-bottom: 6px;
+        gap: 10px;
+        overflow: hidden;
+      }
+
+      .faqHeadingItem .termBtn {
+        background: var(--grey4);
+        color: var(--black);
+      }
+
+      .faqHeadingItem.active {
+        border-bottom: 1px solid var(--black);
+
+        .termBtn {
+          background: var(--black);
+          color: var(--white);
+        }
+
+        .faqHeading {
+          color: var(--black);
+        }
+      }
+
+      .classRomFaqWrapNew {
+        margin-top: 20px;
+        border: unset;
+        position: relative;
+        z-index: 9;
+        background: var(--white) !important;
+      }
+
+      .inclassansUl {
+        border-block: 1px solid var(--grey4);
+        overflow: auto;
+      }
+    }
+
+    .curriculumOutclassDs {
+      padding: 40px 0 !important;
+
+      .curriculumOutclassWrapper {
+        gap: 40px;
+      }
+
+      .outdsHead {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .outclasImgWrap p {
+        font-size: 12px !important;
+      }
+
+      .curriculumDsUpper {
+        gap: 16px;
+        padding-block: 0;
+        flex-direction: column;
+        align-items: flex-start;
+        position: unset;
+      }
+
+      .curriculumDsBelow {
+        gap: 32px;
+        flex-direction: column;
+      }
+
+      .dsBelowRight {
+        max-width: 100%;
+      }
+
+      .content.active {
+        flex-direction: column;
+      }
+
+      #uginclassTab02 .dsBelowLeft {
+        position: unset;
+      }
+
+      #uginclassTab01 .dsBelowLeft {
+        position: unset;
+      }
+
+      .curriculumDsBelow .faqHeading {
+        font-size: 13px;
+        line-height: 120%;
+      }
+
+      .greyParaOutclass {
+        font-size: 12px;
+      }
+
+      .finaceCareerTabs {
+        width: 100%;
+      }
+
+      .financeTabUl {
+        width: 100%;
+      }
+
+      .inclassTab {
+        width: 100%;
+        max-width: 500px;
+        font-size: 12px;
+
+        svg {
+          width: 16px;
+          height: 16px;
+        }
+      }
+    }
+  }
+
+  .ugTestDrive {
+    .internshipSection {
+      background: var(--black);
+      padding-block: 20px !important;
+
+      .downloadMobBtn {
+        width: 100%;
+
+        .btnWhite {
+          width: 100%;
+        }
+      }
+
+      .container {
+        padding: 0 8px !important;
+      }
+
+      .insightBtn {
+        width: 100%;
+        padding-right: 10px;
+      }
+
+      .internshipWrapper {
+        padding: 40px 8px;
+
+        a {
+          width: 100%;
+          /* display: flex !important; */
+        }
+      }
+
+      .internshipCardWrapper {
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .internshipStudentUpperDivi {
+        gap: 16px;
+      }
+
+      .studentCompanyWrapper {
+        gap: 8px;
+      }
+
+      .internshipStudentBelow {
+        margin-top: 16px;
+      }
+
+      .studentThoughtPara {
+        padding-bottom: 16px;
+        padding-top: 16px;
+        min-height: 122px;
+      }
+    }
+    .TimelineTestDrive {
+      .inclassBox {
+        max-height: unset;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .inclassFlex {
+        text-wrap: wrap !important;
+      }
+      .inclasstabs {
+        padding-bottom: 0 !important;
+      }
+    }
+
+    .heroSection {
+      padding-top: 60px !important;
+
+      .heroSectionContent {
+        width: 100%;
+        padding: 0 12px;
+        transform: translate(-50%, -20%);
+      }
+
+      .heroSectionImg {
+        max-height: 85vh;
+      }
+
+      .go-HeroSubtitle {
+        margin-top: 8px;
+      }
+
+      .heroSectionBtnWrap {
+        margin-top: 24px;
+        width: 100%;
+        align-items: flex-start;
+        gap: 12px;
+        flex-direction: column;
+        padding: 0 16px;
+
+        a,
+        button {
+          width: 100%;
+          line-height: 0 !important;
+        }
+      }
+    }
+
+    .curriculumImmersionDs {
+      .innovatorBelowWrap {
+        flex-direction: column;
+      }
+      .swiper-pagination {
+        width: unset !important;
+      }
+    }
+
+    .waitingSection {
+      flex-direction: column;
+      gap: 40px;
+
+      .waitingImage {
+        max-width: unset !important;
+      }
+
+      .waitingRight {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        max-width: unset !important;
+        padding-top: unset !important;
+      }
+
+      .waitingContent {
+        gap: 4px;
+      }
+
+      .waitingBoxiWrapper {
+        flex-wrap: nowrap;
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .waitingBoxi {
+        max-width: unset !important;
+      }
+    }
+
+    .higherStudies {
+      overflow: unset !important;
+
+      max-height: 170vh;
+      padding-top: 0px !important;
+
+      .higherStudiesWrapper {
+        flex-direction: column !important;
+        gap: 24px !important;
+      }
+      .blackSemiPara {
+        font: 16px "go-semibold";
+        line-height: 140%;
+        color: var(--black);
+      }
+
+      .blackMediumPara {
+        font-size: 16px;
+        line-height: 150%;
+        font-family: "go-regular";
+        color: var(--grey3);
+      }
+
+      .higherStudiesLeft {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 0;
+        margin-top: -2px;
+        z-index: 1;
+      }
+
+      .studiesRight {
+        max-width: 600px;
+      }
+
+      .diviCareer {
+        padding: unset;
+        padding-inline: 16px;
+      }
+
+      .upperContentTab {
+        padding-inline: unset;
+      }
+    }
+
+    .individualFee {
+      .individualWrapper {
+        flex-direction: column;
+        gap: unset;
+      }
+
+      .individualContent {
+        width: 100%;
+        max-width: 326px;
+        background-image: unset;
+        padding: 30px;
+        left: 0;
+        border-radius: 16px 16px 0px 0px;
+        gap: 16px;
+      }
+
+      .registrationText {
+        font-size: 14px;
+      }
+
+      .feeContent {
+        width: 100%;
+        max-width: 100%;
+        padding: 0px 27px;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 313px;
+        right: 0px;
+      }
+
+      .feeText {
+        align-items: center;
+      }
+
+      .feeText img {
+        position: relative;
+        bottom: 12px;
+      }
+
+      .costPrice {
+        font-size: 24px;
+      }
+
+      .costGreyPrice {
+        font-size: 16px;
+      }
+
+      .gradientWhiteBtn button {
+        font-size: 12px;
+      }
+      .mobMt {
+        margin-top: 14px;
+      }
+    }
+
+    .skyRocket {
+      .skyWrapper {
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .skyright {
+        max-width: 100%;
+      }
+
+      .skyLeft {
+        max-width: 100%;
+      }
+    }
+    .reachoutBreatherSection {
+      .reachoutBreatherWrapper {
+        flex-direction: column-reverse;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .reachoutLefti,
+      .reachoutRight {
+        max-width: 100%;
+      }
+
+      .reachoutLefti {
+        padding: 20px;
+        gap: 16px;
+      }
+
+      .go-BreatherHeading {
+        padding-bottom: 16px;
+      }
+
+      .supportInfoWrapper {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .supportDivi > img {
+        max-width: 32px;
+        max-height: 32px;
+      }
+
+      .supportcontentText,
+      .supportBoxiText {
+        font-size: 13px;
+      }
+    }
+
+    .muJourney {
+      background:
+        url(https://images.mastersunion.link/uploads/20012026/v1/VectorMob.webp)
+          left,
+        url(https://images.mastersunion.link/uploads/20012026/v1/vectorMob2.webp)
+          right,
+        var(--white);
+      background-repeat: no-repeat;
+      background-size: contain;
+
+      .journeyBottom {
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .journeyWrapper {
+        gap: 24px;
+      }
+
+      .journeyUpper {
+        gap: 24px;
+        width: 100%;
+      }
+    }
+
+    .highSchoolMarquee {
+      .highSchool {
+        max-width: 30%;
+      }
+    }
+
+    .testDriveBreather {
+      &.gradientBoxiSection {
+        .gradientRightDivi {
+          gap: 0 !important;
+        }
+
+        .aiGradientUpper {
+          gap: 8px !important;
+        }
+
+        .aiPoints {
+          gap: 8px !important;
+        }
+
+        .buttonsParent {
+          flex-direction: column !important;
+        }
+        .whiteApplyButton,
+        .downloadBroucherButton {
+          width: 100%;
+          max-width: 100% !important;
+          font: 16px "go-medium" !important;
+        }
+        .whiteApplyButton {
+          justify-content: center !important;
+          font: 16px "go-medium" !important;
+        }
+      }
+    }
+
+    .blackSemiPara {
+      font: 18px "go-semibold";
+      line-height: 140%;
+      color: var(--black);
+    }
+
+    .blackMediumPara {
+      font-size: 18px;
+      line-height: 150%;
+      font-family: "go-regular";
+      color: var(--grey3);
+    }
+  }
+}
+
+@media (min-width: 1280px) and (max-width: 1440px) {
+  .ugAchivers {
+    .ugAchiversHero {
+      .bgHeroImg {
+        right: 0;
+      }
+    }
+  }
+}
+
+@media (min-width: 1440px) and (max-width: 1920px) {
+  .ugAchivers {
+    .ugAchiversHero {
+      .bgHeroImg {
+        right: 180px;
+      }
+    }
+  }
+}
+
+@media (min-width: 1920px) {
+  .ugAchivers {
+    .ugAchiversHero {
+      .bgHeroImg {
+        right: -168px;
+      }
+    }
+  }
+}
+
+
+
+    

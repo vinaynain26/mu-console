@@ -1,0 +1,305 @@
+<div class="sustainMasters">
+
+    <div class="mastersScroll mob-hide">
+        <div class="marqueesliders sliderTbm"></div>
+    </div>
+
+    <div class="mob-visible dsaiMastersMobile">
+        <div class="container">
+            <div class="mastersScrollMob mt30 sliderMobile"></div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+(() => {
+
+     const masters = [
+        {
+            name: "Rachel Konrad",
+            designation: "Former Director of Communications",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/012x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Shashaankk Verma",
+            designation: "MBA in Social Entrepreneurship",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/022x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo1.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Dr. Lan Ma",
+            designation: "Adjunct Professor of Business",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/032x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo2.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Dr. Edward W Rogers",
+            designation: "Former Chief Knowledge Officer",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/042x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo3.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Mr. Manoj Kohli",
+            designation: "Former CEO",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/052x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo4.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Mr. Elkana Ezekiel",
+            designation: "Former CMO",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/062x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo5.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Dr. Meenakshi Rishi",
+            designation: "Professor of Economics",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/072x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo6.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Dr. Daniel GVD Vliet",
+            designation: "Executive Director",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/082x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo7.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Ms. Malthi Satish",
+            designation: "Former Director of PM",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/092x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo8.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Mr. Rajesh Madhavan",
+            designation: "Advisor",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/102x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo9.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Vivek Singh",
+            designation: "Ex-OSD to Union Finance Minister",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/112x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo10.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Freda Liu",
+            designation: "Professor & Producer",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/122x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo11.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Mehjabeen Poonawala",
+            designation: "ESG & Sustainability Advisor | Former Country Head",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/132x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo12.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Dr. Anushree Poddar",
+            designation: "Programme Director, PGP in SBM",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/142x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo13.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Jayati Talapatra",
+            designation: "Sustainability Consultant & Faculty",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/152x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo14.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Dr. Bhaskar Chatterjee",
+            designation: "Father of Indian CSR & Sustainability",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/162x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo15.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Pawan Raj Kumar",
+            designation: "Partner",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/172x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo16.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Tanya Singhal",
+            designation: "Founder",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/182x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo17.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Vivek Mehra",
+            designation: "Sustainability Officer & Co-Founder",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/192x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo18.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Ruchira Shukla",
+            designation: "Founder & CEO, Green Marble",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/202x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo19.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Michael Dioha",
+            designation: "Senior Energy Researcher",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/212x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo20.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Dr. Shajahan Avadi",
+            designation: "Group Captain",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/222x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo21.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Sumeet Popli",
+            designation: "Founder",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/232x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo22.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Dr. Tanya Sharma",
+            designation: "Senior Manager, Carbon Development",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/242x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo23.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Manpreet Singh",
+            designation: "Partner and Leader",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/252x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo24.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+        {
+            name: "Sarika Gosain",
+            designation: "Partner & Leader, ESG & Sustainability",
+            imgUrl: "https://images.mastersunion.link/uploads/16062026/v1/262x.webp",
+            logoUrl: "https://images.mastersunion.link/uploads/16062026/v1/Logo25.svg",
+            videoId: "VF0dbk3y2q8"
+        },
+      
+        
+    ];
+
+
+    function desktopCard(master) {
+        return `
+        <div class="newMasterBoxImg">
+            <div class="newMasterImgBox">
+                <img src="${master.imgUrl}" alt="${master.name}">
+            </div>
+
+            <div class="newMasterDetailsWrap">
+                <h3>${master.name}</h3>
+                <h4>${master.designation}</h4>
+                <img class="tbmMasterLogo" src="${master.logoUrl}" alt="${master.name} logo">
+            </div>
+        </div>`;
+    }
+
+
+    function mobileCard(master) {
+        return `
+        <div class="newMasterBoxImg">
+            <div class="newMasterImgBox">
+                <img src="${master.imgUrl}" alt="${master.name}">
+            </div>
+
+            <div class="newMasterDetailsWrap">
+                <h3>${master.name}</h3>
+                <h4>${master.designation}</h4>
+                <img class="tbmMasterLogo" src="${master.logoUrl}" alt="${master.name} logo">
+            </div>
+        </div>`;
+    }
+
+
+    document.querySelectorAll(".sustainMasters").forEach(component => {
+
+        const desktopSlider = component.querySelector(".sliderTbm");
+        const mobileSlider = component.querySelector(".sliderMobile");
+
+
+        if(desktopSlider){
+            desktopSlider.innerHTML = masters.map(desktopCard).join("");
+        }
+
+
+        if(mobileSlider){
+            mobileSlider.innerHTML = masters.map(mobileCard).join("");
+        }
+
+    });
+
+
+
+    document.querySelectorAll(".marqueesliders").forEach(slider => {
+
+
+        slider.style.msOverflowStyle = 'none';
+        slider.style.scrollbarWidth = 'none';
+        slider.style.overflow = 'scroll';
+
+
+        slider.innerHTML += slider.innerHTML;
+
+
+        let scrollAmount = 0;
+        let animationFrame;
+
+
+        function autoScroll(){
+
+            scrollAmount += 0.8;
+            slider.scrollLeft = scrollAmount;
+
+
+            if(scrollAmount >= slider.scrollWidth / 2){
+                scrollAmount = 0;
+            }
+
+
+            animationFrame = requestAnimationFrame(autoScroll);
+        }
+
+
+        autoScroll();
+
+
+        slider.addEventListener("mouseenter",()=>{
+            cancelAnimationFrame(animationFrame);
+        });
+
+
+        slider.addEventListener("mouseleave",()=>{
+            autoScroll();
+        });
+
+
+    });
+
+
+})();
+</script>

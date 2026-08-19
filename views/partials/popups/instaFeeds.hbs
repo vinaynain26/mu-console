@@ -1,0 +1,119 @@
+<section class="popup-section flex-center hide" id="instamodel">
+    <div class="pop-up">
+
+        <img src="https://files.mastersunion.link/media/svg/close-btn-grey.svg" onclick="closeInstaModel()" class="insta-close close-btn mob-hide" alt="Icon">
+
+        <div class="popup-content master-pop-up" id="instaPopupId">
+
+        </div>
+    </div>
+
+</section>
+
+<script type="text/javascript">
+    function callSwiper() {
+        var popup_insta = new Swiper(".popup_insta", {
+            slidesPerView: 1,
+            spaceBetween: 0,
+            loop: false,
+            parallax: true,
+            freeMode: true,
+            mousewheel: false,
+            speed: 500,
+            navigation: {
+                nextEl: ".inside-btn-right",
+                prevEl: ".inside-btn-left",
+            },
+        });
+    }
+
+
+    let postIndex;
+    function checkinstagrmm(index) {
+        var winWidth = window.matchMedia("(max-width: 767px)");
+        if (winWidth.matches) {
+            return;
+        }
+        postIndex = index;
+        bindInstaPopup(index);
+        $("#instamodel").removeClass("hide");
+        $('body').css('overflow', 'hidden');
+    }
+    function closeInstaModel() {
+        $("#instamodel").addClass("hide");
+        $('#instaPopupId').empty();
+        $('body').css('overflow', 'visible');
+    }
+
+    function bindInstaPopup(index) {
+        let postData = instaPostData[index];
+        $('#instaPopupId').empty();
+        let postImg = '';
+        let postImgSlide = '';
+        if (postData.media_type === "IMAGE") {
+            postImg = `<div class="popup-left flex-center mob-pop-pad insta-popup" style="background-image: url(${postData.media_url})">
+                            <img src="${postData.media_url}" alt="postImg">
+                        </div>`
+        } else if (postData.media_type === "VIDEO") {
+            postImg = `<div class="popup-left flex-center mob-pop-pad insta-popup" style="background-color: black">
+                            <video controls muted autoplay style="z-index: 1; width: -webkit-fill-available;">
+                               <source src="${postData.media_url}" type="video/mp4">
+                            </video>
+                        </div>`
+        } else {
+            postData.children.data.forEach((imgObj, i) => {
+                let postContent = imgObj.media_type !== "VIDEO" ? `<img src="${imgObj.media_url}" alt="postImg">` :
+                    `<video controls muted autoplay style="z-index: 1; width: -webkit-fill-available;">
+                                    <source src="${imgObj.media_url}" type="video/mp4">
+                                </video>`
+                postImgSlide += `<div class="swiper-slide">
+                                ${postContent}
+                            </div>`
+            })
+            postImg = `<div class="popup-left flex-center mob-pop-pad insta-popup" style="background-image: url(${postData.media_url})">
+                           
+                            <div class="swiper popup_insta">
+                                <div class="swiper-wrapper">
+                                    ${postImgSlide}
+                                </div>
+                            </div>
+
+                        </div>`
+        }
+        let popupHtml = `${postImg}
+
+                        <div class="popup-right on-insta-pop">
+                            <div class="insta-slide">
+
+                            <div class="post-top">
+                                <div class="post-logo">
+                                    <img src="https://files.mastersunion.link/resources/animateds/logoanimationwhite.gif" alt="logo">
+                                </div>
+                            
+                                <div class="insta-logo">
+                                    <a  href="${postData.permalink}" target="_blank">
+                                        <img src="https://files.mastersunion.link/media/img/challenges/insta_logo.png" alt="">
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="post-content">
+                                <p class="subText">${postData.caption}</p>
+                            </div>
+                            <div class="post-detail post-detail-position">
+                                <p class="subText"><img src="https://mastersunion.org/assets/img/svg/alarm.svg" alt=""> ${getPostTime(postData.timestamp)}</p>
+                            </div>
+
+                        </div>
+                    </div>`
+
+        $('#instaPopupId').append(popupHtml);
+        setTimeout(function () {
+            $('#instaPopupId').trigger('swiper-wrapper', [postImgSlide])
+            $('#instaPopupId').trigger('refresh.swiper-wrapper');
+            callSwiper();
+        }, 200);
+
+    }
+
+</script>

@@ -1,0 +1,399 @@
+<main>
+    <div class="popupContainerOuter introPopup pospop" id="projectsPop">
+
+        <div class="popupContainer">
+
+            <div class="fromTophead">
+                <h2>Projects</h2>
+                <div class="pointer" onclick="closeProjectsPop()">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0.5" y="0.5" width="31" height="31" rx="5.5" fill="white" />
+                        <rect x="0.5" y="0.5" width="31" height="31" rx="5.5" stroke="#FAFAFA" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M11.0506 11.0499C11.3544 10.7462 11.8468 10.7462 12.1506 11.0499L20.9501 19.8495C21.2538 20.1532 21.2538 20.6457 20.9501 20.9494C20.6464 21.2531 20.1539 21.2531 19.8502 20.9494L11.0506 12.1499C10.7469 11.8461 10.7469 11.3537 11.0506 11.0499Z"
+                            fill="#525252" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M20.9494 11.0499C21.2531 11.3537 21.2531 11.8461 20.9494 12.1499L12.1498 20.9494C11.8461 21.2531 11.3536 21.2531 11.0499 20.9494C10.7462 20.6457 10.7462 20.1532 11.0499 19.8495L19.8494 11.0499C20.1532 10.7462 20.6456 10.7462 20.9494 11.0499Z"
+                            fill="#525252" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="PopupformWrapper" id="leadformContainer">
+                <form action="">
+                    <div id="projectsContainer"></div>
+                </form>
+
+                <div id="pojectsAddAnother" class="addAnother">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M2.1875 7H11.8125" stroke="#E38330" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M7 2.1875V11.8125" stroke="#E38330" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Add another entry
+                </div>
+
+                <div class="submitWrapper">
+                    <div class="gradientButton whiteHover">
+                        <button type="button" class="button iconButton" id="projectsSubmitButton">
+                            Save
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z"
+                                    fill="#090909" />
+                                <path
+                                    d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z"
+                                    fill="#090909" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</main>
+
+<script>
+    $(document).ready(function () {
+        const deletedProjectIds = [];
+        const PROJECT_CATEGORY_CHAR_LIMIT = 30;
+        const PROJECT_CATEGORY_LIMIT_ERROR = `Maximum ${PROJECT_CATEGORY_CHAR_LIMIT} characters allowed`;
+
+        function updateProjectCategoryCounter($field) {
+            if (!$field || !$field.length) return;
+
+            const fieldId = $field.attr('id');
+            if (!fieldId) return;
+
+            const $counter = $(`#${fieldId}Counter`);
+            if (!$counter.length) return;
+
+            const length = ($field.val() || '').toString().length;
+            $counter.text(`${length}/${PROJECT_CATEGORY_CHAR_LIMIT}`);
+        }
+
+        function enforceProjectCategoryLimit($field) {
+            if (!$field || !$field.length) return;
+
+            const currentValue = ($field.val() || '').toString();
+            const trimmedValue = currentValue.slice(0, PROJECT_CATEGORY_CHAR_LIMIT);
+            const wasTrimmed = currentValue.length > PROJECT_CATEGORY_CHAR_LIMIT;
+
+            if (currentValue !== trimmedValue) {
+                $field.val(trimmedValue);
+            }
+
+            const fieldId = $field.attr('id');
+            if (!fieldId) return;
+
+            if (wasTrimmed) {
+                if (typeof showError === 'function') {
+                    showError(fieldId, PROJECT_CATEGORY_LIMIT_ERROR);
+                }
+                updateProjectCategoryCounter($field);
+                return;
+            } else if (typeof clearError === 'function') {
+                const errorElement = document.getElementById(`${fieldId}Error`);
+                if (errorElement && errorElement.textContent === PROJECT_CATEGORY_LIMIT_ERROR) {
+                    clearError(fieldId);
+                }
+            }
+
+            updateProjectCategoryCounter($field);
+        }
+
+        function applyProjectCategoryLimit($context) {
+            const $root = $context && $context.length ? $context : $('#projectsContainer');
+            $root.find('input[id^="projectCategory_"]').each(function () {
+                enforceProjectCategoryLimit($(this));
+            });
+        }
+
+        window.applyProjectCategoryCharacterLimit = applyProjectCategoryLimit;
+
+        $('#projectsPop').on('input', 'input[id^="projectCategory_"]', function () {
+            enforceProjectCategoryLimit($(this));
+        });
+
+        $('#projectsPop').on('blur', 'input[id^="projectCategory_"]', function () {
+            const $field = $(this);
+            if (($field.val() || '').toString().length < PROJECT_CATEGORY_CHAR_LIMIT && typeof clearError === 'function') {
+                const fieldId = $field.attr('id');
+                const errorElement = document.getElementById(`${fieldId}Error`);
+                if (errorElement && errorElement.textContent === PROJECT_CATEGORY_LIMIT_ERROR) {
+                    clearError(fieldId);
+                }
+            }
+            updateProjectCategoryCounter($field);
+        });
+
+        applyProjectCategoryLimit($('#projectsContainer'));
+
+        $('#pojectsAddAnother').on('click', function () {
+            const newId = `new_${Date.now()}`;
+
+            const $newEntry = $(generateProjectsHTML({
+                _id: newId,
+                photo: '',
+                title: '',
+                course: '',
+                professor: '',
+                category: '',
+                link: ''
+            }));
+
+            $('#projectsContainer').append($newEntry);
+            checkProjectsEmptyState();
+            applyProjectCategoryLimit($newEntry);
+
+            attachFieldValidation(
+                [{
+                    fieldId: `projectTitle_${newId}`,
+                    errorMessage: "Please add title"
+                },
+                {
+                    fieldId: `projectCourse_${newId}`,
+                    errorMessage: "Please add Course"
+                },
+                {
+                    fieldId: `projectprofessor_${newId}`,
+                    errorMessage: "Please add Professor"
+                },
+                {
+                    fieldId: `projectCategory_${newId}`,
+                    errorMessage: "Please add Category"
+                },
+                {
+                    fieldId: `projectLink_${newId}`,
+                    errorMessage: "Please add link"
+                }]
+
+            );
+        });
+
+        function checkProjectsEmptyState() {
+            const $container = $('#projectsContainer');
+            const $addAnother = $('#pojectsAddAnother');
+            const entryCount = $container.find('.projectsItem').length;
+            
+            if (entryCount === 0) {
+                // Show empty state message
+                if ($container.find('.emptyStateMessage').length === 0) {
+                    $container.append('<div class="emptyStateMessage" style="text-align: center; padding: 20px; color: #666; font-style: italic;">No entries added yet. Click "Add another entry" to get started.</div>');
+                }
+                // Ensure add another button is visible
+                $addAnother.show();
+            } else {
+                // Remove empty state message if entries exist
+                $container.find('.emptyStateMessage').remove();
+            }
+        }
+
+        $(document).on('click', '.projectsItem .removeEntryBtn', function () {
+            const $entry = $(this).closest('.projectsItem');
+            const entryId = $entry.data('id');
+
+            if (!entryId.toString().startsWith("new_")) {
+                deletedProjectIds.push(entryId);
+            }
+            $entry.remove();
+            checkProjectsEmptyState();
+        });
+
+        $('#projectsSubmitButton').on('click', async function (e) {
+            e.preventDefault();
+
+            const entries = $('.projectsItem');
+            const initialEntries = window.initialProjectsData?.projects || [];
+            const actions = [];
+            let isValid = true;
+            const uploadQueue = [];
+
+            for (let i = 0; i < entries.length; i++) {
+                const $entry = $(entries[i]);
+                const entryId = $entry.data('id');
+
+                const photoId = `projectPhoto_${entryId}`;
+                const titleId = `projectTitle_${entryId}`;
+                const courseId = `projectCourse_${entryId}`;
+                const professorId = `projectprofessor_${entryId}`;
+                const categoryId = `projectCategory_${entryId}`;
+                const linkId = `projectLink_${entryId}`;
+
+                const initialEntry = initialEntries.find(entry => entry._id === entryId);
+                const isNew = !initialEntry;
+
+                {{!-- const photoValid = isNew ? validateFileField(photoId) : true; --}}
+                const titleValid = validateField(titleId, "Please add title");
+                const courseValid = validateField(courseId, `Please add Course`);
+                const professorValid = validateField(professorId, `Please add Professor`);
+                const categoryValid = validateField(categoryId, `Please add Category`);
+                const linkValid = validateField(linkId, "Please add a link");
+
+                if (!titleValid || !courseValid || !professorValid || !categoryValid || !linkValid) {
+                    isValid = false;
+                    continue;
+                }
+
+                if (isNew) {
+                    uploadQueue.push({ entryId, photoId });
+                }
+            }
+
+            if (!isValid) return;
+
+            const $submitBtn = $('#projectsSubmitButton');
+            $submitBtn.prop('disabled', true).text('Submitting...');
+
+            for (let i = 0; i < entries.length; i++) {
+                const $entry = $(entries[i]);
+                const entryId = $entry.data('id');
+
+                const photoId = `projectPhoto_${entryId}`;
+                const titleId = `projectTitle_${entryId}`;
+                const courseId = `projectCourse_${entryId}`;
+                const professorId = `projectprofessor_${entryId}`;
+                const categoryId = `projectCategory_${entryId}`;
+                const linkId = `projectLink_${entryId}`;
+
+                const initialEntry = initialEntries.find(entry => entry._id === entryId);
+                const isNew = !initialEntry;
+
+                const title = $(`#${titleId}`).val().trim();
+                const course = $(`#${courseId}`).val().trim();
+                const professor = $(`#${professorId}`).val().trim();
+                const category = $(`#${categoryId}`).val().trim();
+                const link = $(`#${linkId}`).val().trim();
+
+                let photo = initialEntry?.photo;
+
+                const { photoId: queuedPhotoId } = uploadQueue.find(q => q.entryId === entryId) || {};
+                if (isNew && queuedPhotoId) {
+                    photo = await handleFilestackUpload(queuedPhotoId, initialEntry, 'photo', required = false);
+                } else {
+                    const fileInput = document.getElementById(photoId);
+                    if (fileInput && fileInput.files.length > 0) {
+                        photo = await handleFilestackUpload(photoId, initialEntry, 'photo', required = false);
+                    }
+                }
+
+                console.log(initialEntry)
+                console.log(title)
+                console.log(course)
+                console.log(initialEntry)
+                console.log(initialEntry)
+                console.log(initialEntry)
+
+                const isChanged = isNew || (
+                    String(initialEntry.title ?? '') !== title ||
+                    String(initialEntry.course ?? '') !== course ||
+                    String(initialEntry.professor ?? '') !== professor ||
+                    String(initialEntry.category ?? '') !== category ||
+                    String(initialEntry.link ?? '') !== link ||
+                    String(initialEntry.photo ?? '') !== photo
+                );
+
+                if (isChanged) {
+                    const actionObj = {
+                        action: isNew ? 'add' : 'update',
+                        data: {
+                            title,
+                            course,
+                            professor,
+                            category,
+                            link,
+                            photo
+                        }
+                    };
+                    if (!isNew) actionObj.targetId = entryId;
+
+                    actions.push(actionObj);
+                }
+            }
+
+            deletedProjectIds.forEach(deletedId => {
+                actions.push({
+                    action: 'delete',
+                    targetId: deletedId
+                });
+            });
+
+            // If all entries were deleted, delete all initial entries
+            if (entries.length === 0 && initialEntries.length > 0) {
+                initialEntries.forEach(entry => {
+                    actions.push({ action: 'delete', targetId: entry._id });
+                });
+            }
+
+            if (actions.length === 0) {
+                alert("No changes detected");
+                $submitBtn.prop('disabled', false).html(`Save
+                <svg  
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z"
+                    fill="#090909"
+                  />
+                  <path
+                    d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z"
+                    fill="#090909"
+                  />
+                </svg>`
+                );
+                return;
+            }
+
+            try {
+                const userId = window.location.pathname.split('/').pop();
+                const requestPayload = {
+                    section: 'projects',
+                    actions
+                };
+
+                $.ajax({
+                    url: `{{apiBaseURL}}/api/student-profile/${userId}/draft`,
+                    type: 'POST',
+                    data: JSON.stringify(requestPayload),
+                    contentType: 'application/json',
+                    success: function (res) {
+                        deletedProjectIds.length = 0;
+                        renderProfile(res.draft)
+                        closeProjectsPop();
+                    },
+                    error: function (err) {
+                        console.error('Submission failed', err);
+                        alert(err?.responseJSON?.Message || 'Something went wrong');
+                    }
+                });
+            } catch (error) {
+                console.error("Upload or submission failed:", error);
+                alert("Something went wrong during submission.");
+            } finally {
+                $submitBtn.prop('disabled', false).html(`Save
+                        <svg  
+                        width="18"
+                        height="18"
+                        viewBox="0 0 18 18"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        >
+                        <path
+                            d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z"
+                            fill="#090909"
+                        />
+                        <path
+                            d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z"
+                            fill="#090909"
+                        />
+                        </svg>`
+                );
+            }
+        });
+    });
+</script>

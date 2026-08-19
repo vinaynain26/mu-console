@@ -1,0 +1,1303 @@
+body {
+    overflow-x: hidden;
+}
+
+/* ─── SCROLLING SECTION ──────────────────────────────────── */
+.srcollingSection {
+    position: relative;
+}
+
+/* ─── HERO SECTION ───────────────────────────────────────── */
+.heroSection {
+    position: sticky;
+    top: 0;
+    line-height: 0;
+    z-index: 9;
+    padding: 0px 0 0;
+    overflow: hidden;
+    height: 100vh;
+    background: #020202;
+
+    .heroSectionContent .go-HeroSubtitle {
+        color: var(--white);
+    }
+
+    .heroTag {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        padding: 12px 24px;
+        border-radius: 40px;
+        background: var(--grey17);
+        backdrop-filter: blur(2px);
+        border: 1px solid var(--black5);
+        font-size: 13px;
+        font-family: var(--go-medium);
+        font-weight: 500;
+        text-transform: uppercase;
+        line-height: 120%;
+        color: var(--grey4);
+        letter-spacing: 0.65px;
+        max-width: max-content;
+    }
+
+    .heroSectionContent {
+        position: absolute;
+        bottom: 60px;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        z-index: 3;
+        gap: 16px;
+        width: 100%;
+    }
+
+    .ventureHeroHeading {
+        font-size: 42px;
+        line-height: 120%;
+        font-family: var(--go-regular);
+        font-weight: 400;
+        color: var(--white);
+    }
+
+    .ventureHeadingItalic {
+        font-size: 50px;
+        font-style: italic;
+        font-family: "Fraunces", serif;
+    }
+
+    .ventureSubTitle {
+        font-size: 15px;
+        color: var(--white);
+        line-height: 120%;
+        font-family: var(--go-regular);
+        font-weight: 400;
+        opacity: 0.9;
+    }
+
+    .go-HeroSubtitle {
+        margin-top: 16px;
+        text-align: start;
+
+        .textHighlight {
+            color: var(--white);
+        }
+    }
+
+    .heroSectionBtnWrap {
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    @media (max-width: 767px) {
+        .heroSectionContent {
+            left: 0;
+
+            .ventureHeroHeading {
+                font-size: 30px;
+                line-height: 120%;
+                font-family: var(--go-regular);
+                font-weight: 400;
+            }
+
+            .ventureHeadingItalic {
+                font-size: 32px;
+                line-height: 120%;
+                font-weight: 400;
+            }
+        }
+    }
+}
+
+.heroSection::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 1) 0%, transparent 100%);
+    z-index: 1;
+}
+
+
+/* ─── MISSION & VISION ───────────────────────────────────── */
+.missionAndVision {
+    padding: 80px 0px;
+    position: relative;
+    z-index: 10;
+    background: var(--white);
+    overflow: hidden;
+    display: flex;
+
+    .missionVisionWrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 60px;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: space-between;
+    }
+
+    .missionWrapper {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .missionLeft {
+        width: 100%;
+        max-width: 40%;
+    }
+
+    .missionHeading {
+        font-size: 42px;
+        color: var(--black);
+        font-family: var(--go-semibold);
+        font-weight: 600;
+        line-height: 120%;
+    }
+
+    .missionRight {
+        width: 100%;
+        max-width: 70%;
+    }
+
+    .missionContent {
+        font-size: 20px;
+        color: var(--grey3);
+        line-height: 120%;
+        font-family: var(--go-regular);
+    }
+
+    .visionWrapper {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .visionLeft {
+        width: 100%;
+        max-width: 60%;
+    }
+
+    .visionRight {
+        width: 100%;
+        max-width: 40%;
+        display: flex;
+        justify-content: end;
+    }
+
+    .missionLeft .missionHeading {
+        font-size: 42px;
+        color: var(--black);
+        font-family: var(--go-semibold);
+        font-weight: 600;
+        line-height: 120%;
+    }
+
+    .btnBlack {
+        border-radius: 54px;
+        background: #090909;
+        padding: 14px 24px;
+        font: 16px 'go-medium';
+        line-height: 150% !important;
+        color: white;
+        border: 1px solid #262626;
+        cursor: pointer;
+        display: inline-flex;
+        gap: 6px;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+    }
+
+    .aboutusbtn {
+        margin-top: 32px;
+    }
+
+    @media (max-width: 767px) {
+        .missionVisionWrapper {
+            gap: 24px !important;
+        }
+
+        .missionWrapper {
+            flex-direction: column;
+        }
+
+        .visionWrapper {
+            flex-direction: column-reverse;
+            gap: 0px;
+        }
+
+        .visionLeft,
+        .missionRight,
+        .missionLeft,
+        .visionRight {
+            max-width: 100% !important;
+            width: 100% !important;
+            justify-content: flex-start !important;
+        }
+
+        .missionContent {
+            font-size: 16px;
+        }
+
+        .missionHeading {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .missionLeft .missionHeading {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+    }
+}
+
+
+/* ─── BEYOND CAPITAL ─────────────────────────────────────── */
+.beyondCapitalSection {
+    padding: 80px 0 !important;
+    background-color: #090909;
+    color: white;
+    border-bottom: solid 1px var(--black5);
+
+    .beyondCapitalHeadingContainer {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 40px;
+        width: 100%;
+
+        .beyondCapitalHeading {
+            font-size: 30px;
+            line-height: 120%;
+            font-family: var(--go-normal);
+            font-weight: 400;
+        }
+
+        .beyondCapitalHeadingBold {
+            font-family: var(--go-semibold);
+        }
+
+        .beyondCapitalDescription {
+            width: 100%;
+            max-width: 473px;
+            font-size: 16px;
+            font-style: normal;
+            font-family: var(--go-normal);
+            line-height: 150%;
+            color: var(--grey18);
+        }
+    }
+
+    .beyondCapitalCursor {
+        opacity: 1;
+    }
+
+    .beyondCapitalWrapper {
+        gap: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        align-items: center;
+    }
+
+    .beyondCapitalCardCover {
+        min-width: 274px;
+        position: relative;
+        z-index: 0;
+        padding: 1px;
+        border-radius: 12px;
+        max-width: 400px;
+        width: 100%;
+        overflow: hidden;
+        min-height: 221px;
+    }
+
+    .beyondCapitalcard .logo {
+        max-width: 52px;
+        max-height: 52px;
+    }
+
+    .logo {
+        z-index: 2;
+    }
+
+    .beyondCapitalcard {
+        padding: 20px 14px;
+        width: 100%;
+        max-height: 221px;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        position: relative;
+    }
+
+    .beyondCapitalcardText {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+        position: relative;
+        z-index: 8;
+    }
+
+    .beyondCapitalCardWrapper {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .beyondCapitalCardCover:hover .beyondCapitalCursor {
+        opacity: 1;
+        transition: opacity 0.6s ease;
+    }
+
+    .beyondCapitalAbsoluteNumber {
+        position: absolute;
+        z-index: 2;
+        right: 4px;
+        bottom: -64px;
+        color: #090909;
+        opacity: 0.3;
+        font: 155px "go-medium";
+        line-height: 150%;
+    }
+
+    .baryondCardHeading {
+        line-height: 120%;
+        color: #fff;
+        font: 24px "go-medium";
+    }
+
+    .baryondCardSubtext {
+        font: 16px "go-regular";
+        line-height: 150%;
+        color: #d4d4d4;
+        letter-spacing: 0;
+    }
+
+    .beyondCapitalHEading {
+        font: 32px "go-regular";
+        line-height: 100%;
+    }
+
+    .beyondCapitalBold {
+        font-weight: 600;
+    }
+
+    .beyondCapitalGradientBG {
+        position: absolute;
+        background: radial-gradient(circle at right, #232222, #020202);
+        z-index: 2;
+        width: calc(100% - 2px);
+        height: calc(100% - 2px);
+        border-radius: 12px;
+    }
+
+    .beyondSwiper {
+        overflow: hidden;
+    }
+
+    .swiper-pagination {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin: 0 auto;
+        margin-top: 24px;
+    }
+
+    .swiper-pagination-bullet {
+        min-width: 8px;
+    }
+
+    .swiper-pagination-bullet-active {
+        min-width: 40px !important;
+        width: 100%;
+    }
+
+    @media (min-width: 768px) {
+        .beyondCapitalCursor {
+            position: absolute;
+            left: -140px;
+            bottom: 40px;
+            background: linear-gradient(106deg, #39b5d7 16%, #f7d544 80.82% 104.82%);
+            filter: blur(120px);
+            backdrop-filter: blur(48.75px);
+            width: 374px;
+            height: 374px;
+            border-radius: 50%;
+            opacity: 0;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .container {
+            padding: 0px 12px;
+        }
+
+        .beyondCapitalHeadingContainer {
+            flex-direction: column;
+            gap: 12px;
+            position: sticky;
+            top: 60px;
+            z-index: 10;
+            background: #090909;
+            padding: 16px 0;
+        }
+
+        .beyondCapitalWrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .beyondCapitalHeading {
+            position: sticky;
+            z-index: 10;
+        }
+
+        .beyondCapitalAbsoluteNumber {
+            bottom: -44px;
+        }
+
+        .mobCardsAnimation {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .mobCardsAnimation .beyondCapitalCardCover {
+            position: sticky;
+            top: 300px;
+            margin-bottom: 12px;
+        }
+
+        .mobCardsAnimation .baryondCardSubtext {
+            width: 265px;
+        }
+
+        .beyondCapitalcard{
+            max-height: unset;
+
+        }
+
+        .beyondCapitalCardCover{
+            min-height: 250px;
+        }
+    }
+}
+
+
+/* ─── FORMAL ACADEMIC ────────────────────────────────────── */
+.formalAcademicSection {
+    background: #0a0a0a;
+    padding: 80px 0;
+    color: white;
+
+    .formalAcademicHeadingContainer {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 40px;
+        margin-bottom: 32px;
+    }
+
+    .formalAcademicHeading {
+        max-width: 50%;
+        font-size: 30px;
+        line-height: 120%;
+        color: var(--white);
+        font-family: var(--go-regular);
+        font-weight: 400;
+    }
+
+    .formalAcademicHeadingBold {
+        font-family: var(--go-semibold);
+    }
+
+    .formalAcademicDescription {
+        max-width: 40%;
+        font-size: 16px;
+        line-height: 150%;
+        color: var(--grey18);
+        font-family: var(--go-regular);
+    }
+
+    .formalAcademicUniContainer {
+        display: flex;
+        gap: 24px;
+    }
+
+    .formalAcademicUni {
+        flex: 1;
+        background: #161616;
+        border: 1px solid var(--grey3);
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .formalAcademicUniImg {
+        width: 100%;
+        height: 100%;
+        max-height: 210px;
+        overflow: hidden;
+    }
+
+    .formalAcademicUniImg img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .formalAcademicUniContent {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .formalAcademicUniName {
+        font-size: 18px;
+        font-family: var(--go-semibold);
+        color: var(--white);
+        line-height: 120%;
+        margin-bottom: 4px;
+    }
+
+    .formalAcademicUniDetail {
+        font-size: 13px;
+        color: var(--grey4);
+        line-height: 150%;
+        font-family: var(--go-regular);
+    }
+
+    .formalUniProgramme {
+        min-height: 61px;
+    }
+
+    .formalAcademicUniLabel {
+        font-family: var(--go-semibold);
+        font-size: 14px;
+    }
+
+    @media (max-width: 767px) {
+        overflow: hidden;
+
+        .formalAcademicHeadingContainer {
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .formalAcademicHeading {
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .formalAcademicDescription {
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .formalAcademicSwiper {
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .formalAcademicSwiper .swiper-wrapper {
+            display: flex;
+        }
+
+        .formalAcademicSwiper .swiper-slide {
+            width: 88%;
+            flex-shrink: 0;
+        }
+
+        .formalAcademicSwiper .formalAcademicUni {
+            width: 100%;
+        }
+
+        .formalAcademicUniContent {
+            padding: 12px;
+        }
+
+        .formalAcademicSwiperPagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 24px;
+            width: 100% !important;
+        }
+
+        .formalAcademicSwiperPagination .swiper-pagination-bullet {
+            width: 8px;
+            height: 8px;
+            background: var(--white) !important;
+            border-radius: 50%;
+            opacity: 1;
+            transition: all 0.3s ease;
+        }
+
+        .formalAcademicSwiperPagination .swiper-pagination-bullet-active {
+            width: 28px;
+            border-radius: 4px;
+            background: var(--white) !important;
+        }
+    }
+}
+
+
+/* ─── GLOBAL VISITORS ────────────────────────────────────── */
+.globalVisitorsSection {
+    background: #0a0a0a;
+    padding: 80px 0;
+    color: var(--white);
+    border-bottom: 1px solid var(--black5);
+
+    .globalVisitorsHeadingContainer {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 40px;
+        margin-bottom: 32px;
+    }
+
+    .globalVisitorsHeading {
+        max-width: 50%;
+        font-size: 30px;
+        line-height: 120%;
+        font-family: var(--go-regular);
+        color: var(--white);
+        font-weight: 400;
+    }
+
+    .globalVisitorsHeadingBold {
+        font-family: var(--go-semibold);
+    }
+
+    .globalVisitorsDescription {
+        max-width: 40%;
+        font-size: 16px;
+        line-height: 150%;
+        color: var(--grey18);
+        font-family: var(--go-regular);
+    }
+
+    .globalVisitorsLogoContainer {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        border: 1px solid #2a2a2a;
+        overflow: hidden;
+    }
+
+    .globalVisitorsLogoItem {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border-right: 1px solid #2a2a2a;
+        height: 100%;
+        max-height: 105px;
+    }
+
+    .globalVisitorsLogoItem:last-child {
+        border-right: none;
+    }
+
+    .globalVisitorsLogoImg {
+        width: 100%;
+        object-fit: contain;
+    }
+
+    .globalVisitorsDelegationLabel {
+        font-size: 13px;
+        font-family: var(--go-semibold);
+        font-weight: 600;
+        color: var(--white);
+        text-align: center;
+        line-height: 140%;
+    }
+
+    @media (max-width: 767px) {
+        .globalVisitorsHeadingContainer {
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .globalVisitorsHeading,
+        .globalVisitorsDescription {
+            max-width: 100%;
+        }
+
+        .globalVisitorsLogoContainer {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .globalVisitorsLogoItem:nth-child(2n) {
+            border-right: none;
+        }
+
+        .globalVisitorsLogoItem:nth-child(n+3) {
+            border-top: 1px solid #2a2a2a;
+        }
+    }
+}
+
+
+/* ─── GLOBAL IMMERSION ───────────────────────────────────── */
+.globalImmersionSection {
+    background: url(https://images.mastersunion.link/uploads/11052026/v1/bgVector.webp) no-repeat, var(--white4);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 80px 0;
+    color: #0a0a0a;
+    position: relative;
+    overflow: hidden;
+
+    .globalImmersionHeadingContainer {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 40px;
+        margin-bottom: 32px;
+    }
+
+    .globalImmersionHeading {
+        font-size: 30px;
+        line-height: 150%;
+        font-family: var(--go-regular);
+        font-weight: 400;
+        color: var(--black);
+    }
+
+    .globalImmersionHeadingBold {
+        font-family: var(--go-semibold);
+        line-height: 120%;
+    }
+
+    .globalImmersionDescription {
+        max-width: 473px;
+        font-size: 16px;
+        line-height: 150%;
+        color: var(--grey3);
+        font-family: var(--go-regular);
+    }
+
+    .globalImmersionCardContainer {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+
+    .globalImmersionCard {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        border: 1px solid #e4e4e4;
+    }
+
+    .globalImmersionCardLogos {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .globalImmersionCardLogos img{
+        width: 100%;
+    }
+
+    .globalImmersionCardLogosImg {
+        width: 100%;
+        object-fit: contain;
+        object-position: left center;
+    }
+
+    .globalImmersionCardLogosGrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        align-items: center;
+        width: 100%;
+    }
+
+    .globalImmersionCardLogosRow {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .globalImmersionCardLogo {
+        max-width: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .globalImmersionCardLogoCentered {
+        grid-column: 1 / -1;
+        justify-self: center;
+    }
+
+    .globalImmersionCardFlag {
+        width: 48px;
+        height: 48px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+
+    .globalImmersionCardDivider {
+        width: 100%;
+        height: 1px;
+        background: #e4e4e4;
+        margin: 20px 0;
+    }
+
+    .globalImmersionCardContent {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .globalImmersionCardTitle {
+        font-size: 15px;
+        font-family: var(--go-medium);
+        color: var(--black);
+        line-height: 120%;
+        margin-top: 12px;
+    }
+
+    .globalImmersionCardText {
+        font-size: 14px;
+        font-family: var(--go-regular);
+        color: var(--grey3);
+        line-height: 150%;
+    }
+
+    @media (max-width: 767px) {
+        .globalImmersionHeadingContainer {
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .globalImmersionHeading,
+        .globalImmersionDescription {
+            max-width: 100%;
+            line-height: 120%;
+        }
+
+        .globalImmersionCardContainer {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .globalImmersionCardLogos {
+            min-height: 100px;
+        }
+
+        .globalImmersionCardLogosGrid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+}
+
+
+/* ─── PARTNERSHIP TEAM ───────────────────────────────────── */
+.partnershipTeamSection {
+    background: #0a0a0a;
+    padding: 80px 0;
+    color: var(--white);
+
+    .partnershipTeamHeadingContainer {
+        display: flex;
+        justify-content: space-between;
+        gap: 40px;
+        margin-bottom: 48px;
+    }
+
+    .partnershipTeamHeading {
+        max-width: 50%;
+        font-size: 30px;
+        line-height: 120%;
+        font-family: var(--go-regular);
+        color: var(--white);
+        font-weight: 400;
+    }
+
+    .partnershipTeamHeadingBold {
+        font-family: var(--go-semibold);
+    }
+
+    .partnershipTeamDescription {
+        max-width: 40%;
+        font-size: 16px;
+        line-height: 150%;
+        color: var(--grey18);
+        font-family: var(--go-regular);
+    }
+
+    .partnershipTeamCardContainer {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .partnershipTeamCard {
+        background: #161616;
+        border: 1px solid var(--grey3);
+        border-radius: 16px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .partnershipTeamCardImgWrap {
+        position: relative;
+        width: 100%;
+        height: 334px;
+        overflow: hidden;
+    }
+
+    .partnershipTeamCardImg {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: top center;
+        display: block;
+        position: relative;
+        z-index: 2;
+    }
+
+    .partnershipTeamCardWatermark {
+        position: absolute;
+        right: -20px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 60%;
+        opacity: 0.15;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .partnershipTeamCardContent {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .partnershipTeamCardName {
+        font-size: 24px;
+        font-family: var(--go-regular);
+        color: var(--white);
+        line-height: 120%;
+        margin-bottom: 4px;
+    }
+
+    .partnershipTeamCardRole {
+        font-size: 16px;
+        font-family: var(--go-semibold);
+        color: var(--grey4);
+        line-height: 120%;
+    }
+
+    .partnershipTeamCardDept {
+        font-size: 14px;
+        font-family: var(--go-regular);
+        color: var(--grey4);
+        line-height: 120%;
+    }
+
+    @media (max-width: 767px) {
+        .partnershipTeamHeadingContainer {
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .partnershipTeamHeading,
+        .partnershipTeamDescription {
+            max-width: 100%;
+        }
+
+        .partnershipTeamCardContainer {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .partnershipTeamCardImgWrap {
+            height: 320px;
+        }
+
+        .partnershipTeamCardName {
+            font-size: 18px;
+        }
+    }
+}
+
+
+/* ─── REACHOUT BREATHER ──────────────────────────────────── */
+.reachoutBreatherSection {
+    background: url(https://images.mastersunion.link/uploads/04042026/v1/Vector1376.svg) no-repeat, var(--black5);
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 60px 0 !important;
+
+    .reachoutBreatherWrapper {
+        display: flex;
+        gap: 28px;
+        align-items: stretch;
+    }
+
+    .pbLine {
+        width: 100%;
+        padding-bottom: 8px;
+        border-bottom: 2px solid var(--grey4);
+    }
+
+    .reachoutLefti {
+        width: 100%;
+        max-width: 708px;
+        border-radius: 16px;
+        background: var(--white);
+        padding: 48px;
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        align-items: flex-start;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .go-BreatherHeading {
+        border-bottom: 2px solid var(--grey4);
+        padding-bottom: 8px;
+        width: 100%;
+    }
+
+    .reachoutRight {
+        width: 100%;
+        max-width: 508px;
+        overflow: hidden;
+        line-height: 0;
+        position: relative;
+    }
+
+    .reachoutRight img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        border-radius: 16px;
+    }
+
+    .supportInfoWrapper {
+        display: flex;
+        gap: 32px;
+        align-items: flex-start;
+    }
+
+    .supportDivi {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .supportDivi>img {
+        max-width: 40px;
+        max-height: 40px;
+    }
+
+    .supportMailDivi {
+        display: flex;
+        gap: 5px;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .supportBoxiText {
+        font-size: 16px;
+        color: var(--grey);
+        font-family: var(--go-medium);
+        line-height: 120%;
+    }
+
+    .supportcontentText {
+        font-size: 16px;
+        line-height: 120%;
+        font-family: var(--go-medium);
+        color: var(--grey3);
+    }
+
+    .getInTouchBold {
+        font-family: var(--go-semibold);
+        font-weight: 600;
+    }
+
+    @media (max-width: 767px) {
+
+        .reachoutBreatherWrapper {
+            flex-direction: column-reverse;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .reachoutLefti,
+        .reachoutRight {
+            max-width: 100%;
+        }
+
+        .reachoutLefti {
+            padding: 20px;
+            gap: 16px;
+        }
+
+        .go-BreatherHeading {
+            padding-bottom: 16px;
+        }
+
+        .supportInfoWrapper {
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .supportDivi>img {
+            max-width: 32px;
+            max-height: 32px;
+        }
+
+        .supportcontentText,
+        .supportBoxiText {
+            font-size: 13px;
+        }
+
+        .reachoutRight {
+            height: 220px;
+        }
+    }
+}
+
+
+/* ─── MU JOURNEY ─────────────────────────────────────────── */
+.muJourney {
+    background: url(https://images.mastersunion.link/uploads/19012026/v1/Vector1712.webp) left, url(https://images.mastersunion.link/uploads/19012026/v1/Vector1710.webp) right, var(--white);
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    .journeyWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+        align-items: center;
+    }
+
+    .fr-HeadingItalic {
+        text-align: right;
+        width: 100%;
+        max-width: 858px;
+    }
+
+    .journeyBtn {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        .btnBlack {
+            width: 237px;
+        }
+    }
+
+    .headingAlign {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .go-HighlightHeading {
+        text-align: center;
+    }
+
+    .journeyUpper {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        align-items: center;
+        width: 100%;
+    }
+
+    .journeyBottom {
+        display: flex;
+        align-items: center;
+        gap: 60px;
+        padding: 24px 80px;
+    }
+
+    .journeyLinks {
+        display: flex;
+        align-self: center;
+        gap: 8px;
+        font-size: 16px;
+        color: var(--black);
+        line-height: 150%;
+        font-family: var(--go-regular);
+        text-decoration: underline;
+    }
+
+    @media (max-width: 767px) {
+        background: url(https://images.mastersunion.link/uploads/20012026/v1/VectorMob.webp) left, url(https://images.mastersunion.link/uploads/20012026/v1/vectorMob2.webp) right, var(--white);
+        background-repeat: no-repeat;
+        background-size: contain;
+
+        .journeyBottom {
+            flex-direction: column;
+            gap: 24px;
+            padding: 24px 70px;
+        }
+
+        .journeyWrapper {
+            gap: 24px;
+        }
+
+        .journeyUpper {
+            gap: 24px;
+            width: 100%;
+        }
+
+        .fr-HeadingItalic {
+            text-align: center;
+        }
+    }
+}
+
+
+/* ─── GLOBAL SECTION PADDING (MOBILE) ───────────────────── */
+@media (max-width: 767px) {
+    section {
+        padding: 60px 0px;
+    }
+
+    .reachoutBreatherSection{
+        padding: 40px 0px !important;
+    }
+}

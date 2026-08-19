@@ -1,0 +1,195 @@
+
+    <div class="overlayedSwiper">
+        <div class="swiper hearFromAlumni mt30">
+
+            <div class="swiper-wrapper" id="almuniSwiper">
+            </div>
+        </div>
+
+    </div>
+
+
+
+<script>
+    //almuni section
+    let index = 0;
+    const almunis = [
+
+        {
+            name: 'Daniel Nath,',
+            designation: 'Strategy Lead,',
+            company: 'Google',
+            program: 'PGP TBM',
+            cohort: "Cohort '21",
+            linkedin: 'https://www.linkedin.com/in/danielnath/',
+            youtubeLink: 'K1goR1Gu2bI',  // Rotated from the fifth position
+            thumbnail: 'https://files.mastersunion.link/resources/img/hs1.webp',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/DanlelNath.gif'
+        },
+            {
+            name: 'Jeneesha Singh,',
+            designation: 'Consultant, ',
+            program: 'PGP TBM',
+            company: 'Bain & Co.',
+            cohort: "Cohort '21",
+            linkedin: 'https://www.linkedin.com/in/jeneesha-singh-a52a52134/',
+            youtubeLink: '_Ejeyy1UWDc',  // Rotated from the third position
+            thumbnail: 'https://files.mastersunion.link/resources/img/hs3.webp',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/JeneeshaSingh.gif'
+        },
+          {
+            name: 'Dharmil Bavishi,',
+            designation: "Co-founder,",
+            company: "Bullspree",
+            program: 'PGP TBM',
+            cohort: "Cohort '22",
+            linkedin: 'https://www.linkedin.com/in/khyatee-g-61a682117/',
+            youtubeLink: 'UlzNejFQWk8',  // Rotated from the fourth position
+            thumbnail: 'https://files.mastersunion.link/resources/img/hear2.webp',
+            // thumbnailGif: 'https://images.mastersunion.link/assets/gifs/DanlelNath.gif'
+
+        },
+         {
+            name: 'Deepankar Mathur,',
+            designation: "Founder's Office,",
+            company: "Zerodha",
+            program: 'PGP TBM',
+            cohort: "Cohort '22",
+            linkedin: 'https://www.linkedin.com/in/khyatee-g-61a682117/',
+            youtubeLink: 'yDne-VC--Ws',  // Rotated from the fourth position
+            thumbnail: 'https://files.mastersunion.link/resources/img/hs4.webp',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/DeepankarMathur.gif'
+        },
+             {
+            name: 'Vibhor Agarwal,',
+            designation: "Founder's Office,",
+            company: "Hike",
+            program: 'PGP TBM',
+            cohort: "Cohort '23",
+            linkedin: 'https://www.linkedin.com/in/vibs98/',
+            youtubeLink: 'UJMO8fYIQTE',  // Rotated from the first position
+            thumbnail: 'https://files.mastersunion.link/resources/img/hs6.webp',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/VibhorAgarwal.gif'
+        },
+          {
+            name: 'Mehul Soni,',
+            designation: "Quantitative Trader,",
+            company: "Avirom Capital",
+            program: 'PGP TBM',
+            cohort: "Cohort '24",
+            //linkedin: 'https://www.linkedin.com/in/khyatee-g-61a682117/',
+            youtubeLink: 'lAxRrbfgx9g',  // Rotated from the fourth position
+            thumbnail: 'https://files.mastersunion.link/media/img/Avirom.webp',
+            //thumbnailGif: 'https://images.mastersunion.link/assets/gifs/AnuragBansal.gif'
+        },
+
+        {
+
+            name: 'Kakaraparthi Badarinadh,',
+            designation: "Senior",
+            company: "Specialist, Talabat",
+            program: 'PGP TBM',
+            cohort: "Cohort '24",
+            //linkedin: 'https://www.linkedin.com/in/khyatee-g-61a682117/',
+            youtubeLink: 'fieNhpQ2CSw',  // Rotated from the fourth position
+            thumbnail: 'https://files.mastersunion.link/media/img/Talabatt.webp',
+            //thumbnailGif: 'https://images.mastersunion.link/assets/gifs/AnuragBansal.gif'
+        },
+            {
+            name: 'Prabhu Dayal Guliani,',
+            designation: "Head of Growth, ",
+            company: "AMPM",
+            program: 'PGP TBM',
+            cohort: "Cohort '23",
+            linkedin: 'https://www.linkedin.com/in/khyatee-g-61a682117/',
+            youtubeLink: 'iYQiC_F_K8w',  // Rotated from the fourth position
+            thumbnail: 'https://files.mastersunion.link/resources/img/hs7.webp',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/PrabhuDayalGullan.gif'
+        },
+
+        {
+            name: 'Anurag Bansal,',
+            designation: "Founder's Office,",
+            company: "Zerodha",
+            program: 'PGP TBM',
+            cohort: "Cohort '23",
+            linkedin: 'https://www.linkedin.com/in/khyatee-g-61a682117/',
+            youtubeLink: 'tXjPUfEqQr4',  // Rotated from the fourth position
+            thumbnail: 'https://files.mastersunion.link/resources/img/hs5.webp',
+            thumbnailGif: 'https://images.mastersunion.link/assets/gifs/AnuragBansal.gif'
+        },
+      
+      
+
+    
+
+        // {
+        //     name: 'Dharmil Bavishi,',
+        //     designation: 'Raising 75L on Shark Tank',
+        //     company: 'Raising 75L on Shark Tank',
+        //     program: 'PGP TBM',
+        //     cohort: "Cohort '21",
+        //     linkedin: 'https://www.linkedin.com/in/dharmilbavishi-consumer-tech-gaming/',
+        //     youtubeLink: 'XQPnjqtJcuQ',  // Rotated from the second position
+        //     thumbnail: 'https://cdn.mastersunion.org/assets/img/newmu/BehindThescene.webp',
+        // },
+        // {
+        //     name: 'Mohini Saluja,',
+        //  designation: 'AVP Employer Branding ,',
+        //company: 'Citi Bank',
+        //program: 'PGP TBM',
+        //cohort: "Cohort '23",
+        // linkedin: 'https://www.linkedin.com/in/jeneesha-singh-a52a52134/',
+        // youtubeLink: 'C1RnMO5zotc',  // Rotated from the third position
+        // thumbnail: 'https://files.mastersunion.link/resources/img/hs2.webp',
+        //  thumbnailGif: 'https://images.mastersunion.link/assets/gifs/MohiniSaluja.gif'
+        // },
+
+
+
+        /* {
+             name: 'Shivani Vaswani,',
+             designation: "Strategic Partnerships",
+             company: "Strategic Partnerships",
+             program: 'PGP TBM',
+             cohort: "Cohort '23",
+             linkedin: 'https://www.linkedin.com/in/khyatee-g-61a682117/',
+             youtubeLink: '20ML16bTpRQ',  // Rotated from the fourth position
+             thumbnail: 'https://cdn.mastersunion.org/assets/img/newmu/roleatCred.webp',
+             thumbnailGif: ''
+         },*/
+   
+       
+    
+        //{
+        //    name: 'Before & After MU,',
+        //    designation: "Real Career Transformation",
+        //    company: "Real Career Transformation",
+        //    program: 'PGP TBM',
+        //    cohort: "Cohort '23",
+        //    linkedin: 'https://www.linkedin.com/in/khyatee-g-61a682117/',
+        //    youtubeLink: 'vV7tTgaXlWg',  // Rotated from the fourth position
+        //    thumbnail: 'https://cdn.mastersunion.org/assets/img/newmu/careerafterMU.webp'
+        //}
+    ];
+
+    almunis.map((data, index) => {
+        let html = `<div class="swiper-slide" id='alm-${index}'>
+                        <div class="masterImage">
+                            <img   src="${data.thumbnail}" alt="Icon"  class="">
+                         
+                            <div class="masterPlay" onclick="openPopup('${data.youtubeLink}');"><img  
+                                    src="https://files.mastersunion.link/resources/svg/homePlayIcon.svg" alt="Icon" ></div>
+                        </div>
+                        <p class="alumniName"> 
+                            ${data.name} <span>${data.designation}</span>  <br> <span>${data.company}</span>
+                        </p>
+                        <div class="alumniDesgination">
+                         ${data.program}
+                             <img   src="https://files.mastersunion.link/resources/svg/darkCircle.svg" alt="icon"></img> ${data.cohort} 
+                        </div>
+                    </div>`
+        $('#almuniSwiper').append(html);
+    })
+
+</script>

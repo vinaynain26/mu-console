@@ -1,0 +1,698 @@
+<main>
+    <div class="popupContainerOuter hsslVotePopup" id="leaderboardWaitlist">
+
+        <div class="popupContainer">
+            <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_heading">Vote for your favourite
+                    startup!</h2>
+                <div class="flexend">
+                    <img  src="https://files.mastersunion.link/media/svg/dark-close-icon.svg" class="invert-img" alt=""
+                        onclick="closeHsslVotePopup();">
+                </div>
+            </div>
+
+            <form class="registerbox mt15" id="hsslVotePopUp">
+
+
+                <div class="form" style="position: relative;">
+
+                    <label for="firstName">Full Name <em>*</em></label>
+                    <div class="input">
+                        <input type="text" placeholder="Full Name" id="namehssl"
+                            onblur="validateNameInput('namehssl', 'namehsslError', 'Full Name')">
+                    </div>
+                    <span class="error font-red" id="namehsslError"></span>
+                </div>
+                <div class="form">
+                    <label for="email">Email Address <em>*</em></label>
+                    <div class="input">
+                        <input type="email" placeholder="Email Address" id="emailhssl"
+                            onblur="validateEmailInput('emailhssl', 'emailErrorHssl')">
+                    </div>
+                    <span class="error font-red" id="emailErrorHssl"></span>
+                </div>
+                <div class="form w-100 select-form-arrow">
+                    <label for="category">Grade <em>*</em></label>
+                    <select id="gradeHssl" class="selectInput mt5 safariFix" onchange="handleGradeChange()">
+                        <option value="" disabled selected>Select</option>
+                        <option value="10th grade or below">10th grade or below</option>
+                        <option value="11th grade">11th grade</option>
+                        <option value="12th grade">12th grade</option>
+                        <option value="College student">College student</option>
+                        <option value="Not a student">Not a student</option>
+                    </select>
+                    <span class="error font-red" id="gradeHsslError"></span>
+
+                    
+                </div>
+                <div class="form w-100" id="InstituteNameContinerhssl">
+                    <label for="lastName">Institute Name <em>*</em></label>
+                    <div class="input">
+                        <input type="text" placeholder="Masters' Union" id="InstituteNamehssl"
+                            onblur="validateNameInput('InstituteNamehssl', 'InstituteNamehsslError', 'Institute name')">
+                    </div>
+                    <span class="error font-red" id="InstituteNamehsslError"></span>
+                </div>
+
+                <div class="form w-100">
+                    <label for="contactNumber">Mobile Number <em>*</em></label>
+                    <div class="input otpInput">
+
+                        <select name="" id="selectCountryCode" class=" safariFix input otpCountryCode">
+
+                        </select>
+
+                        <input type="tel"  placeholder="Mobile Number" id="contactNumberhssl"
+                            onblur="validateMobileInput('contactNumber', 'contactNumberhssl')">
+                        {{!-- <button class="getOtpBtn">Get OTP</button> --}}
+                        <div class="gradientButton getOtpBtn ">
+
+                            <div class="gradientButton getOtpBtn">
+                                <button type="button" onclick="getOtp()" class="button iconButton">
+                                    Get OTP
+                                </button>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <span class="error font-red" id="otpMessageHandler"></span> <br>
+                    <span class="error font-red" id="contactNumberError"></span>
+                </div>
+                 <div class="form w-100 hide" id="otpEnterSection">
+                    <label>Enter OTP</label>
+                    <div class="input">
+                        <input type="text" name="otp" id="otpUserHssl">
+                    </div>
+                    <span class="error font-red" id="otpmessageError"></span>
+                </div>
+
+                <div class="form w-100 hide" id="captchaSection">
+                      <label for="">Captcha:</label>
+                      <div class="">
+                        <canvas id="captchaCanvas" width="120" height="40"></canvas>
+                      </div>
+                      <div class="input">                
+                       <input type="text" id="captchaInput" name="captcha" placeholder="Enter CAPTCHA" required>
+                      </div>
+                      <div class="error font-red" id="captchaError"></div>
+                </div>
+
+                <div class="form w-100 select-form-arrow hide" id="select2Div">
+                    <label for="category">Please Select <em>*</em></label>
+                    <select id="dynamicOptionsSelect" class="selectInput mt5">
+                        <option value="" disabled selected>Select</option>
+                    </select>
+                    <span class="error font-red" id="select2Error"></span>
+
+                    
+                </div>
+               
+                <div class="consentCheckWrapper">
+    <div class="consentCheckRow">
+        <input type="checkbox" id="consentCheckHv">
+        <label for="consentCheckHv">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+    </div>
+    <p id="consentCheckErrorHv" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+</div>
+                <div class="">
+                    <div class="gradientButton whiteHover">
+                        <button class="button iconButton" type="submit" onclick="handleFormSubmit(event)">
+                            <span id="btnSubmitText">Vote</span>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                xmlns="https://www.w3.org/2000/svg">
+                                <path
+                                    d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                    fill="white"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="thanku hide" id="registerSuccess">
+                <img  src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+                <p class="font-18 font-semibold wd-40">Your vote response has been recorded!</p>
+            </div>
+
+        </div>
+
+    </div>
+</main>
+
+<script>
+let currentCaptchaCode = "";
+
+    // Function to generate CAPTCHA code and render it on canvas
+    function generateCaptcha() {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      currentCaptchaCode = "";
+      for (let i = 0; i < 6; i++) {
+        currentCaptchaCode += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+
+      const canvas = document.getElementById('captchaCanvas');
+      const ctx = canvas.getContext('2d');
+
+      // Draw background
+      ctx.fillStyle = "#f2f2f2";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Add noise
+      for (let i = 0; i < 30; i++) {
+        ctx.fillStyle = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.3)`;
+        ctx.beginPath();
+        ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Draw CAPTCHA text
+      ctx.font = "24px Arial";
+      ctx.fillStyle = "#000";
+      ctx.textBaseline = "middle";
+      ctx.textAlign = "center";
+      const x = canvas.width / 2;
+      const y = canvas.height / 2;
+      ctx.fillText(currentCaptchaCode, x, y);
+
+      // Add distortion
+      ctx.beginPath();
+      ctx.moveTo(0, Math.random() * canvas.height);
+      ctx.bezierCurveTo(canvas.width / 4, Math.random() * canvas.height, canvas.width / 2, Math.random() * canvas.height, canvas.width, Math.random() * canvas.height);
+      ctx.strokeStyle = "rgba(0,0,0,0.2)";
+      ctx.stroke();
+    }
+
+    // Initial CAPTCHA setup
+    generateCaptcha();
+
+    // Handle form submission
+    let form = document.getElementById('captchaForm');
+    let captchaInput = document.getElementById('captchaInput');
+    let captchaError = document.getElementById('captchaError');
+    let successMessage = document.getElementById('successMessage');
+
+
+
+
+
+    function closeHsslVotePopup() {
+        let applyNowPopUp = document.getElementById("leaderboardWaitlist");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active");
+
+        }
+
+        document.body.classList.remove("no-scroll");
+    }
+
+
+    function openHsslVotePopup(event) {
+
+        event.stopPropagation()
+        const form = document.getElementById("leaderboardWaitlist");
+
+        form.classList.add("active");
+
+        document.body.classList.add("no-scroll");
+
+        document.querySelector("#SuccessMessage").classList.add("hide");
+        document.querySelector("#leadformContainer").classList.remove("hide");
+
+    }
+
+    function onSucessVote(event) {
+
+        event.preventDefault();
+        $("#hsslVotePopUp").addClass("hide");
+        $("#registerSuccess").removeClass("hide");
+    }
+
+    $(document).ready(function () {
+        (function deferCscUntilHsslVotePopupOpen() {
+            var el = document.getElementById("leaderboardWaitlist");
+            if (!el) return;
+            var started = false;
+            function kick() {
+                if (started || !el.classList.contains("active")) return;
+                started = true;
+                getAllCountries();
+            }
+            kick();
+            if (typeof MutationObserver !== "undefined") {
+                new MutationObserver(kick).observe(el, {
+                    attributes: true,
+                    attributeFilter: ["class"],
+                });
+            }
+        })();
+
+        $('#selectCountryCode').change(function () {
+            var countryCode = $(this).val();
+            getAllStates(countryCode);
+        });
+
+        $('#userState').change(function () {
+            var countryCode = $('#selectCountryCode').val();
+            // get stateCode from data-StateCode value from the selected option
+            var stateCode = $(this).find(':selected').data('state');
+
+            console.log("stateCode", stateCode);
+
+            getCities(countryCode, stateCode);
+        });
+
+
+
+
+
+        function getAllCountries() {
+            $.ajax({
+                url: 'https://api.mastersunion.org/api/geo/countries',
+                type: 'GET',
+                headers: {
+                    "Accept": "application/json"
+                }
+            }).done(function (response) {
+                $('#selectCountryCode').empty().append($("<option value='' disabled selected></option>").text("Select your country"));
+                $.each(response, function (idx, country) {
+                    $('#selectCountryCode').append($("<option></option>")
+                        .attr("value", country.phonecode)
+                        .text(`${country.phonecode} (${country.name})`));
+                });
+
+                $('#selectCountryCode').val('91').change();
+            });
+        }
+
+        function getAllStates(countryCode) {
+            $.ajax({
+                url: `https://api.mastersunion.org/api/geo/countries/${countryCode}/states`,
+                type: 'GET',
+                headers: {
+                    "Accept": "application/json"
+                }
+            }).done(function (response) {
+                $('#userState').empty().append($("<option value='' disabled selected></option>").text("Select your state"));
+                $.each(response, function (idx, state) {
+                    $('#userState').append($("<option></option>")
+                        .attr("value", state.name)
+                        .attr("data-state", state.iso2)
+                        .text(state.name));
+                });
+            });
+        }
+
+        function getCities(countryCode, stateCode) {
+            $.ajax({
+                url: `https://api.mastersunion.org/api/geo/countries/${countryCode}/states/${stateCode}/cities`,
+                type: 'GET',
+                headers: {
+                    "Accept": "application/json"
+                }
+            }).done(function (response) {
+                $('#userCity').empty().append($("<option value='' disabled selected></option>").text("Select your city"));
+                $.each(response, function (idx, city) {
+                    $('#userCity').append($("<option></option>")
+                        .attr("value", city.name)
+                        .text(city.name));
+                });
+            });
+        }
+    });
+    let needValidationOrg = true;
+
+    function handleGradeChange() {
+        const grade = $('#gradeHssl').val();
+
+        if (grade === "Not a student") {
+            needValidationOrg = false;
+            // Hide the institute name field when not required
+            $('#InstituteNameContinerhssl').addClass("hide");
+            $('#InstituteNamehsslError').hide();
+        } else {
+            needValidationOrg = true;
+            // Show and enable the institute name field when required
+            $('#InstituteNameContinerhssl').removeClass("hide");
+        }
+    }
+   
+   
+   
+   
+   
+    function handleFormSubmit(e) {
+        e.preventDefault();
+
+        console.log("HSSL Form Submission");
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const utmSource = params.utm_source || '';
+        const utmMedium = params.utm_medium || '';
+        const utmCampaign = params.utm_campaign || '';
+        const gclid = params.gclid || "";
+        const fbclid = params.fbclid || "";
+        const utmTerm = params.utm_term || ""; 
+        const utmPlacement = params.utm_placement || "";
+        const utmContent = params.utm_content || "";
+        const utmCampaignId = params.utm_campaign_id || "";
+        const utmAdGroupId = params.utm_adgroup_id || "";
+        const utmCreativeId = params.utm_creative_id || "";
+
+        const deviceType = window.innerWidth < 767 ? 'mobile' : 'desktop';
+
+        console.log('Device Type:', deviceType);
+        let course = 'K-12';
+        // Collect form data
+        const name = $('#namehssl').val();
+        const email = $('#emailhssl').val();
+        const mobile = $('#contactNumberhssl').val();
+        const countryCode = $('#selectCountryCode').val();
+        const grade = $('#gradeHssl').val();
+        const organisation = $('#InstituteNamehssl').val();
+        const otp = $('#otpUserHssl').val();
+
+        // Validate required fields
+        let isValid = true;
+        const emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+
+        if (!emailPattern.test(email)) {
+            $('#emailErrorHssl').text('Please enter a valid email address').show();
+            isValid = false;
+        } else {
+            $('#emailErrorHssl').hide();
+        }
+
+        if (!mobile || !/^\d{10}$/.test(mobile)) {
+            $('#contactNumberError').text('Please enter a valid mobile number').show();
+            isValid = false;
+        } else {
+            $('#contactNumberError').hide();
+        }
+
+        if (!name) {
+            $('#namehsslError').text('Name is required').show();
+            isValid = false;
+        } else {
+            $('#namehsslError').hide();
+        }
+
+
+
+        if (!grade) {
+            $('#gradeHsslError').text('Please enter your grade').show();
+            isValid = false;
+        } else {
+            $('#gradeHsslError').hide();
+        }
+
+        // Validate organisation (Institute Name) only if needed
+        if (needValidationOrg) {
+            if (!organisation) {
+                $('#InstituteNamehsslError').text('Please enter your organisation').show();
+                isValid = false;
+            } else {
+                $('#InstituteNamehsslError').hide();
+            }
+        }
+
+
+        if (!otp) {
+            $('#otpErrorHssl').text('Please enter the OTP sent to your email').show();
+            isValid = false;
+        } else {
+            $('#otpErrorHssl').hide();
+        }
+   
+
+      if (captchaInput.value !== currentCaptchaCode) {
+        captchaError.textContent = "Captcha does not match. Please try again.";
+        generateCaptcha();
+        return;
+      }
+        if (!document.getElementById('consentCheckHv')?.checked) { document.getElementById('consentCheckErrorHv').classList.remove('warning'); isValid = false; } else { document.getElementById('consentCheckErrorHv').classList.add('warning'); }
+
+        if (!isValid) {
+            console.log("Validation failed. Stopping submission.");
+            return;
+        }
+
+        console.log("All fields are valid. Proceeding with form submission.");
+
+        $("#submitButtonStatusPgpTbm").text("Loading...").prop("disabled", true);
+
+        const formData = {
+            email: email,
+            name: name,
+            mobile: mobile,
+            organisation: organisation,
+            countryCode: countryCode || "",
+            experience: grade || "",
+            medium: utmMedium || "Hssl Voting popup",
+            campaign: utmCampaign || '',
+            source: utmSource || 'website',
+            gclid : gclid,
+            fbclid : fbclid,
+            utmTerm : utmTerm,
+            utmPlacement : utmPlacement ,
+            utmContent : utmContent,
+            utmCampaignId :utmCampaignId,
+            utmAdGroupId : utmAdGroupId,
+            utmCreativeId : utmCreativeId,
+            device: deviceType,
+            event_Id: "668cbe6361bf2340668d4207", // hssl event id
+            eventName: "High School Startup League",
+            course: course || "UG",
+            otp: otp,
+            teamID: teamId,
+            consentCheck: document.getElementById('consentCheckHv')?.checked || false,
+        };
+
+        console.log("Form Data:", formData);
+
+        fetch('{{apiBaseURL}}/api/registerForEventHssl', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log("API Response:", data);
+
+                if (data.Message === "Already registered") {
+                    $('#emailErrorHssl')
+                        .text('this email is already registered')
+                        .css({
+                            'visibility': 'visible',
+                            'display': 'inline',
+                            'opacity': '1' // Fully visible
+                        });
+
+
+                    $("#submitButtonStatusPgpTbm").text("Register Now").prop("disabled", false);
+                    return;
+                } else if (data.Message === "Already registered mobile") {
+
+                    $('#contactNumberError')
+                        .text('this number is already registered')
+                        .css({
+                            'visibility': 'visible',
+                            'display': 'inline',
+                            'opacity': '1' // Fully visible
+                        });
+
+                    $("#submitButtonStatusPgpTbm").text("Register Now").prop("disabled", false);
+                    return;
+                } else if (data.message == "Invalid OTP.") {
+                    $('#otpmessageError').text("You have entered an invalid OTP");
+
+                } else if (data.message == "No OTP record found for this email.") {
+                    $('#otpmessageError').text("Wrong Request, no OTP record found for this email/number");
+
+                }
+
+                if (!data.IsSuccess) {
+                    let message = "Something went wrong, please try again.";
+                    if (data.Message) {
+                        message = data.Message;
+                    }
+                    $("#registerError").text(message).show();
+                    $("#submitButtonStatusPgpTbm").text("Register Now").prop("disabled", false);
+                    return;
+                }
+
+                if (data.IsSuccess) {
+                    // Successful registration
+                    $("#hsslVotePopUp").addClass("hide");
+                    $("#registerSuccess").removeClass("hide");
+
+                    // Store data in localStorage for confirmation
+                    localStorage.setItem("userName", name);
+                    localStorage.setItem("eventName", "High School Startup League");
+
+                    // Optional: Push to another API
+                  // const formDataNPF = {
+                  //     Specialization: null,
+                  //     field_course_preference: course,
+                  //     campaign: utmCampaign || null,
+                  //     email: email,
+                  //     field_device_type: deviceType,
+                  //     medium: utmMedium || "High School Startup League Event Page",
+                  //     mobile: mobile,
+                  //     name: name,
+                  //     source: utmSource || 'Website',
+                  //     field_utm_url: window.location.href,
+                  //     event_payload: formData,
+                  //     leadSource: "HSSL Vote Popup"
+                  // };
+
+                  // fetch(`{{apiBaseURL}}/api/leads/pushToNPF_UG`, {
+                  //     method: 'POST',
+                  //     headers: {
+                  //         'Content-Type': 'application/json',
+                  //     },
+                  //     body: JSON.stringify(formDataNPF),
+                  // })
+                  //     .then(responseNPF => responseNPF.json())
+                  //     .then(dataNPF => console.log("Push to NPF Response:", dataNPF))
+                  //     .catch(errorNPF => console.error('Error in NPF API:', errorNPF));
+                }
+            })
+            .catch(error => {
+                console.error('Error in API call:', error);
+                $("#registerError").text("Failed to register. Please try again.").show();
+                $("#submitButtonStatusPgpTbm").text("Register Now").prop("disabled", false);
+            });
+    }
+    let otpCooldown = false; // Global variable to track cooldown state
+    let cooldownInterval; // Global variable to store the interval reference
+    let cooldownTime = 59; // Cooldown time in seconds
+
+    function getOtp() {
+        if (otpCooldown) {
+            console.log("Please wait for the cooldown to complete.");
+            $('#otpMessageHandler').text(`Please wait for ${cooldownTime} seconds to resend the OTP.`).show();
+            return;
+        }
+
+        // User Fields
+        const name = $('#namehssl').val();
+        const email = $('#emailhssl').val();
+        const countryCode = $('#selectCountryCode').val();
+        const mobile = $('#contactNumberhssl').val();
+
+        // Validate required fields
+        let isValid = true;
+
+        const emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+        if (!emailPattern.test(email)) {
+            $('#emailErrorHssl').removeClass('warning').text('Please enter a valid email address').show();
+            isValid = false;
+            console.log("Invalid Email:", email);
+        } else {
+            $('#emailErrorHssl').addClass('warning').text('').hide();
+        }
+
+        if (!mobile ) {
+            $('#contactNumberError').removeClass('warning').text('Please enter a valid mobile number').show();
+            isValid = false;
+            console.log("Invalid Mobile:", mobile);
+        } else {
+            $('#contactNumberError').addClass('warning').text('').hide();
+        }
+
+        if (!isValid) {
+            console.log("Validation failed. Returning.");
+            return; // Stop form submission if any field is invalid
+        }
+
+        console.log("All fields are valid. Proceeding with form submission.");
+
+        // Disable the OTP button and start cooldown
+        otpCooldown = true;
+        cooldownTime = 59; // Reset cooldown time
+        $('#otpMessageHandler').text(`OTP sent! Please wait for ${cooldownTime} seconds to resend.
+        If you don't get OTP on your mobile, check your email.`).show();
+        $('.getOtpBtn button').prop('disabled', true); // Disable button
+
+        // Start interval to update timer dynamically
+        cooldownInterval = setInterval(() => {
+            cooldownTime--;
+            $('#otpMessageHandler').text(`Please wait for ${cooldownTime} seconds to resend the OTP.
+            If you don't get OTP on your mobile, check your email.`);
+            if (cooldownTime <= 0) {
+                clearInterval(cooldownInterval); // Stop the interval
+                otpCooldown = false;
+                $('.getOtpBtn button').prop('disabled', false); // Enable button
+                $('#otpMessageHandler').text('').hide();
+                console.log("Cooldown complete. OTP button is enabled.");
+            }
+        }, 1000); // Update every second
+        
+        const finalMobile = countryCode + mobile;
+        // First API call to register for the event
+        fetch(`{{apiBaseURL}}/api/getOtpEvent/${email}/${finalMobile}/668cbe6361bf2340668d4207`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === "User is already registered with email") {
+                    clearInterval(cooldownInterval); // Stop the interval
+                    otpCooldown = false;
+                    $('.getOtpBtn button').prop('disabled', false); // Enable button
+                    $('#otpMessageHandler').text(``).show();
+
+                    $('#emailErrorHssl')
+                        .text('This email is already registered.')
+                        .css({
+                            'visibility': 'visible',
+                            'display': 'inline',
+                            'opacity': '1' // Fully visible
+                        });
+                    $("#submitButtonStatusPgpTbm").text("Register Now").prop("disabled", false);
+
+                    // Do not hide #otpEnterSection
+                    return;
+                } else if (data.message === "User is already registered with mobile") {
+                    clearInterval(cooldownInterval); // Stop the interval
+                    otpCooldown = false;
+                    $('.getOtpBtn button').prop('disabled', false); // Enable button
+                    $('#otpMessageHandler').text(``).show();
+
+                    $('#contactNumberError')
+                        .text('This mobile number is already registered.')
+                        .css({
+                            'visibility': 'visible',
+                            'display': 'inline',
+                            'opacity': '1' // Fully visible
+                        });
+                    $("#submitButtonStatusPgpTbm").text("Register Now").prop("disabled", false);
+
+                    // Do not hide #otpEnterSection
+                    return;
+                }
+
+                if (data.success) {
+                    console.log("OTP sent:", data);
+                    $('#otpEnterSection').removeClass("hide"); // Show OTP section only if OTP was sent successfully
+                    $('#captchaSection').removeClass("hide"); // Show OTP section only if OTP was sent successfully
+                    $('#otpMessageHandler').text('OTP sent successfully! Please check your email/mobile.').show();
+                }
+            })
+            .catch(error => {
+                console.error('Error in the API call:', error);
+                clearInterval(cooldownInterval); // Reset interval in case of error
+                otpCooldown = false;
+                $('.getOtpBtn button').prop('disabled', false); // Enable button
+                $('#otpMessageHandler').text('Failed to send OTP. Please try again.').show();
+            });
+    }
+
+</script>

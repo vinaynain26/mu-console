@@ -1,0 +1,335 @@
+<main>
+    <div class="popupContainerOuter introPopup pospop" id="InternshipPop">
+
+        <div class="popupContainer">
+
+            <div class="fromTophead">
+                <h2>Internship</h2>
+                <div class="pointer" onclick="closeInternship()">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0.5" y="0.5" width="31" height="31" rx="5.5" fill="white" />
+                        <rect x="0.5" y="0.5" width="31" height="31" rx="5.5" stroke="#FAFAFA" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M11.0506 11.0499C11.3544 10.7462 11.8468 10.7462 12.1506 11.0499L20.9501 19.8495C21.2538 20.1532 21.2538 20.6457 20.9501 20.9494C20.6464 21.2531 20.1539 21.2531 19.8502 20.9494L11.0506 12.1499C10.7469 11.8461 10.7469 11.3537 11.0506 11.0499Z"
+                            fill="#525252" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M20.9494 11.0499C21.2531 11.3537 21.2531 11.8461 20.9494 12.1499L12.1498 20.9494C11.8461 21.2531 11.3536 21.2531 11.0499 20.9494C10.7462 20.6457 10.7462 20.1532 11.0499 19.8495L19.8494 11.0499C20.1532 10.7462 20.6456 10.7462 20.9494 11.0499Z"
+                            fill="#525252" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="PopupformWrapper" id="leadformContainer">
+                <form action="">
+                    
+                    <div id="internshipsContainer"></div>
+                </form>
+
+                <div class="addAnother">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M2.1875 7H11.8125" stroke="#E38330" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M7 2.1875V11.8125" stroke="#E38330" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Add another entry
+                </div>
+
+                <div class="submitWrapper">
+                    <div class="gradientButton whiteHover">
+                        <button id="internshipSubmitButton" class="button iconButton">
+                            Save
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z"
+                                    fill="#090909" />
+                                <path
+                                    d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z"
+                                    fill="#090909" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</main>
+
+<script>
+$(document).ready(function () {
+    const deletedInternshipIds = [];
+
+    if (typeof initializeInternshipEntry === 'function') {
+        $('.internshipItem').each(function () {
+            initializeInternshipEntry($(this));
+        });
+    }
+
+    const normalizeInternshipDescription = (value) => (value || '')
+        .toString()
+        .split(/\r?\n/)
+        .map(line => line.trim())
+        .filter(Boolean)
+        .join('\n');
+
+    // Add another internship
+    $('.addAnother').on('click', function () {
+        const newId = `new_${Date.now()}`;
+
+        const $newEntry = $(generateInternshipsHTML({
+            _id: newId,
+            company: '',
+            title: '',
+            duration: '',
+            description: '',
+            resume: ''
+        }));
+
+        $('#internshipsContainer').append($newEntry);
+        checkInternshipEmptyState();
+
+        if (typeof initializeInternshipEntry === 'function') {
+            initializeInternshipEntry($(`#internshipsContainer .internshipItem[data-id="${newId}"]`));
+        }
+
+        attachFieldValidation([
+                {
+                    fieldId: `internshipCompany_${newId}`,
+                    errorMessage: "Please add company name"
+                },
+                {
+                    fieldId: `internshipDesignation_${newId}`,
+                    errorMessage: "Please add designation"
+                },
+                {
+                    fieldId: `internshipDuration_${newId}`,
+                    errorMessage: "Please add duration"
+                },
+                {
+                    fieldId: `internshipDescription_${newId}`,
+                    errorMessage: "Please add description"
+                }
+        ]);
+    });
+
+    function checkInternshipEmptyState() {
+        const $container = $('#internshipsContainer');
+        const $addAnother = $('.addAnother');
+        const entryCount = $container.find('.internshipItem').length;
+        
+        if (entryCount === 0) {
+            // Show empty state message
+            if ($container.find('.emptyStateMessage').length === 0) {
+                $container.append('<div class="emptyStateMessage" style="text-align: center; padding: 20px; color: #666; font-style: italic;">No entries added yet. Click "Add another entry" to get started.</div>');
+            }
+            // Ensure add another button is visible
+            $addAnother.show();
+        } else {
+            // Remove empty state message if entries exist
+            $container.find('.emptyStateMessage').remove();
+        }
+    }
+
+    // Remove internship entry
+    $(document).on('click', '.internshipItem .removeEntryBtn', function () {
+        const $entry = $(this).closest('.internshipItem');
+        const entryId = $entry.data('id');
+
+        if (!entryId.toString().startsWith("new_")) {
+            deletedInternshipIds.push(entryId);
+        }
+        $entry.remove();
+        checkInternshipEmptyState();
+    });
+
+    // Submit internships
+    $('#internshipSubmitButton').on('click', async function (e) {
+        e.preventDefault();
+
+        const entries = $('.internshipItem');
+        const initialEntries = window.initialInternshipsData?.internships || [];
+        const actions = [];
+        let isValid = true;
+        const uploadQueue = [];
+
+        for (let i = 0; i < entries.length; i++) {
+            const $entry = $(entries[i]);
+            const entryId = $entry.data('id');
+
+            const companyId = `internshipCompany_${entryId}`;
+            const durationId = `internshipDuration_${entryId}`;
+            const descriptionId = `internshipDescription_${entryId}`;
+            const designationId = `internshipDesignation_${entryId}`;
+            const photosId = `internshipPhotos_${entryId}`;
+
+            const initialEntry = initialEntries.find(entry => entry._id === entryId);
+            const isNew = !initialEntry;
+
+            const companyValid = validateField(companyId, "Please add company name");
+            const durationValid = validateField(durationId, "Please add duration");
+            const descriptionValid = validateField(descriptionId, "Please add description");
+            const designationValid = validateField(designationId, "Please add designation");
+            {{!-- const photosValid = isNew ? validateFileField(photosId) : true; --}}
+
+            {{!-- if (!companyValid || !durationValid || !descriptionValid || !photosValid || !designationValid) {
+                isValid = false;
+                continue;
+            } --}}
+            
+            const descriptionConstraintsValid = typeof validateDescriptionConstraints === 'function'
+                ? validateDescriptionConstraints(descriptionId)
+                : true;
+
+            if (!companyValid || !durationValid || !descriptionValid || !designationValid || !descriptionConstraintsValid) {
+                isValid = false;
+                continue;
+            }
+
+            // Queue for upload
+            if (isNew) {
+                uploadQueue.push({ entryId, photosId, initialEntry });
+            }
+        }
+
+        if (!isValid) return;
+
+        const $submitBtn = $('#internshipSubmitButton');
+        $submitBtn.prop('disabled', true).text('Submitting...');
+
+        for (let i = 0; i < entries.length; i++) {
+            const $entry = $(entries[i]);
+            const entryId = $entry.data('id');
+
+            const companyId = `internshipCompany_${entryId}`;
+            const durationId = `internshipDuration_${entryId}`;
+            const descriptionId = `internshipDescription_${entryId}`;
+            const designationId = `internshipDesignation_${entryId}`;
+            const photosId = `internshipPhotos_${entryId}`;
+
+            const initialEntry = initialEntries.find(entry => entry._id === entryId);
+            const isNew = !initialEntry;
+
+            const companyName = $(`#${companyId}`).val().trim();
+            const duration = $(`#${durationId}`).val().trim();
+            const descriptionRaw = $(`#${descriptionId}`).val();
+            const description = normalizeInternshipDescription(descriptionRaw);
+            const designation = $(`#${designationId}`).val().trim();
+
+            let photos = initialEntry?.photo ?? [];
+            
+            const fileInput = document.getElementById(photosId);
+            if (fileInput && fileInput.files.length > 0) {
+                photos = await handleMultipleFilestackUpload(photosId, photos);
+            }
+
+            const initialDescription = normalizeInternshipDescription(initialEntry?.description);
+
+            const isChanged = isNew || (
+                String(initialEntry.companyName ?? '') !== companyName ||
+                String(initialEntry.duration ?? '') !== duration ||
+                initialDescription !== description ||
+                String(initialEntry.designation ?? '') !== designation ||
+                JSON.stringify(initialEntry.photo ?? []) !== JSON.stringify(photos)
+            );
+
+            if (isChanged) {
+                const actionObj = {
+                    action: isNew ? 'add' : 'update',
+                    data: {
+                        companyName,
+                        duration,
+                        description,
+                        designation,
+                        photo: photos
+                    }
+                };
+                if (!isNew) actionObj.targetId = entryId;
+                actions.push(actionObj);
+            }
+        }
+
+        deletedInternshipIds.forEach(deletedId => {
+            actions.push({
+                action: 'delete',
+                targetId: deletedId
+            });
+        });
+
+        // If all entries were deleted, delete all initial entries
+        if (entries.length === 0 && initialEntries.length > 0) {
+            initialEntries.forEach(entry => {
+                actions.push({ action: 'delete', targetId: entry._id });
+            });
+        }
+
+        if (actions.length === 0) {
+            alert("No changes detected");
+            $submitBtn.prop('disabled', false).html(`Save
+                <svg  
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z"
+                    fill="#090909"
+                  />
+                  <path
+                    d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z"
+                    fill="#090909"
+                  />
+                </svg>`
+              );
+            return;
+        }
+
+        try {
+            const userId = window.location.pathname.split('/').pop();
+            const requestPayload = {
+                section: 'internships',
+                actions
+            };
+
+            await $.ajax({
+                url: `{{apiBaseURL}}/api/student-profile/${userId}/draft`,
+                type: 'POST',
+                data: JSON.stringify(requestPayload),
+                contentType: 'application/json',
+                success: function (res) {
+                    deletedInternshipIds.length = 0;
+                    renderProfile(res.draft)
+                    closeInternship();
+                },
+                error: function (err) {
+                    console.error('Submission failed', err);
+                    alert(err?.responseJSON?.Message || 'Something went wrong');
+                }
+            });
+        } catch (error) {
+            console.error("Upload or submission failed:", error);
+            alert("Something went wrong during submission.");
+        } finally {
+           $submitBtn.prop('disabled', false).html(`Save
+                <svg  
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z"
+                    fill="#090909"
+                  />
+                  <path
+                    d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z"
+                    fill="#090909"
+                  />
+                </svg>`
+              );
+        }
+    });
+});
+</script>

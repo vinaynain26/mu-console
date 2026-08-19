@@ -1,0 +1,302 @@
+<style>
+    .techFaqSection {
+        background: #05060f;
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .techFaqSection::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, rgba(20, 98, 255, 0.08) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .techFaqSection .container {
+        position: relative;
+        z-index: 1;
+    }
+
+    .techFaqHeadingWrap {
+        text-align: center;
+        margin-bottom: 56px;
+    }
+
+    .techFaqHeadingWrap .neuHeadingBold {
+        font: 40px "neueKaine";
+        font-weight: 900;
+        line-height: 120%;
+        color: #fff;
+        text-transform: uppercase;
+        position: relative;
+        display: inline-block;
+    }
+
+    .techFaqHeadingWrap .neuHeadingBold .blueText {
+        color: #1462FF;
+    }
+
+    .techFaqSubtext {
+        font: 16px "neueKaine";
+        font-weight: 400;
+        line-height: 160%;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 12px;
+    }
+
+    .techFaqList {
+        max-width: 860px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .techFaqItem {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 0;
+        transition: background 0.3s ease, border-color 0.3s ease;
+        cursor: pointer;
+    }
+
+    .techFaqItem:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(20, 98, 255, 0.25);
+    }
+
+    .techFaqItem.active {
+        background: rgba(20, 98, 255, 0.06);
+        border-color: rgba(20, 98, 255, 0.3);
+    }
+
+    .techFaqQuestion {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 28px;
+        gap: 16px;
+    }
+
+    .techFaqQuestion .faqHeading {
+        font: 17px "neueKaine";
+        font-weight: 600;
+        line-height: 150%;
+        color: #fff;
+        margin: 0;
+    }
+
+    .techFaqToggle {
+        flex-shrink: 0;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .techFaqItem.active .techFaqToggle {
+        background: #1462FF;
+        border-color: #1462FF;
+        transform: rotate(45deg);
+    }
+
+    .techFaqToggle svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .techFaqAnswer {
+        padding: 10px 18px 14px;
+        display: none;
+    }
+
+    .techFaqAnswer p {
+        font: 15px "neueKaine";
+        font-weight: 400;
+        line-height: 170%;
+        color: rgba(255, 255, 255, 0.6);
+        margin: 0;
+    }
+
+    .techFaqAnswer a {
+        color: #1462FF;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
+    }
+
+    .techFaqAnswer a:hover {
+        color: #5a94ff;
+    }
+
+    .techFaqItem.active .techFaqAnswer {
+        display: block;
+    }
+
+    /* Divider line between question and answer when active */
+    .techFaqItem.active .techFaqQuestion {
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    @media (max-width: 768px) {
+        .techFaqSection {
+            padding: 64px 0;
+        }
+
+        .techFaqHeadingWrap {
+            margin-bottom: 36px;
+        }
+
+        .techFaqHeadingWrap .neuHeadingBold {
+            font-size: 28px;
+        }
+
+        .techFaqSubtext {
+            font-size: 14px;
+        }
+
+        .techFaqQuestion {
+            padding: 20px 20px;
+        }
+
+        .techFaqQuestion .faqHeading {
+            font-size: 15px;
+        }
+
+        .techFaqAnswer {
+            padding: 0 20px 20px 20px;
+        }
+
+        .techFaqAnswer p {
+            font-size: 14px;
+        }
+
+        .techFaqToggle {
+            width: 32px;
+            height: 32px;
+        }
+    }
+</style>
+
+<section class="techFaqSection" id="techFaq">
+    <div class="container">
+        <div class="techFaqHeadingWrap">
+            <h2 class="neuHeadingBold">Frequently Asked <span class="blueText">Questions</span></h2>
+            {{!-- <p class="techFaqSubtext">Everything you need to know about The Next Tech AI Summit</p> --}}
+        </div>
+
+        <div class="techFaqList">
+
+            <div class="techFaqItem active" data-rel="techfaq-1">
+                <div class="techFaqQuestion">
+                    <p class="faqHeading">Where and when is The Next Tech AI Summit happening?</p>
+                    <div class="techFaqToggle">
+                        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 3V13" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                            <path d="M3 8H13" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="techFaqAnswer" id="techfaq-1">
+                    <p>The summit will take place in the heart of India's tech hub at DLF Cyberpark, Gurugram
+                        (<a href="/">Masters' Union Campus)</a>.</p>
+                </div>
+            </div>
+
+            <div class="techFaqItem" data-rel="techfaq-2">
+                <div class="techFaqQuestion">
+                    <p class="faqHeading">What is the focus of the Masters' Union AI Summit 2026?</p>
+                    <div class="techFaqToggle">
+                        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 3V13" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                            <path d="M3 8H13" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="techFaqAnswer" id="techfaq-2">
+                    <p>As India's biggest institution-led AI-startup summit, The Next Tech is about empowering the
+                        next generation of tech leaders. The event is a comprehensive deep-dive into the AI ecosystem,
+                        offering both students and professionals a unique platform to learn, build, and scale. From
+                        keynote sessions on the future of AI to practical masterclasses, it is the definitive AI event
+                        of April 2026.</p>
+                </div>
+            </div>
+
+            <div class="techFaqItem" data-rel="techfaq-3">
+                <div class="techFaqQuestion">
+                    <p class="faqHeading">Can I attend the AI Summit for free?</p>
+                    <div class="techFaqToggle">
+                        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 3V13" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                            <path d="M3 8H13" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="techFaqAnswer" id="techfaq-3">
+                    <p>If you are a student at <a href="/">Masters' Union</a>
+                        or <a href="https://tetr.com/" target="_blank">Tetr College of Business</a>, your entry is
+                        fully sponsored and on the house. If you are joining us from another institution or as a
+                        professional delegate, you can secure your spot by purchasing an affordable student or
+                        professional pass
+                        through our registration portal.</p>
+                </div>
+            </div>
+
+            <div class="techFaqItem" data-rel="techfaq-4">
+                <div class="techFaqQuestion">
+                    <p class="faqHeading">How and when will I receive my AI Summit Pass?</p>
+                    <div class="techFaqToggle">
+                        <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 3V13" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                            <path d="M3 8H13" stroke="white" stroke-width="1.5" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="techFaqAnswer" id="techfaq-4">
+                    <p>Your digital pass is delivered instantly via email as soon as your payment is confirmed. Please
+                        check your inbox (and your "Promotions" or "Spam" folders) for your unique QR code. If your
+                        ticket hasn't arrived within 10 minutes, simply reach out to our support team at
+                        thenexttech@mastersunion.org and we'll get it sorted!</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        // Show first FAQ answer by default
+        $('.techFaqItem.active .techFaqAnswer').show();
+
+        $('.techFaqItem').off('click').on('click', function (event) {
+            event.stopPropagation();
+            var $this = $(this);
+            var isActive = $this.hasClass('active');
+
+            // Close all items
+            $('.techFaqItem').removeClass('active');
+            $('.techFaqAnswer').slideUp(250);
+
+            // If clicked item wasn't active, open it
+            if (!isActive) {
+                $this.addClass('active');
+                $this.find('.techFaqAnswer').slideDown(250);
+            }
+        });
+    });
+</script>

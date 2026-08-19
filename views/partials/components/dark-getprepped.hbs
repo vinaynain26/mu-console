@@ -1,0 +1,83 @@
+<section class="getprepped blackbg hide">
+    <img src="https://files.mastersunion.link/resources/img/gradientbg.png" class="absoluteGradient mobVisible" alt="">
+
+    <img src="https://files.mastersunion.link/resources/img/gradientbg.png" class="darkabsoluteGradient mob-hide" alt="">
+
+    <div class="container">
+
+        <div class="getpreppedWrapper">
+
+            <div class="box">
+                <h2 class="sectionHeading text-white">Thrive with Real-Time <br>  Access to <span class="gradientUnderline"> 500+
+                        Mentors</span></h2>
+                <div class="innerbox mt30">
+
+                    <ul class="getpreppedList darkPrep gap-reduce">
+                        <li>
+                            <img  src="https://files.mastersunion.link/resources/svg/star.svg" alt="Icon">
+                            <p> Gain <span class=""> quick and easy access</span> to interview prep, even if it's the night before your
+                                big day. </p>
+                        </li>
+                        <li>
+                            <img  src="https://files.mastersunion.link/resources/svg/star.svg" alt="Icon">
+                            <p> Connect instantly with expert mentors for <span class=""> 1:1 support</span> tailored to your startup
+                                needs. </p>
+                        </li>
+                        <li>
+                            <img  src="https://files.mastersunion.link/resources/svg/star.svg" alt="Icon">
+                            <p> Whether it’s finishing an assignment or finding emotional support, log in and get the
+                                <span class=""> help you need within the hour</span>. </p>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="box hide darkBgPrep" id="getprepParent">
+                <div class="content-section">
+
+                    <div id="getprep3" class="content active">
+                        
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+    /*     $(document).ready(function() {
+             $(".getpreppedList li").click(function() {
+                 let id = $(this).attr('data-rel');
+                 $(this).addClass('active').siblings().removeClass('active');
+                 $(`#${id}`).addClass('active').siblings().removeClass('active');
+             });
+ 
+             function activateNextTab() {
+                 let currentTab = $(".getpreppedList li.active");
+                 let nextTab = currentTab.next();
+ 
+                 if (nextTab.length === 0) {
+                     nextTab = $(".getpreppedList li").first();
+                 }
+ 
+                 let id = nextTab.attr('data-rel');
+                 nextTab.addClass('active').siblings().removeClass('active');
+                 $(`#${id}`).addClass('active').siblings().removeClass('active');
+             }
+ 
+             setInterval(activateNextTab, 10000); // Change tab and content every 5 seconds
+         });
+ 
+         */
+         setTimeout(function() {
+        var videoContainer = document.getElementById('getprep3');
+        var videoElement = `
+            <video width="100%" height="100%" autoplay muted loop preload="auto">
+                <source src="https://files.mastersunion.link/resources/img/Second_Page3.mp4" type="video/mp4">
+            </video>
+        `;
+        videoContainer.innerHTML = videoElement;
+        $("#getprepParent").removeClass("hide");
+    }, 2500);
+</script>

@@ -1,0 +1,139 @@
+<section class="joinNewsletter" id="newsletter">
+    <div class="container">
+        <div class="JoinNewsWrapper">
+            <div class="NewsHeadingWrapper">
+                <h2 class="sectionHeadingTech font-white"> Join our
+                    <span class="sectionGradientHeadIt">Newsletter</span>
+                </h2>
+                <p class="NewsPara">
+                    Stay ahead with expert insights and trends. Subscribe <br class="mob-hide">
+                    for exclusive updates delivered to your inbox!
+                </p>
+            </div>
+            <div class="Newswrapper">
+                <div class="newsFormRow">
+                    <div class="textForm">
+                        <input class="newsletterInput" type="text" placeholder="Enter your email">
+                    </div>
+                    <button class="SubmitButton">Submit</button>
+                </div>
+                <label class="newsConsent">
+                    <input type="checkbox" class="consentCheckbox">
+                    <span class="consentText">
+                        I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me
+                        information about Intersect Community, programs, admission, or enrollment through digital
+                        channels (including email and WhatsApp), in accordance with Masters&rsquo; Union
+                        <a href="/privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>,
+                        <a href="/cookie-policy" target="_blank" rel="noopener">Cookie Policy</a>, and
+                        <a href="/terms-and-conditions" target="_blank" rel="noopener">Terms &amp; Conditions</a>.
+                        By submitting my details, I agree to receive communications related to Intersect Community,
+                        events, and program updates. Message frequency may vary and message and data rates may apply.
+                        I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.
+                    </span>
+                </label>
+                <p class="error-message" style="color: red; font-size: 14px; display: none; margin-top: 5px;"></p>
+                <p class="thank-you-message" style="color: green; font-size: 16px; display: none; margin-top: 10px;">
+                    Thank you for subscribing!
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+$(function () {
+  var OFFSET = 80; // fixed header ke neeche se 80px
+
+  function scrollToHash(hash, instant) {
+    var $target = $(hash);
+    if (!$target.length) return;
+
+    var top = $target.offset().top - OFFSET;
+
+    $('html, body').animate(
+      { scrollTop: top },
+      instant ? 0 : 500
+    );
+  }
+
+  // CASE 1: page load with hash (direct paste / redirect)
+  if (window.location.hash) {
+    var hash = window.location.hash;
+
+    // browser ka default jump rokne ke liye thoda delay
+    setTimeout(function () {
+      scrollToHash(hash, false);
+    }, 1); // 1ms enough hota hai; heavy pages pe 100-300ms kar dena
+  }
+
+  // CASE 2: same-page anchor click
+  $('a[href*="#"]:not([href="#"])').on('click', function (e) {
+    var hash = this.hash;
+    if (hash && $(hash).length) {
+      e.preventDefault();
+      scrollToHash(hash, false);
+
+      // URL me hash update kar do without jump
+      if (history.pushState) {
+        history.pushState(null, null, hash);
+      }
+    }
+  });
+});
+
+
+
+    $(document).ready(function () {
+        $(document).off('click', '.SubmitButton').on('click', '.SubmitButton', function (e) {
+            e.preventDefault();
+
+            let wrapper = $(this).closest('.Newswrapper');
+            let formRow = wrapper.find('.newsFormRow');
+            let consent = wrapper.find('.newsConsent');
+            let consentCheckbox = wrapper.find('.consentCheckbox');
+            let textForm = wrapper.find('.textForm');
+            let submitButton = wrapper.find('.SubmitButton');
+            let errorMessage = wrapper.find('.error-message');
+            let thankYouMessage = wrapper.find('.thank-you-message');
+            let SubscriberEmail = textForm.find('.newsletterInput').val().trim();
+            let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            errorMessage.hide().text('');
+            thankYouMessage.hide();
+
+            if (SubscriberEmail === '') {
+                errorMessage.text('Email cannot be empty.').show();
+                return;
+            } else if (!emailRegex.test(SubscriberEmail)) {
+                errorMessage.text('Please enter a valid email address.').show();
+                return;
+            } else if (!consentCheckbox.is(':checked')) {
+                errorMessage.text('Please accept the consent to continue.').show();
+                return;
+            }
+
+            $.ajax({
+                url: '{{apiBaseURL}}/api/intersect/subscribe',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ email: SubscriberEmail, consentCheck: document.getElementById('consentChecknws1')?.checked || false }),
+                success: function () {
+                    formRow.hide();
+                    consent.hide();
+                    textForm.hide();
+                    submitButton.hide();
+                    errorMessage.hide();
+                    thankYouMessage.show();
+                },
+                error: function (xhr) {
+                    if (xhr.status === 409) { 
+                        errorMessage.text('This email is already subscribed.').show();
+                    } else {
+                        errorMessage.text('Something went wrong. Please try again.').show();
+                    }
+                }
+            });
+        });
+    });
+</script>

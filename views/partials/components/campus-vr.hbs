@@ -1,0 +1,101 @@
+<div class="container">
+
+    <h1 class="urban-Heading"><span class="gradientUnderline">Urban Campus</span></h1>
+    <p class="programmeTagLine">Situated in CyberPark, Gurugram, flanked by over 600 MNCs</p>
+
+    <div class="carrer-outer">
+        <div class="mastercamp-tabs">
+            <div class="tab-teaser">
+
+                <div class="scroll-menu">
+                    <div class="tab-menu">
+                        <nav class="navigationWrapper ">
+                            <ul class="tabs faqtabs">
+                                <li class="active" data-rel="urban-campus5">CDS Tower </li>
+                                <li data-rel="urban-campus57">CDS Tower - 2nd Floor</li>
+                                <li class="" data-rel="urban-campus1">Tower A </li>
+                                <li class="" data-rel="urban-campus2"> Tower C</li>
+                                <li class="" data-rel="urban-campus3"> Auditorium </li>
+                                <li class="" data-rel="urban-campus4"> Food Court</li>
+                            </ul>
+                        </nav>
+
+                    </div>
+                </div>
+
+                <div class="tab-main-box newUGlist mt20">
+                    <div class="y-tag mob-visible tab-visible mb-10">CDS Tower</div>
+                    <div class="urban-tab-box active" id="urban-campus5">
+                        <iframe id="iframe_embedded" width="100%" height="400px" src=""
+                            data-src="https://my.matterport.com/show/?m=H94FKdNQbTi&play=1&brand=1" frameborder="0"
+                            allowfullscreen allow="vr"></iframe>
+                    </div>
+
+                    <div class="y-tag mob-visible tab-visible mb-10">CDS Tower - 2nd Floor</div>
+                    <div class="urban-tab-box" id="urban-campus57">
+                        <iframe id="iframe_embedded" width="100%" height="400px" src=""
+                            data-src="https://my.matterport.com/show/?m=zjAw7AksqvZ" frameborder="0" allowfullscreen
+                            allow="vr"></iframe>
+                    </div>
+
+                    <div class="y-tag mob-visible tab-visible mb-10">Tower A</div>
+                    <div class="urban-tab-box" id="urban-campus1">
+                        <iframe id="iframe_embedded" width="100%" height="400px" src=""
+                            data-src="https://my.matterport.com/show/?m=fvbzUtwNH1B" frameborder="0" allowfullscreen
+                            allow="vr"></iframe>
+                    </div>
+                    <div class="y-tag mob-visible tab-visible mb-10">Tower C</div>
+                    <div class="urban-tab-box" id="urban-campus2">
+                        <iframe id="iframe_embedded" width="100%" height="400px" src=""
+                            data-src="https://my.matterport.com/show/?m=jQcZmR1BxFc&play=1&brand=1" frameborder="0"
+                            allowfullscreen allow="vr"></iframe>
+                    </div>
+                    <div class="y-tag mob-visible tab-visible mb-10">Auditorium</div>
+                    <div class="urban-tab-box" id="urban-campus3">
+                        <iframe id="iframe_embedded" width="100%" height="400px"
+                            data-src="https://s3.mastersunion.link/assets/mu-vr/index.html" frameborder="0"
+                            allowfullscreen allow="vr"></iframe>
+                    </div>
+                    <div class="y-tag mob-visible tab-visible mb-10">Food Court</div>
+                    <div class="urban-tab-box" id="urban-campus4">
+                        <iframe id="iframe_embedded" width="100%" height="400px"
+                            data-src="https://s3.mastersunion.link/assets/food-court/index.html" frameborder="0"
+                            allowfullscreen allow="vr"></iframe>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(".urbanCampus .tab-menu li a").on("click", function () {
+        var target = $(this).attr("data-rel");
+        console.log("target: ", target);
+        $(this).parent("li").siblings().find("a").removeClass("active");
+        console.log($(this));
+        // $('.tab-teaser .tab-menu li a').removeClass('active');
+        $(this).addClass("active");
+        $("#" + target)
+            .fadeIn("slow")
+            .siblings(".tab-box")
+            .hide();
+        return false;
+    });
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+        console.log("SettingTimeout");
+        setTimeout(lazyLoadIFrames, 3000);
+    });
+
+    function lazyLoadIFrames() {
+        const iframes = document.querySelectorAll("#iframe_embedded");
+        iframes.forEach(lazyFrame => {
+            console.log("binding");
+            lazyFrame.setAttribute('src', lazyFrame.getAttribute('data-src'));
+            lazyFrame.classList.remove('lazyload');
+        });
+    }  
+</script>

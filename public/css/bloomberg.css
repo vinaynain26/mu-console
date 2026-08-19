@@ -1,0 +1,2198 @@
+  .heroSection {
+      position: relative;
+      line-height: 0;
+      z-index: 9;
+      padding: 0 0 0;
+      overflow: hidden;
+      min-height: 100vh;
+      background: #020202;
+
+
+      .overlay {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(to top, rgba(0, 0, 0, 1.9), transparent);
+          pointer-events: none;
+      }
+
+
+      .heroSectionContent .go-HeroSubtitle {
+          color: var(--grey4);
+      }
+
+      .heroSectionContent {
+          position: absolute;
+          bottom: -5%;
+          left: 50%;
+          transform: translate(-50%, -30%);
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          text-align: center;
+          width: 100%;
+      }
+
+      .go-HeroSubtitle {
+          margin-top: 16px;
+
+          .textHighlight {
+              color: var(--white);
+          }
+      }
+
+      .heroSectionBtnWrap {
+          display: flex;
+          gap: 16px;
+          align-items: center;
+          margin-top: 24px;
+      }
+
+      .heroSectionImg {
+          height: 90vh;
+
+          .video-container {
+              max-width: 100%;
+
+              video {
+                  width: 100%;
+              }
+          }
+
+
+          .mobilevideo {
+              width: 100%;
+          }
+
+      }
+
+
+  }
+
+  .programmeBreatherNew {
+      background: linear-gradient(125deg, #39b6d8 -20%, #f7d344 50%, #e38330 100%);
+      padding: 60px 0;
+
+      .twelthSup {
+          font-size: 14px;
+          font-family: var(--go-semibold);
+          line-height: 0;
+      }
+
+      .firstBoxi {
+          min-height: 130px;
+      }
+
+      .programmeBreatherWrapper {
+          display: flex;
+          align-items: flex-start;
+          gap: 24px;
+
+      }
+
+      .firstTbmBoxi {
+          min-height: 114px;
+      }
+
+      .programmeBreatherLeft>img {
+          border-radius: 10px;
+      }
+
+      .programmeBreatherLeft {
+          width: 100%;
+          max-width: 642px;
+          position: relative;
+          border-radius: 10px;
+          line-height: 0;
+      }
+
+      .masterPlay {
+          position: absolute;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          width: 100%;
+          left: 0;
+          top: 0;
+          cursor: pointer;
+
+          svg {
+              backdrop-filter: blur(2px);
+              border-radius: 60px;
+
+          }
+      }
+
+      .programmeBreatherRight {
+          width: 100%;
+          max-width: 574px;
+
+          background: var(--white);
+          border-radius: 10px;
+          padding: 24px;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          max-height: fit-content;
+
+      }
+
+      .boxiUpperLeft {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+          width: 100%;
+          max-width: 55%;
+      }
+
+      .boxiUpper {
+          display: flex;
+          gap: 24px;
+          align-items: stretch;
+          margin-top: 32px;
+          min-height: 264px;
+      }
+
+      .smallBoxi {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          align-items: flex-start;
+          width: 100%;
+          max-width: 100%;
+      }
+
+      .eligibilityBoxi {
+          color: var(--grey15);
+          line-height: 150%;
+          font-size: 12px;
+          font-family: var(--go-regular);
+          text-transform: uppercase;
+      }
+
+      .classContentBoxi {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 8px;
+          width: 100%;
+      }
+
+      .classText {
+          line-height: 120%;
+          font-size: 24px;
+          color: var(--black);
+          font-family: var(--go-medium);
+      }
+
+      .classPara {
+          font-size: 14px;
+          line-height: 120%;
+          color: var(--grey15);
+          font-family: var(--go-medium);
+      }
+
+      .rightBoxiSection {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          max-width: 45%;
+          gap: 15px;
+      }
+
+      .buttonsParent {
+          display: flex;
+          width: 100%;
+          gap: 16px;
+          margin-top: 32px;
+          align-items: flex-start;
+      }
+
+
+      .whiteApplyButton {
+          gap: 50px;
+          padding: 14px 30px;
+          justify-content: space-between;
+      }
+
+
+      .whiteApplyButton,
+      .downloadBroucherButton {
+          width: 100%;
+          max-width: 50%;
+      }
+
+      .firstBoxi {
+          border-bottom: 1px solid var(--grey4);
+          padding-bottom: 16px;
+      }
+
+      .lineDuration {
+          background-color: var(--grey4);
+          width: 1px;
+      }
+  }
+
+
+  .traderManager {
+      background: var(--black);
+
+      .traderWrapper {
+          display: flex;
+          flex-direction: column;
+      }
+
+      .traderHeading {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+      }
+
+      .marqueeCards {
+          width: 100%;
+          pointer-events: none;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          margin-top: 32px;
+      }
+
+      .marqueeInnerWrap {
+          width: 100%;
+          height: 100%;
+      }
+
+      .marqueeReverse {
+          height: 100%;
+          width: max-content;
+          align-items: center;
+          display: flex;
+          position: relative;
+          animation: marqueeReverse 20s linear infinite;
+          will-change: transform;
+          gap: 20px;
+      }
+
+      .traderCardsBox {
+          border: 1px solid var(--grey4);
+          background: var(--grey16);
+          border-radius: 8px;
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          align-items: flex-start;
+          min-height: 220px;
+          max-width: 300px;
+          width: 100%;
+      }
+
+      .traderCardsBox>img {
+          max-width: 52px;
+          width: 100%;
+      }
+
+      .traderDetails {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          align-items: flex-start;
+      }
+
+      .traderCardHeading {
+          font-size: 22px;
+          line-height: 120%;
+          color: var(--black);
+          font-family: "Fraunces", serif;
+          font-weight: 350;
+      }
+
+      .traderSubText {
+          font-size: 14px;
+          line-height: 150%;
+          font-family: var(--go-regular);
+          color: var(--grey3);
+      }
+  }
+
+  .labSection {
+      position: relative;
+      padding: 0 !important;
+      line-height: 0;
+
+      .imageLab {
+          width: 100%;
+      }
+
+      .labHeading {
+          font-size: 72px;
+          line-height: 98.64%;
+          font-family: var(--go-semibold);
+          color: var(--white);
+          position: absolute;
+          bottom: 14%;
+          left: 8%;
+          font-weight: 600;
+      }
+
+      .mapDivi {
+          display: flex;
+          align-items: baseline;
+          gap: 16px;
+          position: absolute;
+          top: 30%;
+          left: 10%;
+      }
+
+      .mapPara {
+          font-size: 16px;
+          line-height: 120%;
+          font-family: var(--go-regular);
+          color: var(--white);
+
+      }
+
+      .mapDivi2 {
+          top: 7%;
+          left: 54%;
+
+      }
+
+      .mapDivi3 {
+          top: 27%;
+          left: 73.8%;
+      }
+
+      .terminalDivi {
+          position: absolute;
+          right: 8%;
+          bottom: 16%;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 20px;
+      }
+
+      .terminalParaBox {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 12px;
+      }
+
+      .unlimitHeading {
+          font-size: 28px;
+          line-height: 98.64%;
+          font-family: var(--go-medium);
+          color: var(--white);
+          font-weight: 500;
+      }
+
+      .locationBoxi {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          cursor: pointer;
+      }
+
+      .locationPara {
+          font-size: 16px;
+          line-height: 98.64%;
+          font-family: var(--go-semibold);
+          color: var(--white);
+          font-weight: 600;
+      }
+  }
+
+  .curriculumOutclassDsNew {
+      padding-top: 60px;
+      background: var(--white3);
+      border-bottom: 1px solid var(--grey4);
+
+      .faqHeadingItem .faqHeading {
+          color: var(--grey10);
+          font-family: "go-semibold";
+      }
+
+      .curriculumOutclassWrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 40px;
+      }
+
+      .curriculumDsUpper {
+          position: sticky;
+          top: 3rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background: var(--white3);
+          padding-block: 20px;
+          z-index: 10;
+      }
+
+      .curriculumDsUpper a:hover img {
+          transform: translateY(4px);
+      }
+
+      .curriculumDsUpper a img {
+          transition: 0.3s;
+      }
+
+      .curriculumDsBelow {
+          display: flex;
+          justify-content: space-between;
+          gap: 30px;
+      }
+
+      .dsBelowLeft {
+          width: 100%;
+          max-width: 560px;
+      }
+
+      .portfolioWrapperLeft {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          position: sticky;
+          top: 12rem;
+          gap: 8px;
+      }
+
+      .portfolioSubHead {
+          font-size: 16px;
+          line-height: 150%;
+          font-family: var(--go-regular);
+          color: var(--black);
+          width: 100%;
+          max-width: 52%;
+      }
+
+      .portfolioStepWrapper {
+          padding: 16px 24px;
+          background: var(--white);
+          border-radius: 8px 8px 0px 0px;
+          border: 0.5px solid var(--grey18);
+          position: relative;
+          cursor: pointer;
+      }
+
+      .portfolioStepWrapper.step6 {
+          width: 100%;
+          max-width: 288px;
+      }
+
+      .portfolioStepWrapper.step5 {
+          width: 100%;
+          max-width: 322px;
+      }
+
+      .portfolioStepWrapper.step4 {
+          width: 100%;
+          max-width: 357px;
+      }
+
+      .portfolioStepWrapper.step3 {
+          width: 100%;
+          max-width: 391px;
+      }
+
+      .portfolioStepWrapper.step2 {
+          width: 100%;
+          max-width: 426px;
+      }
+
+      .portfolioStepWrapper.step1 {
+          width: 100%;
+          max-width: 460px;
+          border-radius: 8px;
+      }
+
+      .stepContent {
+          display: flex;
+          justify-content: space-between;
+          gap: 6px;
+          align-items: center;
+      }
+
+      /* .stepContent>img {
+          display: none;
+      } */
+
+      .tradingHeading {
+          color: var(--black);
+          font-family: var(--go-medium);
+          font-size: 20px;
+          line-height: 120%;
+      }
+
+      .portfolioStepWrapper.active {
+          background: var(--black);
+
+          .tradingHeading {
+              color: #e38330;
+          }
+
+          .stepContent img {
+              filter: brightness(0.3);
+          }
+      }
+
+      .faqHeadingsWrapper.mobView {
+          display: none;
+      }
+
+      .dsBelowRight {
+          width: 100%;
+          max-width: calc(100% - 560px);
+      }
+
+      .classRomFaqWrapNew {
+          justify-content: space-between;
+          display: flex;
+          /* gap: 5px; */
+          background: transparent;
+          padding: 0;
+          border-radius: 4px;
+          border: 0.5px solid var(--grey4);
+          flex-direction: column;
+          margin-bottom: 10px;
+      }
+
+      .classRomFaqWrapNew .left {
+          display: flex;
+          gap: 15px;
+          justify-content: space-between;
+          align-items: center;
+          background: var(--white);
+          border-radius: 4px;
+          padding: 12px;
+      }
+
+      .leftDsBottom {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+      }
+
+      .termBtn {
+          background: var(--black);
+          border-radius: 20px;
+          padding: 3px 10px;
+          display: flex;
+          align-items: center;
+          font-size: 12px;
+          line-height: 120%;
+          color: var(--white);
+          justify-content: center;
+          max-width: fit-content;
+      }
+
+      .termHeading {
+          font-size: 18px;
+          line-height: 150%;
+          color: var(--black);
+          font-family: var(--go-semibold);
+      }
+
+      .dsBelowRight .content-section {
+          width: 100%;
+      }
+
+      .contentOfOutClass {
+          padding: 18px 12px;
+          background: var(--white);
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          cursor: auto;
+      }
+
+      .paraContent {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+      }
+
+      .inclassansUl {
+          border-top: 1px solid var(--grey4);
+          border-bottom: unset;
+      }
+
+      .inclassDataParent {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+      }
+
+      .faqContent {
+          display: flex;
+          gap: 8px;
+          margin-top: 6px;
+          border-bottom: 1px solid var(--grey4);
+          padding-bottom: 8px;
+          align-items: flex-start;
+      }
+
+      .faqText {
+          color: var(--grey3);
+          font-size: 14px;
+          font-family: var(--go-regular);
+          line-height: 150%;
+      }
+
+      .faqContent:last-child {
+          border-bottom: unset;
+      }
+
+      .faqBlackBold {
+          font-family: var(--go-semibold);
+          line-height: 150%;
+          color: var(--black);
+      }
+  }
+
+
+  .dsaiMasters {
+      background-color: var(--white);
+      display: flex;
+      flex-direction: column;
+      /* Hide scrollbar for webkit browsers */
+      scrollbar-width: none;
+      /* Firefox */
+      -ms-overflow-style: none;
+      /* Internet Explorer 10+ */
+
+      /* Hide scrollbar for webkit browsers */
+      &::-webkit-scrollbar {
+          display: none;
+      }
+
+      .tbmMasterLogo {
+          max-width: 200px;
+          min-height: 35px;
+          margin-top: 10px;
+          width: 100%;
+      }
+
+      .learningDisclaimer {
+          margin-top: 40px;
+          font-size: 12px;
+          font-family: var(--go-regular);
+          line-height: 150%;
+          color: var(--black);
+          margin-left: 2px;
+      }
+
+      .newMasterImgBox>img {
+          border-radius: 8px 8px 0px 0;
+      }
+
+      .newMasterDetailsWrap {
+          border-radius: 0px 0px 8px 8px;
+          line-height: 0;
+          padding-block: 16px;
+      }
+
+      .newMasterBoxImg {
+          line-height: 0;
+          max-width: 100%;
+          min-width: 16%;
+      }
+
+      .marqueesliders {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 16px;
+          overflow: auto;
+      }
+
+      .expertsDivi {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          max-width: 588px;
+          align-items: flex-start;
+      }
+
+      .go-HeroSubtitle {
+          color: var(--grey3);
+      }
+
+      .industrySpan {
+          color: var(--black);
+          font-weight: 600;
+      }
+
+      .mastersScroll {
+          margin-top: 32px;
+      }
+
+      .newMasterDetailsWrap h3 {
+          font: 16px "go-regular";
+      }
+
+      .newMasterDetailsWrap h4 {
+          font: 12px 'go-regular';
+          line-height: 150%;
+          color: var(--grey10);
+      }
+
+      .newMasterDetailsWrap svg {
+          margin-top: 10px;
+          max-width: 200px;
+          max-height: 35px;
+          min-height: 35px;
+      }
+  }
+
+
+  .tradeWithExpert {
+      padding: 60px 0px;
+      background: linear-gradient(to bottom, var(--white) 50%, var(--black) 50%);
+      border-bottom: 1px solid var(--black5);
+      border-top: 1px solid var(--grey4);
+
+      .tradeExpertWrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 60px;
+      }
+
+      .tradeExpertUpper {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+      }
+
+      .tradeExpertLeft {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          width: 100%;
+          max-width: 44%;
+      }
+
+      .tradeSubHeading {
+          font-size: 16px;
+          line-height: 150%;
+          color: var(--grey3);
+          font-family: var(--go-regular);
+      }
+
+      .black_semibold {
+          color: var(--black);
+          font-family: var(--go-semibold);
+          /* font-weight: 500; */
+      }
+
+      .tradeExpertRight {
+          width: 100%;
+          max-width: 40%;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+      }
+
+      .tradePointer {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+      }
+
+      .numberIcons {
+          align-items: center;
+          padding: 10px;
+          border: 1px solid var(--grey15);
+          max-width: 26px;
+          max-height: 26px;
+          border-radius: 60px;
+          color: var(--black);
+          font-family: var(--go-regular);
+          font-size: 14px;
+          line-height: 150%;
+          display: flex;
+          justify-content: center;
+      }
+
+      .tradePointText {
+          font-size: 14px;
+          line-height: 150%;
+          font-family: var(--go-regular);
+          color: var(--grey3);
+      }
+
+      .tradeExpertLower {
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          justify-content: center;
+
+          .macImg {
+              width: 100%;
+              max-width: 960px;
+          }
+      }
+
+      .tradeExpertDivi {
+          position: absolute;
+          padding: 10px;
+          border-radius: 10px;
+          border: 1px solid var(--grey4);
+          background: var(--white);
+          display: flex;
+          align-items: center;
+          gap: 11px;
+          top: 71px;
+          right: 31px;
+      }
+
+      .tradeExpertSecondDiv {
+          position: absolute;
+          padding: 10px;
+          border-radius: 10px;
+          border: 1px solid var(--grey4);
+          background: var(--grey16);
+          display: flex;
+          align-items: center;
+          gap: 11px;
+          top: 27%;
+          left: 14%;
+      }
+
+      .tradeExpertThirdDiv {
+          position: absolute;
+          padding: 10px;
+          border-radius: 10px;
+          border: 1px solid var(--grey4);
+          background: var(--grey16);
+          display: flex;
+          align-items: center;
+          gap: 11px;
+          bottom: 21%;
+          right: 9%;
+      }
+  }
+
+  .feeStructureSection {
+      background: var(--black);
+      border-block: 1px solid var(--black5);
+
+      h2 .fr-BreatherHeading {
+          font-style: normal;
+      }
+
+      .walkDisclaimer {
+          margin-top: 40px;
+          font-size: 10px;
+          font-family: var(--go-regular);
+          line-height: 150%;
+          color: var(--grey10);
+          margin-left: 2px;
+      }
+
+      .feeStructureWrapper {
+          display: flex;
+          gap: 32px;
+          align-items: stretch;
+      }
+
+      .feeStructureLeft {
+          max-width: 100%;
+      }
+
+      .feeStructureRight {
+          max-width: 40%;
+      }
+
+      .feeStructureLeft,
+      .feeStructureRight {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+          align-items: flex-start;
+      }
+
+      .feeStructureTable {
+          border-collapse: collapse;
+      }
+
+      .cautionWrapper {
+          width: 100%;
+      }
+
+      .feeDivider {
+          width: 1px;
+          background: var(--black5);
+      }
+
+      .feeStructureParent {
+          width: 100%;
+      }
+
+      .feeStructureTable {
+          width: 100%;
+      }
+
+      .feeHeadRow {
+
+          border-radius: 16px 16px 0px 0px;
+          background: var(--grey17);
+      }
+
+      .feeHeadCol {
+          text-align: start;
+          padding-right: 20px;
+          padding: 12px 16px;
+          vertical-align: bottom;
+          line-height: 120%;
+      }
+
+      .feeHeadCol:first-child {
+          border-top-left-radius: 4px;
+          /* or whatever px you want */
+          border-bottom-left-radius: 4px;
+      }
+
+      .feeHeadCol:last-child {
+          border-top-right-radius: 4px;
+          /* or whatever px you want */
+          border-bottom-right-radius: 4px;
+      }
+
+      .feeYearText {
+          font-size: 14px;
+          line-height: 150%;
+          font-family: var(--go-semibold);
+          color: var(--white);
+      }
+
+      .feeYearGradient {
+          font-size: 10px;
+          line-height: 150%;
+          font-family: var(--go-regular);
+          text-transform: uppercase;
+          background: var(--Linear-Gradient, linear-gradient(91deg, #39B5D7 1.8%, #F7D544 50.99%, #E38330 99.75%));
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 4px;
+      }
+
+      .bodyFeeCol {
+          padding: 16px;
+          text-align: start;
+          font-size: 16px;
+          line-height: 150%;
+          font-family: var(--go-regular);
+          color: var(--grey4);
+          font-weight: 400;
+          text-wrap: nowrap;
+      }
+
+      .bodyFeesRow {
+          border-bottom: 1px solid var(--black5);
+      }
+
+      .feeColColor {
+          color: var(--grey10);
+      }
+
+      .totalFee {
+          color: var(--white);
+          font-family: var(--go-semibold);
+      }
+
+      .cautionBlack {
+          width: 100%;
+          padding: 10px 20px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          border-radius: 8px;
+          background: linear-gradient(var(--grey17) 0 0) padding-box, var(--gradient) border-box;
+          border: 1px solid transparent;
+
+          svg {
+              width: 100%;
+              max-width: 24px;
+          }
+      }
+
+      .cautionPara {
+          font-size: 10px;
+          line-height: 150%;
+          font-family: var(--go-regular);
+          color: var(--white);
+      }
+  }
+
+  .createrLab.labSection {
+      .terminalDivi {
+          right: 9%;
+          bottom: 11%;
+      }
+
+      .mapPara {
+          color: var(--white);
+      }
+
+      .mapDivi {
+          top: 28%;
+          left: 6%;
+      }
+
+      .mapDivi2 {
+          top: 16%;
+          left: 35%;
+      }
+
+      .mapDivi3 {
+          top: 13%;
+          left: 75.8%;
+      }
+  }
+
+
+  .reachoutBreatherSection {
+      background: linear-gradient(96deg, #39B5D7 -31.01%, #F7D544 49.05%, #E38330 109.58%);
+      padding: 60px 0 !important;
+
+      .reachoutBreatherWrapper {
+          display: flex;
+          gap: 28px;
+          align-items: stretch;
+      }
+
+      .supportHeadingWrapper {
+          display: flex;
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 8px;
+          border-bottom: 2px solid var(--grey4);
+          padding-bottom: 8px;
+          width: 100%;
+      }
+
+      .supportPara {
+          font-size: 14px;
+          line-height: 120%;
+          font-family: var(--go-regular);
+          color: var(--grey3);
+      }
+
+      .reachoutLefti {
+          width: 100%;
+          max-width: 57.1%;
+          border-radius: 16px;
+          background: var(--white);
+          padding: 40px;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          align-items: flex-start;
+          max-height: 267px;
+          overflow: hidden;
+      }
+
+      .go-BreatherHeading {
+
+          width: 100%;
+      }
+
+      .reachoutRight {
+          width: 100%;
+          max-width: 39.6%;
+          overflow: hidden;
+      }
+
+      .supportInfoWrapper {
+          display: flex;
+          gap: 16px;
+          flex-wrap: wrap;
+      }
+
+      .supportDivi {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+      }
+
+      .supportDivi>img {
+          max-width: 40px;
+          max-height: 40px;
+      }
+
+      .supportMailDivi {
+          display: flex;
+          gap: 5px;
+          align-items: flex-start;
+          flex-direction: column;
+      }
+
+      .impotantNote {
+          display: flex;
+          gap: 10px;
+          align-items: center;
+          font-size: 14px;
+          line-height: 120%;
+          font-family: var(--go-medium);
+          color: var(--grey17);
+      }
+
+      .supportBelowWrap {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+      }
+
+      .supportBoxiText {
+          font-size: 16px;
+          font-style: italic;
+          font-weight: 400;
+          line-height: 120%;
+          font-family: "fraunces", serif;
+          color: var(--grey);
+
+      }
+
+      .supportcontentText {
+          font-size: 16px;
+          line-height: 120%;
+          font-family: var(--go-medium);
+          color: var(--grey17);
+      }
+  }
+
+  .worldClassSection {
+      background: linear-gradient(to bottom, var(--white) 50%, var(--black) 50%);
+      border-bottom: 1px solid var(--grey17);
+
+      .worldClassWrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+          align-items: flex-start;
+      }
+
+      .worldHeadingWrapper {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+      }
+
+      .worldCampusFrame {
+          width: 100%;
+      }
+
+      .worldCampusFrame iframe {
+          height: 65vh;
+          border-radius: 8px;
+          width: 100%;
+      }
+  }
+
+  .theNewsSection {
+      background: var(--black);
+
+      .theNewsWrapper {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 40px;
+      }
+
+      .newsHeadingWrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          text-align: center;
+      }
+
+      .newsPara {
+          font-size: 16px;
+          line-height: 150%;
+          font-family: var(--go-regular);
+          color: var(--grey4);
+      }
+
+      .newsCardsWrapper {
+          width: 100%;
+          display: flex;
+          gap: 24px;
+          align-items: flex-start;
+          overflow: auto;
+      }
+
+      .newsCard {
+          position: relative;
+          border-radius: 8px;
+          cursor: pointer;
+          min-width: 24%;
+
+          img {
+              border-radius: 8px;
+              width: 100%;
+          }
+      }
+
+      .arrowSvg {
+          position: absolute;
+          bottom: 25px;
+          right: 25px;
+          backdrop-filter: blur(5px);
+          border-radius: 60px;
+      }
+  }
+
+  .graduatePrestigiousSection {
+      background: var(--black);
+
+
+      .remarkText {
+          font-size: 11px;
+          line-height: 150%;
+          font-family: var(--go-regular);
+          color: var(--grey10);
+          align-self: flex-start;
+          margin-top: 32px;
+          margin-left: 8px;
+      }
+
+      .graduatePrestigiousWrapper:nth-child(2) {
+          border-top: 1px solid var(--black5);
+          padding-top: 32px;
+          border-radius: 16px;
+      }
+
+      .degreeSectionParent {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 20px;
+      }
+
+      .graduatePrestigiousWrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 40px;
+          align-items: flex-start;
+          padding: 0;
+          background: var(--black);
+          border-radius: 10px;
+      }
+
+      /* .graduatePrestigiousWrapper.graduateBelowSticky {
+           padding-top: 0;
+
+       } */
+
+      .degreeImageWrapper {
+          position: relative;
+      }
+
+      .degreeHeadingWrapper {
+          display: flex;
+          width: 100%;
+          justify-content: space-between;
+          align-items: flex-end;
+      }
+
+      .degreePara {
+          font-size: 14px;
+          line-height: 150%;
+          font-family: var(--go-regular);
+          color: var(--grey10);
+      }
+
+      .degreeParaBold {
+          font-family: var(--go-semibold);
+          color: var(--grey18);
+      }
+
+      .degreeListWrapper {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+
+      }
+
+      .degreeHeading {
+          font: normal 28px/1.2 var(--go-regular);
+      }
+
+      .degreeGradientHeading {
+          font: italic 32px/1.2 "Fraunces", serif;
+          font-weight: 350;
+      }
+
+      .degreeList {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          align-items: flex-start;
+          width: 100%;
+          max-width: 612px;
+      }
+
+      .degreeListItem {
+          display: flex;
+          align-items: baseline;
+          gap: 8px;
+      }
+
+      .listNumber {
+          border-radius: 60px;
+          border: 1px solid var(--grey15);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 10px;
+          max-width: 26px;
+          max-height: 26px;
+          font-size: 14px;
+          line-height: 150%;
+          color: var(--white);
+      }
+
+      .listPara {
+          font-size: 16px;
+          line-height: 150%;
+          font-family: var(--go-regular);
+          color: var(--grey10);
+      }
+
+      .listGradientBold {
+          font-weight: 600;
+          line-height: 120%;
+          color: var(--Orange, #E38330);
+      }
+
+      .yellowArrow {
+          vertical-align: middle;
+      }
+  }
+
+  .imagesSection {
+      .imagesSectionWrapper {
+          display: flex;
+          flex-direction: column;
+          gap: 24px;
+      }
+
+      .imagesSectionHeadingWrapper {
+          display: flex;
+          justify-content: space-between;
+      }
+
+      .portfolioSubHead {
+          max-width: 468px;
+          width: 100%;
+      }
+
+      .imagesSectionContentWrapper {
+          display: flex;
+          border-radius: 8px;
+          overflow: hidden;
+      }
+
+      .imagesSectionRelative {
+          position: relative;
+          max-width: 248px;
+          width: 100%;
+          max-height: 484px;
+          height: 100%;
+
+      }
+
+      .imagesSectionContentAbsolute {
+          position: absolute;
+          bottom: 12px;
+          left: 12px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+      }
+
+      .imagesSectionName {
+          font: 18px "go-medium";
+          color: white;
+      }
+
+      .imagesSectionLogo {
+          max-width: 175px;
+          width: 100%;
+      }
+
+      .greyLine {
+          width: 100%;
+          height: 1px;
+          background: var(--grey3);
+      }
+
+      .portfolioSubHead {
+          max-width: 468px;
+          width: 100%;
+          font: 16px "go-regular";
+          line-height: 150%;
+          color: var(--black);
+      }
+
+
+
+  }
+
+
+  @media (max-width: 767px) {
+      .imagesSection {
+          .imagesSectionHeadingWrapper {
+              flex-direction: column;
+              gap: 12px;
+          }
+
+          .portfolioSubHead {
+              width: 100%;
+              font: 14px "go-regular";
+          }
+
+          .imagesSectionContentWrapper {
+              flex-direction: column;
+          }
+
+          .imagesSectionRelative {
+              width: 100%;
+              max-width: 100%;
+          }
+
+          .imagesSectionContentAbsolute {
+              bottom: 40px;
+          }
+
+          .imagesSectionName {
+              font: 16px "go-medium";
+              color: white;
+          }
+
+
+      }
+
+      .heroSection {
+          padding-top: 60px !important;
+
+          .heroSectionContent {
+              width: 100%;
+              padding: 0 12px;
+              transform: translate(-50%, -20%);
+              bottom: 0;
+          }
+
+          .heroSectionImg {
+              max-height: 85vh;
+          }
+
+          .go-HeroSubtitle {
+              margin-top: 8px;
+          }
+
+          .heroSectionBtnWrap {
+              margin-top: 24px;
+              width: 100%;
+              align-items: flex-start;
+              gap: 12px;
+              flex-direction: column;
+              padding: 0 16px;
+
+              .callBtn {
+                  width: 100%;
+              }
+
+              a,
+              button {
+                  width: 100%;
+                  line-height: 0 !important;
+              }
+          }
+      }
+
+      .tradeWithExpert {
+          background: linear-gradient(to bottom, var(--white) 78%, var(--black) 31%);
+
+
+          .tradeExpertUpper {
+              display: flex;
+              flex-direction: column;
+              gap: 16px;
+          }
+
+          .tradeExpertWrapper {
+              gap: 40px;
+          }
+
+          .tradeExpertLeft {
+              max-width: 100%;
+          }
+
+          .tradeExpertRight {
+              max-width: 100%;
+          }
+
+          .tradeSubHeading {
+              font-size: 14px;
+          }
+
+          .tradePointer {
+              align-items: flex-start;
+          }
+
+          .numberIcons {
+              max-width: 18px;
+              max-height: 18px;
+              font-size: 11px;
+              line-height: 0;
+          }
+      }
+
+      .worldClassSection {
+          .worldHeadingWrapper {
+              flex-direction: column;
+              gap: 18px;
+              align-items: flex-start;
+          }
+      }
+
+      .programmeBreatherNew {
+          padding: 40px 0 !important;
+
+          .programmeBreatherWrapper {
+              gap: 20px;
+              flex-direction: column;
+          }
+
+          .firstTbmBoxi {
+              min-height: 112px !important;
+          }
+
+          .programmeBreatherRight {
+              padding: 16px;
+          }
+
+          .boxiUpper {
+              margin-top: 16px;
+              min-height: unset;
+          }
+
+          .eligibilityBoxi {
+              font-size: 10px;
+          }
+
+          .classText {
+              font-size: 18px;
+          }
+
+          .classPara {
+              font-size: 13px;
+          }
+
+          .firstBoxi {
+              gap: 4px;
+          }
+
+          .buttonsParent {
+              margin-top: 24px;
+              gap: 8px;
+              flex-direction: column !important;
+
+
+              a,
+              button {
+                  width: 100%;
+
+                  svg {
+                      max-width: 20px;
+                  }
+              }
+          }
+      }
+
+      .traderManager {
+          background: var(--black);
+
+          .traderWrapper {
+              display: flex;
+              flex-direction: column;
+          }
+
+          .traderHeading {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              text-align: center;
+          }
+
+          .marqueeCards {
+              width: 100%;
+              pointer-events: none;
+              overflow: hidden;
+              display: flex;
+              align-items: center;
+              margin-top: 32px;
+          }
+
+          .marqueeInnerWrap {
+              width: 100%;
+              height: 100%;
+          }
+
+          .marqueeReverse {
+              height: 100%;
+              width: max-content;
+              align-items: center;
+              display: flex;
+              position: relative;
+              animation: marqueeReverse 20s linear infinite;
+              will-change: transform;
+              gap: 20px;
+          }
+
+          .traderCardsBox {
+              border: 1px solid var(--grey4);
+              background: var(--grey16);
+              border-radius: 8px;
+              padding: 16px;
+              display: flex;
+              flex-direction: column;
+              gap: 12px;
+              align-items: flex-start;
+              min-height: 248px;
+              max-width: 300px;
+              width: 100%;
+          }
+
+          .traderDetails {
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+              align-items: flex-start;
+          }
+
+          .traderCardHeading {
+              font-size: 22px;
+              line-height: 120%;
+              color: var(--black);
+              font-family: "Fraunces", serif;
+              font-weight: 350;
+          }
+
+          .traderSubText {
+              font-size: 14px;
+              line-height: 150%;
+              font-family: var(--go-regular);
+              color: var(--grey3);
+          }
+      }
+
+      .theNewsSection {
+          .newsHeadingWrapper {
+              gap: 8px;
+          }
+
+          .newsCardsWrapper {
+              padding-left: 16px;
+          }
+
+          .newsCard {
+              min-width: 85%;
+          }
+      }
+
+      .graduatePrestigiousSection {
+          background: var(--black);
+          padding: 60px 0 !important;
+          border-top: 1px solid var(--black5);
+
+          .graduatePrestigiousWrapper.graduateCurriculum {
+              padding-top: 0 !important;
+              border-radius: 0 !important;
+              border-top: unset;
+          }
+
+
+          .degreeHeadingWrapper.mob-visible {
+              padding: 8px;
+          }
+
+          .container {
+              padding: 0 8px !important;
+          }
+
+          .degreeSectionParent {
+              gap: 12px;
+          }
+
+          .remarkText {
+              margin-left: 0;
+              margin-top: 16px;
+          }
+
+          .graduatePrestigiousWrapper {
+              padding: 0px 8px;
+              gap: 24px;
+              border-radius: 0;
+          }
+
+          .degreeHeadingWrapper {
+              flex-direction: column;
+              align-items: flex-start;
+              gap: 12px;
+              display: flex;
+              padding: 0 8px;
+          }
+
+          .graduatePrestigiousWrapper {
+              padding-top: 24px !important;
+              border-radius: 12px 12px 8px 8px !important;
+              border-top: 1px solid var(--grey3);
+
+          }
+
+          .graduatePrestigiousWrapper:nth-child(2) {
+              border-top: unset;
+              padding-top: 0;
+              border-radius: 0;
+          }
+
+          .degreePara {
+              font-size: 14px;
+          }
+
+          .degreeListWrapper {
+              flex-direction: column;
+              gap: 20px;
+              align-items: flex-start;
+          }
+
+          .graduatePrestigiousWrapper.graduateBelowSticky {
+              margin-top: 32px;
+          }
+
+          .degreeGradientHeading {
+              font: italic 20px / 1.2 "Fraunces", serif;
+          }
+
+          .degreeHeading {
+              font: normal 18px / 1.2 var(--go-regular);
+          }
+
+          .listNumber {
+              max-width: 18px;
+              max-height: 18px;
+              font-size: 12px;
+              line-height: 0;
+          }
+
+          .yellowArrow {
+              max-width: 13px;
+              max-height: 13px;
+          }
+
+          .degreeList .degreePara {
+              font-size: 13px;
+          }
+      }
+
+      .feeStructureSection {
+          .feeStructureParent {
+              overflow-x: scroll;
+          }
+
+          .feeStructureParent::-webkit-scrollbar-thumb {
+              display: block;
+              background: var(--grey3);
+          }
+
+          .feeStructureWrapper {
+              flex-direction: column;
+              gap: 60px;
+          }
+
+
+          .feeStructureLeft,
+          .feeStructureRight {
+              max-width: 100%;
+          }
+
+          .feeDivider {
+              display: none;
+          }
+
+          .feeStructureTable {
+              min-width: 670px;
+          }
+
+          .feeStructureRight .feeStructureTable {
+              min-width: 450px;
+          }
+      }
+
+      .curriculumOutclassDsNew {
+          .termHeading {
+              font-size: 13px;
+          }
+
+          .mobView {
+              .termBtn {
+                  display: none;
+              }
+          }
+
+          .inClassAns {
+              font-size: 12px !important;
+          }
+
+          .curriculumOutclassWrapper {
+              gap: 32px;
+          }
+
+          .curriculumDsUpper {
+              position: unset;
+              padding-block: unset;
+              align-items: flex-start;
+              flex-direction: column;
+              gap: 24px;
+          }
+
+          .portfolioSubHead {
+              font-size: 14px;
+              max-width: 100%;
+          }
+
+          .curriculumDsBelow {
+              display: flex;
+              flex-direction: column;
+              gap: 24px;
+          }
+
+          .portfolioStepWrapper.step1 {
+              max-width: 358px;
+          }
+
+          .portfolioStepWrapper.step2 {
+              max-width: 331px;
+          }
+
+          .portfolioStepWrapper.step3 {
+              max-width: 304px;
+          }
+
+          .portfolioStepWrapper.step4 {
+              max-width: 277px;
+          }
+
+          .portfolioStepWrapper.step5 {
+              max-width: 250px;
+          }
+
+          .portfolioStepWrapper.step6 {
+              max-width: 223px;
+          }
+
+          .tradingHeading {
+              font-size: 18px;
+          }
+
+          .faqHeadingsWrapper.mobView {
+              display: flex;
+              padding-top: 20px;
+              overflow-y: auto;
+              position: sticky;
+              top: 52px;
+              z-index: 10;
+              gap: 24px;
+              background: var(--white);
+          }
+
+          .classRomFaqWrapNew.steps:last-child {
+              margin-bottom: 0px !important;
+          }
+
+          .dsBelowRight {
+              max-width: 100%;
+              background: var(--white);
+              padding: 16px 8px;
+          }
+
+          .faqHeadingItem {
+              display: flex;
+              flex-direction: column;
+              align-items: flex-start;
+              border-bottom: 1px solid var(--grey20);
+              min-width: max-content;
+              padding-bottom: 6px;
+              gap: 10px;
+              overflow: hidden;
+          }
+
+          .faqHeadingItem .termBtn {
+              background: var(--grey4);
+              color: var(--black);
+          }
+
+          .faqHeadingItem.active {
+              border-bottom: 1px solid var(--black);
+
+              .termBtn {
+                  background: var(--black);
+                  color: var(--white);
+              }
+
+              .faqHeading {
+                  color: var(--black);
+              }
+          }
+
+          .classRomFaqWrapNew {
+              margin-top: 20px;
+              border: unset;
+              position: relative;
+              z-index: 9;
+              background: var(--white) !important;
+          }
+
+          .inclassansUl {
+              border-block: 1px solid var(--grey4);
+              overflow: auto;
+          }
+      }
+
+      .labSection {
+          .labHeading {
+              font-size: 32px;
+          }
+
+          .imageLab {
+              max-height: 85vh;
+          }
+
+          .unlimitHeading {
+              font-size: 13px;
+          }
+
+          .locationPara {
+              font-size: 12px;
+          }
+
+          .mapDivi>svg {
+              width: 100%;
+              height: 100%;
+              max-width: 6px;
+              max-height: 6px;
+          }
+
+          .mapDivi {
+              top: 24%;
+              left: 40%;
+              gap: 12px;
+          }
+
+          .mapDivi3 {
+              top: 10%;
+              left: 2%;
+          }
+
+          .mapDivi2 {
+              top: 2%;
+              left: 55%;
+          }
+
+          .mapPara {
+              font-size: 10px;
+          }
+
+          .locationBoxi>svg {
+              max-width: 12px;
+              max-height: 12px;
+          }
+
+          .labHeading {
+              bottom: 30%;
+              left: 6%;
+          }
+
+          .terminalDivi {
+              right: 12%;
+              bottom: 8%;
+          }
+      }
+
+      .createrLab.labSection {
+
+          .terminalDivi {
+              right: 26%;
+              bottom: 5%;
+          }
+
+
+          .labHeading {
+              bottom: 24%;
+              left: 6%;
+          }
+
+          .mapDivi {
+              top: 2%;
+              left: 54.5%;
+          }
+
+          .mapDivi2 {
+              top: 16%;
+              left: 2.5%;
+          }
+
+          .mapDivi3 {
+              top: 28%;
+              left: 40.5%;
+          }
+      }
+
+      .reachoutBreatherSection {
+          .reachoutBreatherWrapper {
+              flex-direction: column-reverse;
+              gap: 20px;
+              align-items: flex-start;
+          }
+
+          .reachoutLefti,
+          .reachoutRight {
+              max-width: 100%;
+          }
+
+          .reachoutLefti {
+              padding: 20px;
+              gap: 16px;
+          }
+
+
+          .supportInfoWrapper {
+              flex-direction: column;
+              gap: 16px;
+          }
+
+          .supportDivi>img {
+              max-width: 32px;
+              max-height: 32px;
+          }
+
+          .supportcontentText,
+          .supportBoxiText {
+              font-size: 13px;
+          }
+
+          .impotantNote {
+              font-size: 13px;
+          }
+
+          .supportBelowWrap {
+              gap: 16px;
+          }
+      }
+
+
+      .dsaiMasters {
+          /* Hide scrollbar for webkit browsers */
+          scrollbar-width: none;
+          /* Firefox */
+          -ms-overflow-style: none;
+          /* Internet Explorer 10+ */
+
+          /* Hide scrollbar for webkit browsers */
+          &::-webkit-scrollbar {
+              display: none;
+          }
+
+          .newMasterBoxImg {
+              min-width: 240px;
+          }
+
+          .newMasterImgBox>img {
+              min-height: 192px;
+          }
+
+          .dsaiMastersMobile .container {
+              padding-right: 0 !important;
+          }
+      }
+
+  }
+
+
+  @media (min-width: 1024px) and (max-width: 1280px) {
+      .labSection {
+          .terminalDivi {
+              right: 5%;
+          }
+
+          .labHeading {
+              bottom: 13%;
+              left: 7%;
+          }
+      }
+
+      .createrLab.labSection {
+          .terminalDivi {
+              right: 6%;
+          }
+      }
+  }
+
+  @media (min-width: 1400px) and (max-width: 1440px) {
+      .labSection {
+          .terminalDivi {
+              right: 5%;
+          }
+
+          .labHeading {
+              bottom: 13%;
+              left: 7%;
+          }
+      }
+
+      .createrLab.labSection {
+          .terminalDivi {
+              right: 7%;
+          }
+      }
+
+  }
+
+
+  @media (min-width: 1920px) {
+      .labSection {
+          .terminalDivi {
+              right: 14%;
+          }
+      }
+
+      .createrLab.labSection {
+          .terminalDivi {
+              right: 16%;
+          }
+      }
+  }
+
+  @media (min-width: 320px) and (max-width: 380px) {
+
+      .labSection {
+          .imageLab {
+              max-height: 100%;
+          }
+      }
+  }

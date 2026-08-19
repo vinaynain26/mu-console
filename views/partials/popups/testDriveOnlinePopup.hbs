@@ -1,0 +1,484 @@
+
+    <div class="popupContainerOuter testDrivePopup intersectPopupCommon " id="testDriveOnlineRegNowPopUp">
+        <div class="popupContainer">
+            <div class="testDriveOnlinePopupCross">
+                <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg" class="invert-img"
+                    alt="Icon" onclick="hideApplyNowPopUp();">
+            </div>
+
+            <div class="PopupIntersectBody" id="testDriveContainer">
+                <form class="registerbox" id="companyConnect">
+                    <!-- First Name -->
+                    <div class="form" style="position: relative;">
+                        <label for="firstNameField">Name <em>*</em></label>
+                        <div class="input">
+                            <input type="text" placeholder="Full Name" id="firstNameField" onblur="validateFirstNameTdop()">
+                        </div>
+                        <span class="error font-red" id="firstNameErrorField"></span>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form">
+                        <label for="emailField">Email <em>*</em></label>
+                        <div class="input">
+                            <input type="email" placeholder="user@gmail.com" id="emailField" onblur="validateEmailTdop()">
+                        </div>
+                        <span class="error font-red" id="emailErrorField"></span>
+                    </div>
+
+                    <!-- Mobile -->
+                    {{!-- <div class="form">
+                        <label for="mobileField">Contact No. <em>*</em></label>
+                        <div class="input">
+                            <input type="text" placeholder="9999999999" id="mobileField" maxlength="10">
+                        </div>
+                        <span class="error font-red" id="mobileErrorField"></span>
+                    </div> --}}
+                    <div class="form optionFromMob">
+                                <label for="name" class="font-14 font-medium font-black1">Contact Number <span
+                                        class="font-red">*</span></label>
+                                <div class="phoneGroup mt-5">
+                                    <select class="codeOptionBlock inputBox phoneCode countryCodeIP" name="countryCode" id="countryCodeIntersect">
+                                        {{!-- <option value="IN">+91</option> --}}
+                                     {{!-- <option value="91" data-iso="IN">91</option> --}}
+                                    </select>
+                                    <div class="inputType">
+                                        <input type="text" placeholder="Enter Mobile Number"
+                                    class="inputBox font-16 font-black1 font-medium " id="mobileField" maxlength="10"
+                                    onblur="validateMobileTdop()">
+                                    </div>
+                                </div>
+                                <span class="error font-red" id="mobileErrorField"></span>
+
+                     </div>
+                    <!-- Designation -->
+                    {{!-- <div class="form">
+                        <label for="designationField">Designation </label>
+                        <div class="input">
+                            <input type="text"  placeholder="Designation" id="designationField">
+                        </div>
+                        <span class="error font-red" id="designationErrorField"></span>
+                    </div> --}}
+
+                   
+                   
+
+                    <!-- LinkedIn -->
+                    <div class="form" style="width: 100%;">
+                        <label for="linkedinField">Kindly share your LinkedIn and brief about yourself here <span class="greyText">
+                            (Up to 200
+                            words or a personal website link)
+                        </span></label>
+                        <div class="input">
+                            <textarea id="linkedinField"  placeholder="Please enter your message"></textarea>
+                        </div>
+                        <span class="error font-red" id="linkedinErrorField"></span>
+                    </div>
+
+                    <!-- Contribute -->
+                    <div class="form w-100 select-form-arrow" id="contributeDiv">
+                        <label for="contributeField">Would you like to contribute to Intersect 4.0 in any of the
+                            following ways?</label>
+                        <select id="contributeField" class="selectInput mt5">
+                            <option value="" disabled selected>Select</option>
+                            <option value="Speaker">Speaker</option>
+                            <option value="Organising Volunteer">Organising Volunteer</option>
+                            <option value="Digital Content Curation">Digital Content Curation</option>
+                            <option value="No">No</option>
+                        </select>
+                        <span class="error font-red" id="contributeErrorField"></span>
+                        
+                    </div>
+
+                    <!-- Scholarship -->
+                    <div class="form w-100 select-form-arrow" id="scholarshipDiv">
+                        <label for="scholarshipField">Would you like to apply for travel and stay scholarship?</label>
+                        <select onchange="handleConditionOfScholarShip()" id="scholarshipField" class="selectInput mt5">
+                            <option value="" disabled selected>Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                        <span class="error font-red" id="scholarshipErrorField"></span>
+                        
+                    </div>
+
+                     <!-- Why Apply Scholarship -->
+                    <div class="form hide" style="width: 100%;" id="whyApplyScholarshipDiv">
+                           <label for="whyScholarshipField">Why do you believe you should be selected for this
+                            scholarship? <em>*</em></label> 
+                        <div class="input">
+                            <input type="text" placeholder="" maxlength="200" id="whyScholarshipField">
+                        </div>
+                        <span class="error font-red" id="whyScholarshipErrorField"></span>
+                    </div>
+
+                    {{!-- <div class="form w-100 select-form-arrow hide" id="whyApplyScholarshipDiv">
+                        <label for="whyScholarshipField">Why do you believe you should be selected for this
+                            scholarship?</label>
+                        <select id="whyScholarshipField" class="selectInput mt5">
+                            <option value="" disabled selected>Select</option>
+                            <option value="Yes">Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                        <span class="error font-red" id="whyScholarshipErrorField"></span>
+                        
+                    </div> --}}
+
+                    <!-- Profile Picture -->
+               <div class="uploadFileBlock" id="uplaodProfilePicDiv">
+                  <h3 class="labelText">
+                    Please upload your professional profile picture here. <em>*</em>
+                  </h3>
+                  <label for="profilePicField" class="uploadFileLabel">
+                    <span>Choose File</span>
+                    <p id="fileChosenText">No File Chosen</p>
+                    <input id="profilePicField" type="file" accept=".png,.jpg,.jpeg" />
+                  </label>
+                 <span class="error font-red" id="ImageErrorField"></span>
+
+                </div>
+
+                <div class="consentCheckWrapper">
+                    <div class="consentCheckRow">
+                        <input type="checkbox" id="consentChecktdop">
+                        <label for="consentChecktdop">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+                    </div>
+                    <p id="consentCheckErrortdop" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+                </div>
+                </form>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="stickyButtonIntersect" id="submitButtonContainer">
+                <a href="javascript:void(0);" class="gradientButton whiteHover">
+                    <button class="button iconButton" id="registerBtnIntersection">
+                        Submit
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+                            <path
+                                d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                fill="white"></path>
+                        </svg>
+                    </button>
+                </a>
+            </div>
+
+            <div class="thanku hide" id="registerSuccess">
+                <img  src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+                <h2 class="font-28 bold wd-40">Thank You!</h2>
+                <p class="font-18 font-semibold  wd-40 mb20">Registration Successful</p>
+            </div>
+        </div>
+        </div>
+
+
+
+<script>
+
+
+
+// Global variable to store the uploaded file URL
+let uploadedFileUrl = '';
+
+$(document).ready(function () {
+  // Ensure FileStack is initialized
+  const fileStackClient = filestack.init('{{filestackApiKey}}'); // Replace YOUR_API_KEY if needed
+
+  // Handle file input change
+  $('#profilePicField').on('change', function (event) {
+    const file = event.target.files[0];
+
+    if (!file) {
+      console.log('No file selected. Please choose a file.');
+      return;
+    }
+
+    // Validate file type and size
+    const allowedExtensions = ['image/png', 'image/jpeg', 'image/jpg'];
+    const maxSize = 5 * 1024 * 1024; // 5 MB
+
+    if (!allowedExtensions.includes(file.type)) {
+      console.log('Invalid file type. Please upload a valid image file (PNG, JPEG, JPG).');
+      return;
+    }
+
+    if (file.size > maxSize) {
+      console.log('File size exceeds 5 MB. Please upload a smaller file.');
+      return;
+    }
+
+    // Update UI with the chosen file name
+    $('#fileChosenText').text(file.name);
+    console.log('Selected file:', file.name);
+
+    // Upload file to FileStack
+    fileStackClient
+      .upload(file)
+      .then((response) => {
+        uploadedFileUrl = response.url; // Assign the URL to the global variable
+        console.log('File uploaded successfully. URL:', uploadedFileUrl);
+
+        // Update UI after upload success
+        $('#fileChosenText').text(`Uploaded: ${file.name}`);
+      })
+      .catch((error) => {
+        console.error('File upload failed:', error);
+      });
+  });
+});
+ 
+
+    function openLeadGenForm(formTitle, destination, contactUs) {
+
+        const form = document.getElementById("testDriveOnlineRegNowPopUp");
+        /// const h2 = document.querySelector("#form_heading");
+        ///
+        /// form.classList.add("active");
+        ///
+        /// form.setAttribute("data-destination", destination);
+        /// form.setAttribute("data-title", h2.textContent);
+        ///
+        // ///   document.querySelector("#SuccessMessage").classList.add("hide");
+        /// document.querySelector("#submitbuttonreport").classList.remove("hide");
+        /// document.querySelector("#leadformContainer").classList.remove("hide");
+        /// document.querySelector("#form_heading").classList.remove("hide");
+
+
+
+    }
+
+    function openContactUsForm() {
+        console.log("Contact us form");
+        const form = document.getElementById("testDriveOnlineRegNowPopUp");
+
+          //form.classList.add("active");
+         // form.setAttribute("data-isContactUsForm", true);
+
+        // //  document.querySelector("#SuccessMessage").classList.add("hide");
+        //   document.querySelector("#submitbuttonreport").classList.remove("hide");
+        //   document.querySelector("#leadformContainer").classList.remove("hide");
+        //   document.querySelector("#form_heading").classList.remove("hide");
+    }
+    // let name = $('#nameReport').val();
+    // let email = $('#emailReport').val();
+    // let number = $('#numberReport').val();
+
+    function handleConditionOfScholarShip() {
+        const wantFullScholarship = $("#scholarshipField").val();
+        if (wantFullScholarship === "No") {
+            $("#whyApplyScholarshipDiv").addClass("hide");
+          //  $("#uplaodProfilePicDiv").addClass("hide");
+        } else if (wantFullScholarship === "Yes") {
+            $("#whyApplyScholarshipDiv").removeClass("hide");
+         //   $("#uplaodProfilePicDiv").removeClass("hide");
+        }
+    }
+
+
+
+
+
+$('#registerBtnIntersection').on('click', function (e) {
+    e.preventDefault();
+    console.log("Register button clicked");
+
+    // Extract UTM parameters from the URL
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+    const utmSource = params.utm_source || '';
+    const utmMedium = params.utm_medium || '';
+    const utmCampaign = params.utm_campaign || '';
+    const deviceType = window.innerWidth < 767 ? 'mobile' : 'desktop';
+    console.log('Device type:', deviceType);
+
+    // Collect input values from form fields
+    const emailUser = $('#emailField').val().trim();
+    const mobileUser = $('#mobileField').val().trim();
+    const firstName = $('#firstNameField').val().trim();
+    const designation = ($('#designationField').val() || '').trim();
+    const userOrganization = ($('#organizationField').val() || '').trim();
+    const linkedInInput = $("#linkedinField").val().trim();
+    const attendedBefore = $("#attendedBeforeField").val();
+    const wantToContribute = $("#contributeField").val();
+    const wantFullScholarship = $("#scholarshipField").val();
+    const whyWantScholarship = $("#whyScholarshipField").val();
+    const profilePic = $("#profilePicField").val();
+    const countryCode = document.getElementById('countryCodeIntersect').value.trim();
+
+    // Validation flags
+    let valid = true;
+
+    // Email validation
+    const emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+    if (!emailPattern.test(emailUser)) {
+        $('#emailErrorField').text("Please enter a valid email");
+        valid = false;
+    } else {
+        $('#emailErrorField').text("");
+    }
+
+    // Mobile number validation
+    if (mobileUser.length !== 10 || isNaN(mobileUser)) {
+        $('#mobileErrorField').text("Please enter a valid 10-digit mobile number");
+        valid = false;
+    } else {
+        $('#mobileErrorField').text("");
+    }
+
+    // First name validation
+   if (!firstName || !/^[a-zA-Z\s]+$/.test(firstName)) {
+    $("#firstNameErrorField").text("Please enter a valid name (only alphabets and spaces)");
+    valid = false;
+} else {
+    $("#firstNameErrorField").text("");
+}
+    // image val
+     // Organization validation
+    if (!uploadedFileUrl) {
+        $("#ImageErrorField").text("Please Upload Your Profile Picture");
+        valid = false;
+    } else {
+        $("#ImageErrorField").text("");
+    }
+
+    if (!document.getElementById('consentChecktdop')?.checked) { document.getElementById('consentCheckErrortdop').classList.remove('warning'); valid = false; } else { document.getElementById('consentCheckErrortdop').classList.add('warning'); }
+
+    // If validation passes, submit the form
+    if (valid) {
+        $("#registerBtnIntersection").prop("disabled", true);
+
+        // Prepare the payload for the API request
+        const payload = {
+            name: firstName,
+            event_Id: "6762c4f2eadd48411393702b", // Example event ID
+            email: emailUser,
+            mobile: mobileUser,
+            countryCode: countryCode,
+            consentCheck: document.getElementById('consentChecktdop')?.checked || false,
+            designation: designation,
+            organisation: userOrganization,
+            linkedinUrl: linkedInInput,
+            attendedBefore: attendedBefore,
+            wantToContribute: wantToContribute,
+            wantFullScholarship: wantFullScholarship,
+            whyWantScholarship: whyWantScholarship,
+            profilePic: uploadedFileUrl || "Empty profile", // Default value if no profile picture
+            source: utmSource || 'Website', // Default to 'Website' if no UTM source
+            medium: utmMedium || 'intersect-four-point-o - Event Register Page Popup', // Default to 'Source' if no UTM medium
+            campaign: utmCampaign || null, // Null if no UTM campaign
+        };
+
+        const endpoint = '{{apiBaseURL}}/api/registerForEvent'; // Replace with actual API base URL
+
+        // Send the registration request
+        fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.Message === "Already registered") {
+                $("#emailErrorField").text("Email is already registered.");
+                $("#registerBtnIntersection").prop("disabled", false);
+                return;
+            }
+
+            if (data.Message === "Already registered for this slot") {
+                $("#userSlotError").text("Already registered for this slot.");
+                $("#registerBtnIntersection").prop("disabled", false);
+                return;
+            }
+
+            console.log('Success:', data);
+
+            // Hide form elements and show success message
+            $('#companyConnect').addClass('hide');
+            $('#submitButtonContainer').addClass('hide');
+            $("#registerSuccess").removeClass("hide");
+
+            // Store user and event data in localStorage
+            localStorage.setItem("userName", firstName);
+            localStorage.setItem("eventName", "Intersect 4.0");
+
+            // Re-enable the button after a delay
+            setTimeout(() => {
+                $("#registerBtnIntersection").prop("disabled", false);
+                // Optionally, redirect to a thank-you page
+                // window.location.href = `/thankyoupage/pgp-ug`;
+            }, 3300);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            $("#registerBtnIntersection").prop("disabled", false);
+        });
+    }
+});
+
+
+
+    function hideApplyNowPopUp() {
+        let applyNowPopUp = document.getElementById("testDriveOnlineRegNowPopUp");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+
+        $('#nameReport').val("");
+        $('#emailReport').val("");
+        $('#numberReport').val("");
+        const consentChecktdop = document.getElementById('consentChecktdop');
+        if (consentChecktdop) { consentChecktdop.checked = false; }
+        document.getElementById('consentCheckErrortdop')?.classList.add("warning");
+        const form = document.getElementById("testDriveOnlineRegNowPopUp");
+        form.removeAttribute("data-isContactUsForm");
+
+    }
+
+
+    // Per-field onblur validation (matches the submit-time checks + .error span convention)
+    function validateFirstNameTdop() {
+        const firstName = $('#firstNameField').val().trim();
+        if (!firstName || !/^[a-zA-Z\s]+$/.test(firstName)) {
+            $("#firstNameErrorField").text("Please enter a valid name (only alphabets and spaces)");
+            return false;
+        }
+        $("#firstNameErrorField").text("");
+        return true;
+    }
+
+    function validateEmailTdop() {
+        const emailUser = $('#emailField').val().trim();
+        const emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+        if (!emailPattern.test(emailUser)) {
+            $('#emailErrorField').text("Please enter a valid email");
+            return false;
+        }
+        $('#emailErrorField').text("");
+        return true;
+    }
+
+    function validateMobileTdop() {
+        const mobileUser = $('#mobileField').val().trim();
+        if (mobileUser.length !== 10 || isNaN(mobileUser)) {
+            $('#mobileErrorField').text("Please enter a valid 10-digit mobile number");
+            return false;
+        }
+        $('#mobileErrorField').text("");
+        return true;
+    }
+
+
+    function validationOnblurPgpTbmCommon(field, errorId, errorMessage) {
+        var input = $("#" + field);  // Get the field by ID
+        var error = $("#" + errorId);  // Get the error element by ID
+
+        if (input.val() === "") {
+            error;  // Add the warning class if applicable
+            error.text(errorMessage);  // Set the dynamic error message
+        } else {
+            error.hide();  // Hide the error message if input is valid
+        }
+    }
+
+
+
+</script>

@@ -1,0 +1,450 @@
+<main>
+    <div class="popupContainerOuter introPopup pospop workExpPopup" id="WorkExperiPop">
+
+        <div class="popupContainer">
+
+            <div class="fromTophead">
+                <h2>Work Experience</h2>
+                <div class="pointer" onclick="closeWorkExp()">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="0.5" y="0.5" width="31" height="31" rx="5.5" fill="white" />
+                        <rect x="0.5" y="0.5" width="31" height="31" rx="5.5" stroke="#FAFAFA" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M11.0506 11.0499C11.3544 10.7462 11.8468 10.7462 12.1506 11.0499L20.9501 19.8495C21.2538 20.1532 21.2538 20.6457 20.9501 20.9494C20.6464 21.2531 20.1539 21.2531 19.8502 20.9494L11.0506 12.1499C10.7469 11.8461 10.7469 11.3537 11.0506 11.0499Z"
+                            fill="#525252" />
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M20.9494 11.0499C21.2531 11.3537 21.2531 11.8461 20.9494 12.1499L12.1498 20.9494C11.8461 21.2531 11.3536 21.2531 11.0499 20.9494C10.7462 20.6457 10.7462 20.1532 11.0499 19.8495L19.8494 11.0499C20.1532 10.7462 20.6456 10.7462 20.9494 11.0499Z"
+                            fill="#525252" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="PopupformWrapper" id="leadformContainer">
+                <form action="">
+                    <div id="workExperienceContainer">
+                        <div class="formField-upload isImp">
+                            <span class="label">Upload Logo</span>
+                            <label class="file-input-wrapper" for="this">
+                                <input type="file" accept="image/*" id="this" oninput="validateImage(this)" name="this">
+                                <span class="chooseButton">Choose File</span>
+                                <span class="noFile">No File Chosen</span>
+                            </label>
+                            {{!-- <div class="file-hint">(MP4 - Max 50MB)</div> --}}
+                        </div>
+
+                        <div class="formField isImp">
+                            <label for="Company Name">Company Name</label>
+                            <input type="text" id="Company Name" placeholder="Enter Here">
+                        </div>
+
+                        <div class="formField isImp">
+                            <label for="Designation">Designation</label>
+                            <input type="text" id="Designation" placeholder="Enter Here">
+                        </div>
+
+                        <div class="flexbox exceptionField isImp">
+                            <label for="headline">Start Date</label>
+                            <div class="formField">
+                                <input type="text" id="headline" placeholder="YYYY">
+                            </div>
+                            <div class="formField">
+                                <input type="text" id="headline" placeholder="MM">
+                            </div>
+                        </div>
+
+                        <div class="checboxWrap">
+                            <input type="checkbox" id="thisCheckbox">
+                            <label for="this1">I am currently working in this role</label>
+                        </div>
+
+                        <div class="flexbox exceptionField isImp" id="endDate">
+                            <label for="headline">End Date</label>
+                            <div class="formField">
+                                <input type="text" id="headline" placeholder="YYYY">
+                            </div>
+                            <div class="formField">
+                                <input type="text" id="headline" placeholder="MM">
+                            </div>
+                        </div>
+
+                        <div class="formField isImp">
+                            <label for="Description">Description</label>
+                            <textarea type="text" id="Description" placeholder="Enter here"></textarea>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="workExpAddAnother" class="addAnother">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M2.1875 7H11.8125" stroke="#E38330" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M7 2.1875V11.8125" stroke="#E38330" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Add another entry
+                </div>
+
+                <div class="submitWrapper">
+                    <div class="gradientButton whiteHover">
+                        <button class="button iconButton" id="workExperienceSubmitButton">
+                            Save
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z"
+                                    fill="#090909" />
+                                <path
+                                    d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z"
+                                    fill="#090909" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</main>
+
+<script>
+    $(document).ready(function () {
+        const deletedWorkExperienceIds = [];
+
+        // Add another work experience entry
+        $('#workExpAddAnother').on('click', function () {
+            const newId = `new_${Date.now()}`;
+            const newHTML = generateWorkExperienceEntryHTML({
+                _id: newId,
+                logo: '',
+                companyName: '',
+                designation: '',
+                startYear: '',
+                startMonth: '',
+                endYear: '',
+                endMonth: '',
+                isCurrent: false,
+                description: ''
+            });
+
+            $('#workExperienceContainer').append(newHTML);
+            checkWorkExperienceEmptyState();
+
+            attachFieldValidation([
+                {
+                    fieldId: `workCompanyName_${newId}`,
+                    errorMessage: "Please enter company name"
+                },
+                {
+                    fieldId: `workDesignation_${newId}`,
+                    errorMessage: "Please enter designation"
+                },
+                {
+                    fieldId: `workStartYear_${newId}`,
+                    errorMessage: "Please enter start year"
+                },
+                {
+                    fieldId: `workStartMonth_${newId}`,
+                    errorMessage: "Please enter start month"
+                },
+                {
+                    fieldId: `workEndYear_${newId}`,
+                    errorMessage: "Please enter end year"
+                },
+                {
+                    fieldId: `workEndMonth_${newId}`,
+                    errorMessage: "Please enter end month"
+                },
+                {
+                    fieldId: `workDescription_${newId}`,
+                    errorMessage: "Please add description"
+                }
+            ]);
+        });
+
+        function deepCompareWorkExperience(entryA, entryB, ignoreEndDate = false) {
+            if (!entryA || !entryB) return false;
+
+            const fieldsToCompare = [
+                'companyName',
+                'designation',
+                'description',
+                'currentlyWorking',
+                'logo'
+            ];
+
+            for (const field of fieldsToCompare) {
+                if ((entryA[field] || '') !== (entryB[field] || '')) return false;
+            }
+
+            if ((entryA.startDate?.year || '') !== (entryB.startDate?.year || '')) return false;
+            if ((entryA.startDate?.month || '') !== (entryB.startDate?.month || '')) return false;
+
+            if (!ignoreEndDate) {
+                if ((entryA.endDate?.year || '') !== (entryB.endDate?.year || '')) return false;
+                if ((entryA.endDate?.month || '') !== (entryB.endDate?.month || '')) return false;
+            }
+
+            return true;
+        }
+
+        function validateStartEndDates(startYearId, startMonthId, endYearId, endMonthId) {
+            const startYear = parseInt($(`#${startYearId}`).val(), 10);
+            const startMonth = parseInt($(`#${startMonthId}`).val(), 10);
+            const endYear = parseInt($(`#${endYearId}`).val(), 10);
+            const endMonth = parseInt($(`#${endMonthId}`).val(), 10);
+
+            let valid = true;
+
+            if (isNaN(startMonth) || startMonth < 1 || startMonth > 12) {
+                showError(startMonthId, 'Start month must be between 1 and 12.');
+                valid = false;
+            }
+            if (!isNaN(endMonth) && (endMonth < 1 || endMonth > 12)) {
+                showError(endMonthId, 'End month must be between 1 and 12.');
+                valid = false;
+            }
+
+            if (!isNaN(startYear) && !isNaN(endYear) && !isNaN(startMonth) && !isNaN(endMonth)) {
+                if ((startYear > endYear) || (startYear === endYear && startMonth > endMonth)) {
+                    showError(endMonthId, 'Start date cannot be later than End date.');
+                    valid = false;
+                }
+            }
+            return valid;
+        }
+
+
+
+        function checkWorkExperienceEmptyState() {
+            const $container = $('#workExperienceContainer');
+            const $addAnother = $('#workExpAddAnother');
+            const entryCount = $container.find('.workExperienceEntry').length;
+            
+            if (entryCount === 0) {
+                // Show empty state message
+                if ($container.find('.emptyStateMessage').length === 0) {
+                    $container.append('<div class="emptyStateMessage" style="text-align: center; padding: 20px; color: #666; font-style: italic;">No entries added yet. Click "Add another entry" to get started.</div>');
+                }
+                // Ensure add another button is visible
+                $addAnother.show();
+            } else {
+                // Remove empty state message if entries exist
+                $container.find('.emptyStateMessage').remove();
+            }
+        }
+
+        $(document).on('click', '.workExperienceEntry .removeEntryBtn', function () {
+            const $entry = $(this).closest('.workExperienceEntry');
+            const entryId = $entry.data('id');
+
+            if (!entryId.toString().startsWith("new_")) {
+                deletedWorkExperienceIds.push(entryId);
+            }
+            $entry.remove();
+            checkWorkExperienceEmptyState();
+        });
+
+        $(document).on('change', 'input[id^="workIsCurrent_"]', function () {
+            const $entry = $(this).closest('.workExperienceEntry');
+            const isChecked = $(this).is(':checked');
+            $entry.find('.endDateGroup').toggle(!isChecked);
+
+            if (isChecked) {
+                $entry.find('input[id^="workEndYear_"]').val('');
+                $entry.find('input[id^="workEndMonth_"]').val('');
+                $entry.find('p[id^="workEndYear_"][id$="Error"]').text('');
+                $entry.find('p[id^="workEndMonth_"][id$="Error"]').text('');
+            }
+        });
+
+        // Submit Work Experiences
+        $('#workExperienceSubmitButton').on('click', async function (e) {
+            e.preventDefault();
+
+            const entries = $('.workExperienceEntry');
+            const initialEntries = window.initialWorkExperiencesData?.workExperiences || [];
+            const actions = [];
+            let isValid = true;
+            const uploadQueue = [];
+
+            for (let i = 0; i < entries.length; i++) {
+                const $entry = $(entries[i]);
+                const entryId = $entry.data('id');
+
+                const isCurrent = $(`#workIsCurrent_${entryId}`).is(':checked');
+                const existing = initialEntries.find(e => e._id === entryId);
+                const isNew = !existing;
+
+                const logoId = `workCompanyLogo_${entryId}`;
+                const companyId = `workCompanyName_${entryId}`;
+                const designationId = `workDesignation_${entryId}`;
+                const startYearId = `workStartYear_${entryId}`;
+                const startMonthId = `workStartMonth_${entryId}`;
+                const endYearId = `workEndYear_${entryId}`;
+                const endMonthId = `workEndMonth_${entryId}`;
+                const descId = `workDescription_${entryId}`;
+
+                // Validate file selection (not upload yet)
+                const logoValid = isNew ? validateFileField(logoId) : true;
+                const companyValid = validateField(companyId, "Please enter company name");
+                const designationValid = validateField(designationId, "Please enter designation");
+                const startYearValid = validateField(startYearId, "Please enter start year");
+                const startMonthValid = validateField(startMonthId, "Please enter start month");
+                const descriptionValid = validateField(descId, "Please enter description");
+
+                let endYearValid = true, endMonthValid = true;
+                if (!isCurrent) {
+                    endYearValid = validateField(endYearId, "Please enter end year");
+                    endMonthValid = validateField(endMonthId, "Please enter end month");
+                }
+
+                if (!logoValid || !companyValid || !designationValid || !startYearValid || !startMonthValid || !descriptionValid || !endYearValid || !endMonthValid) {
+                    isValid = false;
+                    continue;
+                }
+
+                const dateValid = validateStartEndDates(startYearId, startMonthId, endYearId, endMonthId);
+
+                if (!dateValid) {
+                    isValid = false;
+                    continue;
+                }
+
+                // Queue logo upload for later
+                uploadQueue.push({ entryId, logoId, existing });
+            }
+
+            if (!isValid) return;
+
+            const $submitBtn = $('#workExperienceSubmitButton');
+            $submitBtn.prop('disabled', true).text('Submitting...');
+
+            for (let i = 0; i < entries.length; i++) {
+                const $entry = $(entries[i]);
+                const entryId = $entry.data('id');
+                const existing = initialEntries.find(e => e._id === entryId);
+                const isNew = !existing;
+                const isCurrent = $(`#workIsCurrent_${entryId}`).is(':checked');
+
+                const companyName = $(`#workCompanyName_${entryId}`).val().trim();
+                const designation = $(`#workDesignation_${entryId}`).val().trim();
+                const startYear = $(`#workStartYear_${entryId}`).val().trim();
+                const startMonth = $(`#workStartMonth_${entryId}`).val().trim();
+                const endYear = isCurrent ? '' : $(`#workEndYear_${entryId}`).val().trim();
+                const endMonth = isCurrent ? '' : $(`#workEndMonth_${entryId}`).val().trim();
+                const description = $(`#workDescription_${entryId}`).val().trim();
+
+                const { logoId } = uploadQueue.find(q => q.entryId === entryId) || {};
+                let logo = existing?.logo || '';
+                console.log('logolog', logo)
+
+                if (isNew && logoId) {
+                    logo = await handleFilestackUpload(logoId, existing, 'photo');
+                } else {
+                    const fileInput = document.getElementById(logoId);
+                    if (fileInput && fileInput.files.length > 0) {
+                        logo = await handleFilestackUpload(logoId, existing, 'photo');
+                    }
+                }
+
+                const entryData = {
+                    companyName,
+                    designation,
+                    startDate: { year: startYear, month: startMonth },
+                    endDate: { year: endYear, month: endMonth },
+                    currentlyWorking: isCurrent,
+                    description,
+                    logo
+                };
+
+                let isChanged = isNew;
+                if (!isNew && existing) {
+                    isChanged = !deepCompareWorkExperience(existing, entryData, isCurrent);
+                }
+
+                if (isChanged) {
+                    const actionObj = {
+                        action: isNew ? 'add' : 'update',
+                        data: entryData
+                    };
+                    if (!isNew) actionObj.targetId = entryId;
+                    actions.push(actionObj);
+                }
+            }
+
+            deletedWorkExperienceIds.forEach(id => {
+                actions.push({ action: 'delete', targetId: id });
+            });
+
+            // If all entries were deleted, delete all initial entries
+            if (entries.length === 0 && initialEntries.length > 0) {
+                initialEntries.forEach(entry => {
+                    actions.push({ action: 'delete', targetId: entry._id });
+                });
+            }
+
+            if (actions.length === 0) {
+                alert("No changes detected");
+                $submitBtn.prop('disabled', false).html(`Save
+                <svg  
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z"
+                    fill="#090909"
+                  />
+                  <path
+                    d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z"
+                    fill="#090909"
+                  />
+                </svg>`
+                );
+                return;
+            }
+
+
+            try {
+                const userId = window.location.pathname.split('/').pop();
+                await $.ajax({
+                    url: `{{apiBaseURL}}/api/student-profile/${userId}/draft`,
+                    type: 'POST',
+                    data: JSON.stringify({ section: 'workExperiences', actions }),
+                    contentType: 'application/json',
+                    success: (res) => {
+                        deletedWorkExperienceIds.length = 0;
+                        renderProfile(res.draft)
+                        closeWorkExp();
+                    },
+                    error: err => {
+                        console.error(err);
+                        alert(err?.responseJSON?.Message || 'Something went wrong');
+                    }
+                });
+            } catch (err) {
+                console.error(err);
+                alert('Something went wrong during submission.');
+            } finally {
+                $submitBtn.prop('disabled', false).html(`Save
+                <svg  
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M13.1589 4.145L2.8125 14.4553L3.54115 15.1875L13.8875 4.87722L13.1589 4.145Z"
+                    fill="#090909"
+                  />
+                  <path
+                    d="M14.0929 12.929C11.9657 10.2216 11.8005 6.35689 13.7831 3.53585C13.7418 3.49451 14.4337 4.22819 14.4233 4.21786C11.6456 6.16056 7.77318 5.98489 5.10898 3.85618L6.04868 2.8125C7.97971 5.05487 11.5423 5.11687 13.8761 3.43251C13.8657 3.43251 14.5679 4.14552 14.5163 4.11452C12.5336 6.27422 12.7608 10.1493 15.1875 11.8543L14.0826 12.9393L14.0929 12.929Z"
+                    fill="#090909"
+                  />
+                </svg>`
+                );
+            }
+        });
+    });
+</script>

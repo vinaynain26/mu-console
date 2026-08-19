@@ -1,0 +1,333 @@
+<main>
+    <div class="popupContainerOuter   ApplyNow" id="PGdownloadBrochure">
+
+        <div class="popupContainer">
+            <div class="fromTophead ">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="Pg_form_heading"> Download Programme
+                    Brochure </h2>
+                <div class="popUpCloseBtnWrap">
+                    <img src="https://files.mastersunion.link/resources/svg/crossIcon.svg" class="invert-img" alt="Icon"
+                        onclick="hideApplyNowPopUpMainPG();">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="leadformContainer">
+                <div class="left mob-hide">
+                    <img class="ugPopUpImg" src="https://files.mastersunion.link/media/img/ug-brochure-image.webp"
+                        alt="">
+                </div>
+                <div class="right">
+                    <iframe id="83ff75fe-ef77-4f66-8013-031ae6efec95" width="100%" height="500px"></iframe>
+                    <div class="formFooter" id="submitbuttonreport">
+                       
+                    </div>
+                </div>
+            </div>
+
+            <div id="SuccessMessage" class="congrats-box text-center hide">
+                <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+
+                <h3 class="thankyouboxHeading mt-10 gtmUgDwnBroGotit" id="gtmUgDwnBroGotitId">Got it</h3>
+                <p class="text-2 gtmUgDwnBroGotPara" id="gtmUgDwnBroGotParaId">The Report will be downloaded shortly.
+                <p class="text-2"> Feel free to write to us at <a class="link-red"
+                        href="mailto:pgadmissions@mastersunion.org" target="_blank">pgadmissions@mastersunion.org</a>
+                </p>
+
+                <p class="text-2"> or call on <span class="font-bold">+91 89293 61765</span> in case of any queries.
+                </p>
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+
+
+    function triggerBrochureDownload(destination) {
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+        if (isIOS) {
+            // iOS Safari often blocks async window.open; same-tab navigation is more reliable.
+            window.location.href = destination;
+            return;
+        }
+
+        const link = document.createElement("a");
+        link.href = destination;
+        link.target = "_blank";
+        link.rel = "noopener";
+        link.download = "";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function PgdownloadBrochure(formTitle, destination) {
+        console.log('PgdownloadBrochureCalled')
+
+        console.log('destination1234', destination)
+        const form = document.getElementById("PGdownloadBrochure");
+        const h2 = document.querySelector("#Pg_form_heading");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        document.querySelector("#SuccessMessage").classList.add("hide");
+        document.querySelector("#submitbuttonreport").classList.remove("hide");
+        document.querySelector("#leadformContainer").classList.remove("hide");
+        document.querySelector("#Pg_form_heading").classList.remove("hide");
+
+        // Disable scrolling when popup is open
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+    }
+    // let name = $('#nameReport').val();
+    // let email = $('#emailReport').val();
+    // let number = $('#numberReport').val();
+    function onButtonClickSubmitReportMainPG() {
+        console.log('on submit top main 121');
+
+        // Validate functions
+        const validateNumber = (number) => /^\d+$/.test(number);
+        const validateEmail = (email) => email.includes("@") && email.includes(".");
+
+        let name = $('#nameReport').val().trim();
+        name = name ? name.charAt(0).toUpperCase() + name.slice(1).toLowerCase() : "";
+        let nameParts = name.split(/\s+/);
+        let firstName = "";
+        let lastName = "";
+        if (nameParts.length === 1) {
+            firstName = nameParts[0];
+            lastName = "";
+        }
+        else {
+            lastName = nameParts.pop();
+            firstName = nameParts.join(" ");
+        }
+        let email = $('#emailReport').val().trim();
+        let number = $('#numberReport').val().trim();
+        let qualification = $('#qualificationReport').val();
+
+
+        let isValid = true;
+
+        isValid = validateNameInput('nameReport', 'nameReportVal') && isValid;
+        isValid = validateEmailInput('emailReport', 'emailReportVal') && isValid;
+        isValid = validateMobileInput('numberReport', 'numberReportVal') && isValid;
+        isValid = validateSelectInput('qualificationReport', 'qualificationReportVal') && isValid;
+
+         const form = document.getElementById("PGdownloadBrochure");
+        const destination = form.getAttribute("data-destination") || "https://files.mastersunion.link/MasterUnion/PGP_Applied_AI_and_Agentic_Systems_Brochure.pdf";
+
+        if (!isValid) return;
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const utmSource = params.utm_source;
+        const utmMedium = params.utm_medium;
+        const utmCampaign = params.utm_campaign;
+
+        const gclid = params.gclid;
+        const fbclid = params.fbclid;
+        const utmTerm = params.utm_term;
+        const utmPlacement = params.utm_placement;
+        const utmContent = params.utm_content;
+        const utmCampaignId = params.utm_campaign_id;
+        const utmAdGroupId = params.utm_adgroup_id;
+        const utmCreativeId = params.utm_creative_id;
+
+        let url = window.location.pathname.substring(1);
+        let formname = document.querySelector("#PGdownloadBrochure").getAttribute("data-title") || "Download Placement Report";
+        let medium = `PGP AI - ${formname} - Popup`;
+        let leadSource = `PGP AI - ${formname} - Popup`;
+
+        let course = 'PG Programme in AI';
+        // if (url.startsWith("pgp-rise")) {
+        //     course = 'PGP Rise';
+        //     medium = `PGP Rise - ${formname} Popup`;
+        // } else if (url.startsWith("ug-")) {
+        //     course = 'Undergraduate Programme';
+        //     medium = `UG - ${formname} Popup`;
+        // }
+
+        let device = 'PC';
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            device = "Mobile";
+        } else {
+            device = "Desktop";
+        }
+
+        // api for our Data base
+        var post_url = '{{apiBaseURL}}/api/courseRegister';
+        var request_method = 'POST'; //get form GET/POST method
+        $.ajax({
+            url: post_url,
+            type: request_method,
+            contentType: "application/json",
+            data: JSON.stringify({
+                "email": email,
+
+                "name": name,
+                "mobile": number,
+                "courseName": course,
+                "qualification": qualification,
+                "full_utm_url": window.location.href || "N/A",
+                "leadSource": leadSource,
+                "leadOrigin": leadSource || "N/A",// for lead matrix
+                "medium": utmMedium || null,
+                "campaign": utmCampaign || null,
+                "source": utmSource || null,
+                "gclid": gclid || null,
+                "fbclid": fbclid || null,
+                "utmTerm": utmTerm || null,
+                "utmPlacement": utmPlacement || null,
+                "utmContent": utmContent || null,
+                "utmCampaignId": utmCampaignId || null,
+                "utmAdGroupId": utmAdGroupId || null,
+                "utmCreativeId": utmCreativeId || null,
+
+            }),
+            dataType: "json",
+            success: function (result) {
+                console.log("Second api after first success")
+                //const post_url = '{{apiBaseURL}}/api/leads/pushToNPF_UG';
+                const post_url = "https://api-lead.mastersunion.org/api/leadAndApplicantApis/ugDownloadBrochureApi";
+
+                const request_method = 'POST';
+
+                $.ajax({
+                    url: post_url,
+                    type: request_method,
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        device: device,
+                        email: email,
+                        name: name,
+                        mobile: number,
+                        //  linkedinProfile: "",
+
+                        fullUrl: window.location.href || "N/A",
+
+                        course: "course",
+                        field_professional_qualification: qualification,
+                        Specialization: course,
+                        "Course Preference": "Applied AI & Agentic Systems",
+                        // sendMail: false,
+                        leadSource: medium,
+                        leadOrigin: medium || "N/A",// for lead matrix
+                        source: utmSource || null,
+                        medium: utmMedium || null,
+                        campaign: utmCampaign || null,
+                        formId: 100,
+                        gclid: gclid || null,
+                        fbclid: fbclid || null,
+                        utmTerm: utmTerm || null,
+                        utmPlacement: utmPlacement || null,
+                        utmContent: utmContent || null,
+                        utmCampaignId: utmCampaignId || null,
+                        utmAdGroupId: utmAdGroupId || null,
+                        utmCreativeId: utmCreativeId || null,
+                    }),
+                    dataType: "json",
+                    success: function (result) {
+                        if (result && result.status === "success" && result.statusCode === 200) {
+                            triggerBrochureDownload(destination);
+                        }
+                        window.dataLayer = window.dataLayer || [];
+                        window.dataLayer.push({
+                            event: "formSubmitted",
+                            leadsUserData: {
+                                email: email,
+                                phone_number: `+91${number}`,
+                                first_name: firstName,
+                                last_name: lastName,
+                            }
+                        });
+
+                    }
+                });
+
+            }
+        });
+
+       
+        document.querySelector("#SuccessMessage").classList.remove("hide");
+        document.querySelector("#submitbuttonreport").classList.add("hide");
+        document.querySelector("#leadformContainer").classList.add("hide");
+        document.querySelector("#Pg_form_heading").classList.add("hide");
+
+
+    }
+
+    function validateInputBlur(fieldId, fieldName) {
+        const inputValue = $(`#${fieldId}`).val().trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const numberRegex = /^\d+$/;
+
+        if (inputValue === "") {
+            $(`#${fieldName}ReportVal`).removeClass('warning');
+        } else {
+            $(`#${fieldName}ReportVal`).addClass('warning');
+        }
+    }
+
+
+    function hideApplyNowPopUpMainPG() {
+        let applyNowPopUp = document.getElementById("PGdownloadBrochure");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active");
+        }
+
+        $('#nameReport').val("");
+        $('#emailReport').val("");
+        $('#numberReport').val("");
+        $('#qualificationReport').val("").trigger("change");
+
+        document.querySelector("#nameReportVal").classList.add("warning");
+        document.querySelector("#emailReportVal").classList.add("warning");
+        document.querySelector("#numberReportVal").classList.add("warning");
+        document.querySelector("#qualificationReportVal").classList.add("warning");
+
+        // Re-enable scrolling when popup is closed - remove inline style completely
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+    }
+
+    // Close popup when clicking outside (on the background) or pressing ESC – same as UG finance popup
+    document.addEventListener('DOMContentLoaded', function () {
+        const popup = document.getElementById("PGdownloadBrochure");
+        if (popup) {
+            popup.addEventListener('click', function (e) {
+                if (e.target === popup) {
+                    hideApplyNowPopUpMainPG();
+                }
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && popup.classList.contains('active')) {
+                    hideApplyNowPopUpMainPG();
+                }
+            });
+
+            const observer = new MutationObserver(function (mutations) {
+                mutations.forEach(function (mutation) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        if (!popup.classList.contains('active')) {
+                            document.body.style.overflow = '';
+                            document.documentElement.style.overflow = '';
+                        }
+                    }
+                });
+            });
+            observer.observe(popup, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        }
+    });
+</script>

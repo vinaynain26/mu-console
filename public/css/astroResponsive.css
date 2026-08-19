@@ -1,0 +1,3142 @@
+@media (max-width: 767px) {
+
+    .heroSection {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        max-height: 90vh !important;
+        overflow: hidden;
+
+        .heroSectionContent {
+            width: 100%;
+            padding: 0 12px;
+            transform: translate(-50%, -20%);
+        }
+
+        .heroSectionBtnWrap {
+            margin-top: 24px;
+            width: 100%;
+            align-items: flex-start;
+            gap: 12px;
+            flex-direction: column;
+
+
+            a,
+            button {
+                width: 100%;
+                line-height: 0 !important;
+            }
+        }
+    }
+
+    .boxBreather {
+        padding: 0px;
+        padding-top: 60px !important;
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+
+        .boxContainer {
+            padding: 0;
+            flex-wrap: wrap;
+            gap: 0;
+        }
+
+        .boxiContent {
+            width: 100%;
+            max-width: 50%;
+            min-width: unset;
+        }
+
+        .boxiContent:nth-child(1) {
+            border-right: 1px solid var(--grey3);
+            padding-right: 16px;
+            padding-bottom: 16px;
+
+        }
+
+        .boxiContent.secondBoxi {
+            padding-left: 16px;
+            padding-bottom: 16px;
+
+        }
+
+
+        .boxiContent.thirdBoxi {
+            border-right: 1px solid var(--grey3);
+            padding-right: 16px;
+            border-top: 1px solid var(--grey3);
+            padding-top: 16px;
+        }
+
+        .boxiContent.fourthBoxi {
+            padding-left: 16px;
+            border-top: 1px solid var(--grey3);
+            padding-top: 16px;
+        }
+
+        .boxContainer {
+            padding: 16px;
+            justify-content: unset;
+        }
+
+        .stretchedLine {
+            display: none;
+        }
+
+    }
+
+    .courseBreather.courseBreather--scrollScene {
+        min-height: 75vh;
+    }
+
+    .courseBreather {
+        height: unset;
+        padding: 0 !important;
+
+        .mobileCourse {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .courseHeadingWrapper {
+            top: 0;
+            padding-top: 80px;
+        }
+
+        .courseBreather__focusVideo {
+            min-height: 100vh;
+            height: unset;
+        }
+
+        .pmDivi>img {
+            min-height: unset;
+        }
+
+        .courseHead {
+            padding: 8px 12px;
+
+            .headName {
+                font-size: 12px;
+            }
+
+            .headDesignation {
+                font-size: 8px;
+            }
+        }
+
+        .nameWrapper {
+            bottom: 5%;
+            padding: 0 3%;
+        }
+
+
+
+        .pmDivi img {
+            min-width: 270px;
+        }
+    }
+
+    .sharkMobileSection {
+        padding-top: 24px !important;
+
+        .sharkCard {
+            line-height: 0;
+        }
+    }
+
+    .homepage {
+        .selectingStudents.sharkTank {
+            background: var(--white) !important;
+        }
+    }
+
+    .homepage .ourProgramme {
+        .masterPlay {
+            img {
+                position: absolute;
+                top: 12px;
+                left: 12px;
+            }
+        }
+    }
+
+    .homepage .sharkMobileSection {
+        background: var(--white) !important;
+        padding-bottom: 0 !important;
+    }
+
+
+    .homepage {
+        border-bottom: 1px solid var(--black5);
+    }
+
+    .homepage {
+        background: var(--black);
+
+        .go-BlockHeading {
+            font-size: 16px !important;
+        }
+
+
+        .programFlexi {
+            max-width: 100% !important;
+            min-height: unset !important;
+        }
+
+        .btnBlack {
+            padding: 12px 22px !important;
+            font-size: 14px;
+
+            svg {
+                max-width: 19px;
+            }
+        }
+
+
+
+        .campusPara {
+            font-size: 12px !important;
+        }
+
+        .campusHeading {
+            font-size: 13px !important;
+
+        }
+
+        .campusImage {
+            max-width: 27px;
+            max-height: 27px;
+        }
+
+        .campusDiviParent {
+            gap: 10px !important;
+        }
+
+        .programImageParent {
+            max-height: 146px !important;
+        }
+
+        .btnBlack,
+        .deadlineParent {
+            width: 100%;
+        }
+
+        .ourprogramWrap {
+            gap: 16px !important;
+            margin-top: 16px !important;
+            overflow: auto;
+
+            .programmeRightContent {
+                min-width: unset;
+                padding: 12px;
+            }
+        }
+
+
+        .programmePara .programmeCardPara {
+            display: block !important;
+        }
+
+    }
+
+    .cautionWrapper {
+        gap: 12px;
+    }
+
+    .seondtabs {
+        padding: 10px !important;
+    }
+
+
+    .buildingSectionNew {
+        padding: 0 !important;
+
+        .buildingStickyWrapper {
+            gap: 80px;
+        }
+
+        .buildingWatchWrapper>img {
+            max-width: 42px;
+            max-height: 42px;
+        }
+
+        .headingWrapper {
+            flex-direction: column;
+            gap: 12px;
+            top: 44px;
+            left: 24px;
+            align-items: flex-start !important;
+        }
+
+        .companyParent {
+            flex-direction: column;
+            left: unset;
+            right: unset;
+            align-self: center;
+            justify-content: center;
+            width: 100%;
+            gap: 30px;
+            min-width: 100%;
+        }
+
+        .companyStack {
+            flex-wrap: wrap;
+            right: unset;
+            left: unset;
+            justify-content: center;
+            gap: 12px 24px;
+        }
+
+        .rupees {
+            font-size: 30px;
+        }
+
+        .masterPlay {
+            left: 47%;
+            top: 50%;
+        }
+
+        .rupeePara {
+            font-size: 11px;
+        }
+
+        .verticalLine {
+            display: none;
+        }
+
+        .placementPrice {
+            gap: 4px;
+            width: 100%;
+            max-width: 32%;
+        }
+
+        .logoSlider {
+            width: 65% !important;
+            border-radius: 60px;
+        }
+
+        .buildingPara {
+            font-size: 14px;
+        }
+
+        .playBtnPara {
+            font-size: 14px;
+        }
+
+        .masterPlay {
+            left: 30%;
+            top: 50%;
+        }
+
+        .buildingLogoWrapper {
+            flex-direction: column;
+            gap: 16px;
+            bottom: 40px;
+            left: 0;
+            width: 100%;
+            align-items: center;
+            max-width: 100%;
+
+        }
+
+        .buildingWrapper {
+
+
+            .btnWhite.btnMd {
+                width: 90%;
+            }
+        }
+    }
+
+    .worldClassSection {
+        .worldHeadingWrapper {
+            flex-direction: column;
+            gap: 18px;
+            align-items: flex-start;
+        }
+
+        .navigationWrapper {
+            margin-top: 0;
+        }
+
+        .navigationWrapper ul {
+            margin-top: 0;
+        }
+    }
+
+    .transformation {
+        .masterRight {
+            max-height: 225px;
+        }
+
+        /* .swiper-pagination{
+            padding-top: 10px !important;
+        } */
+    }
+
+    .dsaiMasters {
+        /* Hide scrollbar for webkit browsers */
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* Internet Explorer 10+ */
+
+        /* Hide scrollbar for webkit browsers */
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .newMasterBoxImg {
+            min-width: 230px;
+        }
+
+        .newMasterImgBox>img {
+            min-height: 192px;
+        }
+
+        .dsaiMastersMobile .container {
+            padding-right: 0 !important;
+        }
+    }
+
+    .programmeBreatherNew {
+        padding: 40px 0 !important;
+
+        .programmeBreatherWrapper {
+            gap: 20px;
+            flex-direction: column;
+        }
+
+        .programmeBreatherRight {
+            padding: 16px;
+        }
+
+        .boxiUpper {
+            margin-top: 16px;
+            min-height: unset;
+        }
+
+        .buttonsParent {
+            margin-top: 24px;
+            gap: 8px;
+            flex-direction: column !important;
+
+
+            a,
+            button {
+                width: 100%;
+
+                svg {
+                    max-width: 20px;
+                }
+            }
+        }
+
+        .eligibilityBoxi {
+            font-size: 10px;
+        }
+
+        .classText {
+            font-size: 18px;
+        }
+
+        .classPara {
+            font-size: 13px;
+        }
+
+        .firstBoxi {
+            gap: 4px;
+        }
+
+    }
+
+    .lateralSection {
+        .lateralWrapper {
+            flex-direction: column;
+            gap: 32px;
+            align-items: flex-end;
+            justify-content: flex-end;
+        }
+
+        .lateralHeadingWrapper {
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-start;
+        }
+    }
+
+    .investmentSection {
+        padding: 40px 0 !important;
+
+        .investmentHeadingWrapper {
+            top: 24px;
+            left: 12px;
+            text-align: unset;
+            justify-content: unset;
+            align-items: flex-start;
+        }
+
+        .investmentBtnWrapper {
+            bottom: 24px;
+            right: 12px;
+            justify-content: flex-end;
+        }
+    }
+
+    .enrollmentSectionNew {
+        background: var(--black);
+
+        .fourCards {
+            display: flex !important;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .onhoverOverlay .overlayNumber {
+            margin-top: 0;
+        }
+
+        .gridCardBlack {
+            display: none;
+        }
+
+        .threeCards {
+            grid-template-columns: 1fr;
+        }
+
+        .gridCard {
+            max-height: 100%;
+        }
+
+        .gridCard:after {
+            height: 50%;
+            background: linear-gradient(to top,
+                    rgba(0, 0, 0, 0.85),
+                    rgba(0, 0, 0, 0.60), transparent);
+        }
+
+        .gridCard:not(:first-child):after {
+            height: 30%;
+            background: linear-gradient(to top,
+                    rgba(0, 0, 0, 0.85),
+                    rgba(0, 0, 0, 0.60), transparent);
+        }
+
+        .enrollOverlay {
+            display: none;
+        }
+
+        .gridCard:hover {
+            .lifeCardOverlay {
+                opacity: unset;
+                bottom: unset;
+            }
+        }
+
+
+        .onhoverOverlay {
+            opacity: 1 !important;
+            gap: 12px;
+            background: unset;
+            bottom: 0 !important
+        }
+
+        .overlayMob {
+            font-size: 13px;
+        }
+
+        .overlayText {
+            font-size: 22px !important;
+        }
+    }
+
+    .insightSectionNew {
+        padding: 60px 0 !important;
+        padding-bottom: 100px !important;
+
+        .insightParaWrapper {
+            gap: 8px;
+        }
+
+        .swiper-pagination {
+            bottom: 54px !important;
+            left: 0 !important;
+            position: absolute !important;
+            width: 100% !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: var(--grey3) !important;
+            opacity: 1;
+            transition: all 0.3s ease;
+        }
+
+        .swiper-pagination-bullet-active {
+            width: 40px !important;
+            background: var(--grey) !important;
+        }
+
+        .insightPara {
+            font-size: 14px;
+        }
+
+        .insightWrapper {
+            gap: 24px;
+        }
+
+        .facultyDetailsWrapper {
+            gap: 12px;
+        }
+
+        .insightNames {
+            font-size: 16px;
+        }
+
+        .inisghtItalic {
+            font-size: 16px;
+        }
+
+        .aboutVideo {
+            padding-top: 12px;
+        }
+
+        .insightBtnWrapperMob {
+            align-self: flex-end;
+        }
+    }
+
+
+    .sittingLectures {
+        border-top: 1px solid var(--black5);
+
+        .lectureUpper {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .logoTrack {
+            display: flex;
+            width: 100%;
+        }
+
+        .card1 .lectureCardLogoWrapper {
+            display: flex;
+            gap: 30px !important;
+
+            .logo {
+                margin-right: 0;
+            }
+        }
+
+        .listDot {
+            font-size: 14px;
+        }
+
+        .cardListContent {
+            padding-left: 30px;
+            gap: 8px;
+        }
+
+        .card4 .lectureCardLogoWrapper {
+            padding: 0 8px;
+        }
+
+        .lectureWrapper {
+            gap: 24px;
+        }
+
+        .lectureCard {
+            padding: 16px 8px;
+            max-height: unset;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 18px;
+        }
+
+        .lectureLeftCard {
+            padding-left: 0;
+            max-width: 100%;
+        }
+
+        .cardSubHeading {
+            font-size: 20px;
+        }
+
+        .go-HighlightHeading {
+            font-size: 18px;
+        }
+
+        .lectureP {
+            font-size: 14px;
+        }
+
+        .lectureCardFlip {
+            padding: 16px 8px;
+            max-height: unset;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 18px;
+        }
+
+        .lectureRightCardFlip {
+            padding-left: 0;
+            max-width: 100%;
+        }
+
+        .RightCardContentFlip {
+            max-width: 100%;
+            gap: 8px;
+        }
+
+        .lectureCardFlip,
+        .lectureCard {
+            padding: 0;
+            border: 2px solid var(--white);
+            border-radius: 8px;
+            min-height: 540px;
+        }
+
+        .cardMainContent {
+            padding: 0 8px 0px 8px;
+            gap: 8px;
+        }
+
+        .card3 .lectureProfileCards {
+            padding: 0 8px;
+        }
+
+        .logo>svg {
+            width: 52px;
+            height: 52px;
+        }
+
+        .card7 .lectureCardLogoWrapper {
+            gap: 0px;
+
+            .logo {
+                margin-right: 0px;
+                min-height: 30px;
+                min-width: 30px;
+            }
+        }
+
+        .card7 {
+            top: 149px;
+        }
+
+        .profileHeadingText {
+            font-size: 13px;
+        }
+
+        .profileLightText {
+            font-size: 12px;
+        }
+
+        .LectureCreaterProfileCard svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .LectureCreaterProfileCard {
+            max-width: 185px;
+        }
+    }
+
+    .enterpreneur {
+        .enterpreneurWrap {
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .enterpreneurLeft {
+            max-width: 100%;
+        }
+
+        .enterpreneurRight {
+            max-width: 100%;
+
+        }
+    }
+
+
+
+    .craftedMobileSection {
+        background: var(--white);
+        padding-top: 40px !important;
+
+        .whiteCaution {
+            padding: 8px 12px;
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid transparent;
+            background: linear-gradient(var(--white) 0 0) padding-box,
+                var(--gradient) border-box;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+
+            p {
+                font-size: 11px;
+                line-height: 150%;
+                font-family: var(--go-regular);
+                color: var(--grey3);
+            }
+        }
+
+        .learnPara {
+            font-size: 14px;
+            line-height: 20.81px;
+            color: var(--black);
+            font-family: var(--go-regular);
+        }
+
+        .beyondWrapperParent {
+            flex-direction: column;
+            gap: 16px;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .vectorOnWhite::after {
+            height: 100%;
+        }
+
+        .craftedMobWrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 24px;
+        }
+
+        .cityWrapperMob {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .accodianBelow {
+            padding: 18px 12px;
+            background: var(--white3);
+            border-bottom: 1px solid var(--grey4);
+            display: flex;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .imersionLogo {
+            width: 100%;
+            height: 100%;
+            max-width: 20px;
+            max-height: 20px;
+        }
+
+        .immersionBoxi {
+            display: flex;
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .termBtn.immersionTag {
+            background: var(--grey4);
+            font-family: var(--go-medium);
+            color: var(--black);
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: var(--grey4);
+            border: unset;
+        }
+
+        .placeName {
+            font-size: 18px;
+            line-height: 150%;
+            font-family: var(--go-semibold);
+            color: var(--black);
+        }
+
+        .imageBox>img {
+            overflow: hidden;
+            max-height: 535px;
+            width: 100%;
+            min-width: 100%;
+            border-radius: 8px;
+        }
+
+        .cityList {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            overflow: auto;
+            position: sticky;
+            top: 120px;
+            background: white;
+            z-index: 10;
+            padding-block: 10px;
+        }
+
+        .contentMobile {
+            margin-top: 12px;
+        }
+
+        .cityContent {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .ratioWrapper,
+        .ratioBoxi,
+        .rationNumBoxi {
+            width: 100%;
+            overflow: auto;
+        }
+
+        .ratioWrapper.jalandharLogos {
+            .rationLogoBoxi:nth-child(3) {
+                img {
+                    max-width: 90px !important;
+                }
+            }
+        }
+
+        .ratioWrapper.jalandharLogos {
+            .rationLogoBoxi:nth-child(4) {
+                img {
+                    max-width: 90px !important;
+                }
+            }
+        }
+
+        .ratioWrapper.mundraLogos {
+            img {
+                max-width: 76px !important;
+            }
+        }
+
+        .ratioWrapper.mundraLogos {
+            .rationLogoBoxi:nth-child(3) {
+                img {
+                    max-width: 56px !important;
+                }
+            }
+        }
+
+        .rationLogoBoxi.DelhiImgMob {
+            img {
+                max-width: 95px !important;
+            }
+        }
+
+        .ratioWrapper.lucknowLogo {
+            .rationLogoBoxi:nth-child(2) {
+                img {
+                    max-width: 110px !important;
+                }
+            }
+        }
+
+        .imageWrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+
+        .termBtn {
+            padding: 8px 20px;
+            border-radius: 60px;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            border: 1px solid var(--black);
+            font-size: 12px;
+            line-height: 120%;
+            width: fit-content;
+            font-family: var(--go-regular);
+            color: var(--black);
+            transition: all 0.3s;
+            min-width: 85px;
+        }
+
+        .termBtn.active {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .ratioWrapper {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+            overflow: auto;
+        }
+
+        .placePara {
+            font-size: 13px;
+            line-height: 150%;
+            color: var(--black);
+            font-family: var(--go-regular);
+        }
+
+        .ratioBoxi {
+            width: 100%;
+            padding-left: 12px;
+            border-left: 2px solid #e38330;
+            display: flex;
+            align-items: center;
+            min-height: 84px;
+        }
+
+        .rationLogoBoxi {
+            img {
+                max-width: 60px;
+            }
+        }
+
+        .ratioPara {
+            font-size: 13px;
+            line-height: 150%;
+            font-family: var(--go-regular);
+            color: var(--grey3);
+        }
+
+        .ratioNumber {
+            font-size: 30px;
+            line-height: 120%;
+            font-family: var(--go-medium);
+            color: var(--black);
+        }
+
+        .rationNumBoxi {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            width: 100%;
+        }
+
+        .mumbaiWrapper .rationLogoBoxi:nth-child(1) {
+            img {
+                max-width: 100px !important;
+            }
+        }
+
+        .mumbaiWrapper .rationLogoBoxi:nth-child(2) {
+            img {
+                max-width: 100px !important;
+            }
+        }
+
+        .mumbaiWrapper .rationLogoBoxi:nth-child(3) {
+            img {
+                max-width: 100px !important;
+            }
+        }
+
+        .bengDivi .rationLogoBoxi:nth-child(1) {
+            img {
+                max-width: 100px !important;
+            }
+        }
+
+        .bengDivi .rationLogoBoxi:nth-child(2) {
+            img {
+                max-width: 100px !important;
+            }
+        }
+    }
+
+    .singleDualDegreeSection {
+        .singleDualContainer {
+            flex-direction: column-reverse;
+
+            .singleDualList {
+                margin-bottom: 24px;
+                min-height: unset;
+            }
+
+            .dualDegreePara {
+                display: none;
+            }
+
+            .singleDualCardImage {
+                min-height: unset;
+                margin-bottom: 24px;
+            }
+        }
+    }
+
+    .fundSection {
+        .fundHeadingWrapper {
+            flex-direction: column;
+            gap: 12px;
+            left: 16px;
+            width: 90%;
+        }
+
+        .fundPara {
+            font-size: 14px;
+        }
+
+        .fundBtnWrapper {
+            justify-content: flex-end;
+            bottom: 44px;
+            right: 16px;
+        }
+    }
+
+    .indiaMapSection {
+        padding-top: 32px !important;
+
+        .indiaMapWrapper {
+            padding: 40px 20px;
+            gap: 40px;
+        }
+
+        .mapLefti {
+            max-width: 100%;
+            gap: 0;
+        }
+
+        .mapRight {
+            max-width: 100%;
+            scale: 0.9;
+        }
+
+        .mapCoreText {
+            font-size: 18px;
+        }
+
+        .mapLeftBottom {
+            gap: 28px;
+        }
+
+        .gradientMapNum {
+            font-size: 34px;
+        }
+    }
+
+    .newDesignBreatherImmersion {
+        padding: 60px 0 !important;
+
+        .podcastImmDsai {
+            display: flex;
+            flex-direction: column !important;
+        }
+    }
+
+    .mastersScrollMob {
+        gap: 12px !important;
+    }
+
+    .impactScroll {
+        padding: 40px 0 !important;
+        padding-bottom: 60px !important;
+
+        .impactLeft {
+            width: 100%;
+        }
+
+        .masterPlay>img {
+            backdrop-filter: blur(2px);
+            border-radius: 60px;
+        }
+
+        .impactHeadingWrapper {
+            padding-bottom: 32px;
+        }
+
+
+        .impactMobCard {
+            display: flex;
+            padding: 12px;
+            background: var(--grey17);
+            border: 1px solid var(--grey3);
+            border-radius: 12px;
+            flex-direction: column;
+            gap: 24px;
+            position: sticky;
+            top: 8rem;
+            min-height: 536px;
+        }
+
+        .impactMobCard:nth-of-type(4) {
+            min-height: 579px;
+        }
+
+        .impactMobCard:last-child {
+            min-height: 535px;
+        }
+
+        .mobImpactImage {
+            max-height: 212px;
+            overflow: hidden !important;
+        }
+
+        .circleNumber {
+            max-height: 30px !important;
+        }
+
+        .impactLeftBoxInner {
+            gap: 60px;
+            margin-top: 60px;
+            margin-top: 32px !important;
+        }
+
+        .pointerPara {
+            font-size: 13px !important;
+        }
+
+        .techPointerChild {
+            align-items: center;
+        }
+
+        .impactLeftBox {
+            position: relative;
+            padding-left: 0 !important;
+        }
+
+        .impactLeftBox::after {
+            scale: 0.8;
+            left: -10px;
+            display: none;
+        }
+
+        .impactLeftBoxInner::before {
+            left: 10px;
+            display: none;
+        }
+
+        .ulListWrapper {
+            margin-top: 12px !important;
+
+            .appliedPara {
+                font-size: 14px;
+            }
+
+            .poweredDivi>img {
+                max-width: 16px;
+            }
+
+            .techPointersParent {
+                gap: 5px !important;
+            }
+        }
+
+        .impactButton {
+            padding: 6px 12px !important;
+            font-size: 12px !important;
+            line-height: unset !important;
+            font-family: var(--go-regular);
+        }
+
+        .impactLeftBoxInner {
+            gap: 40px;
+        }
+
+        .impactLeftUpper {
+            display: flex;
+            flex-direction: column;
+            gap: 8px !important;
+            align-items: flex-start;
+        }
+
+        .poweredDivi {
+            gap: 12px !important;
+        }
+
+        .circleNumberMob {
+            width: 100%;
+            height: 100%;
+            max-width: 24px;
+            max-height: 24px;
+            align-items: center;
+            padding: 7px;
+            border: 1px solid #525252;
+            border-radius: 60px;
+            color: var(--white);
+            font-family: var(--go-regular);
+            font-size: 11px;
+            display: flex;
+            justify-content: center;
+        }
+
+    }
+
+    .weeklySection {
+        .weeklyWrapper {
+            gap: 24px;
+        }
+
+        .weeklyImageWrapper>img {
+            min-width: 1310px;
+        }
+
+        .weeklyImageWrapper {
+            overflow-x: scroll;
+            overflow-y: hidden;
+        }
+
+        .weeklyImageWrapper::-webkit-scrollbar-thumb {
+            display: block !important;
+            background: #737373 !important;
+        }
+    }
+
+    .podcastSection {
+        .podcastWrapper {
+            flex-direction: column-reverse;
+            gap: 20px;
+            background: unset;
+            padding: 0;
+        }
+
+        .podcastRight,
+        .podcastLeft {
+            max-width: 100%;
+        }
+
+        .podcastLeft {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 10px;
+            gap: 20px;
+            justify-content: flex-end;
+            align-items: flex-end;
+        }
+
+        .podcastHeadingWrapper {
+            gap: 14px;
+        }
+
+        .whiteApplyButton {
+            padding: 9px 14px;
+            font-size: 14px;
+        }
+
+        .whiteApplyButton svg {
+            max-width: 22px;
+            max-height: 22px;
+        }
+
+    }
+
+    .germanImmersion {
+        .germanImmersionWrapper {
+            flex-direction: column-reverse;
+            gap: 12px;
+        }
+
+        .germanBtnWrapper {
+            gap: 16px;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        .germanBreatherLeft,
+        .masterRight {
+            max-width: 100%;
+        }
+
+        .germanImageBoxi>img {
+            min-height: unset;
+        }
+
+        .btnJapan {
+            margin-top: 8px;
+        }
+
+        .customDropdownWrapper .btnBlack {
+            justify-content: center;
+        }
+
+        .dropdownList {
+            max-width: 100%;
+        }
+
+        .dropdownList li {
+            padding: 10px 22px;
+        }
+
+        .germanBreatherLeft {
+            padding: 20px;
+            align-items: flex-start;
+            gap: 16px;
+
+            .btnBlack {
+                width: 100%;
+            }
+        }
+
+        .germanPara {
+            font-size: 14px;
+        }
+
+        .btnBlack {
+            width: 100%;
+        }
+
+        .germanflagsWrapper {
+            gap: 12px;
+
+            svg {
+                max-height: 47px;
+                max-width: 68px;
+            }
+        }
+
+        .swiper-pagination {
+            bottom: unset !important;
+            margin-top: 8px;
+            left: 42% !important;
+        }
+
+        .bottomBlackOverlay {
+            display: none;
+        }
+    }
+
+    .semesterCurriculum {
+        padding-bottom: 15px !important;
+
+        .modelBox {
+            display: none;
+        }
+
+
+        .yearBelowRightHeading p:nth-child(2) {
+            margin-top: 10px;
+            font: 16px 'go-medium';
+            line-height: 120%;
+            color: var(--black);
+        }
+
+        .container.headWrapperSticky {
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-start !important;
+        }
+
+        .yearBelowRight {
+            padding: 20px 10px;
+        }
+
+        .yearBelowRightHeading {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+
+        .aiToolsParent {
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .aiToolsRight {
+            max-width: unset;
+        }
+
+        .yearBelowLeft {
+            overflow: auto;
+            max-width: 100%;
+            gap: 0;
+        }
+
+        .headWrapper {
+            position: unset;
+        }
+
+        .semWrapper {
+            flex-flow: column;
+        }
+
+        .semesterTabsWrapper {
+            /* margin-top: 20px; */
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+            /* Firefox */
+            -webkit-overflow-scrolling: touch;
+
+        }
+
+        .semesterTabsWrapper::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari */
+        }
+
+        .semesterTabs {
+            display: flex;
+            gap: 10px;
+            min-width: max-content;
+            overflow-x: auto;
+            padding-block: 10px;
+        }
+
+        .tabContentWrapper {
+
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            overflow: auto;
+        }
+
+        .semesterTabs .mobTab {
+            display: inline-block;
+            padding: 5px 20px;
+            /* margin-right: 8px; */
+            border-radius: 20px;
+            white-space: nowrap;
+            cursor: pointer;
+            background: #f1f1f1;
+            border: 1px solid #090909;
+        }
+
+        .mobTab.active {
+
+            background: var(--black);
+
+            .mobTabSem {
+                color: var(--white);
+            }
+        }
+
+        .tabContent {
+            display: block;
+            min-width: 300px;
+            padding-block: 22px;
+            scroll-margin-top: 100px;
+            /* adjust to your header height */
+
+
+            .yearBelowRight {
+                min-height: 590px;
+
+            }
+        }
+
+
+        .flagParentDivi img {
+            max-width: 23%;
+        }
+
+        .mobTabSem {
+            font-family: '"Fraunces", serif';
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 120%;
+            font-style: italic;
+        }
+    }
+
+    .reachoutBreatherSection {
+        .reachoutBreatherWrapper {
+            flex-direction: column-reverse;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+
+        .reachoutLefti,
+        .reachoutRight {
+            max-width: 100%;
+        }
+
+        .reachoutLefti {
+            padding: 20px;
+            gap: 16px;
+        }
+
+        .go-BreatherHeading {
+            padding-bottom: 16px;
+        }
+
+        .supportInfoWrapper {
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .supportDivi>img {
+            max-width: 32px;
+            max-height: 32px;
+        }
+
+        .supportcontentText,
+        .supportBoxiText {
+            font-size: 13px;
+        }
+    }
+
+
+    .theNewsSection {
+        .newsHeadingWrapper {
+            gap: 8px;
+        }
+
+        .newsCardsWrapper {
+            padding-left: 16px;
+        }
+
+        .newsCard {
+            min-width: 85%;
+        }
+    }
+
+
+    .internshipSection {
+        background: var(--black);
+        padding-block: 20px !important;
+
+        .container {
+            padding: 0 8px !important;
+        }
+
+        .downloadMobBtn {
+            width: 100%;
+
+            .btnWhite {
+                width: 100%;
+            }
+
+        }
+
+        .internshipWrapper {
+            padding: 40px 8px;
+
+            a {
+                width: 100%;
+            }
+        }
+
+        .internshipCardWrapper {
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .internshipStudentUpperDivi {
+            gap: 16px;
+        }
+
+        .studentCompanyWrapper {
+            gap: 8px;
+        }
+
+        .internshipStudentBelow {
+            margin-top: 16px;
+        }
+
+        .studentThoughtPara {
+            padding-bottom: 16px;
+            padding-top: 16px;
+            min-height: 222px;
+        }
+    }
+
+    .popUpCloseBtnWrap {
+        position: absolute;
+        right: -5px;
+        z-index: 9;
+        top: -30px;
+    }
+
+    .graduatePrestigiousSection {
+        background: var(--black);
+        padding: 60px 0 !important;
+        border-top: 1px solid var(--black5);
+
+        .graduatePrestigiousWrapper.graduateCurriculum {
+            padding-top: 0 !important;
+            border-radius: 0 !important;
+            border-top: unset;
+        }
+
+
+        .degreeHeadingWrapper.mob-visible {
+            padding: 8px;
+        }
+
+        .container {
+            padding: 0 8px !important;
+        }
+
+        .degreeSectionParent {
+            gap: 12px;
+        }
+
+        .remarkText {
+            margin-left: 0;
+            margin-top: 16px;
+        }
+
+        .graduatePrestigiousWrapper {
+            padding: 0px 8px;
+            position: sticky;
+            gap: 24px;
+            border-radius: 0;
+            top: 6em;
+        }
+
+        .degreeHeadingWrapper {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            display: flex;
+            padding: 0 8px;
+        }
+
+        .graduatePrestigiousWrapper {
+            padding-top: 24px !important;
+            border-radius: 12px 12px 8px 8px !important;
+            border-top: 1px solid var(--grey3);
+
+        }
+
+        .graduatePrestigiousWrapper:nth-child(2) {
+            border-top: unset;
+            padding-top: 0;
+            border-radius: 0;
+        }
+
+        .degreePara {
+            font-size: 14px;
+        }
+
+        .degreeListWrapper {
+            flex-direction: column;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .graduatePrestigiousWrapper.graduateBelowSticky {
+            margin-top: 32px;
+        }
+
+        .degreeGradientHeading {
+            font: italic 20px / 1.2 "Fraunces", serif;
+        }
+
+        .degreeHeading {
+            font: normal 18px / 1.2 var(--go-regular);
+        }
+
+        .listNumber {
+            max-width: 18px;
+            max-height: 18px;
+            font-size: 12px;
+            line-height: 0;
+        }
+
+        .yellowArrow {
+            max-width: 13px;
+            max-height: 13px;
+        }
+
+        .degreeList .degreePara {
+            font-size: 13px;
+        }
+    }
+
+    .parentPerspectiveSection {
+        .parentPerspectiveWrapper {
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .perspectiveRight,
+        .perspectiveLefti {
+            max-width: 100%;
+        }
+
+        .bottomBlackOverlay {
+            display: none;
+        }
+
+        .swiper-pagination {
+            bottom: unset !important;
+            margin-top: 12px;
+            left: 42% !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: var(--grey10) !important;
+            opacity: 1;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+
+        .swiper-pagination-bullet-active {
+            width: 40px !important;
+            background: var(--grey10) !important;
+            border-radius: 10px;
+        }
+    }
+
+    .internshipSection.blackBackground {
+        background: var(--black) !important;
+
+        .internshipWrapper {
+            padding: 40px 8px !important;
+        }
+    }
+
+    .meritScholarship {
+
+        .meritScholarshipTable .textGreyBold {
+            font-family: 'go-medium';
+            font-size: 14px;
+        }
+
+        .meritScholarshipTable td {
+            font-size: 14px;
+
+        }
+
+
+        .meritScholarshipTable th:first-child {
+            width: 320px;
+        }
+
+        .meritScholarWrapper {
+            gap: 16px;
+        }
+
+        .meritHeading {
+            font-size: 22px;
+        }
+
+        .meritUpperWrap {
+            flex-direction: column;
+        }
+
+        .meritScholarLeft {
+            max-width: 100%;
+        }
+
+        .meritScholarshipTable th {
+            padding: 10px 20px;
+        }
+
+        .meritTableDivi {
+            overflow-x: scroll;
+        }
+
+        .meritScholarshipTable {
+            min-width: 700px;
+        }
+
+        .meritNoteBox {
+            align-items: flex-start;
+        }
+
+        .meritNoteText {
+            line-height: 150%;
+        }
+    }
+
+    .financing {
+        padding: 60px 0 !important;
+
+        .financingHeadingWrap {
+            max-width: 100%;
+        }
+
+        .caution {
+            margin-top: 20px;
+        }
+
+        .financingSubHead {
+            font-size: 14px;
+        }
+
+        .financingBelowWrap {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .financeMenuMob {
+            display: flex;
+            max-width: 100%;
+            padding-left: 16px;
+            display: flex;
+            align-items: center;
+            overflow: auto;
+
+        }
+
+        .container {
+            width: 100%;
+        }
+
+        .finMob {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .financeMenuList.active {
+            border-top: 1px solid var(--grey4);
+            border-left: 1px solid var(--grey4);
+            border-right: 1px solid var(--grey4);
+            border-radius: 4px 4px 0 0;
+            border-bottom: unset;
+        }
+
+        .financeMenuList {
+            min-width: 150px;
+            padding: 18px 11px;
+            max-height: 80px;
+            background: var(--white4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: 0.3s all;
+
+
+            img {
+                min-height: 30px;
+                max-height: 30px;
+                overflow: hidden;
+                text-align: center;
+                align-self: center;
+            }
+
+        }
+
+        .financeMenuList::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--grey4);
+        }
+
+        .financeMenuList.active::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--grey);
+
+        }
+
+        .financingBelowWrap .content-section {
+            width: 100%;
+        }
+
+        .financeDetailBox {
+            max-width: 100%;
+            padding: 0;
+        }
+
+        .financeDetailWrapper {
+            background: var(--white);
+            border: 1px solid var(--white4);
+            border-radius: 8px;
+            padding: 16px 12px;
+        }
+
+        .financingWrapper {
+            gap: 24px;
+        }
+
+        .financeDetailBox {
+            border: unset;
+            padding-block: 12px;
+        }
+
+
+        .finaceValue {
+            font-size: 14px;
+        }
+
+        .financeBoxes {
+            flex-wrap: nowrap;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+    }
+
+    .admissionTrack {
+        .container {
+            padding: 0px 16px !important;
+        }
+
+        .admissionTrackWrapper {
+            flex-direction: column-reverse;
+            gap: 30px !important;
+        }
+    }
+
+    .bluePrintNew {
+        .flexbox {
+            gap: 24px;
+        }
+
+        .bannerSubheading {
+            font-size: 14px;
+        }
+    }
+
+    .podcastSection.newsSection {
+        padding: 60px 0 !important;
+
+        .podcastLeft {
+            max-width: 100%;
+        }
+
+        .podcastRight {
+            max-width: 100%;
+        }
+
+        .podcastHeadingWrapper {
+            gap: 24px;
+        }
+
+        .podcastWrapper {
+            gap: unset;
+        }
+
+        .podcastLeft {
+            padding: 32px 16px;
+        }
+
+        .mt20 {
+            margin-top: unset !important;
+        }
+    }
+
+    .learnTrading {
+        .learnTradeUpper {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .learnTradeLeft {
+            max-width: 100%;
+            gap: 24px;
+        }
+
+
+        .learnTradeText {
+            font-size: 14px;
+        }
+
+
+        .marqueeCards {
+            margin-top: 40px;
+        }
+
+
+        .dsaiMastersMobile .newMasterBoxImg {
+            min-width: 280px;
+        }
+
+
+    }
+
+    .exploreCampus {
+        .withoutArrowWhiteBgBtn {
+            font-size: 13px;
+            padding: 8px 12px;
+        }
+
+        .exploreCampusUpper {
+            flex-direction: column;
+            gap: 18px;
+            align-items: flex-start;
+        }
+
+        .exploreCampusUpper {
+            flex-direction: column;
+            gap: 18px;
+            align-items: flex-start;
+        }
+
+        .campusButtonDivi {
+            gap: 8px;
+        }
+    }
+
+
+    .feeProcess {
+        #growingDiv {
+            left: 33px !important;
+            top: 66px !important;
+            width: 4.1px !important;
+        }
+
+        .feeProcessContainer .rightSection::before {
+            left: 4.6% !important;
+        }
+    }
+
+    .curriculumOutclassDs {
+        padding: 40px 0 !important;
+
+        .curriculumOutclassWrapper {
+            gap: 40px;
+        }
+
+        .outdsHead {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .outclasImgWrap p {
+            font-size: 12px !important;
+        }
+
+        .curriculumDsUpper {
+            gap: 16px;
+            padding-block: 0;
+            flex-direction: column;
+            align-items: flex-start;
+            position: unset;
+        }
+
+        .curriculumDsBelow {
+            gap: 32px;
+            flex-direction: column;
+        }
+
+        .dsBelowRight {
+            max-width: 100%;
+        }
+
+        .content.active {
+            flex-direction: column;
+        }
+
+        .dsBelowLeft {
+            position: relative;
+            top: unset;
+        }
+
+
+        .curriculumDsBelow .faqHeading {
+            font-size: 13px;
+            line-height: 120%;
+        }
+
+        .greyParaOutclass {
+            font-size: 12px;
+        }
+
+        .finaceCareerTabs {
+            width: 100%;
+        }
+
+        .financeTabUl {
+            width: 100%;
+        }
+
+        .inclassTab {
+            width: 100%;
+            max-width: 500px;
+            font-size: 12px;
+
+            svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+    }
+
+    .learnTrading {
+
+        .imgRelativeDiv {
+            position: relative;
+            width: 100%;
+        }
+
+        .learnTradeUpper {
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .learnTradeLeft {
+            max-width: 100%;
+            gap: 24px;
+        }
+
+        .learnTradeText {
+            font-size: 14px;
+        }
+
+        .marqueeCards {
+            margin-top: 40px;
+        }
+
+        .dsaiMastersMobile .newMasterBoxImg {
+            min-width: 280px;
+        }
+
+    }
+
+
+    .dsCareer {
+        .studiesRight {
+            margin-top: 0 !important;
+        }
+    }
+
+    .applicationTimeline {
+
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: unset;
+        }
+
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 10%;
+        }
+
+        th:first-child,
+        td:first-child {
+            width: 110px;
+        }
+
+        .table-scroll-wrapper {
+            -webkit-overflow-scrolling: touch !important;
+        }
+
+        .table-scroll-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-scroll-wrapper::-webkit-scrollbar-track {
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
+
+        .table-scroll-wrapper::-webkit-scrollbar-thumb {
+            background: var(--grey18) !important;
+            border-radius: 10px;
+        }
+
+        .table-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+            background: var(--grey3) !important;
+        }
+
+        .applicationDivi {
+            overflow: auto;
+        }
+
+        .applicationDivi::-webkit-scrollbar-thumb {
+            display: block;
+        }
+
+        .applicationTimelineTable {
+            min-width: 1200px;
+            margin-bottom: 10px;
+        }
+
+        .headingTable {
+            padding: 12px 10px;
+        }
+
+        .timelineRow {
+            padding: 8px 10px;
+        }
+    }
+
+    .buildingSection {
+        .companyParent {
+            flex-direction: column;
+            left: unset;
+            right: unset;
+            align-self: center;
+            justify-content: center;
+            width: 100%;
+            gap: 30px;
+            min-width: 100%;
+        }
+
+        .verticalLine {
+            display: none;
+        }
+
+        .companyStack {
+            flex-wrap: wrap;
+            right: unset;
+            left: unset;
+            justify-content: center;
+            gap: 12px 24px;
+        }
+
+        .rupees {
+            font-size: 30px;
+        }
+
+        .verticalLine {
+            display: none;
+        }
+
+        .placementPrice {
+            gap: 4px;
+            width: 100%;
+            max-width: 32%;
+        }
+
+        .rupeePara {
+            font-size: 11px;
+        }
+    }
+
+    .feeProcess {
+        .feeProcessContainer .feeBox .body {
+            padding: 16px 12px !important;
+        }
+
+        .feeSectionMOb {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .detailsList .subHeading {
+            font-size: 18px;
+        }
+
+        .detailsList .list li {
+            font-size: 13px;
+        }
+
+        .curriculumHead {
+            font-size: 13px;
+        }
+    }
+
+    .feeStructureSection {
+        .feeStructureParent {
+            overflow-x: scroll;
+        }
+
+        .feeStructureParent::-webkit-scrollbar-thumb {
+            display: block;
+            background: var(--grey3);
+        }
+
+        .feeStructureWrapper {
+            flex-direction: column;
+            gap: 60px;
+        }
+
+
+        .feeStructureLeft,
+        .feeStructureRight {
+            max-width: 100%;
+        }
+
+        .feeDivider {
+            display: none;
+        }
+
+        .feeStructureTable {
+            min-width: 670px;
+        }
+
+        .feeStructureRight .feeStructureTable {
+            min-width: 450px;
+        }
+    }
+
+    .buildingSection {
+        padding: 0 !important;
+
+
+
+        .buildingStickyWrapper {
+            gap: 80px;
+        }
+
+        .buildingWatchWrapper>img {
+            max-width: 42px;
+            max-height: 42px;
+        }
+
+        .headingWrapper {
+            flex-direction: column;
+            gap: 12px;
+            top: 44px !important;
+            left: 24px !important;
+            align-items: flex-start !important;
+        }
+
+        .logoSlider {
+            width: 65% !important;
+            border-radius: 60px;
+        }
+
+        .buildingPara {
+            font-size: 14px;
+        }
+
+        .playBtnPara {
+            font-size: 14px;
+        }
+
+        .masterPlay {
+            left: 47%;
+            top: 50%;
+        }
+
+        .buildingLogoWrapper {
+            flex-direction: column;
+            gap: 16px;
+            bottom: 40px;
+            left: 0;
+            width: 100%;
+            align-items: center;
+            max-width: 100%;
+
+        }
+
+        .buildingWrapper {
+
+            .btnWhite.btnMd {
+                width: 90%;
+            }
+        }
+    }
+
+    .buildCardSection.blackBuild {
+        .buildHeadingPara {
+            font-size: 14px;
+        }
+
+        .conLogoAndText>img {
+            max-width: 54px;
+        }
+
+        .logoWrapper {
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 6px !important;
+        }
+
+
+        .buildCtaWrapper {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .buildCardWrapper {
+            margin-top: 32px;
+            gap: 0;
+        }
+
+        .buildCard {
+            gap: 0;
+            padding: 0;
+            flex-direction: column;
+            top: 8rem;
+
+        }
+
+        .buildRight {
+            max-width: 100%;
+        }
+
+        .buildLeft {
+            max-width: 100%;
+            padding: 24px 16px;
+        }
+
+        .buildCard:nth-child(even) {
+            flex-direction: column;
+        }
+
+        .companyLogo {
+            max-width: 33%;
+        }
+    }
+
+    .buildCardSection {
+
+        .termList {
+            gap: 8px;
+        }
+
+        .listDivi {
+            padding-bottom: 8px;
+        }
+
+        .buildHeadingPara {
+            font-size: 14px;
+            padding-right: 12px;
+        }
+
+        .buildCardWrapper {
+            margin-top: 32px;
+            /* gap: 0; */
+        }
+
+        .buildCard {
+            gap: 8px;
+            padding: 8px;
+            flex-direction: column-reverse;
+            border: unset;
+        }
+
+        .buildRight {
+            max-width: 100%;
+            border-radius: 12px 12px 0 0 !important;
+            max-height: 298px;
+
+            .corelottie {
+                height: 310px;
+            }
+        }
+
+        .leftiUpper,
+        .buildCardHeadingWrap {
+            gap: 8px;
+        }
+
+        .buildLeft {
+            max-width: 100%;
+        }
+
+        .buildCard:nth-child(even) {
+            flex-direction: column-reverse;
+        }
+    }
+
+    .magazineSection {
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 45%;
+            display: none;
+            display:
+                none !important;
+        }
+
+        .magazineTabsWrapper {
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .magazineImageWrapper.active {
+            filter: brightness(1);
+            border-radius: 4px;
+            border: 4px solid transparent;
+            background: linear-gradient(var(--black) 0) padding-box, linear-gradient(90deg, #39B6D8 6.41%, #F7D344 51.47%, #E38330 96.52%) border-box;
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+
+        .magazineImageWrapper {
+            border: 4px solid var(--grey10);
+            border-radius: 4px;
+            cursor: pointer;
+            max-width: 100%;
+            max-height: 218px;
+            filter: brightness(0.5);
+            transition: all 0.3s ease;
+        }
+
+        .tabs li {
+            color: var(--grey);
+        }
+
+        .scratchBtn:hover,
+        .scratchBtn.active {
+            background-color: var(--black);
+            transition: 0.4s ease-in-out;
+        }
+
+        .tabs li {
+            color: var(--grey);
+        }
+
+        .scratchTextMob {
+            font-size: 16px;
+            line-height: 120%;
+            font-family: var(--go-medium);
+            color: var(--grey3);
+        }
+
+        .magazineLeftMob {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid transparent;
+            background: linear-gradient(var(--white) 0 0) padding-box, var(--gradient) border-box;
+            border-radius: 32px;
+            padding: 8px;
+        }
+
+        .scratchBtn {
+            border-radius: 60px;
+            display: flex;
+            padding: 4px 15px 6px 15px;
+            justify-content: center;
+            align-items: center;
+            width: fit-content;
+            color: var(--grey3);
+            /* background: var(--black); */
+            cursor: pointer;
+        }
+
+
+        .scratchTextMob {
+            color: var(--grey3);
+        }
+
+        .scratchBtn:hover .scratchTextMob,
+        .scratchBtn.active .scratchTextMob {
+            color: var(--white);
+        }
+
+
+    }
+
+    .insightSection.new .insightBtnWrapper {
+        flex-direction: column;
+        gap: 24px;
+        align-items: flex-start;
+    }
+
+
+    .classRoom {
+        .withoutArrowWhiteBgBtn {
+            font-size: 13px;
+            padding: 8px 14px;
+        }
+
+        .largeTech {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .campusButtonDivi {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        .classRoomUpper {
+            padding-left: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 24px;
+        }
+
+        .classRoomWrapper {
+            margin-top: 32px;
+        }
+    }
+
+    .classprofile {
+
+
+        .customDropdownWrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .lineSpace {
+            margin-top: 5px;
+        }
+
+        .dropdownList {
+            width: 100%;
+            border: 1px solid #ccc;
+            z-index: 999;
+            box-shadow: 0px 0px 22px 0px rgba(0, 0, 0, 0.05);
+        }
+
+
+        .dropdownList li {
+            cursor: pointer;
+            padding-block: 14px;
+        }
+
+        .dropdownList li:active {
+            background-color: var(--grey4);
+        }
+
+        .btnMobileDrop {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            position: relative;
+        }
+
+        .custom-select {
+            appearance: none;
+            /* Standard */
+            -webkit-appearance: none;
+            /* Safari/Chrome */
+            -moz-appearance: none;
+            /* Firefox */
+            background-image: none;
+            /* Remove any default bg icon */
+            text-align: center;
+        }
+
+        .customDropdownWrapper .btnBlack {
+            width: 70%;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+
+
+        .content-section .flexbox {
+            align-items: center !important;
+        }
+
+        .greybox {
+            padding: 40px 20px !important;
+        }
+
+    }
+
+    .whiteLineBg.classprofile {
+        padding: 60px 0;
+
+        .customDropdownWrapper {
+            position: relative;
+            width: 100%;
+        }
+
+        .lineSpace {
+            margin-top: 5px;
+        }
+
+        .dropdownList {
+            width: 100%;
+            border: 1px solid #ccc;
+            z-index: 999;
+            box-shadow: 0px 0px 22px 0px rgba(0, 0, 0, 0.05);
+        }
+
+        .dropdownWrapper {
+            flex: unset !important;
+        }
+
+        .newClassWrapper {
+            flex-wrap: wrap;
+            gap: 20px !important;
+        }
+
+        .newclassLeft {
+            max-width: 100% !important;
+        }
+
+        .masterImage.ugClassMid {
+            max-width: 100%;
+        }
+
+
+        .dropdownList li {
+            cursor: pointer;
+            padding-block: 14px;
+        }
+
+        .dropdownList li:active {
+            background-color: var(--grey4);
+        }
+
+        .btnMobileDrop {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            position: relative;
+        }
+
+        .informationWrapper {
+            font: 0.813rem "go-regular";
+            line-height: 160%;
+            flex-wrap: wrap;
+            gap: 20px;
+            flex-direction: column;
+            align-items: flex-end;
+            position: relative;
+        }
+
+        .greybox::after {
+            width: 40% !important;
+            top: 52% !important;
+            left: 68% !important;
+        }
+
+        .custom-select {
+            appearance: none;
+            /* Standard */
+            -webkit-appearance: none;
+            /* Safari/Chrome */
+            -moz-appearance: none;
+            /* Firefox */
+            background-image: none;
+            /* Remove any default bg icon */
+            text-align: center;
+        }
+
+        .customDropdownWrapper .btnBlack {
+            width: 70%;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .box2col {
+            width: 100%;
+            max-width: 100%;
+        }
+
+
+
+        .content-section .flexbox {
+            align-items: center !important;
+        }
+
+        .greybox {
+            padding: 40px 20px !important;
+        }
+
+    }
+
+    .industryReady {
+        .box .flexbox {
+            align-items: center;
+        }
+
+
+
+        .futureGroup>img {
+            max-width: 42px;
+            max-height: 42px;
+        }
+
+        .futureGroup .txtgroup h6 {
+            font-size: 20px;
+        }
+
+        .futureGroup {
+            gap: 8px;
+        }
+    }
+
+    .businessSection {
+        .exploringWorld {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .swiper-pagination {
+            width: 100% !important;
+            margin-top: 20px;
+        }
+
+
+        .businessPara {
+            font-size: 14px;
+        }
+
+        .listPara {
+            text-wrap: nowrap;
+        }
+
+        .businessItem {
+            padding: 16px 32px;
+            min-width: 230px;
+            flex-shrink: 0;
+        }
+
+        .businessList {
+            max-width: 100%;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            box-sizing: border-box;
+            padding-inline-start: 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .businessList::-webkit-scrollbar {
+            display: none;
+        }
+
+        .businessMaster {
+            width: 100%;
+            overflow: auto;
+        }
+
+        .content-section {
+            width: 100%;
+        }
+
+        .masterItem {
+            max-width: 100%;
+            min-width: 250px;
+            max-height: unset !important;
+            line-height: 0;
+        }
+    }
+
+    .higherStudies {
+
+        .tabimgages {
+            height: 100%;
+
+            img {
+                height: auto;
+
+            }
+        }
+
+        .companyWrapperNew {
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+
+            .companiesLogoDivi {
+                max-height: 80px;
+                max-width: 182px;
+            }
+        }
+
+        .jobCardLeft {
+            max-width: 142px;
+        }
+
+        .divrow {
+            display: flex;
+            gap: 8px;
+
+            .companiesLogoDivi {
+                min-width: 35%;
+            }
+        }
+
+        .divrowWrap {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow: auto;
+            padding-left: 16px;
+        }
+
+        .higherStudiesLeft {
+            width: 100%;
+            max-width: 100%;
+            margin-bottom: 0;
+            margin-top: -2px;
+            z-index: 1;
+        }
+
+        .techCareerTabs {
+            border-bottom: unset;
+        }
+
+        .techUpperHighlightLeft {
+            flex-wrap: wrap !important;
+            row-gap: 8px;
+        }
+
+        .careerTabUl {
+            padding-left: 16px;
+            gap: 0;
+            overflow: auto;
+        }
+
+        .higherStudiesLeft>img {
+            min-height: unset;
+        }
+
+        .higherStudiesWrapper {
+            flex-direction: column !important;
+
+        }
+
+        .higherStudiesLeft.masterImage {
+            border-radius: 0;
+
+        }
+
+        .higherStudyContent>svg {
+            max-width: 46px;
+            max-height: 46px;
+        }
+
+        .careerTabUl li {
+            border-bottom: 1px solid var(--grey18);
+        }
+
+        .masterImage>img {
+            border-radius: 0;
+        }
+
+        .companiesLogoDivi {
+            max-height: unset;
+        }
+
+        .techUpperHighlightLeft .companiesLogoDivi {
+            max-width: 140px !important;
+        }
+
+        .bottomCareerContent {
+            overflow: auto !important;
+            justify-content: flex-start;
+            flex-wrap: nowrap !important;
+        }
+    }
+
+    .insightSection {
+        padding: 60px 0 80px;
+
+        .insightParaWrapper {
+            gap: 12px;
+        }
+
+        .aboutVideo {
+            font-size: 13px;
+        }
+
+        .swiper-pagination {
+            bottom: 32px !important;
+            left: 0 !important;
+            position: absolute !important;
+            width: 100% !important;
+        }
+
+        .swiper-pagination-bullet {
+            background: var(--grey3) !important;
+            opacity: 1;
+            transition: all 0.3s ease;
+        }
+
+        .swiper-pagination-bullet-active {
+            width: 40px !important;
+            background: var(--grey) !important;
+        }
+
+        .insightPara {
+            font-size: 14px;
+        }
+
+        .insightWrapper {
+            gap: 24px;
+        }
+
+        .facultyDetailsWrapper {
+            gap: 12px;
+        }
+
+        .insightNames {
+            font-size: 16px;
+        }
+
+        .inisghtItalic {
+            font-size: 16px;
+        }
+
+        .aboutVideo {
+            padding-top: 12px;
+        }
+
+        .insightBtnWrapperMob {
+            align-self: flex-end;
+
+        }
+    }
+
+    .concentrationNew {
+        .coreWrapper .box {
+            width: 100% !important;
+        }
+    }
+
+    .aiPackedNew {
+        padding: 60px 0 !important;
+
+        .aiPackedWrapper {
+            gap: 40px !important;
+        }
+
+        .aiPackedLeft {
+            padding: 0 !important;
+        }
+
+        .aiScrollWrapper {
+            overflow: hidden;
+            width: 100%;
+            position: relative;
+        }
+
+        .aiScrollContent {
+            display: flex;
+            width: max-content;
+            animation: aiInfiniteScroll 30s linear infinite;
+            gap: 10px;
+            /* Adjust spacing as needed */
+        }
+
+        .aiPackedBoxi {
+            max-width: fit-content !important;
+            min-width: fit-content !important;
+        }
+    }
+}
+
+@keyframes aiInfiniteScroll {
+    0% {
+        transform: translateX(0%);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@media (min-width: 320px) and (max-width: 360px) {
+
+    html {
+        zoom: 90%;
+    }
+
+    .feeProcess {
+        #growingDiv {
+            left: 34px !important;
+            top: 66px !important;
+            width: 4.1px !important;
+        }
+    }
+
+
+    @media (min-width: 1920px) {
+        .exploreCampus {
+            height: 90vh;
+        }
+    }
+}

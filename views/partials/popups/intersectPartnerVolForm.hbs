@@ -1,0 +1,504 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<main>
+    <div class="popupContainerOuter ApplyNow scrollPopup intersectForms"
+        id="intersectPartnerVolForm">
+        <div class="popupContainer">
+            <div class="fromTophead">
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_heading">
+                    Get Involved, Collaborate With Us
+                </h2>
+                <button class="popUpCloseBtnWrap homeCrossfix" onclick="hidePartnerForm()" aria-label="Close">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Close">
+                </button>
+            </div>
+            <div class="PopupformWrapper" id="leadformContainer">
+                <div class="right">
+                    <div class="formContainer active">
+                        <div class="flexInput" id="formain">
+                            <div class="formtwoRow">
+                                <div class="inputGroup">
+                                    <label for="fullName" class="font-14 font-medium font-black1">Full Name <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter Your Full Name"
+                                        class="inputBox font-16 font-black1 font-medium" id="partnerVolfullName" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="email" class="font-14 font-medium font-black1">Email <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter Your Professional Email Address"
+                                        class="inputBox font-16 font-black1 font-medium" id="partnerVolEmail" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="phone" class="font-14 font-medium font-black1">Enter Phone Number <span
+                                            class="font-red">*</span></label>
+                                    <input type="tel" maxlength="10" placeholder="Enter Your Phone Number"
+                                        class="inputBox font-16 font-black1 font-medium" id="partnerVolPhone" oninput="this.value = this.value.replace(/[^0-9]/g, ''); clearError(this);">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="organisation" class="font-14 font-medium font-black1">Organisation Name
+                                        <span class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter Your Organisation's Name"
+                                        class="inputBox font-16 font-black1 font-medium" id="partnerVolOrganisation" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="role" class="font-14 font-medium font-black1">Role/Designation <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter Your Current Role Or Designation"
+                                        class="inputBox font-16 font-black1 font-medium" id="partnerVolroleDesignation" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="orgType" class="font-14 font-medium font-black1">Organisation Type <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Corporate, Educational, Non-profit, etc."
+                                        class="inputBox font-16 font-black1 font-medium" id="partnerVolorganizationType" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="organisation" class="font-14 font-medium font-black1">What best describes you?
+                                        <span class="font-red">*</span></label>
+                                    <input type="text" placeholder="Student/Working Professional/Educator"
+                                        class="inputBox font-16 font-black1 font-medium" id="partnerVolwhatBestDescribesYou" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="location" class="font-14 font-medium font-black1">Location <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter Your Current City/State/Country"
+                                        class="inputBox font-16 font-black1 font-medium" id="partnerVolLocation" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="interest" class="font-14 font-medium font-black1">Partnership interest
+                                        <span class="font-red">*</span></label>
+                                    <input type="text" placeholder="Event, Sponsorship, etc."
+                                        class="inputBox font-16 font-black1 font-medium" id="partnerVolpartnershipInterest" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="linkedin" class="font-14 font-medium font-black1">LinkedIn profile <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter your LinkedIn Profile Link"
+                                        class="inputBox font-16 font-black1 font-medium" id="partnerVollinkedin" oninput="clearError(this)">
+                                </div>
+
+                                <div class="inputGroup">
+                                    <label for="website" class="font-14 font-medium font-black1">Website link <span
+                                            class="font-red">*</span></label>
+                                    <input type="text" placeholder="Enter Your Organisation’s Website Link"
+                                        class="inputBox font-16 font-black1 font-medium" id="partnerVolwebsiteLink" oninput="clearError(this)">
+                                </div>
+                            </div>
+
+                            <div class="inputGroup">
+                                <label class="font-14 font-medium font-black1">
+                                    Have you attended past Intersect events? <span class="font-red">*</span>
+                                </label>
+                                <div class="multi-select-container" id="partnersPastEventsAttended-container">
+                                    <div class="multi-select-box inputBox" id="partnersPastEventsAttended-box">
+                                        <span class="placeholder">Select options</span>
+                                    </div>
+                                    <div class="multi-select-options" id="partnersPastEventsAttended-options">
+                                        <div class="multi-select-option" data-value="Intersect 1.0">Intersect 1.0</div>
+                                        <div class="multi-select-option" data-value="Intersect 2.0">Intersect 2.0</div>
+                                        <div class="multi-select-option" data-value="Intersect 3.0">Intersect 3.0</div>
+                                        <div class="multi-select-option" data-value="Intersect 4.0">Intersect 4.0</div>
+                                        <div class="multi-select-option" data-value="School Leaders Round Table">School Leaders Round Table</div>
+                                        <div class="multi-select-option" data-value="None">None</div>
+                                    </div>
+                                    <input type="hidden" name="partnersPastEventsAttended" id="partnersPastEventsAttended">
+                                </div>
+                            </div>
+
+                            <div class="inputGroup select">
+                                <label for="website" class="font-14 font-medium font-black1">How long would you like to volunteer with us?<span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="6 Month, 1 Year, Other(Please Specify)"
+                                        class="inputBox font-16 font-black1 font-medium" id="partnerVolVolunteerDuration" oninput="clearError(this)">
+                            </div>
+    
+                            <div class="inputGroup">
+                                <label for="website" class="font-14 font-medium font-black1">How do you want to volunteer?<span
+                                        class="font-red">*</span></label>
+                                <textarea type="text" placeholder="Podcast/Content Creation, Speaker Session, Event Assistant, Logistics Support, Speaker Coordination, etc."
+                                    class="inputBox font-16 font-black1 font-medium" id="partnerVolVolunteerInterest" oninput="clearError(this)"></textarea>
+                            </div>
+
+                            <div class="inputGroup">
+                                <label for="reason" class="font-14 font-medium font-black1"></label>
+                                <textarea type="text"
+                                    class="inputBox font-16 font-black1 font-medium" id="partnerVolreasonToJoin" oninput="clearError(this)"></textarea>
+                            </div>
+
+                            <div class="inputGroup">
+                                <label for="reason" class="font-14 font-medium font-black1">Skills or Experience Relevant to Volunteering
+                                    with Us? <span class="font-red">*</span></label>
+                                <input type="text" placeholder="List Any Relevant Skills Or Past Volunteer Experiences."
+                                    class="inputBox font-16 font-black1 font-medium" id="partnerVolSkillsExperience" oninput="clearError(this)">
+                            </div>
+
+                            <div class="inputGroup">
+                                <label for="query" class="font-14 font-medium font-black1">Query/comments, if
+                                    any</label>
+                                <textarea type="text"
+                                    class="inputBox font-16 font-black1 font-medium" id="partnerVolqueryComments"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="formFooter" id="submitbuttonreport">
+                        <div class="gradientButton whiteHover" id="partnerVolSubmitButton" onclick="submitPartnerForm()">
+                            <button class="button iconButton gtmUgDwnBroPop" id="gtmUgDwnBroPopId">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="https://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                        fill="white"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p id="serverErrorMessage" style="text-align: center;" class="msg-error hide"></p>
+        </div>
+        <div id="SuccessMessage" class="congrats-box hide">
+            <button class="popUpCloseBtnWrap homeCrossfix" onclick="hideThanksPage()" aria-label="Close">
+                <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg" class="invert-img" alt="Close">
+            </button>
+            <img src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="">
+
+            <h3 class="thankyouboxHeading mt-10 gtmUgDwnBroGotit" id="gtmUgDwnBroGotitId">Thank You</h3>
+            <p class="text-2 gtmUgDwnBroGotPara" id="gtmUgDwnBroGotParaId">We've successfully received your application to join the Intersect community. Our team will get back to you, if your application is shortlisted. </p>
+            <p class="text-2">For any queries please contact us at <a class="font-red"
+                    href="mailto:pummy.ralli@mastersunion.org">pummy.ralli@mastersunion.org</a></p>
+        </div>
+    </div>
+</main>
+
+<script>
+    let formType;
+    let partnersSelectedValues = [];
+
+    function showPartnerForm(type) {
+            formType=type;
+            const form = document.getElementById("intersectPartnerVolForm");
+            form.classList.add("active")
+            $('#serverErrorMessage').addClass('hide')
+            $('.inputGroup').removeClass('hide')
+
+            $("#intersectPartnerVolForm input, #intersectPartnerVolForm textarea").val("");
+            $("#partnerVolPastEventsAttended").prop("selectedIndex", 0);
+            $("#fileChosenText").text("");
+            resetpartnersPastEventsAttended();
+            $('#partnersPastEventsAttended-options').addClass('hide')
+            if(formType==='partner'){
+                $("#partnerVolwhatBestDescribesYou").closest(".inputGroup").addClass('hide')
+                $("#partnerVolVolunteerDuration").closest(".inputGroup").addClass('hide')
+                $("#partnerVolVolunteerInterest").closest(".inputGroup").addClass('hide')
+                $("#partnerVolSkillsExperience").closest(".inputGroup").addClass('hide')
+                $("#partnerVolSkillsExperience").closest(".inputGroup").addClass('hide')
+                $("#partnerVolreasonToJoin").closest(".inputGroup").find("label").html("Why Do You Want to Partner with Us? <span class='font-red'>*</span>");
+                $("#partnerVolreasonToJoin").closest(".inputGroup").find("textarea").attr("placeholder", "What Do You Aim To Achieve Through This Partnership?");
+                $('#partnerVolSubmitButton button').html(`
+                                                            Partner With Us
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                                xmlns="https://www.w3.org/2000/svg">
+                                                                <path d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z" 
+                                                                    fill="white"></path>
+                                                            </svg>
+                                                        `);
+            }
+            else{
+                $("#partnerVolOrganisation").closest(".inputGroup").addClass('hide')
+                $("#partnerVolroleDesignation").closest(".inputGroup").addClass('hide')
+                $("#partnerVolorganizationType").closest(".inputGroup").addClass('hide')
+                $("#partnerVolpartnershipInterest").closest(".inputGroup").addClass('hide')
+                $("#partnerVolwebsiteLink").closest(".inputGroup").addClass('hide')
+                $("#partnerVolreasonToJoin").closest(".inputGroup").find("label").html("Why Do You Want to volunteer with intersect? <span class='font-red'>*</span>");
+                $("#partnerVolreasonToJoin").closest(".inputGroup").find("textarea").attr("placeholder", "What motivates you to join us and help make the intersect events a success?");
+                $('#partnerVolSubmitButton button').html("Volunteer Now");
+                $('#partnerVolSubmitButton button').html(`
+                                                            Volunteer Now
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                                xmlns="https://www.w3.org/2000/svg">
+                                                                <path d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z" 
+                                                                    fill="white"></path>
+                                                            </svg>
+                                                        `);
+             }
+    }
+
+    function hidePartnerForm(){
+        $(".msg-error").remove();
+        const form = document.getElementById("intersectPartnerVolForm");
+        form.classList.remove("active")
+        resetpartnersPastEventsAttended();
+        $('#partnersPastEventsAttended-options').addClass('hide')
+    }
+
+    function submitPartnerForm() {   
+
+        let isValid = true;
+
+        $(".msg-error").remove();
+        {{!-- $("#serverErrorMessage").removeClass("show");
+        $("#emailErrorMessage").removeClass("show"); --}}
+
+        function showError(input, message) {
+            $(input).after(`<p class="msg-error" >${message}</p>`);
+            isValid = false;
+        }
+
+        function clearError(input){
+            $(`#${input.id}`).next('.msg-error').remove();
+    }
+
+
+        let fullName = $("#partnerVolfullName").val().trim();
+        if (fullName === "") showError("#partnerVolfullName", "Full Name is required");
+
+        let email = $("#partnerVolEmail").val().trim();
+        let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email === "") showError("#partnerVolEmail", "Email is required");
+        else if (!emailPattern.test(email)) showError("#partnerVolEmail", "Enter a valid email");
+
+        let phone = $("#partnerVolPhone").val().trim();
+        let phonePattern = /^[0-9]{10}$/;
+        if (phone === "") showError("#partnerVolPhone", "Phone number is required");
+        else if (!phonePattern.test(phone)) showError("#partnerVolPhone", "Enter a valid 10-digit phone number");
+
+
+        let requiredFields;
+        if(formType==='partner'){ 
+            requiredFields = [
+                { id: "#partnerVolOrganisation", message: "Organisation Name is required" },
+                { id: "#partnerVolroleDesignation", message: "Role/Designation is required" },
+                { id: "#partnerVolorganizationType", message: "Organisation Type is required" },
+                { id: "#partnerVolLocation", message: "Location is required" },
+                { id: "#partnerVolpartnershipInterest", message: "Partnership Interest is required" },
+                { id: "#partnerVollinkedin", message: "LinkedIn profile is required" },
+                { id: "#partnerVolwebsiteLink", message: "Website link is required" },
+                { id: "#partnersPastEventsAttended", message: "This field is required" },
+                { id: "#partnerVolreasonToJoin", message: "Reason to join is required" },
+            ];
+        }
+        else{
+            requiredFields = [
+                { id: "#partnerVolwhatBestDescribesYou", message: "This field is required" },
+                { id: "#partnerVolVolunteerDuration", message: "Duration is required" },
+                { id: "#partnerVolVolunteerInterest", message: "This field is required" },
+                { id: "#partnerVolLocation", message: "Location is required" },
+                { id: "#partnerVolSkillsExperience", message: "Skill is required" },
+                { id: "#partnerVollinkedin", message: "LinkedIn profile is required" },
+                { id: "#partnersPastEventsAttended", message: "This field is required" },
+                { id: "#partnerVolreasonToJoin", message: "Reason to join is required" },
+            ];
+        }
+
+        requiredFields.forEach(field => {
+            if ($(field.id).val().trim() === "") showError(field.id, field.message);
+        });
+
+        if ($("#partnerVolPastEventsAttended").val() === "") {
+            showError("#partnerVolPastEventsAttended", "Please select an option");
+        }
+
+        if (isValid) {
+            $('#partnerVolSubmitButton button').html(`Submitting....`);
+            let formData;
+            
+            if(formType==='partner'){ 
+                formData = {
+                    category : "Partnership",
+                    fullName: fullName,
+                    email: email,
+                    phoneNumber: phone,
+                    organizationName: $("#partnerVolOrganisation").val().trim(),
+                    roleDesignation: $("#partnerVolroleDesignation").val().trim(),
+                    organizationType: $("#partnerVolorganizationType").val().trim(),
+                    location: $("#partnerVolLocation").val().trim(),
+                    partnershipInterest: $("#partnerVolpartnershipInterest").val().trim(),
+                    linkedInProfile: $("#partnerVollinkedin").val().trim(),
+                    websiteLink: $("#partnerVolwebsiteLink").val().trim(),
+                    pastEventsAttended: partnersSelectedValues.join(","),
+                    reasonToJoin: $("#partnerVolreasonToJoin").val().trim(),
+                    queryComments: $("#partnerVolqueryComments").val().trim(),
+                };
+            }
+            else{
+                formData = {
+                    category : "Volunteering",
+                    fullName: fullName,
+                    email: email,
+                    phoneNumber: phone,
+                    whatBestDescribesYou: $("#partnerVolwhatBestDescribesYou").val().trim(),
+                    location: $("#partnerVolLocation").val().trim(),
+                    partnershipInterest: $("#partnerVolpartnershipInterest").val().trim(),
+                    volunteerDuration: $("#partnerVolVolunteerDuration").val().trim(),
+                    volunteerInterest: $("#partnerVolVolunteerInterest").val().trim(),
+                    skillsExperience: $("#partnerVolSkillsExperience").val().trim(),
+                    linkedInProfile: $("#partnerVollinkedin").val().trim(),
+                    pastEventsAttended: partnersSelectedValues.join(","),
+                    reasonToJoin: $("#partnerVolreasonToJoin").val().trim(),
+                    queryComments: $("#partnerVolqueryComments").val().trim(),
+                };
+            }
+
+            $.ajax({
+                url: `{{apiBaseURL}}/api/intersect/addPartnerVol`,
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(formData), 
+                success: function (response) {
+                    console.log("Form submitted successfully:", response);
+                    $('.popupContainer').addClass('hide'); 
+                    $('.congrats-box').removeClass('hide');
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 409) {
+                        showError("#partnerVolEmail", "Email is Already Registered"); 
+                        $('#partnerVolEmail').focus();
+                    }
+                    else if (xhr.status === 500) {
+                        errorMessage = "Server error! Please try again.";
+                        $("#serverErrorMessage").text(errorMessage).removeClass("hide");
+                    } else if (xhr.status === 503) {
+                        errorMessage = "Service unavailable. Please try again later.";
+                        $("#serverErrorMessage").text(errorMessage).removeClass("hide");
+                    }
+                    console.error("Form submission error:", error);
+                }
+            })
+            .always(function(){
+                $('#partnerVolSubmitButton button').html( formType === `partner` ? 
+                                                        `
+                                                            Partner With Us
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                                xmlns="https://www.w3.org/2000/svg">
+                                                                <path d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z" 
+                                                                    fill="white"></path>
+                                                            </svg>
+                                                        `
+                                                        :
+                                                        `
+                                                            Volunteer Now
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                                                xmlns="https://www.w3.org/2000/svg">
+                                                                <path d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z" 
+                                                                    fill="white"></path>
+                                                            </svg>
+                                                        `
+                                                        );
+            })
+        }
+    }
+
+    $(document).ready(function (){
+        const multiSelectBox = document.querySelector("#partnersPastEventsAttended-box");
+        const multiSelectOptions = document.querySelector("#partnersPastEventsAttended-options");
+        const hiddenInput = document.querySelector("#partnersPastEventsAttended");
+
+        // Update the selected items displayed in the box
+        function updateSelectedItems() {
+            multiSelectBox.innerHTML = "";
+
+            if (partnersSelectedValues.length === 0) {
+                multiSelectBox.innerHTML = '<span class="placeholder">Select options</span>';
+            } else {
+                partnersSelectedValues.forEach(value => {
+                    const selectedItem = document.createElement("div");
+                    selectedItem.className = "selected-item";
+
+                    const itemText = document.createElement("span");
+                    itemText.textContent = value;
+                    selectedItem.appendChild(itemText);
+
+                    const removeBtn = document.createElement("span");
+                    removeBtn.className = "remove-item";
+                    removeBtn.innerHTML = "&times;";
+                    removeBtn.addEventListener("click", function (e) {
+                        e.stopPropagation();
+                        partnersSelectedValues = partnersSelectedValues.filter(val => val !== value);
+                        updateSelectedItems();  // Re-render the selected items
+                    });
+
+                    selectedItem.appendChild(removeBtn);
+                    multiSelectBox.appendChild(selectedItem);
+                });
+            }
+
+            hiddenInput.value = partnersSelectedValues.join(",");
+            clearError(hiddenInput);
+
+            // Highlight the selected options in the dropdown list
+            multiSelectOptions.querySelectorAll(".multi-select-option").forEach(option => {
+                option.classList.toggle("selected", partnersSelectedValues.includes(option.getAttribute("data-value")));
+            });
+        }
+
+        // Toggle dropdown visibility when the select box is clicked
+        multiSelectBox.addEventListener("click", function () {
+            multiSelectBox.classList.toggle("active");
+            multiSelectOptions.classList.toggle("show");
+        });
+
+        // Close the dropdown when clicking outside of the container
+        document.addEventListener("click", function (e) {
+            if (!multiSelectBox.contains(e.target)) {
+                multiSelectBox.classList.remove("active");
+                multiSelectOptions.classList.remove("show");
+            }
+        });
+
+        // Add click event listeners to each option in the dropdown
+        multiSelectOptions.querySelectorAll(".multi-select-option").forEach(option => {
+            option.addEventListener("click", function () {
+                const value = option.getAttribute("data-value");
+
+                if (value === "None") {
+                    partnersSelectedValues = ["None"];
+                } else {
+                    if (partnersSelectedValues.includes("None")) {
+                        partnersSelectedValues = partnersSelectedValues.filter(val => val !== "None");
+                    }
+                    if (partnersSelectedValues.includes(value)) {
+                        partnersSelectedValues = partnersSelectedValues.filter(val => val !== value);
+                    } else {
+                        partnersSelectedValues.push(value);
+                    }
+                }
+                updateSelectedItems();  // Update the displayed selected items
+            });
+        });
+
+        // Function to reset the multi-select
+        function resetMultiSelect() {
+            partnersSelectedValues = [];
+            updateSelectedItems();  // Reset by clearing the selected items
+        }
+
+        // Expose the reset function globally so it can be called anytime
+        window.resetpartnersPastEventsAttended = resetMultiSelect;
+
+        $('#partnersPastEventsAttended-box').click(function(){
+            $('#partnersPastEventsAttended-options').removeClass('hide')
+        })
+
+        document.addEventListener("click", function (e) {
+            const box = document.querySelector("#partnersPastEventsAttended-box");
+            const options = document.querySelector("#partnersPastEventsAttended-options");
+
+            if (!box.contains(e.target) && !options.contains(e.target)) {
+                box.classList.remove("active");
+                options.classList.remove("show");
+                options.classList.add("hide");
+            }
+        });
+
+    })
+</script>

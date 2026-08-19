@@ -1,0 +1,329 @@
+<section class="flex-container-section popup-section download-popup-outer event-popup testDrivePopup"
+    style="display: none;" id="futureLeaderPopup21">
+    <div class="popup download-popup ">
+        {{!-- <span class="close">X</span> --}}
+        <div class="popup-content master-pop-up">
+            {{!-- <div class="popup-left flex-center white mob-hide">
+                <img src="https://files.mastersunion.link/media/img/pop-img.png" alt="" class="y-shadow">
+                <h3 class="heading-3 mt10"><em class="highlight">Audited</em></h3>
+                <h3 class="heading-3"><em class="highlight">Placement Report </em></h3>
+                <p class="text-1">COHORT OF 2021</p>
+            </div> --}}
+
+            <div class="popup-right">
+                <form class="form-flex" id="brochure_form_Blockchain" style="display: block;">
+                    <div class="form-header flex-end">
+                        <p class="text-3 flex-end">
+                            <img src="https://mastersunion.org/assets/img/svg/Close.svg" alt=""
+                                onclick="closeStartupWeekendPopup()" class="pointer">
+                        </p>
+                    </div>
+                    <div class="inner-box pt-0" id="form-fields">
+                        <div class="header-box hide">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                                xmlns="https://www.w3.org/2000/svg">
+                                <circle cx="20" cy="20" r="20" fill="#FAD133" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M15.5321 17.7832C15.825 17.4903 16.2998 17.4902 16.5928 17.7831L20 21.1894L23.4072 17.7831C23.7002 17.4902 24.175 17.4903 24.4679 17.7832C24.7608 18.0761 24.7607 18.551 24.4678 18.8439L20.5303 22.7803C20.2374 23.0731 19.7626 23.0731 19.4697 22.7803L15.5322 18.8439C15.2393 18.551 15.2392 18.0761 15.5321 17.7832Z"
+                                    fill="#343434" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M20 11C20.4142 11 20.75 11.3358 20.75 11.75V22.2472C20.75 22.6615 20.4142 22.9972 20 22.9972C19.5858 22.9972 19.25 22.6615 19.25 22.2472V11.75C19.25 11.3358 19.5858 11 20 11Z"
+                                    fill="#343434" />
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M11.75 21.5C12.1642 21.5 12.5 21.8358 12.5 22.25V27.5H27.5V22.25C27.5 21.8358 27.8358 21.5 28.25 21.5C28.6642 21.5 29 21.8358 29 22.25V27.5C29 27.8978 28.842 28.2794 28.5607 28.5607C28.2794 28.842 27.8978 29 27.5 29H12.5C12.1022 29 11.7206 28.842 11.4393 28.5607C11.158 28.2794 11 27.8978 11 27.5V22.25C11 21.8358 11.3358 21.5 11.75 21.5Z"
+                                    fill="#343434" />
+                            </svg>
+
+                            <p class="text-2 mt10 mb20 hide">Get <strong>CTC Analysis</strong> and <strong>Audited
+                                </strong>Report</p>
+                        </div>
+                        <div>
+                            <div class="form-group blacktext">
+                                <label class="form-label text-4">
+                                    Name <span class="imp-sign">*</span>
+                                </label>
+                                <div class="input-group mt5">
+                                    <img class="form-svgs" src="https://mastersunion.org/assets/img/svg/User.svg"
+                                        alt="">
+                                    <input type="text" id="name1" name="name" placeholder="Enter your name"
+                                        class="text-3" onblur="validateName1(this)">
+                                    <span class="msg-error" id="nameValidation1">Please enter a valid name</span>
+                                </div>
+                            </div>
+                            <div class="form-group blacktext mt5">
+                                <label class="form-label text-4">
+                                    Email <span class="imp-sign">*</span>
+                                </label>
+                                <div class="input-group mt5">
+                                    <img class="form-svgs"
+                                        src="https://mastersunion.org/assets/img/svg/EnvelopeSimple.svg" alt="">
+                                    <input type="email" id="email1" name="email" placeholder="Enter your email"
+                                        class="text-3" onblur="validateEmail1(this)">
+                                    <span class="msg-error" id="emailValidation1">Please enter a valid email
+                                        address</span>
+                                </div>
+                            </div>
+
+                            <div class="form ccPhone">
+                                <label>Phone Number<em>*</em></label>
+                                <div class="flexbox mt-5">
+                                    <select name="countryCode" id="countryCode">
+                                        <option value="91">91</option>
+                                    </select>
+                                    <div class="input">
+                                        <input type="text" placeholder="Enter your Phone Number" id="mobile1"
+                                            maxlength="10" onblur="validateMobile(this, 'mobileValidation')">
+                                    </div>
+                                </div>
+
+
+                                <span class="msg-error" id="mobileValidation">Please enter a valid
+                                    Phone Number</span>
+                            </div>
+
+                        </div>
+                        <div class="consentCheckWrapper">
+                            <div class="consentCheckRow">
+                                <input type="checkbox" id="consentCheckTsw">
+                                <label for="consentCheckTsw">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+                            </div>
+                            <p id="consentCheckErrorTsw" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+                        </div>
+                        <div class="submit-box mt20">
+                            <button type="button" id="onBrocherSubmitBtn"
+                                class="yellow-btn download-yellow">Submit</button>
+                            <p id="error-msg1" class="success-text">
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-flex thanku-section hide">
+                        <div class="inner-box">
+                            <div class="congrats-box">
+                                <img src="https://files.mastersunion.link/media/img/yellow-check.png" alt="">
+
+                                <div class="congrats-inner mt20" id="further-steps">
+                                    {{!-- <h3 class="heading-3 mb-0" id="scholarship-steps">Thank You for registering!</h3> --}}
+                                    <p class="text-1 mt20" id="next-steps">Please complete the form to register
+                                        for this event</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+
+
+
+        </div>
+    </div>
+</section>
+
+<script>
+    let device = 'PC';
+    let EVENT_ID = null;
+    if (window.matchMedia("(max-width: 768px)").matches) {
+        device = "Mobile"
+    } else {
+        device = "Desktop"
+    }
+    var boardroomPopupCscLoaded = false;
+    function getAllCountriesBoardroomPopup() {
+        if (boardroomPopupCscLoaded) return;
+        boardroomPopupCscLoaded = true;
+        $.ajax({
+            url: 'https://api.mastersunion.org/api/geo/countries',
+            type: 'GET',
+            headers: {
+                "Accept": "application/json"
+            }
+        }).done(function (response) {
+            $.each(response, function (idx, country) {
+                $('#countryCode').append($("<option></option>")
+                    .attr("value", country.iso2)
+                    .text(country.phonecode));
+            });
+        });
+    }
+
+    function openStartupWeekendPopup(eventId = null) {
+        getAllCountriesBoardroomPopup();
+        $("#futureLeaderPopup21").css("display", 'flex')
+        $('body').css('overflow', 'hidden');
+        EVENT_ID = eventId;
+
+    }
+    function closeStartupWeekendPopup() {
+        $("#futureLeaderPopup21").css("display", "none")
+        $('#brochure_form_Blockchain .thanku-section').addClass('hide');
+        $('#brochure_form_Blockchain #form-fields').removeClass('hide');
+        $('#emailValidation1').css('visibility', 'hidden');
+        $('#nameValidation1').css('visibility', 'hidden');
+        $('#mobileValidation1').css('visibility', 'hidden');
+        $('#examValidation1').css('visibility', 'hidden');
+
+        $('body').css('overflow', 'visible');
+        $('#error-msg1').text('');
+    }
+    function validateEmail1(emailField) {
+        var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+        if (reg.test(emailField.value) == false) {
+            document.getElementById('emailValidation1').style.visibility = "visible"
+            return false;
+        }
+        document.getElementById('emailValidation1').style.visibility = "hidden"
+        return true;
+
+    }
+    function validateMobile1(mobileField) {
+        var reg = /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/;
+        if (reg.test(mobileField.value) == false) {
+            document.getElementById('mobileValidation1').style.visibility = "visible"
+            return false;
+        }
+        document.getElementById('mobileValidation1').style.visibility = "hidden"
+        return true;
+    }
+    function validateName1(nameField) {
+        var reg = /^[a-zA-Z ]+$/;
+        if (reg.test(nameField.value) == false || nameField.value.trim() === '') {
+            document.getElementById('nameValidation1').style.visibility = "visible"
+            return false;
+        }
+        document.getElementById('nameValidation1').style.visibility = "hidden"
+        return true;
+    }
+    function validateExam1(nameField) {
+        if (nameField.value.trim() === '') {
+            document.getElementById('examValidation1').style.visibility = "visible"
+            return false;
+        }
+        document.getElementById('examValidation1').style.visibility = "hidden"
+        return true;
+    }
+    $(document).ready(function () {
+        $("#onBrocherSubmitBtn").click(function (event) {
+            event.preventDefault();
+            if (!document.getElementById('consentCheckTsw')?.checked) {
+                document.getElementById('consentCheckErrorTsw').classList.remove('warning');
+                return;
+            } else {
+                document.getElementById('consentCheckErrorTsw').classList.add('warning');
+            }
+            const urlSearchParams = new URLSearchParams(window.location.search);
+            var params = Object.fromEntries(urlSearchParams.entries());
+            if (params.utm_source) { var utmSource = params.utm_source }
+            if (params.utm_medium) { var utmMedium = params.utm_medium }
+            if (params.utm_campaign) { var utmCampaign = params.utm_campaign }
+
+            let source = "https://mastersunion.org/events/the-boardroom";
+            if (
+                $('#mobile1').val().trim() != '' &&
+                $('#name1').val().trim() != '' &&
+                $('#email1').val().trim() != '' &&
+                /^[a-zA-Z ]+$/.test($('#name1').val()) == true &&
+                (/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test($('#mobile1').val()) == true) &&
+                /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/.test($("#email1").val()) == true
+            ) {
+
+                var post_url = '{{apiBaseURL}}/api/registerForEvent'
+                var request_method = 'POST'; //get form GET/POST method
+                var form_data = {
+                    event_Id: EVENT_ID || '66615c6bf78638cf8d50f391',
+                    eventName: "The Boardroom",
+                    email: $('#email1').val(),
+                    name: $('#name1').val(),
+                    mobile: $('#mobile1').val(),
+                    mode: 'offline',
+                    field_device_type: device,
+                    source: utmSource || "Website",
+                    medium: utmMedium || source,
+                    country: $('#countryCode').val(),
+                    campaign: utmCampaign || null,
+                    course: "Under Graduate Program",// Updated only for test drive "Under Graduate Program"
+                    consentCheck: document.getElementById('consentCheckTsw')?.checked || false,
+                };
+
+                $.ajax({
+                    url: post_url,
+                    type: request_method,
+                    data: JSON.stringify(form_data),
+                    contentType: 'application/json; charset=utf-8',
+                }).done(function (response) {
+                    if (response.IsSuccess) {
+                        $('#error-msg1').text('');
+                        $('#brochure_form_Blockchain .thanku-section').toggleClass('hide');
+                        $('#brochure_form_Blockchain #form-fields').toggleClass('hide');
+                        window.open(`/events/the-boardroom-form/${response.Data}`, '_blank')
+                        $("#futureLeaderPopup21").removeClass("is-visible")
+
+                        let device = 'PC'
+                        if (window.matchMedia("(max-width: 768px)").matches) {
+                            device = "Mobile"
+                        } else {
+                            device = "Desktop"
+                        }
+                        var post_url = '{{apiBaseURL}}/api/leads/pushToNPF'
+                        var request_method = 'POST'; //get form GET/POST method
+                        $.ajax({
+                            url: post_url,
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify({
+                                "college_id": 5034,
+                                "field_device_type": device,
+                                "source": utmSource || 'Website',
+                                "email": $('#email1').val(),
+                                "name": $('#name1').val(),
+                                "mobile": $('#mobile1').val(),
+                                "field_linkedin_profile_url": "",
+                                "medium": utmMedium || source,
+                                "campaign": utmCampaign || null,
+                                "course": "Under Graduate Program",
+                                "leadSource": "The Boardroom Popup",
+                                "consentCheck": document.getElementById('consentCheckTsw')?.checked || false
+                            }),
+                            dataType: "json",
+                            success: function (result) {
+                                //Write your code here
+                                $("input[type=text], input[type=email], input[type=tel]").val("");
+                            }
+                        });
+                    } else {
+                        if (response.Message == "Already registered") {
+                            $("input[type=text], input[type=email], input[type=tel]").val("");
+                            $('#error-msg1').text('You have already registered for this event.');
+
+                        } else {
+                            $('#error-msg1').text('Something went wrong.Please try again');
+                        }
+
+
+                    }
+                });
+
+            } else {
+                if (/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/.test($("#email1").val()) == false || $('#email1').val().trim() == '') {
+                    document.getElementById('emailValidation1').style.visibility = "visible"
+                } else {
+                    document.getElementById('emailValidation1').style.visibility = "hidden";
+                }
+
+                if (/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test($('#mobile1').val()) == false || $('#mobile1').val().trim() == '') {
+                    document.getElementById('mobileValidation1').style.visibility = "visible"
+                } else {
+                    document.getElementById('mobileValidation1').style.visibility = "hidden"
+                }
+
+                if (/^[a-zA-Z ]+$/.test($('#name1').val()) == false || $('#name1').val().trim() == '') {
+                    document.getElementById('nameValidation1').style.visibility = "visible"
+                } else {
+                    document.getElementById('nameValidation1').style.visibility = "hidden"
+                }
+            }
+
+        });
+    });
+
+</script>

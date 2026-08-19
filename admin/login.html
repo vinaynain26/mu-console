@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign in · MU Console</title>
+<link rel="stylesheet" href="/console-ui/app.css">
+<style>
+  body{display:grid;place-items:center;min-height:100vh;background:#f1f2f4}
+  .box{width:100%;max-width:394px;padding:20px}
+  .mark{text-align:center;margin-bottom:20px}
+  .mark h1{font-size:19px;margin:0 0 4px;font-weight:650}
+  .mark p{margin:0;color:var(--ink-sub);font-size:13.5px}
+  .card .inner{padding:20px}
+  .field{margin-bottom:14px}
+  .err{background:var(--crit-bg);color:var(--crit-ink);padding:10px 13px;border-radius:var(--r);
+       font-size:13px;margin-bottom:14px;display:none}
+  .err.show{display:block}
+  .demo{margin-top:14px;font-size:12.5px;color:var(--ink-sub);text-align:center;line-height:1.7}
+  .demo code{background:#e3e3e3;padding:1px 6px;border-radius:4px;font-size:12px}
+</style></head><body>
+<div class="box">
+  <div class="mark">
+    <h1>MU Console</h1>
+    <p>Masters' Union programme pages</p>
+  </div>
+  <div class="card"><div class="inner">
+    <div class="err" id="err"></div>
+    <form id="f">
+      <div class="field">
+        <label class="lbl" for="email">Email</label>
+        <input type="email" id="email" autocomplete="username" required autofocus>
+      </div>
+      <div class="field">
+        <label class="lbl" for="password">Password</label>
+        <input type="password" id="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn primary" id="go" style="width:100%;justify-content:center">Sign in</button>
+    </form>
+  </div></div>
+  <div class="demo" id="demo"></div>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+
+fetch('/api/account').then(r => r.json()).then(a => {
+  $('demo').innerHTML =
+    'Default login <code>' + (a.defaultEmail || 'figma.uiux@mastersunion.org') + '</code>' +
+    '<br>One account exists per role — editor@, reviewer@, viewer@ · same password.';
+});
+
+$('f').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  $('go').disabled = true; $('err').classList.remove('show');
+  try {
+    const res = await fetch('/api/account/login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: $('email').value, password: $('password').value })
+    });
+    const out = await res.json();
+    if (!res.ok) throw new Error(out.error || 'Could not sign in.');
+    location.href = params.get('next') || '/console';
+  } catch (e2) {
+    $('err').textContent = e2.message; $('err').classList.add('show');
+    $('go').disabled = false;
+  }
+});
+</script></body></html>

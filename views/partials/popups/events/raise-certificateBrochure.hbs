@@ -1,0 +1,292 @@
+<main>
+    <div class="popupContainerOuter  ApplyNow" id="raisebrochure">
+
+        <div class="popupContainer">
+            <div class="fromTophead">
+
+                <h2 class="font-56 font-bold font-black1  letter-spacing1" id="form_headingBro">Download Brochure</h2>
+               <div class="popUpCloseBtnWrap">
+                    <img  src="https://files.mastersunion.link/resources/svg/crossIcon.svg"
+                        class="invert-img" alt="Icon" onclick="hidebrochure();">
+                </div>
+            </div>
+            <div class="PopupformWrapper" id="leadformContainerBro">
+                <div class="left mob-hide">
+                    <img src="https://files.mastersunion.link/resources/img/formleft.webp" alt="">
+                </div>
+                <div class="right">
+                    <div class="formContainer active">
+                        <div class="flexInput" id="formain">
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Full Name <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your name"
+                                    class="inputBox font-16 font-black1 font-medium " id="nameReportBro"
+                                    onblur="validateInputBlurBrochure('nameReportBro','name')">
+                                <p class="font-12 font-red font-regular warning" id="nameReportBroVal">Please Check the
+                                    input</p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Email ID <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your email"
+                                    class="inputBox font-16 font-black1 font-medium " id="emailReportBro"
+                                    onblur="validateInputBlurBrochure('emailReportBro','email')">
+                                <p class="font-12 font-red font-regular warning" id="emailReportBroVal">Please Enter Valid
+                                    Email
+                                </p>
+                            </div>
+                            <div class="inputGroup">
+                                <label for="name" class="font-14 font-medium font-black1">Contact Number <span
+                                        class="font-red">*</span></label>
+                                <input type="text" placeholder="Enter your mobile number" oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                    class="inputBox font-16 font-black1 font-medium " id="numberReportBro" maxlength="10"
+                                    onblur="validateInputBlurBrochure('numberReportBro','number')">
+                                <p class="font-12 font-red font-regular warning" id="numberReportBroVal">Please Enter Valid
+                                    Number
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="consentCheckWrapper">
+                        <div class="consentCheckRow">
+                            <input type="checkbox" id="consentCheckRcb">
+                            <label for="consentCheckRcb">I authorize Masters&rsquo; Union and its affiliates to process my personal data to send me information about programs related to my application, admission, or enrollment through digital channels (including email, phone calls, RCS, SMS, and WhatsApp), in accordance with Masters&rsquo; Union <a href="https://mastersunion.org/privacy-policy" target="_blank">Privacy Policy</a>, <a href="https://mastersunion.org/cookie-policy" target="_blank">Cookie Policy</a>, and <a href="https://mastersunion.org/terms-and-conditions" target="_blank">Terms &amp; Conditions</a>. By submitting my details, I agree to receive communications related to my application, events, and program updates. Message frequency may vary and message and data rates may apply. I may withdraw my consent at any time by replying STOP, UNSUBSCRIBE, or HELP for assistance.</label>
+                        </div>
+                        <p id="consentCheckErrorRcb" class="font-12 font-red font-regular warning consentCheckError">Please accept the consent to continue</p>
+                    </div>
+                    <div class="formFooter" id="submitbuttonreportBro">
+                        <div class="gradientButton whiteHover" onclick="onButtonClickSubmitBrochureYoung()">
+                            <button class="button iconButton">
+                                Download
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="https://www.w3.org/2000/svg">
+                                    <path
+                                        d="M16.0208 9.41421L7.41421 18.0208L6 16.6066L14.6066 8H7.02082V6H18.0208V17H16.0208V9.41421Z"
+                                        fill="white"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="SuccessMessageBro" class="congrats-box hide"
+                style="margin-left: auto; margin-right: auto; width: 100%;">
+                <div>
+                    <img  src="https://files.mastersunion.link/assets/img/thankyou_logo.svg" alt="Icon">
+                </div>
+
+                <h3 class="thankyouboxHeading">Got it</h3>
+                <p class="text-2">Our team will reach out to you shortly.</p>
+
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    // let name = $('#nameReportBro').val();
+    // let email = $('#emailReportBro').val();
+    // let number = $('#numberReportBro').val();
+    function onButtonClickSubmitBrochureYoung() {
+        console.log('on submit brocherr');
+
+        // Validate functions
+        const validateNumber = (number) => /^\d+$/.test(number);
+        const validateEmail = (email) => email.includes("@") && email.includes(".");
+
+        let name = $('#nameReportBro').val().trim();
+        let email = $('#emailReportBro').val().trim();
+        let number = $('#numberReportBro').val().trim();
+
+        // Check name validity
+        if (name === "") {
+            $('#nameReportBroVal').removeClass('warning');
+            return false;
+        }
+
+        // Check email validity
+        if (!validateEmail(email)) {
+            $('#emailReportBroVal').text("Please enter a valid email address.");
+            $('#emailReportBroVal').removeClass('warning');
+            return false; // Prevent form submission
+        } else {
+            $('#emailReportBroVal').addClass('warning');
+        }
+
+        // Check number validity
+        if (!validateNumber(number)) {
+            $('#numberReportBroVal').text("Please enter a valid contact number (numbers only).");
+            $('#numberReportBroVal').removeClass('warning');
+            return false; // Prevent form submission
+        } else {
+            $('#numberReportBroVal').addClass('warning');
+        }
+
+        if (!document.getElementById('consentCheckRcb')?.checked) {
+            document.getElementById('consentCheckErrorRcb').classList.remove('warning');
+            return false;
+        } else {
+            document.getElementById('consentCheckErrorRcb').classList.add('warning');
+        }
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        const utmSource = params.utm_source || 'Website';
+        const utmMedium = params.utm_medium;
+        const utmCampaign = params.utm_campaign;
+
+        let url = window.location.pathname.substring(1);
+        //let formname = document.querySelector("#raisebrochure").getAttribute("data-title") || "Download Placement Report";
+        let medium = `mu-raise-download-brochure`;
+
+        let course = 'K-12';  // changed 
+        
+        let device = 'PC';
+        if (window.matchMedia("(max-width: 768px)").matches) {
+            device = "Mobile";
+        } else {
+            device = "Desktop";
+        }
+
+        // api for our Data base
+        var post_url = '{{apiBaseURL}}/api/courseRegister';
+        var request_method = 'POST'; //get form GET/POST method
+        $.ajax({
+            url: post_url,
+            type: request_method,
+            contentType: "application/json",
+            data: JSON.stringify({
+                "email": email,
+                "event_Id":"674daaee5799b210db8e440a",
+                "name": name,
+                "mobile": number,
+                "courseName": course,
+                "leadSource": medium,
+                consentCheck: document.getElementById('consentCheckRcb')?.checked || false
+            }),
+            dataType: "json",
+            success: function (result) {
+                console.log("Second api after first success")
+                const post_url = '{{apiBaseURL}}/api/leads/pushToNPF_UG';
+                const request_method = 'POST';
+
+                $.ajax({
+                    url: post_url,
+                    type: request_method,
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        field_device_type: device,
+                        email: email,
+                        name: name,
+                        mobile: number,
+                        linkedinProfile: "",
+                        medium: utmMedium || medium,
+                        campaign: utmCampaign || null,
+                        source: utmSource || "Website",
+                        field_course_preference: course,
+                        field_utm_url: window.location.href,
+                        sendMail: false,
+                        leadSource: medium,
+                        consentCheck: document.getElementById('consentCheckRcb')?.checked || false,
+                    }),
+                    dataType: "json",
+                    success: function (result) {
+                        console.log("In success block", result);
+
+                       // const form = document.getElementById("raisebrochure");
+                         //   const destination = form.getAttribute("data-destination") || "https://cdn.mastersunion.org/assets/img/newmu/placementreport2023.pdf";
+                         document.querySelector("#SuccessMessageBro").classList.remove("hide");
+                         document.querySelector("#submitbuttonreportBro").classList.add("hide");
+                         document.querySelector("#leadformContainerBro").classList.add("hide");
+                         document.querySelector("#form_headingBro").classList.add("hide");
+                    window.open('https://images.mastersunion.link/brochures/30122024/MasterUnionrAIsev7.pdf');
+                     }
+                });
+
+            }
+        });
+    
+
+
+    }
+
+   function validateInputBlurBrochure(inputId, inputType) {
+    var value = document.getElementById(inputId).value.trim(); // Get input value and trim whitespace
+    var isValid = false;
+    var errorMessage = "";
+    var warningElement = document.getElementById(inputId + 'Val');
+
+    // Define regex patterns for each input type
+    var regexPatterns = {
+        name: /^[a-zA-Z\s]+$/, // Allows only letters and spaces
+        email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Standard email regex pattern
+        number: /^\d+$/ // Allows only digits (numbers only)
+    };
+
+    // Determine the validation logic based on input type
+    switch (inputType) {
+        case 'name':
+            isValid = regexPatterns.name.test(value);
+            errorMessage = "Please enter a valid name (letters and spaces only).";
+            break;
+        case 'email':
+            isValid = regexPatterns.email.test(value);
+            errorMessage = "Please enter a valid email address.";
+            break;
+        case 'number':
+            isValid = regexPatterns.number.test(value);
+            errorMessage = "Please enter a valid contact number (numbers only).";
+            break;
+        default:
+            console.error("Invalid input type specified.");
+            return;
+    }
+
+    // Handle validation results
+    if (isValid) {
+        warningElement.classList.add('warning'); // Add warning class to hide the error message
+        warningElement.textContent = ""; // Clear any existing error message
+    } else {
+        warningElement.classList.remove('warning'); // Remove warning class to show the error message
+        warningElement.textContent = errorMessage; // Display the appropriate error message
+    }
+}
+
+
+
+
+    function hidebrochure() {
+        let applyNowPopUp = document.getElementById("raisebrochure");
+        if (applyNowPopUp) {
+            applyNowPopUp.classList.remove("active")
+        }
+        $('#nameReportBro').val("");
+        $('#emailReportBro').val("");
+        $('#numberReportBro').val("");
+        $('#consentCheckRcb').prop('checked', false);
+        $('#consentCheckErrorRcb').addClass('warning');
+    }
+
+
+    function DownloadBrochure(formTitle, destination) {
+        const form = document.getElementById("raisebrochure");
+       // const h2 = document.querySelector("#form_headingBro");
+
+        form.classList.add("active");
+        h2.textContent = formTitle || h2.textContent;
+        form.setAttribute("data-destination", destination);
+        form.setAttribute("data-title", h2.textContent);
+
+        // Reset form
+        document.querySelector("#SuccessMessageBro").classList.add("hide");
+        document.querySelector("#submitbuttonreportBro").classList.remove("hide");
+        document.querySelector("#leadformContainerBro").classList.remove("hide");
+        document.querySelector("#form_headingBro").classList.remove("hide");
+
+    }
+
+</script>

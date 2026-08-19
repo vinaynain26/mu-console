@@ -1,0 +1,4898 @@
+.pgpCmt {
+  /* .brightnessMid {
+    filter: brightness(1.25)
+  }
+
+  .brightnessHeavy {
+    filter: brightness(1.40)
+  } */
+
+
+  @media (min-width: 1024px) and (max-width: 1280px) {
+    .labSection {
+      .terminalDivi {
+        right: 5%;
+      }
+
+      .labHeading {
+        bottom: 13%;
+        left: 7%;
+      }
+    }
+
+    .createrLab.labSection {
+      .terminalDivi {
+        right: 6%;
+      }
+    }
+  }
+
+  @media (min-width: 1400px) and (max-width: 1440px) {
+    .labSection {
+      .terminalDivi {
+        right: 5%;
+      }
+
+      .labHeading {
+        bottom: 13%;
+        left: 7%;
+      }
+    }
+
+    .createrLab.labSection {
+      .terminalDivi {
+        right: 7%;
+      }
+    }
+
+  }
+
+
+  @media (min-width: 1920px) {
+    .labSection {
+      .terminalDivi {
+        right: 14%;
+      }
+    }
+
+    .createrLab.labSection {
+      .terminalDivi {
+        right: 16%;
+      }
+    }
+  }
+
+  @media (min-width: 320px) and (max-width: 380px) {
+
+    .labSection {
+      .imageLab {
+        max-height: 100%;
+      }
+    }
+  }
+
+  .labSection {
+    position: relative;
+    padding: 0 !important;
+    line-height: 0;
+    border-bottom: 1px solid var(--black5);
+
+    .imageLab {
+      width: 100%;
+    }
+
+    .labHeading {
+      font-size: 72px;
+      line-height: 98.64%;
+      font-family: var(--go-semibold);
+      color: var(--white);
+      position: absolute;
+      bottom: 14%;
+      left: 8%;
+      font-weight: 600;
+    }
+
+    .mapDivi {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      position: absolute;
+      top: 30%;
+      left: 10%;
+    }
+
+    .mapPara {
+      font-size: 16px;
+      line-height: 120%;
+      font-family: var(--go-regular);
+      color: var(--white);
+
+    }
+
+    .mapDivi2 {
+      top: 7%;
+      left: 54%;
+
+    }
+
+    .mapDivi3 {
+      top: 27%;
+      left: 73.8%;
+    }
+
+    .terminalDivi {
+      position: absolute;
+      right: 8%;
+      bottom: 16%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
+
+    .terminalParaBox {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .unlimitHeading {
+      font-size: 28px;
+      line-height: 98.64%;
+      font-family: var(--go-medium);
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .locationBoxi {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .locationPara {
+      font-size: 16px;
+      line-height: 98.64%;
+      font-family: var(--go-semibold);
+      color: var(--white);
+      font-weight: 600;
+    }
+  }
+
+  .impactScroll .video-container:hover img.fade-img {
+    opacity: 1 !important;
+  }
+
+  .impactScroll {
+    padding-top: 40px;
+
+    .video-container img.fade-img {
+      cursor: unset !important;
+    }
+
+    .video-container {
+      cursor: unset !important;
+    }
+
+    .impactHeroPara {
+      color: var(--grey10);
+    }
+
+
+    .mobImpactImage {
+      position: relative;
+    }
+
+    .textHighlight {
+      color: var(--grey18) !important;
+    }
+
+    .impactHeadingWrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 20px 0;
+      z-index: 10;
+      background: var(--black);
+    }
+
+  }
+
+  .feeProcessContainer .rightSection::before {
+    top: 3px;
+  }
+
+  .white_semiBold {
+    color: var(--grey18);
+    font-family: var(--go-semibold);
+  }
+
+  .gradientTxt {
+    background: var(--Linear-Gradient, linear-gradient(91deg, #39B5D7 1.8%, #F7D544 50.99%, #E38330 99.75%));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+
+  .heroSectionAstro::after {
+     content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 1.4) 0%,
+      rgba(0, 0, 0, 0.4) 40%,
+      rgba(0, 0, 0, 0.2) 70%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    height: 50%;
+
+  }
+
+  .heroSectionAstro {
+    position: relative;
+    line-height: 0;
+    z-index: 9;
+    padding: 0px 0 0;
+    overflow: hidden;
+    min-height: 100vh;
+    background: var(--black);
+
+    .heroSectionImg video {
+      width: 100%;
+    }
+
+    .video-container {
+      max-height: 94vh !important;
+      position: relative;
+    }
+
+   
+
+    .heroSectionContent .go-HeroSubtitle {
+      color: var(--grey4);
+    }
+
+    .heroSectionText {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translate(-50%, -30%);
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      gap: 32px;
+      width: 100%;
+      z-index: 5;
+    }
+
+    .heroSectionHeadingWrap {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .heroUnderline {
+      text-decoration: underline;
+      text-decoration-thickness: 3px;
+    }
+
+    .subPointSpan {
+      font-family: var(--go-semibold);
+      color: var(--grey18);
+      font-size: 16px;
+      line-height: 150%;
+    }
+
+    .heroSectionPointers {
+      display: flex;
+      gap: 19px;
+    }
+
+    .heroSubPoint {
+      font-size: 16px;
+      line-height: 150%;
+      font-family: var(--go-regular);
+      color: var(--grey10);
+      text-align: center;
+      list-style: disc;
+      padding-right: 18px;
+
+    }
+
+    .heroSectionBtnWrap {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  .programmeBreatherNew {
+    background: linear-gradient(125deg, #39b6d8 -20%, #f7d344 50%, #e38330 100%);
+    padding: 60px 0;
+
+    .twelthSup {
+      font-size: 14px;
+      font-family: var(--go-semibold);
+      line-height: 0;
+    }
+
+    .programmeBreatherWrapper {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+
+    }
+
+    .firstTbmBoxi {
+      min-height: 114px;
+    }
+
+    .programmeBreatherLeft>img {
+      border-radius: 10px;
+    }
+
+    .programmeBreatherLeft {
+      width: 100%;
+      max-width: 642px;
+      position: relative;
+      border-radius: 10px;
+      line-height: 0;
+    }
+
+    .masterPlay {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      left: 0;
+      top: 0;
+      cursor: pointer;
+
+      svg {
+        backdrop-filter: blur(2px);
+        border-radius: 60px;
+
+      }
+    }
+
+    .programmeBreatherRight {
+      width: 100%;
+      max-width: 574px;
+
+      background: var(--white);
+      border-radius: 10px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      max-height: fit-content;
+
+    }
+
+    .boxiUpperLeft {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 55%;
+    }
+
+    .boxiUpper {
+      display: flex;
+      gap: 24px;
+      align-items: stretch;
+      margin-top: 32px;
+      min-height: 244px;
+    }
+
+    .smallBoxi {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .eligibilityBoxi {
+      color: var(--grey15);
+      line-height: 150%;
+      font-size: 12px;
+      font-family: var(--go-regular);
+      text-transform: uppercase;
+    }
+
+    .classContentBoxi {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .classText {
+      line-height: 120%;
+      font-size: 24px;
+      color: var(--black);
+      font-family: var(--go-medium);
+    }
+
+    .classPara {
+      font-size: 14px;
+      line-height: 120%;
+      color: var(--grey15);
+      font-family: var(--go-medium);
+    }
+
+    .rightBoxiSection {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      max-width: 45%;
+      gap: 15px;
+    }
+
+    .buttonsParent {
+      display: flex;
+      width: 100%;
+      gap: 16px;
+      margin-top: 32px;
+      align-items: flex-start;
+    }
+
+
+    .whiteApplyButton {
+      gap: 50px;
+      padding: 14px 30px;
+      justify-content: space-between;
+    }
+
+
+    .whiteApplyButton,
+    .downloadBroucherButton {
+      width: 100%;
+      max-width: 50%;
+    }
+
+    .firstBoxi {
+      border-bottom: 1px solid var(--grey4);
+      padding-bottom: 16px;
+    }
+
+    .lineDuration {
+      background-color: var(--grey4);
+      width: 1px;
+    }
+  }
+
+  .numberIconsWhite {
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--grey15);
+    max-width: 26px;
+    max-height: 26px;
+    border-radius: 60px;
+    color: var(--white);
+    font-family: var(--go-regular);
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .traderManager {
+    background: var(--black);
+
+    .traderWrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .traderHeading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .marqueeCards {
+      width: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      margin-top: 32px;
+    }
+
+    .marqueeInnerWrap {
+      width: 100%;
+      height: 100%;
+    }
+
+    .marqueeReverse {
+      height: 100%;
+      width: max-content;
+      align-items: center;
+      display: flex;
+      position: relative;
+      animation: marqueeReverse 20s linear infinite;
+      will-change: transform;
+      gap: 20px;
+    }
+
+    .traderCardsBox {
+      border: 1px solid var(--grey4);
+      background: var(--grey16);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-start;
+      /* min-height: 221px; */
+      min-height: 250px;
+      max-width: 300px;
+      width: 100%;
+    }
+
+    .traderDetails {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .traderCardHeading {
+      font-size: 22px;
+      line-height: 120%;
+      color: var(--black);
+      font-family: "Fraunces", serif;
+      font-weight: 350;
+    }
+
+    .traderSubText {
+      font-size: 14px;
+      line-height: 150%;
+      font-family: var(--go-regular);
+      color: var(--grey3);
+    }
+  }
+
+  .curriculumOutclassDs {
+    padding-top: 60px;
+    background: var(--white3);
+
+    .faqHeadingItem .faqHeading {
+      color: var(--grey10);
+      font-family: 'go-semibold';
+    }
+
+    .curriculumOutclassWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .curriculumDsUpper {
+      position: sticky;
+      top: 5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--white3);
+      padding-block: 20px;
+      z-index: 10;
+    }
+
+    .curriculumDsUpper a:hover img {
+      transform: translateY(4px);
+    }
+
+    .curriculumDsUpper a img {
+      transition: 0.3s;
+    }
+
+    .curriculumDsBelow {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .dsBelowLeft {
+      width: 100%;
+      max-width: 630px;
+    }
+
+    .portfolioWrapperLeft {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: sticky;
+      top: 12rem;
+    }
+
+    .portfolioStepWrapper {
+      padding: 16px 24px;
+      background: var(--white);
+      border-radius: 8px 8px 0px 0px;
+      border: 0.5px solid var(--grey18);
+      position: relative;
+      margin-bottom: -10px;
+      cursor: pointer;
+
+    }
+
+    .portfolioStepWrapper.step6 {
+      width: 100%;
+      max-width: 288px;
+
+    }
+
+    .portfolioStepWrapper.step5 {
+      width: 100%;
+      max-width: 322px;
+
+    }
+
+    .portfolioStepWrapper.step4 {
+      width: 100%;
+      max-width: 357px;
+
+    }
+
+    .portfolioStepWrapper.step3 {
+      width: 100%;
+      max-width: 391px;
+
+    }
+
+    .portfolioStepWrapper.step2 {
+      width: 100%;
+      max-width: 426px;
+
+    }
+
+    .portfolioStepWrapper.step1 {
+      width: 100%;
+      max-width: 460px;
+      border-radius: 8px;
+
+
+    }
+
+    .stepContent {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      align-items: center;
+    }
+
+
+
+    .tradingHeading {
+      color: var(--black);
+      font-family: var(--go-medium);
+      font-size: 24px;
+      line-height: 120%;
+    }
+
+    .portfolioStepWrapper.active {
+      background: var(--black);
+
+      .tradingHeading {
+        background: var(--Linear-Gradient, linear-gradient(91deg, #39B5D7 1.8%, #F7D544 50.99%, #E38330 99.75%));
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .stepContent img {
+        filter: brightness(0.3);
+      }
+
+    }
+
+    .faqHeadingsWrapper.mobView {
+      display: none;
+    }
+
+    .dsBelowRight {
+      width: 100%;
+      max-width: calc(100% - 680px);
+    }
+
+    .classRomFaqWrap {
+      justify-content: space-between;
+      display: flex;
+      /* gap: 5px; */
+      background: transparent;
+      padding: 0;
+      border-radius: 4px;
+      border: 0.5px solid var(--grey4);
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+
+    .classRomFaqWrap .left {
+      display: flex;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--white);
+      border-radius: 4px;
+      padding: 12px;
+    }
+
+    .leftDsBottom {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .termBtn {
+      background: var(--black);
+      border-radius: 20px;
+      padding: 3px 10px;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      line-height: 120%;
+      color: var(--white);
+      justify-content: center;
+      max-width: fit-content;
+    }
+
+    .termHeading {
+      font-size: 18px;
+      line-height: 150%;
+      color: var(--black);
+      font-family: var(--go-semibold);
+    }
+
+    .dsBelowRight .content-section {
+      width: 100%;
+    }
+
+    .contentOfOutClass {
+      padding: 18px 12px;
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: auto;
+    }
+
+    .paraContent {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .inclassansUl {
+      border-top: 1px solid var(--grey4);
+      border-bottom: unset;
+    }
+
+    .inclassDataParent {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .faqContent {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      border-bottom: 1px solid var(--grey4);
+      padding-bottom: 8px;
+      align-items: flex-start;
+    }
+
+    .faqText {
+      color: var(--grey3);
+      font-size: 14px;
+      font-family: var(--go-regular);
+      line-height: 150%;
+    }
+
+    .faqContent:last-child {
+      border-bottom: unset;
+    }
+
+    .faqBlackBold {
+      font-family: var(--go-semibold);
+      line-height: 150%;
+      color: var(--black);
+    }
+  }
+
+  .reachoutBreatherSection {
+    background: linear-gradient(96deg, #39B5D7 -31.01%, #F7D544 49.05%, #E38330 109.58%);
+    padding: 60px 0 !important;
+
+    .reachoutBreatherWrapper {
+      display: flex;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .supportHeadingWrapper {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 8px;
+      border-bottom: 2px solid var(--grey4);
+      padding-bottom: 8px;
+      width: 100%;
+    }
+
+    .supportPara {
+      font-size: 14px;
+      line-height: 120%;
+      font-family: var(--go-regular);
+      color: var(--grey3);
+    }
+
+    .reachoutLefti {
+      width: 100%;
+      max-width: 57.1%;
+      border-radius: 16px;
+      background: var(--white);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: flex-start;
+      max-height: 267px;
+      overflow: hidden;
+    }
+
+    .go-BreatherHeading {
+
+      width: 100%;
+    }
+
+    .reachoutRight {
+      width: 100%;
+      max-width: 39.6%;
+      overflow: hidden;
+    }
+
+    .supportInfoWrapper {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .supportDivi {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .supportDivi>img {
+      max-width: 40px;
+      max-height: 40px;
+    }
+
+    .supportMailDivi {
+      display: flex;
+      gap: 5px;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .impotantNote {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 14px;
+      line-height: 120%;
+      font-family: var(--go-medium);
+      color: var(--grey17);
+    }
+
+    .supportBelowWrap {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .supportBoxiText {
+      font-size: 16px;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 120%;
+      font-family: "fraunces", serif;
+      color: var(--grey);
+      display: none;
+    }
+
+    .supportcontentText {
+      font-size: 16px;
+      line-height: 120%;
+      font-family: var(--go-medium);
+      color: var(--grey17);
+    }
+  }
+
+  .curriculumOutclassDs.pointsList {
+    .classRomFaqWrap {
+      justify-content: space-between;
+      display: flex;
+      background: transparent;
+      padding: 0;
+      border-radius: 6px;
+      border: unset !important;
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+
+    .classRomFaqWrap .left {
+      display: flex;
+      gap: 15px;
+      justify-content: space-between;
+      align-items: flex-start;
+      background: var(--white);
+      border-radius: 6px;
+      padding: 12px;
+    }
+
+    .inclassansUl {
+      display: flex;
+      gap: 20px;
+      background: var(--white);
+      padding: 0 12px;
+      border-bottom: 1px solid var(--grey4);
+      border-top: unset;
+    }
+
+    .faqBlackBold {
+      font-family: var(--go-semibold);
+      color: var(--grey3);
+    }
+
+    .inclassansUl li.active::after {
+      content: "";
+      display: block;
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      border-bottom: 1px solid var(--black);
+      z-index: 2;
+    }
+
+    .curriculumOutclassWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .inclassansUl li {
+      text-wrap: nowrap;
+      position: relative;
+      font-size: 13px;
+      line-height: 150%;
+      padding: 8px 0px;
+      color: var(--grey10);
+      font-family: var(--go-semibold);
+    }
+
+    .inclassansUl li.active {
+      transition: all 0.4s ease-in-out;
+      color: black;
+    }
+
+    .contentOfOutClass {
+      padding: 18px 12px;
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: auto;
+      width: 100%;
+    }
+
+    .outclassContentDivi {
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--grey4);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .headingParagraph {
+      font-size: 13px;
+      font-family: var(--go-semibold);
+      line-height: 140%;
+      color: var(--black17);
+    }
+
+    .pointLists {
+      list-style: disc;
+      padding-left: 18px;
+      margin-top: 5px;
+    }
+
+    .inClassAns {
+      font-size: 13px;
+      font-family: var(--go-regular);
+      line-height: 150%;
+      color: var(--grey3);
+    }
+
+    .viewMoreButton {
+      background: var(--white3);
+      font-family: "Fraunces", serifs;
+      font-weight: 350;
+      border-radius: 16px;
+      border: 1px solid var(--grey4);
+      max-width: fit-content;
+      font-size: 13px;
+      display: flex;
+      gap: 10px;
+      color: var(--black);
+      cursor: pointer;
+      align-items: center;
+      padding: 6px 10px;
+    }
+
+    .inclassansUl li.active::after {
+      content: "";
+      display: block;
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      border-bottom: 1px solid var(--black);
+      z-index: 2;
+    }
+
+    .classRomFaqWrap .toggler {
+      max-width: 36px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .classRomFaqWrap.active .toggler {
+      filter: invert(1);
+      transform: rotate(45deg);
+      transition: 0.4s ease-in;
+    }
+
+    .dsBelowLeft .insideFaqImg {
+      position: sticky;
+      top: 13rem;
+      border-radius: 8px;
+    }
+
+    .dsBelowLeft.masterImage {
+      overflow: unset;
+    }
+  }
+
+  .tradeWithExpert {
+    padding: 60px 0px;
+    background: linear-gradient(to bottom, var(--white) 50%, var(--black) 50%);
+    border-bottom: 1px solid var(--black5);
+
+    .tradeExpertWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 60px;
+    }
+
+    .tradeExpertUpper {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .tradeExpertLeft {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      max-width: 44%;
+    }
+
+    .tradeSubHeading {
+      font-size: 16px;
+      line-height: 150%;
+      color: var(--grey3);
+      font-family: var(--go-regular);
+    }
+
+    .black_semibold {
+      color: var(--black);
+      font-family: var(--go-semibold);
+      /* font-weight: 500; */
+    }
+
+    .tradeExpertRight {
+      width: 100%;
+      max-width: 40%;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tradePointer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .numberIcons {
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--grey15);
+      max-width: 26px;
+      max-height: 26px;
+      border-radius: 60px;
+      color: var(--black);
+      font-family: var(--go-regular);
+      font-size: 14px;
+      line-height: 150%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .tradePointText {
+      font-size: 14px;
+      line-height: 150%;
+      font-family: var(--go-regular);
+      color: var(--grey3);
+    }
+
+    .tradeExpertLower {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+
+      .macImg{
+        width: 100%;
+        max-width: 960px;
+      }
+    }
+
+    .tradeExpertDivi {
+      position: absolute;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--grey4);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      top: 71px;
+      right: 31px;
+    }
+
+    .tradeExpertSecondDiv {
+      position: absolute;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--grey4);
+      background: var(--grey16);
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      top: 27%;
+      left: 14%;
+    }
+
+    .tradeExpertThirdDiv {
+      position: absolute;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid var(--grey4);
+      background: var(--grey16);
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      bottom: 21%;
+      right: 9%;
+    }
+  }
+
+  .certifiedSebi {
+    background: url(https://images.mastersunion.link/uploads/04072025/v1/certifiedSebiVector.svg), linear-gradient(to top, var(--white) 44%, var(--black) 43%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 60px;
+    background-position-y: -6px;
+
+    .certifiedSebiWrap {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .certifiedSebiUpper {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .certifiedSebiLeft {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .certifiedSebiSubText {
+      font-size: 16px;
+      line-height: 150%;
+      font-family: var(--go-regular);
+      color: var(--grey10);
+    }
+
+    .certifiedSebiRight {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .certifiedPointer {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .numberIconsWhite {
+      align-items: center;
+      padding: 10px;
+      border: 1px solid var(--grey15);
+      max-width: 26px;
+      max-height: 26px;
+      border-radius: 60px;
+      color: var(--white);
+      font-family: var(--go-regular);
+      font-size: 14px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .certifiedText {
+      font-size: 14px;
+      line-height: 150%;
+      font-family: var(--go-regular);
+      color: var(--grey10);
+    }
+
+    .white_semiBold {
+      color: var(--grey18);
+      font-family: var(--go-semibold);
+    }
+
+
+    .certifiedSebiBelow {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .learnTrading {
+    background: var(--black);
+    border-bottom: 1px solid var(--black5);
+
+    .learnTradeUpper {
+      display: flex;
+      gap: 30px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .learnTradeLeft {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      width: 100%;
+      max-width: 48%;
+    }
+
+    .learnTradePoints {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .learnTradeDetail {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .learnTradeText {
+      font-size: 14px;
+      line-height: 150%;
+      font-family: var(--go-regular);
+      color: var(--grey10);
+    }
+
+    .white_semiBold {
+      color: var(--grey18);
+      font-family: var(--go-semibold);
+    }
+
+    .learnTradeRight {
+      width: 100%;
+      max-width: 48%;
+      line-height: 0;
+    }
+
+    .learnTradeImg {
+      position: relative;
+    }
+
+    .mastersScroll {
+      margin-top: 80px;
+      overflow: hidden;
+    }
+
+    .marqueesliders {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 16px;
+      overflow: auto;
+    }
+
+    /* .newMasterDetailsWrap {
+      border-radius: 0px 0px 8px 8px;
+      line-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    } */
+
+    .marqueeCards {
+      width: 100%;
+      /* pointer-events: none; */
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      margin-top: 80px;
+    }
+
+    .newMasterDetailsWrap {
+      padding: 16px 8px;
+    }
+
+    .newMasterDetailsWrap h3 {
+      font-size: 16px;
+      line-height: 120%;
+      color: var(--white);
+      font-family: var(--go-regular);
+    }
+
+    .newMasterDetailsWrap h4 {
+      font-size: 12px;
+      line-height: 120%;
+      font-family: var(--go-regular);
+      color: var(--grey18);
+      margin-top: 4px;
+    }
+
+    .newMasterDetailsWrap svg {
+      margin-top: 10px;
+      max-width: 200px;
+      max-height: 35px;
+      min-height: 35px;
+    }
+
+    .marqueeInnerWrap {
+      width: 100%;
+      height: 100%;
+    }
+
+    .marqueeReverse {
+      height: 100%;
+      width: max-content;
+      align-items: center;
+      display: flex;
+      position: relative;
+      animation: marqueeReverse 30s linear infinite;
+      will-change: transform;
+      gap: 20px;
+    }
+
+    .learnMasterBox {
+      position: absolute;
+      top: 20px;
+      width: 197px;
+      right: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.10);
+      gap: 10px;
+      backdrop-filter: blur(3.5px);
+    }
+
+    .learnMasterName {
+      font-size: 18px;
+      line-height: 120%;
+      color: var(--white);
+      font-family: var(--go-regular);
+    }
+
+    .learnMasterDiv {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .learnMasterDesig {
+      font-size: 18px;
+      line-height: 120%;
+      font-style: italic;
+      font-family: "Fraunces", serif;
+      font-weight: 350;
+      color: var(--white);
+      opacity: 0.7;
+    }
+
+    .masterDataBox {
+      border-radius: 8px;
+      border: 1px solid var(--black5);
+      overflow: hidden;
+      min-width: 240px;
+      max-width: 268px;
+    }
+
+    .imgMasterdiv {
+      line-height: 0;
+    }
+
+    .masterDetailDivi {
+      background: var(--grey17);
+      padding: 16px 8px;
+      margin: 0;
+    }
+
+    .masterDataWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .masterInfo {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .programMasterName {
+      font-size: 16px;
+      line-height: 120%;
+      color: var(--white);
+      font-family: var(--go-regular);
+    }
+
+    .programMasterDesig {
+      font-size: 12px;
+      line-height: 120%;
+      font-family: var(--go-regular);
+      color: var(--grey18);
+    }
+
+    .masterCompanyLogo {
+      border-bottom: 1px solid var(--black5);
+      padding-bottom: 12px;
+    }
+
+    /* .masterCompanyLogo img {
+      width: 100%;
+      max-width: 200px;
+      max-height: 35px;
+      min-height: 35px;
+
+    } */
+
+    .newMasterBoxImg {
+      line-height: 0;
+      max-width: 100%;
+      min-width: 16%;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .masterDescription {
+      font-size: 12px;
+      line-height: 120%;
+      font-family: var(--go-regular);
+      color: var(--grey10);
+      min-height: 28px;
+      margin-top: 12px;
+
+    }
+
+    .marqueeCards:hover .marqueeReverse {
+      animation-play-state: paused;
+    }
+
+    .learningDisclaimer {
+      margin-top: 40px;
+      font-size: 10px;
+      font-family: var(--go-regular);
+      line-height: 150%;
+      color: var(--grey10);
+      margin-left: 2px;
+    }
+  }
+
+  .realInvestment {
+    background: var(--black);
+    padding-top: 60px;
+    padding-bottom: 0px;
+    line-height: 0;
+
+    .realInvestImg {
+      position: relative;
+    }
+
+    .realInvestContent {
+      position: absolute;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      top: 20px;
+      width: 90%;
+      /* gap: 80px; */
+      left: 60px;
+    }
+
+    .realInvestHeading {
+      font-size: 16px;
+      line-height: 120%;
+      color: var(--grey10);
+      font-family: var(--go-regular);
+    }
+
+    .watchVideoText {
+      font-size: 24px;
+      font-family: var(--go-semibold);
+      color: var(--white);
+      line-height: 150%;
+    }
+
+    .masterPlay.watchPlayBtn {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      top: 8%;
+      width: fit-content;
+      height: fit-content;
+      left: 45%;
+      top: 50%;
+    }
+  }
+
+  .investmentFund {
+    .investmentWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .investmentHeading {
+      text-align: center;
+    }
+
+    .investmentFlexWrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      row-gap: 32px;
+    }
+
+    .investMasterBox {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+      width: 100%;
+      max-width: 226px;
+    }
+
+    .investBoxDetails {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .investRecruiteDetail {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--grey4);
+      padding-bottom: 6px;
+    }
+
+    .investRecruiterName {
+      font-size: 12px;
+      font-family: var(--go-regular);
+      line-height: 150%;
+      color: var(--grey);
+    }
+
+    .investDesignation {
+      font-size: 12px;
+      font-family: var(--go-semibold);
+      line-height: 150%;
+      color: var(--black);
+    }
+  }
+
+  .fundPortfolio {
+    background: linear-gradient(to bottom, var(--white3) 50%, var(--black) 50%);
+    position: relative;
+    border-bottom: 1px solid var(--black5);
+    padding: 60px;
+
+    .fundPortfolioWrap {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .fundPortfolioUpper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fundPortfolioImg {
+      position: relative;
+      max-width: 904px;
+      margin: 0 auto;
+    }
+  }
+
+  .walkAway {
+    background: var(--black);
+    padding: 60px 0px;
+
+    .walkAwayWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .walkAwayImage {
+      width: 100%;
+      position: relative;
+      line-height: 0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .walkAwayBelowWrap {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+    }
+
+    .walkAwayLeft {
+      width: 100%;
+      max-width: 50%;
+    }
+
+    .awayHeading {
+      font-size: 30px;
+      color: var(--white);
+      line-height: 120%;
+      font-family: var(--go-regular);
+      font-weight: 400;
+    }
+
+    .awayItalic {
+      font-size: 34px;
+      font-style: italic;
+      line-height: 120%;
+      font-family: "Fraunces", serif;
+      font-weight: 350;
+    }
+
+    .walkAwayRight {
+      width: 100%;
+      max-width: 50%;
+    }
+
+    .walkContentWrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .walkDetails {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .listNumber {
+      border-radius: 60px;
+      border: 1px solid var(--grey15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      max-width: 26px;
+      max-height: 26px;
+      font-size: 14px;
+      line-height: 150%;
+      color: var(--white);
+    }
+
+    .walkText {
+      font-size: 14px;
+      line-height: 150%;
+      font-family: var(--go-regular);
+      font-weight: 400;
+      color: var(--grey10);
+    }
+
+    .walkBold {
+      font-family: var(--go-semibold);
+      font-weight: 600;
+      line-height: 150%;
+      color: var(--grey18);
+    }
+
+    .walkDisclaimer {
+      margin-top: 32px;
+      font-size: 10px;
+      line-height: 150%;
+      color: var(--grey10);
+      font-family: var(--go-regular);
+    }
+
+    .diclaimerBold {
+      color: var(--grey18);
+    }
+  }
+
+  .curriculumTrader {
+    background: url(https://images.mastersunion.link/uploads/04072025/v1/curriculumVector.svg), linear-gradient(100deg, #39B6D8 -19.33%, #F7D344 40.46%, #E38330 100.24%);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    padding: 40px 0px;
+
+    .curriculumTraderWrap {
+      background-color: var(--white);
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 auto;
+      gap: 30px;
+      max-width: 90%;
+    }
+
+    .tradeWrapLeft {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .tradeLeftText {
+      font-size: 14px;
+      line-height: 150%;
+      font-family: var(--go-regular);
+      color: var(--grey3);
+    }
+
+    .tradeWrapRight {
+      width: 100%;
+      max-width: 481px;
+    }
+  }
+
+  .insideOutside {
+    background: var(--white3);
+    padding: 60px 0px;
+
+    .insideOutsideWrap {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .insideOutsideUpper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--white3);
+      position: sticky;
+      top: 5.5rem;
+      z-index: 10;
+    }
+
+    .insideOutsideBelow {
+      display: flex;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .insideOutsideLeft {
+      width: 100%;
+      max-width: 630px;
+    }
+
+    .insideOutsideRight {
+      width: 100%;
+      max-width: calc(100% - 680px);
+    }
+  }
+
+  .impactScroll {
+    background: var(--black);
+    padding-top: 60px;
+
+    .sectionGradientHead {
+      font-family: "Fraunces", serif !important;
+      font-weight: 400;
+
+    }
+
+    .sectionHeadingFr {
+      font-size: 30px !important;
+    }
+
+    .impactWrapper {
+      display: flex;
+      gap: 80px;
+    }
+
+    .impactRight {
+      width: 45%;
+      border-inline: 1px solid var(--black5);
+      position: relative;
+
+      .video-container {
+        top: 13rem !important;
+
+      }
+
+      img {
+        position: sticky;
+        top: 7rem;
+      }
+    }
+
+    .impactLeft {
+      width: 50%;
+
+    }
+
+    .impactLeftUpper {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .impactLeftBoxInner {
+      display: flex;
+      flex-direction: column;
+      gap: 160px;
+      margin-top: 80px;
+      position: relative;
+    }
+
+    .impactLeftBox {
+      position: relative;
+      padding-left: 65px;
+
+    }
+
+    .impactLeftBox:nth-of-type(5)::after {
+      content: '';
+      position: absolute;
+      background: url(https://images.mastersunion.link/uploads/22072025/v2/icon3.svg) !important;
+      background-repeat: no-repeat;
+      width: 40px;
+      height: 40px;
+      left: 0;
+      top: 0;
+    }
+
+    .impactLeftBox::after {
+      content: '';
+      background: url(https://images.mastersunion.link/uploads/22072025/v2/tradeIcon.svg) !important;
+      width: 40px;
+      height: 40px;
+      left: 0;
+    }
+
+    .impactLeftBox:nth-of-type(3)::after {
+      content: '';
+      background: url(https://images.mastersunion.link/uploads/22072025/v3/wealthIcon.svg) !important;
+      width: 40px;
+      height: 41px;
+    }
+
+    .impactLeftBox:nth-of-type(7)::after {
+      content: '';
+      background: url(https://images.mastersunion.link/uploads/22072025/v3/icon4.svg) !important;
+      width: 40px;
+      height: 40px;
+    }
+
+    .impactLeftBoxInner::before {
+      content: '';
+      position: absolute;
+      background: var(--black5);
+      width: 2px;
+      height: 100%;
+      left: 1.2rem;
+      top: 0;
+    }
+
+    .ulListWrapper {
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-direction: column;
+      margin-top: 12px;
+
+      .poweredDivi {
+        align-items: flex-start;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .appliedPara {
+        color: var(--grey10);
+        line-height: 150%;
+        font-size: 16px;
+      }
+
+      .poweredDivi>img {
+        filter: invert(1);
+        max-width: 18px;
+      }
+    }
+
+    .dateTag {
+      color: var(--grey4);
+      font: 13px 'go-regular';
+      text-transform: uppercase;
+      line-height: 120%;
+      padding: 6px 12px;
+      border-radius: 40px;
+      text-align: center;
+      background: var(--black5);
+      width: fit-content;
+      letter-spacing: 0.26px;
+      margin-bottom: 10px;
+
+      span {
+        background: linear-gradient(92deg, #39B5D7 46.88%, #F7D544 73.88%, #E38330 100.65%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-family: "Fraunces", serif;
+        font-size: 12px;
+
+        font-weight: 400;
+        width: fit-content;
+      }
+    }
+
+    .go-HeroSubtitle {
+      color: var(--grey10);
+    }
+
+    .textHighlight {
+      color: var(--grey4);
+      font-family: var(--go-semibold);
+    }
+
+    .impactButton {
+      display: flex;
+      padding: 6px 12px;
+      align-items: center;
+      gap: 4px;
+      border-radius: 40px;
+      background: #313131;
+      color: var(--grey4);
+      font-size: 13px;
+      font-family: var(--go-regular);
+      line-height: 120%;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      max-width: max-content;
+    }
+
+    .techPointersParent {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .circleNumber {
+      align-items: center;
+      padding: 10px;
+      border: 1px solid #525252;
+      max-height: 26px;
+      max-width: 26px;
+      border-radius: 60px;
+      color: var(--white);
+      font-family: var(--go-regular);
+      font-size: 14px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .techPointerChild {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+    }
+
+    .pointerPara {
+      font-size: 16px;
+      font-family: var(--go-regular);
+      line-height: 150%;
+      color: var(--grey10);
+
+    }
+
+    .stickyHead {
+      position: sticky;
+      top: 78px;
+      padding: 20px 0;
+      z-index: 10;
+      background: var(--black);
+    }
+
+    .impactHeroPara {
+      margin-top: 8px;
+    }
+  }
+
+  .enrollmentSection {
+    background: url(https://images.mastersunion.link/uploads/08052025/v2/Vector13518.svg), var(--black);
+    background-repeat: no-repeat;
+    padding: 80px 0;
+    background-size: cover;
+
+    .enrollmentWrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .go-HighlightHeading {
+      text-align: center;
+    }
+
+    .threeCards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      width: fit-content;
+      gap: 12px;
+    }
+
+    .fourCards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .gridCard {
+      position: relative;
+      overflow: hidden;
+      max-height: unset;
+      border-radius: 8px;
+    }
+
+    .enrollOverlay {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      transition: all 0.3s ease;
+      opacity: 1;
+    }
+
+    .onhoverOverlay {
+      position: absolute;
+      gap: 12px;
+      border-radius: 8px;
+      background: linear-gradient(to top, rgb(0 0 0 / 53%) 0%, rgb(255 255 255 / 0%) 100%);
+      background-repeat: no-repeat;
+      padding: 16px 0 16px 16px;
+      flex-direction: column;
+      z-index: 5;
+      justify-content: flex-end;
+      display: flex;
+      opacity: 0;
+      left: 0;
+      bottom: 0;
+      height: 100%;
+      width: 100%;
+      transition: bottom 0.4s ease-in-out, opacity 0.4s ease-in-out;
+    }
+
+    .onhoverOverlay:hover {
+      opacity: 1;
+      bottom: 0;
+    }
+
+    .gridCardBlack {
+      position: absolute;
+      width: 100%;
+      height: 50%;
+      left: 0;
+      /* top: 0; */
+      bottom: 0;
+    }
+
+    .gridCard:hover .onhoverOverlay {
+      bottom: 0;
+    }
+
+    .onhoverOverlay .overlayNumber {
+      color: var(--grey4);
+      max-width: 90%;
+    }
+
+    .gridCard:hover .enrollOverlay {
+      opacity: 0;
+    }
+
+    .overlayNumber {
+      font-size: 14px;
+      line-height: 150%;
+      font-family: var(--go-regular);
+    }
+
+    .overlayText {
+      font-size: 22px;
+      line-height: 120%;
+      font-family: "fraunces", serif;
+      font-weight: 400;
+    }
+
+  }
+
+  .applicationTimeline {
+    background: var(--white);
+    padding-bottom: 40px !important;
+
+
+    th:first-child,
+    td:first-child {
+      width: 150px;
+    }
+
+    th:nth-child(2),
+    td:nth-child(2) {
+      width: 210px;
+    }
+
+    th:nth-child(5),
+    td:nth-child(5) {
+      width: 11%;
+    }
+
+    .applicationTimelineWrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 24px;
+      width: 100%;
+
+    }
+
+    .applicationTimelineTable {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+    }
+
+    .applicationTimelineTable thead {
+      background: var(--grey16);
+      width: 100%;
+    }
+
+    .headingTable {
+      font-size: 12px;
+      line-height: 120%;
+      font-family: var(--go-regular);
+      color: var(--black5);
+      padding: 12px 16px;
+      text-align: start;
+      font-weight: 400;
+    }
+
+    .timelineRow {
+      font-size: 14px;
+      line-height: 120%;
+      font-family: var(--go-medium);
+      color: var(--grey17);
+      text-align: start;
+      padding: 24px 16px;
+      font-weight: 500;
+    }
+
+    .greyActive {
+      padding: 4px 15px;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      border-radius: 60px;
+      background: var(--grey4);
+      font-size: 14px;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 120%;
+      font-family: "fraunces", serif;
+      width: fit-content;
+    }
+
+    .statusTable {
+      padding: 6px 15px;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+      font-family: "fraunces", serif;
+      width: fit-content;
+      background: #DDEBE5;
+      border-radius: 60px;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: 400;
+      line-height: 120%;
+      color: #1C7C54;
+    }
+
+    .roundRow {
+      border-bottom: 1px solid var(--grey4);
+    }
+
+    .applicationDivi {
+      width: 100%;
+    }
+
+    .notActiveRow {
+      .timelineRow {
+        color: var(--grey10);
+      }
+
+      .statusTable {
+
+        background: #FADFE1;
+        font-size: 14px;
+        font-style: italic;
+        font-weight: 400;
+        line-height: 120%;
+        color: #DF2935;
+      }
+
+      .btnBlack.btnSm {
+        backdrop-filter: blur(2.5px);
+        border: 1px solid var(--Grey-70, #D4D4D4);
+        background: var(--Grey-80, #E5E5E5);
+        color: var(--grey10);
+
+        svg path {
+          fill: #a3a3a3;
+        }
+      }
+
+      .greyActive {
+        color: var(--black);
+      }
+    }
+  }
+
+  .structureOfFee {
+    background: var(--black);
+    border-bottom: 1px solid var(--black5);
+
+    .structureWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .fr_heading {
+      font-size: 34px;
+      color: var(--white);
+      font-family: "Fraunces", serif;
+      font-weight: 350;
+      line-height: 120%;
+    }
+
+    .structureFeeTable {
+      width: 100%;
+    }
+
+    .tableFee {
+      width: 100%;
+      max-width: 100%;
+      border-collapse: collapse;
+    }
+
+    .tableFee thead {
+      background: var(--grey17);
+    }
+
+    .tableFee th {
+      font-size: 14px;
+      line-height: 150%;
+      color: var(--white);
+      font-family: var(--go-semibold);
+      padding: 16px;
+    }
+
+    .gradientTableText {
+      font-size: 10px;
+      line-height: 150%;
+      text-transform: uppercase;
+      font-family: var(--go-regular);
+      background: var(--Linear-Gradient, linear-gradient(91deg, #39B5D7 1.8%, #F7D544 50.99%, #E38330 99.75%));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .feeStructureParent {
+      width: 100%;
+    }
+
+    .feeStructureTable {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .structureWrapper {
+      gap: 16px;
+    }
+
+    .feeHeadRow {
+
+      border-radius: 16px 16px 0px 0px;
+      background: var(--grey17);
+    }
+
+    .feeHeadCol {
+      text-align: start;
+      padding-right: 20px;
+      padding: 12px 16px;
+      vertical-align: bottom;
+    }
+
+    .feeHeadCol:first-child {
+      border-top-left-radius: 16px;
+    }
+
+    .feeHeadCol:last-child {
+      border-top-right-radius: 16px;
+    }
+
+    .feeYearText {
+      font-size: 14px;
+      line-height: 150%;
+      font-family: var(--go-semibold);
+      color: var(--white);
+    }
+
+    .feeYearGradient {
+      font-size: 10px;
+      line-height: 150%;
+      font-family: var(--go-regular);
+      text-transform: uppercase;
+      background: var(--Linear-Gradient, linear-gradient(91deg, #39B5D7 1.8%, #F7D544 50.99%, #E38330 99.75%));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 4px;
+    }
+
+    .structureFeeCol {
+      padding: 16px;
+      text-align: start;
+      font-size: 16px;
+      line-height: 150%;
+      font-family: var(--go-regular);
+      color: var(--white);
+      text-wrap: nowrap;
+    }
+
+    .cautionBlack {
+      width: 100%;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 8px;
+      background: linear-gradient(var(--grey17) 0 0) padding-box, var(--gradient) border-box;
+      border: 1px solid transparent;
+    }
+
+    .cautionPara {
+      font-size: 11px;
+      line-height: 150%;
+      font-family: var(--go-regular);
+      color: var(--grey10);
+    }
+  }
+
+  .futureInvest {
+    background: var(--black);
+    padding-top: 60px;
+    padding-bottom: 200px;
+
+
+    .investingWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .futureInvestImg {
+      position: relative;
+    }
+
+    .futureInvestTextWrap {
+      position: absolute;
+      z-index: 1;
+      bottom: -30%;
+      width: 100%;
+    }
+
+    .futureInvestTextWrap::before {
+      content: "";
+      background: linear-gradient(102deg, #39b6d8 0%, #f7d344 50%, #e38330 100%);
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: calc(100% + 2px);
+      height: calc(100% + 2px);
+      z-index: 0;
+      border-radius: 14px;
+      z-index: -1;
+    }
+
+    .futureInvestContent {
+      display: inline-flex;
+      padding: 40px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 16px;
+      background: var(--black3);
+      top: 75%;
+      left: 0;
+      gap: 0;
+      position: relative;
+      z-index: 9;
+      width: 100%;
+    }
+
+
+    .futureInvsetbox {
+      display: flex;
+      flex-direction: column;
+      padding-right: 24px;
+      gap: 12px;
+      width: 100%;
+      max-width: 348px;
+      align-items: flex-start;
+      justify-content: center;
+      padding-left: 24px;
+      border-right: 1px solid var(--grey3);
+    }
+
+    .futureInvsetbox:nth-child(3) {
+      border-right: unset;
+      padding-right: unset;
+    }
+
+    .futureInvsetbox:nth-child(1) {
+      padding-left: unset;
+
+    }
+
+    .futurePercent {
+      font-size: 32px;
+      line-height: 120%;
+      color: var(--white);
+      font-family: "Fraunces", serif;
+    }
+
+    .futureText {
+      font-size: 16px;
+      line-height: 150%;
+      text-transform: capitalize;
+      color: var(--grey10);
+      font-family: var(--go-regular);
+    }
+  }
+
+  .lifeAtMuSection {
+    background: var(--black);
+
+    .lifeAtMuWrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 32px;
+    }
+
+    .lifeMuHeadingWrapper {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .lifeCardsWrapper {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .lifeMuCard {
+      position: relative;
+      max-width: 400px;
+      cursor: pointer;
+      border-radius: 10px;
+      max-height: fit-content;
+      overflow: hidden !important;
+    }
+
+
+    .lifeCardHeadWrapper {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      position: absolute;
+      padding: 0 22px;
+      bottom: 26px;
+      transition: opacity 0.4s ease-in-out;
+    }
+
+    .lifeCardHeading {
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 120%;
+      font-family: "fraunces", serif;
+    }
+
+    .lifeCardOverlay {
+      position: absolute;
+      border-radius: 16px;
+      background: linear-gradient(to top,
+          rgba(0, 0, 0, 1) 0%,
+          rgba(0, 0, 0, 0.85) 30%,
+          rgba(0, 0, 0, 0.6) 60%,
+          rgba(0, 0, 0, 0) 100%);
+      background-repeat: no-repeat;
+      padding: 24px;
+      flex-direction: column;
+      z-index: 5;
+      align-items: flex-end;
+      justify-content: space-between;
+      display: flex;
+      opacity: 0;
+      left: 0;
+      bottom: -100%;
+      height: 100%;
+      width: 100%;
+      transition:
+        bottom 0.4s ease-in-out,
+        opacity 0.4s ease-in-out;
+    }
+
+    .lifeMuCard:hover {
+      .lifeCardOverlay {
+        opacity: 1;
+        bottom: 0;
+      }
+
+      .lifeCardHeadWrapper {
+        opacity: 0;
+      }
+    }
+
+    .liveOverlayContent {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .lifeOverlayPara {
+      font-size: 13px;
+      line-height: 150%;
+      font-family: var(--go-regular);
+      color: var(--grey4);
+    }
+
+    .lifeCardOverlay>img {
+      max-width: 48px;
+      max-height: 48px;
+    }
+
+    .lifeCardOverlay a {
+      align-self: flex-end;
+    }
+  }
+
+  .feeProcess {
+    padding-top: 0px !important;
+
+    #growingDiv {
+      left: calc(33% - 6px);
+    }
+
+
+    .link-red {
+      color: #E38330 !important;
+      font-size: 14px;
+      line-height: 160%;
+    }
+
+    .procedureImg {
+      max-width: 60px;
+      max-height: 60px;
+    }
+
+    .feeProcessContainer .rightSection .body {
+      background: var(--grey16) !important;
+      border-radius: 8px;
+
+    }
+
+    .feeBox .body {
+      padding: 32px !important;
+    }
+
+    .detailsList .subHeading {
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 120%;
+      color: var(--grey3);
+      font-family: "Fraunces", serif;
+      margin-bottom: 8px;
+    }
+
+    .curriculumHead {
+      margin-top: 15px;
+      font-size: 14px;
+      font-family: var(--go-semibold);
+      line-height: 150%;
+      color: var(--grey3);
+    }
+
+    .evaluationHeading {
+      font-size: 14px;
+      font-family: var(--go-semibold);
+      line-height: 150%;
+      color: var(--grey3);
+      margin-top: 8px;
+    }
+
+    .detailsList .list li {
+      font-size: 14px;
+      margin-top: 0px;
+
+    }
+
+    .detailsList .list li p {
+      color: var(--grey3);
+    }
+
+    .statustext {
+      color: var(--grey3);
+    }
+  }
+
+  .upstoxSection {
+    padding: 60px 0 !important;
+    background: url('https://images.mastersunion.link/uploads/29082025/v1/Vector13512.webp'), var(--black);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-bottom: 1px solid var(--black5);
+
+    .lateralul {
+      list-style-type: disc;
+      padding-left: 20px;
+
+      color: var(--grey10);
+      font: 14px 'go-regular';
+      line-height: 180%;
+    }
+
+
+    .lateralWrapper {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .mob-visible {
+        width: 100%;
+
+        .btnClose {
+          width: 100%;
+        }
+      }
+    }
+
+    .lateralLeft {
+      width: 100%;
+      max-width: 634px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 32px;
+    }
+
+    .lateralRight {
+      width: 100%;
+      max-width: 538px;
+      line-height: 0;
+
+      img {
+        border-radius: 8px;
+      }
+    }
+
+    .lateralHeadingWrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .lateralPara {
+      font-size: 14px;
+      line-height: 150%;
+      font-family: var(--go-regular);
+      color: var(--white);
+      margin-top: 16px;
+    }
+
+    .lateralParaBold {
+      color: var(--grey18);
+      font-weight: 600;
+    }
+  }
+
+}
+
+
+@media (max-width: 767px) {
+  .pgpCmt {
+
+    .labSection {
+      .labHeading {
+        font-size: 32px;
+      }
+
+      .imageLab {
+        max-height: 85vh;
+      }
+
+      .unlimitHeading {
+        font-size: 13px;
+      }
+
+      .locationPara {
+        font-size: 12px;
+      }
+
+      .mapDivi>svg {
+        width: 100%;
+        height: 100%;
+        max-width: 6px;
+        max-height: 6px;
+      }
+
+      .mapDivi {
+        top: 24%;
+        left: 40%;
+        gap: 12px;
+      }
+
+      .mapDivi3 {
+        top: 10%;
+        left: 2%;
+      }
+
+      .mapDivi2 {
+        top: 2%;
+        left: 55%;
+      }
+
+      .mapPara {
+        font-size: 10px;
+      }
+
+      .locationBoxi>svg {
+        max-width: 12px;
+        max-height: 12px;
+      }
+
+      .labHeading {
+        bottom: 30%;
+        left: 6%;
+      }
+
+      .terminalDivi {
+        right: 12%;
+        bottom: 8%;
+      }
+    }
+
+    .upstoxSection {
+      .lateralWrapper {
+        flex-direction: column;
+        gap: 32px;
+        align-items: flex-end;
+        justify-content: flex-end;
+      }
+
+      .lateralHeadingWrapper {
+        flex-direction: column;
+        /* gap: 12px; */
+        align-items: flex-start;
+      }
+
+      .upstocxImg {
+        margin-top: 16px;
+      }
+    }
+
+    .programmeBreatherNew {
+      padding: 40px 0 !important;
+
+      .programmeBreatherWrapper {
+        gap: 20px;
+        flex-direction: column;
+      }
+
+      .firstTbmBoxi {
+        min-height: 109px !important;
+      }
+
+      .programmeBreatherRight {
+        padding: 16px;
+      }
+
+      .boxiUpper {
+        margin-top: 16px;
+        min-height: unset;
+      }
+
+      .eligibilityBoxi {
+        font-size: 10px;
+      }
+
+      .classText {
+        font-size: 18px;
+      }
+
+      .classPara {
+        font-size: 13px;
+      }
+
+      .firstBoxi {
+        gap: 4px;
+      }
+
+      .buttonsParent {
+        margin-top: 24px;
+        gap: 8px;
+        flex-direction: column !important;
+
+
+        a,
+        button {
+          width: 100%;
+
+          svg {
+            max-width: 20px;
+          }
+        }
+      }
+    }
+
+    .reachoutBreatherSection {
+      .reachoutBreatherWrapper {
+        flex-direction: column-reverse;
+        gap: 20px;
+        align-items: flex-start;
+      }
+
+      .reachoutLefti,
+      .reachoutRight {
+        max-width: 100%;
+      }
+
+      .reachoutLefti {
+        padding: 20px;
+        gap: 16px;
+      }
+
+
+      .supportInfoWrapper {
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .supportDivi>img {
+        max-width: 32px;
+        max-height: 32px;
+      }
+
+      .supportcontentText,
+      .supportBoxiText {
+        font-size: 13px;
+      }
+
+      .impotantNote {
+        font-size: 13px;
+      }
+
+      .supportBelowWrap {
+        gap: 16px;
+      }
+    }
+
+    .impactScroll {
+      padding: 40px 0 !important;
+      padding-bottom: 60px !important;
+
+      .stickyHead {
+        position: unset;
+      }
+
+      .impactLeft {
+        width: 100% !important;
+      }
+
+      .masterPlay>img {
+        backdrop-filter: blur(2px);
+        border-radius: 60px;
+      }
+
+      .impactHeadingWrapper {
+        padding: 0 0 32px 0 !important;
+
+      }
+
+
+      .impactMobCard {
+        display: flex;
+        padding: 12px;
+        background: var(--grey17);
+        border: 1px solid var(--grey3);
+        border-radius: 12px;
+        flex-direction: column;
+        gap: 24px;
+        position: sticky;
+        top: 8rem;
+        min-height: 452px;
+      }
+
+      .impactMobCard:last-child {
+        min-height: 535px;
+      }
+
+      .mobImpactImage {
+        max-height: 260px;
+        overflow: hidden !important;
+      }
+
+      .circleNumber {
+        max-height: 30px !important;
+      }
+
+      .impactLeftBoxInner {
+        gap: 60px;
+        margin-top: 60px;
+        margin-top: 32px !important;
+      }
+
+      .pointerPara {
+        font-size: 13px !important;
+      }
+
+      .techPointerChild {
+        align-items: flex-start;
+      }
+
+      .impactLeftBox {
+        position: relative;
+        padding-left: 0 !important;
+      }
+
+      .impactLeftBox::after {
+        scale: 0.8;
+        left: -10px;
+        display: none;
+      }
+
+      .impactLeftBoxInner::before {
+        left: 10px;
+        display: none;
+      }
+
+      .ulListWrapper {
+        margin-top: 12px !important;
+
+        .appliedPara {
+          font-size: 14px;
+        }
+
+        .poweredDivi>img {
+          max-width: 16px;
+        }
+
+        .techPointersParent {
+          gap: 5px !important;
+        }
+      }
+
+      .impactButton {
+        padding: 6px 12px !important;
+        font-size: 12px !important;
+        line-height: unset !important;
+        font-family: var(--go-regular);
+      }
+
+      .impactLeftBoxInner {
+        gap: 40px;
+      }
+
+      .impactLeftUpper {
+        display: flex;
+        flex-direction: column;
+        gap: 8px !important;
+        align-items: flex-start;
+      }
+
+      .poweredDivi {
+        gap: 12px !important;
+      }
+
+      .circleNumberMob {
+        width: 100%;
+        height: 100%;
+        max-width: 24px;
+        max-height: 24px;
+        align-items: center;
+        padding: 7px;
+        border: 1px solid #525252;
+        border-radius: 60px;
+        color: var(--white);
+        font-family: var(--go-regular);
+        font-size: 11px;
+        display: flex;
+        justify-content: center;
+      }
+
+    }
+
+    .numberIconsWhite {
+      max-width: 18px;
+      max-height: 18px;
+      line-height: 0;
+      font-size: 11px;
+    }
+
+    .heroSectionAstro {
+      position: relative;
+      line-height: 0;
+      z-index: 9;
+      padding: 80px 0 0;
+      overflow: hidden;
+      min-height: 80vh;
+      background: var(--black);
+      padding-bottom: 0 !important;
+
+      .heroSectionContent .go-HeroSubtitle {
+        color: var(--grey4);
+      }
+
+      .callBtn{
+        width: 100%;
+      }
+
+      .heroSectionHeadingWrap {
+        max-width: 100%;
+      }
+
+      .heroSectionText {
+        position: absolute;
+        bottom: -5%;
+        /* transform: translate(-50%, -20%); */
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        gap: 24px;
+      }
+
+      .go-HeroSubtitle {
+        margin-top: 12px;
+        opacity: 0.9;
+      }
+
+      .heroSectionBtnWrap {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        width: 100%;
+        padding-inline: 16px;
+        /* align-items: center; */
+      }
+
+      .heroSectionBtnWrap a {
+        width: 100%;
+      }
+
+      .heroSectionBtnWrap button {
+        width: 100%;
+      }
+
+      .heroSectionMarquee {
+        display: flex !important;
+      }
+
+      .heroMarqueeInner {
+        height: 100%;
+        width: 100%;
+      }
+
+      .marqueeReverse {
+        height: 100%;
+        width: max-content;
+        align-items: center;
+        display: flex;
+        position: relative;
+        animation: marqueeReverse 45s linear infinite;
+        will-change: transform;
+        gap: 20px;
+      }
+    }
+
+    .traderManager {
+      .traderCardHeading {
+        font-size: 20px;
+      }
+    }
+
+    .tradeWithExpert {
+      background: linear-gradient(to bottom, var(--white) 78%, var(--black) 31%);
+
+      .tradeExpertUpper {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .tradeExpertWrapper {
+        gap: 40px;
+      }
+
+      .tradeExpertLeft {
+        max-width: 100%;
+      }
+
+      .tradeExpertRight {
+        max-width: 100%;
+      }
+
+      .tradeSubHeading {
+        font-size: 14px;
+      }
+
+      .tradePointer {
+        align-items: flex-start;
+      }
+
+      .numberIcons {
+        max-width: 18px;
+        max-height: 18px;
+        font-size: 11px;
+        line-height: 0;
+      }
+    }
+
+    .fundPortfolio {
+      padding-top: 40px !important;
+
+      .fundPortfolioWrap {
+        gap: 24px;
+      }
+    }
+
+    .certifiedSebi {
+      background: linear-gradient(to top, var(--white) 29%, var(--black) 15%);
+
+      .certifiedSebiUpper {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .certifiedSebiSubText {
+        font-size: 14px;
+      }
+
+      .certifiedPointer {
+        align-items: flex-start;
+      }
+
+      .numberIconsWhite {
+        font-size: 11px;
+        max-width: 18px;
+        max-height: 18px;
+        line-height: 0;
+      }
+    }
+
+    .learnTrading {
+      .learnTradeUpper {
+        display: flex;
+        flex-direction: column;
+
+      }
+
+      .learnTradeLeft {
+        max-width: 100%;
+        gap: 24px;
+      }
+
+      .learnTradeText {
+        font-size: 14px;
+      }
+
+      .marqueeCards {
+        margin-top: 40px;
+      }
+
+      .dsaiMastersMobile .newMasterBoxImg {
+        min-width: 280px;
+      }
+
+    }
+
+    .realInvestment {
+      padding-bottom: 0px !important;
+
+      .investmentWrapper {
+        display: flex !important;
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+        padding-inline: 16px;
+      }
+
+      .watchVideoText {
+        font-size: 16px;
+      }
+
+
+      .realInvestHeading {
+        font-size: 13px;
+        text-align: center;
+        line-height: 150%;
+        font-weight: 400;
+        font-family: var(--go-regular);
+      }
+
+      .realInvestImg {
+        margin-top: 32px;
+      }
+
+      .masterPlay.watchPlayBtn {
+        left: 30%;
+        top: 44%;
+      }
+    }
+
+    .investmentFund {
+      .investmentFlexWrap {
+        flex-wrap: nowrap;
+        overflow: auto;
+        max-width: 100%;
+      }
+
+      .investMasterBox {
+        max-width: 100%;
+        min-width: 250px;
+      }
+
+      .masterPlay.watchPlayTextNew {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        top: 50%;
+        width: fit-content;
+        height: fit-content;
+        /* transform: translate(50%, -50%); */
+        left: 40%;
+      }
+    }
+
+    .impactScroll {
+
+      .impactLeft {
+        width: 100%;
+      }
+
+      .impactLeftBoxInner {
+        gap: 60px;
+        margin-top: 40px;
+      }
+
+      .pointerPara {
+        font-size: 13px !important;
+      }
+
+      .impactLeftBox {
+        position: relative;
+        padding-left: 0px !important;
+      }
+
+      .masterImage {
+        border-radius: unset !important;
+      }
+
+      .impactLeftBox::after {
+        scale: 0.8;
+        left: -10px;
+        display: none;
+      }
+
+      .impactLeftBoxInner::before {
+        left: 10px;
+        display: none;
+      }
+
+      .ulListWrapper {
+        .appliedPara {
+          font-size: 14px;
+        }
+
+        .poweredDivi>img {
+          max-width: 16px;
+        }
+      }
+
+      .impactButton {
+        padding: 6px 12px;
+        font-size: 12px;
+        line-height: 120%;
+        font-family: var(--go-regular);
+      }
+
+      .impactLeftBoxInner {
+        gap: 40px;
+      }
+
+      .impactLeftUpper {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+      }
+
+      .circleNumber {
+        max-width: 18px;
+        max-height: 18px;
+        font-size: 11px;
+        line-height: 0;
+      }
+
+    }
+
+    .walkAway {
+      .walkAwayBelowWrap {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .walkAwayLeft,
+      .walkAwayRight {
+        max-width: 100%;
+      }
+
+      .listNumber {
+        font-size: 11px;
+        max-width: 18px;
+        max-height: 18px;
+        line-height: 0;
+      }
+
+      .awayHeading {
+        font-size: 22px;
+      }
+
+      .awayItalic {
+        font-size: 24px;
+      }
+    }
+
+    .curriculumTrader {
+      padding: 40px 0px !important;
+
+      .tradeWrapLeft {
+        max-width: 100%;
+        gap: 16px;
+
+      }
+
+      .curriculumTraderWrap {
+        padding: 16px;
+        max-width: unset;
+        border-radius: 8px;
+      }
+    }
+
+    .insideOutside {
+      .insideOutsideUpper {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        align-items: flex-start;
+      }
+    }
+
+    .enrollmentSection {
+      background: var(--black);
+
+      .fourCards {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .gridCardBlack {
+        display: none;
+      }
+
+      .threeCards {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .gridCard {
+        max-height: 100%;
+      }
+
+      .enrollOverlay {
+        display: none;
+      }
+
+      .gridCard:hover .enrollOverlay {
+        opacity: unset;
+      }
+
+      .gridCard:hover .onhoverOverlay {
+        bottom: unset;
+        opacity: unset;
+      }
+
+
+      .onhoverOverlay {
+        bottom: 16px !important;
+        opacity: 1 !important;
+        gap: 12px;
+        background: unset;
+      }
+
+      .overlayMob {
+        font-size: 13px;
+      }
+
+      .overlayText {
+        font-size: 22px !important;
+      }
+    }
+
+    .applicationTimeline {
+
+      th:nth-child(2),
+      td:nth-child(2) {
+        width: unset;
+      }
+
+      th:nth-child(5),
+      td:nth-child(5) {
+        width: 10%;
+      }
+
+      th:first-child,
+      td:first-child {
+        width: 110px;
+      }
+
+      .table-scroll-wrapper {
+        -webkit-overflow-scrolling: touch !important;
+      }
+
+      .table-scroll-wrapper::-webkit-scrollbar {
+        height: 8px;
+      }
+
+      .table-scroll-wrapper::-webkit-scrollbar-track {
+        background: #f5f5f5;
+        border-radius: 4px;
+      }
+
+      .table-scroll-wrapper::-webkit-scrollbar-thumb {
+        background: var(--grey18) !important;
+        border-radius: 10px;
+      }
+
+      .table-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+        background: var(--grey3) !important;
+      }
+
+      .applicationDivi {
+        overflow: auto;
+      }
+
+      .applicationDivi::-webkit-scrollbar-thumb {
+        display: block;
+      }
+
+      .applicationTimelineTable {
+        min-width: 1200px;
+        margin-bottom: 10px;
+      }
+
+      .headingTable {
+        padding: 12px 10px;
+      }
+
+      .timelineRow {
+        padding: 8px 10px;
+      }
+    }
+
+
+    .futureInvest {
+      padding-bottom: 234px !important;
+
+      .futureInvestContent {
+        display: flex;
+        flex-direction: column;
+        padding: 37px 16px;
+        align-items: flex-start;
+        gap: 12px;
+        border-radius: 16px;
+      }
+
+      .futureInvsetbox {
+        border-bottom: 1px solid var(--grey3);
+        border-right: unset;
+        padding-bottom: 12px;
+        padding-left: unset;
+        padding-right: unset;
+      }
+
+      .futureInvsetbox:nth-child(3) {
+        border-bottom: unset;
+
+      }
+
+      .futurePercent {
+        font-size: 20px;
+      }
+
+      .futureText {
+        font-size: 13px;
+      }
+
+      .futureInvestTextWrap {
+        bottom: -55%;
+      }
+
+    }
+
+    .feeProcess {
+
+      #growingDiv {
+        left: 8.2%;
+      }
+
+      .feeProcessContainer .rightSection::before {
+        left: 4.6% !important;
+      }
+
+      .feeProcessContainer .feeBox .body {
+        padding: 16px 12px !important;
+      }
+
+      .feeSectionMOb {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+      }
+
+      .detailsList .subHeading {
+        font-size: 18px;
+      }
+
+      .detailsList .list li {
+        font-size: 13px;
+      }
+
+      .curriculumHead {
+        font-size: 13px;
+      }
+    }
+
+
+
+    .structureOfFee {
+      .feeStructureParent {
+        overflow-x: scroll;
+      }
+
+      .feeStructureParent::-webkit-scrollbar-thumb {
+        display: block;
+        background: var(--grey3);
+      }
+
+      .feeStructureTable {
+        min-width: 520px;
+      }
+
+      .fr_heading {
+        font-size: 24px;
+      }
+    }
+
+    .curriculumOutclassDs.pointsList {
+      .curriculumDsBelow {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .dsBelowRight {
+        background: unset;
+      }
+
+      .classRomFaqWrap {
+        border: 0.5px solid var(--grey4);
+      }
+
+      .inclassansUl li.active::after {
+        content: "";
+        display: block;
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        border-bottom: 1px solid var(--black);
+        z-index: 2;
+      }
+
+
+    }
+
+    .curriculumOutclassDs {
+
+      .termHeading {
+        font-size: 13px;
+      }
+
+      .inClassAns {
+        font-size: 12px !important;
+      }
+
+      .curriculumOutclassWrapper {
+        gap: 32px;
+      }
+
+      .curriculumDsUpper {
+        position: unset;
+        padding-block: unset;
+        align-items: flex-start;
+      }
+
+      .curriculumDsBelow {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .portfolioStepWrapper.step1 {
+        max-width: 358px;
+      }
+
+      .portfolioStepWrapper.step2 {
+        max-width: 331px;
+      }
+
+      .portfolioStepWrapper.step3 {
+        max-width: 304px;
+      }
+
+      .portfolioStepWrapper.step4 {
+        max-width: 277px;
+      }
+
+      .portfolioStepWrapper.step5 {
+        max-width: 250px;
+      }
+
+      .portfolioStepWrapper.step6 {
+        max-width: 223px;
+      }
+
+      .tradingHeading {
+        font-size: 18px;
+      }
+
+      .faqHeadingsWrapper.mobView {
+        display: flex;
+        padding-top: 20px;
+        overflow-y: auto;
+        position: sticky;
+        top: 6rem;
+        z-index: 10;
+        gap: 24px;
+        background: var(--white);
+      }
+
+      .classRomFaqWrap.steps:last-child {
+        margin-bottom: 0px !important;
+      }
+
+      .dsBelowRight {
+        max-width: 100%;
+        background: var(--white);
+        padding: 16px 8px;
+      }
+
+      .faqHeadingItem {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        border-bottom: 1px solid var(--grey20);
+        min-width: max-content;
+        padding-bottom: 6px;
+        gap: 10px;
+        overflow: hidden;
+      }
+
+      .faqHeadingItem .termBtn {
+        background: var(--grey4);
+        color: var(--black);
+      }
+
+      .faqHeadingItem.active {
+        border-bottom: 1px solid var(--black);
+
+        .termBtn {
+          background: var(--black);
+          color: var(--white);
+        }
+
+        .faqHeading {
+          color: var(--black);
+        }
+      }
+
+      .classRomFaqWrap {
+        margin-top: 20px;
+        border: unset;
+        position: relative;
+        z-index: 9;
+        background: var(--white) !important;
+      }
+
+      .inclassansUl {
+        border-block: 1px solid var(--grey4);
+        overflow: auto;
+      }
+
+
+    }
+
+  }
+}
+
+
+/* ─── MARKET DASHBOARD ──────────────────────────────────────────── */
+.pgpCmt .marketDashboard {
+  --mk-up: #1C7C54;
+  --mk-up-soft: rgba(28, 124, 84, 0.10);
+  --mk-dn: #B91C1C;
+  --mk-dn-soft: rgba(185, 28, 28, 0.10);
+  background: var(--white3);
+  padding-bottom: 80px;
+}
+
+.pgpCmt .marketDashboard .mkTop {
+  background: var(--black);
+  padding: 60px 0 40px;
+  border-bottom: 1px solid var(--black5);
+}
+
+.pgpCmt .marketDashboard .mkHeadingWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.pgpCmt .marketDashboard .mkSubText {
+  font-size: 16px;
+  line-height: 150%;
+  font-family: var(--go-regular);
+  color: var(--grey10);
+  max-width: 720px;
+}
+
+.pgpCmt .marketDashboard .mkTicker {
+  background: var(--white);
+  border-bottom: 1px solid var(--grey4);
+  position: relative;
+  overflow: hidden;
+  padding: 0 !important;
+}
+
+.pgpCmt .marketDashboard .mkTickerWrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.pgpCmt .marketDashboard .mkTickerWrap::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--Linear-Gradient);
+  z-index: 4;
+}
+
+.pgpCmt .marketDashboard .mkTickerWrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 96px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, var(--white) 90%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.pgpCmt .marketDashboard .mkTickerHeader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 22px;
+  background: linear-gradient(90deg, var(--white) 0%, var(--white) 80%, rgba(255, 255, 255, 0) 100%);
+  z-index: 3;
+}
+
+.pgpCmt .marketDashboard .mkLiveDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--mk-dn);
+  position: relative;
+  box-shadow: 0 0 6px rgba(185, 28, 28, 0.5);
+}
+
+.pgpCmt .marketDashboard .mkLiveDot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: rgba(185, 28, 28, 0.35);
+  animation: mkPulse 1.8s ease-out infinite;
+  z-index: -1;
+}
+
+.pgpCmt .marketDashboard .mkLiveLabel {
+  font-family: var(--go-semibold);
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  background: var(--Linear-Gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes mkPulse {
+  0% { transform: scale(1); opacity: 0.55; }
+  70% { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+.pgpCmt .marketDashboard .mkTickerViewport {
+  overflow: hidden;
+}
+
+.pgpCmt .marketDashboard .mkTickerTrack {
+  display: flex;
+  width: max-content;
+  padding: 14px 0 14px 140px;
+  animation: mkScroll 50s linear infinite;
+  will-change: transform;
+}
+
+.pgpCmt .marketDashboard .mkTickerTrack:hover {
+  animation-play-state: paused;
+}
+
+@keyframes mkScroll {
+  to { transform: translateX(-50%); }
+}
+
+.pgpCmt .marketDashboard .mkTi {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 22px;
+  border-right: 1px solid var(--grey4);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.pgpCmt .marketDashboard .mkTiS {
+  font-family: var(--go-semibold);
+  font-size: 13px;
+  color: var(--black);
+  letter-spacing: 0.5px;
+}
+
+.pgpCmt .marketDashboard .mkTiV {
+  font-family: var(--go-regular);
+  font-size: 13px;
+  color: var(--grey3);
+}
+
+.pgpCmt .marketDashboard .mkTi .mkUp,
+.pgpCmt .marketDashboard .mkTi .mkDn {
+  font-family: var(--go-semibold);
+  font-size: 12px;
+}
+
+/* STATS */
+.pgpCmt .marketDashboard .mkStats {
+  padding-top: 30px;
+}
+
+.pgpCmt .marketDashboard .mkStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--white);
+  border: 1px solid var(--grey4);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.pgpCmt .marketDashboard .mkStatCell {
+  padding: 18px 22px;
+  border-right: 1px solid var(--grey4);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pgpCmt .marketDashboard .mkStatCell:last-child {
+  border-right: none;
+}
+
+.pgpCmt .marketDashboard .mkStatLabel {
+  font-family: var(--go-semibold);
+  font-size: 10px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+
+.pgpCmt .marketDashboard .mkStatValue {
+  font-family: var(--go-semibold);
+  font-size: 22px;
+  color: var(--black);
+  font-variant-numeric: tabular-nums;
+  line-height: 110%;
+}
+
+.pgpCmt .marketDashboard .mkStatDelta {
+  font-family: var(--go-medium);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* BOARD */
+.pgpCmt .marketDashboard .mkBoard {
+  padding-top: 32px;
+}
+
+.pgpCmt .marketDashboard .mkNavTabs {
+  display: flex;
+  gap: 6px;
+  background: var(--white);
+  border: 1px solid var(--grey4);
+  border-radius: 12px;
+  padding: 6px;
+  margin-bottom: 20px;
+  max-width: fit-content;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.pgpCmt .marketDashboard .mkNt {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--go-semibold);
+  font-size: 13px;
+  color: var(--grey3);
+  padding: 9px 18px;
+  cursor: pointer;
+  transition: 0.2s;
+  letter-spacing: 0.2px;
+}
+
+.pgpCmt .marketDashboard .mkNt:hover {
+  color: var(--black);
+  background: var(--grey16);
+}
+
+.pgpCmt .marketDashboard .mkNt.on {
+  background: var(--black);
+  color: var(--white);
+}
+
+.pgpCmt .marketDashboard .mkBoardGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 18px;
+  align-items: start;
+}
+
+.pgpCmt .marketDashboard .mkBoardRight {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* SEARCH */
+.pgpCmt .marketDashboard .mkSearch {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.pgpCmt .marketDashboard .mkSearchInput {
+  background: var(--white);
+  border: 1px solid var(--grey4);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: 0.2s;
+}
+
+.pgpCmt .marketDashboard .mkSearchInput:focus-within {
+  border-color: var(--grey15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.pgpCmt .marketDashboard .mkSearchInput svg {
+  color: var(--grey);
+  flex-shrink: 0;
+}
+
+.pgpCmt .marketDashboard .mkSearchInput input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--go-regular);
+  font-size: 13px;
+  color: var(--black);
+}
+
+.pgpCmt .marketDashboard .mkSearchInput input::placeholder {
+  color: var(--grey);
+}
+
+.pgpCmt .marketDashboard .mkSearchDrop {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--white);
+  border: 1px solid var(--grey4);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  z-index: 50;
+  display: none;
+  overflow: hidden;
+}
+
+.pgpCmt .marketDashboard .mkSearchDrop.show {
+  display: block;
+}
+
+.pgpCmt .marketDashboard .mkSr {
+  display: flex;
+  align-items: center;
+  padding: 11px 16px;
+  cursor: pointer;
+  gap: 12px;
+  transition: 0.1s;
+  border-bottom: 1px solid var(--grey4);
+}
+
+.pgpCmt .marketDashboard .mkSr:last-child {
+  border-bottom: none;
+}
+
+.pgpCmt .marketDashboard .mkSr:hover {
+  background: var(--white3);
+}
+
+.pgpCmt .marketDashboard .mkSrSym {
+  font-family: var(--go-semibold);
+  font-size: 12px;
+  color: var(--black);
+  min-width: 90px;
+  letter-spacing: 0.4px;
+}
+
+.pgpCmt .marketDashboard .mkSrName {
+  flex: 1;
+  font-family: var(--go-regular);
+  font-size: 12px;
+  color: var(--grey3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pgpCmt .marketDashboard .mkSrPct {
+  font-family: var(--go-semibold);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* CARD */
+.pgpCmt .marketDashboard .mkCard {
+  background: var(--white);
+  border: 1px solid var(--grey4);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.pgpCmt .marketDashboard .mkCardHead {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--grey4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pgpCmt .marketDashboard .mkCardTitle {
+  font-family: var(--go-semibold);
+  font-size: 14px;
+  color: var(--black);
+  letter-spacing: 0.2px;
+}
+
+.pgpCmt .marketDashboard .mkCardMeta {
+  font-family: var(--go-regular);
+  font-size: 11px;
+  color: var(--grey);
+  font-variant-numeric: tabular-nums;
+}
+
+/* TABLE */
+.pgpCmt .marketDashboard .mkTableWrap {
+  overflow-x: auto;
+}
+
+.pgpCmt .marketDashboard .mkTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pgpCmt .marketDashboard .mkTable thead th {
+  padding: 10px 14px;
+  text-align: left;
+  font-family: var(--go-semibold);
+  font-size: 10px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--grey);
+  background: var(--white3);
+  border-bottom: 1px solid var(--grey4);
+  white-space: nowrap;
+}
+
+.pgpCmt .marketDashboard .mkTable thead th:not(:first-child) {
+  text-align: right;
+}
+
+.pgpCmt .marketDashboard .mkTable tbody tr {
+  border-bottom: 1px solid var(--grey4);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.pgpCmt .marketDashboard .mkTable tbody tr:last-child {
+  border-bottom: none;
+}
+
+.pgpCmt .marketDashboard .mkTable tbody tr:hover {
+  background: var(--white3);
+}
+
+.pgpCmt .marketDashboard .mkTable tbody tr.mkSel {
+  background: var(--white3);
+  box-shadow: inset 3px 0 0 var(--black);
+}
+
+.pgpCmt .marketDashboard .mkTable td {
+  padding: 12px 14px;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.pgpCmt .marketDashboard .mkTable td.mkNum {
+  text-align: right;
+  font-family: var(--go-regular);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  color: var(--black);
+}
+
+.pgpCmt .marketDashboard .mkTable td.mkMuted {
+  color: var(--grey);
+}
+
+.pgpCmt .marketDashboard .mkTable td:last-child {
+  text-align: right;
+}
+
+.pgpCmt .marketDashboard .mkSn {
+  font-family: var(--go-semibold);
+  font-size: 13px;
+  color: var(--black);
+  letter-spacing: 0.3px;
+}
+
+.pgpCmt .marketDashboard .mkSs {
+  font-family: var(--go-regular);
+  font-size: 11px;
+  color: var(--grey);
+  margin-top: 2px;
+}
+
+.pgpCmt .marketDashboard .mkUp { color: var(--mk-up); }
+.pgpCmt .marketDashboard .mkDn { color: var(--mk-dn); }
+
+.pgpCmt .marketDashboard .mkPill {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 14px;
+  font-family: var(--go-semibold);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pgpCmt .marketDashboard .mkPillUp {
+  background: var(--mk-up-soft);
+  color: var(--mk-up);
+}
+
+.pgpCmt .marketDashboard .mkPillDn {
+  background: var(--mk-dn-soft);
+  color: var(--mk-dn);
+}
+
+.pgpCmt .marketDashboard .mkSp {
+  width: 70px;
+  height: 24px;
+  display: inline-block;
+}
+
+@keyframes mkFg {
+  0%, 100% { background: transparent; }
+  40% { background: var(--mk-up-soft); }
+}
+
+@keyframes mkFr {
+  0%, 100% { background: transparent; }
+  40% { background: var(--mk-dn-soft); }
+}
+
+.pgpCmt .marketDashboard .mkFg { animation: mkFg 0.6s; }
+.pgpCmt .marketDashboard .mkFr { animation: mkFr 0.6s; }
+
+/* CHART CARD */
+.pgpCmt .marketDashboard .mkChartCard {
+  display: flex;
+  flex-direction: column;
+}
+
+.pgpCmt .marketDashboard .mkChartHead {
+  padding: 16px 18px 6px;
+}
+
+.pgpCmt .marketDashboard .mkCSym {
+  font-family: var(--go-semibold);
+  font-size: 15px;
+  color: var(--black);
+  letter-spacing: 0.4px;
+}
+
+.pgpCmt .marketDashboard .mkCName {
+  font-family: var(--go-regular);
+  font-size: 11px;
+  color: var(--grey);
+  margin-top: 2px;
+}
+
+.pgpCmt .marketDashboard .mkPriceRow {
+  padding: 4px 18px 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.pgpCmt .marketDashboard .mkLtp {
+  font-family: var(--go-semibold);
+  font-size: 26px;
+  color: var(--black);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.4px;
+}
+
+.pgpCmt .marketDashboard .mkChg {
+  font-family: var(--go-medium);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pgpCmt .marketDashboard .mkRangeRow {
+  display: flex;
+  gap: 6px;
+  padding: 0 18px 12px;
+}
+
+.pgpCmt .marketDashboard .mkRb {
+  background: transparent;
+  border: 1px solid var(--grey4);
+  border-radius: 6px;
+  font-family: var(--go-semibold);
+  font-size: 11px;
+  color: var(--grey3);
+  padding: 4px 12px;
+  cursor: pointer;
+  transition: 0.15s;
+  letter-spacing: 0.3px;
+}
+
+.pgpCmt .marketDashboard .mkRb:hover {
+  background: var(--white3);
+}
+
+.pgpCmt .marketDashboard .mkRb.on {
+  background: var(--black);
+  border-color: var(--black);
+  color: var(--white);
+}
+
+.pgpCmt .marketDashboard .mkChartCanvas {
+  padding: 4px 14px 16px;
+  height: 180px;
+}
+
+.pgpCmt .marketDashboard .mkChartCanvas canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* COMMODITIES SIDE LIST */
+.pgpCmt .marketDashboard .mkComRow {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--grey4);
+  cursor: pointer;
+  transition: 0.15s;
+  gap: 12px;
+}
+
+.pgpCmt .marketDashboard .mkComRow:last-child {
+  border-bottom: none;
+}
+
+.pgpCmt .marketDashboard .mkComRow:hover,
+.pgpCmt .marketDashboard .mkComRow.mkSel {
+  background: var(--white3);
+}
+
+.pgpCmt .marketDashboard .mkComIcon {
+  width: 34px;
+  height: 34px;
+  background: var(--black);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--go-semibold);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.pgpCmt .marketDashboard .mkComBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pgpCmt .marketDashboard .mkComName {
+  font-family: var(--go-semibold);
+  font-size: 13px;
+  color: var(--black);
+}
+
+.pgpCmt .marketDashboard .mkComUnit {
+  font-family: var(--go-regular);
+  font-size: 10px;
+  color: var(--grey);
+}
+
+.pgpCmt .marketDashboard .mkComRight {
+  margin-left: auto;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pgpCmt .marketDashboard .mkComPrice {
+  font-family: var(--go-semibold);
+  font-size: 13px;
+  color: var(--black);
+  font-variant-numeric: tabular-nums;
+}
+
+.pgpCmt .marketDashboard .mkComPct {
+  font-family: var(--go-semibold);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.pgpCmt .marketDashboard .mkDisclaimer {
+  margin-top: 24px;
+  font-family: var(--go-regular);
+  font-size: 11px;
+  color: var(--grey);
+  text-align: center;
+}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────────────── */
+
+/* TABLET 1024 → 1100 keep two cols but tighten the right column */
+@media (max-width: 1100px) {
+  .pgpCmt .marketDashboard .mkBoardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .pgpCmt .marketDashboard .mkBoardRight {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .pgpCmt .marketDashboard .mkBoardRight > .mkCard {
+    flex: 1 1 320px;
+    min-width: 0;
+  }
+}
+
+/* TABLET ↘ */
+@media (max-width: 900px) {
+  .pgpCmt .marketDashboard .mkStatValue {
+    font-size: 18px;
+  }
+
+  .pgpCmt .marketDashboard .mkStatCell {
+    padding: 14px 16px;
+  }
+}
+
+/* MOBILE */
+@media (max-width: 767px) {
+  .pgpCmt .marketDashboard {
+    padding-bottom: 40px;
+  }
+
+  .pgpCmt .marketDashboard .mkTop {
+    padding: 36px 0 26px;
+  }
+
+  .pgpCmt .marketDashboard .mkHeadingWrap {
+    gap: 10px;
+  }
+
+  .pgpCmt .marketDashboard .mkSubText {
+    font-size: 13px;
+    line-height: 160%;
+  }
+
+  /* Ticker */
+  .pgpCmt .marketDashboard .mkTickerHeader {
+    padding: 0 12px;
+    gap: 6px;
+  }
+
+  .pgpCmt .marketDashboard .mkTickerWrap::after {
+    width: 50px;
+  }
+
+  .pgpCmt .marketDashboard .mkLiveLabel {
+    font-size: 10px;
+    letter-spacing: 1.2px;
+  }
+
+  .pgpCmt .marketDashboard .mkTickerTrack {
+    padding: 10px 0 10px 88px;
+    animation-duration: 35s;
+  }
+
+  .pgpCmt .marketDashboard .mkTi {
+    padding: 3px 14px;
+    gap: 6px;
+  }
+
+  .pgpCmt .marketDashboard .mkTiS,
+  .pgpCmt .marketDashboard .mkTiV {
+    font-size: 11px;
+  }
+
+  .pgpCmt .marketDashboard .mkTi .mkUp,
+  .pgpCmt .marketDashboard .mkTi .mkDn {
+    font-size: 11px;
+  }
+
+  /* Stats */
+  .pgpCmt .marketDashboard .mkStats {
+    padding-top: 20px;
+  }
+
+  .pgpCmt .marketDashboard .mkStatsGrid {
+    grid-template-columns: 1fr 1fr;
+    border-radius: 10px;
+  }
+
+  .pgpCmt .marketDashboard .mkStatCell {
+    padding: 12px 14px;
+    gap: 4px;
+  }
+
+  .pgpCmt .marketDashboard .mkStatCell:nth-child(2) {
+    border-right: none;
+  }
+
+  .pgpCmt .marketDashboard .mkStatCell:nth-child(1),
+  .pgpCmt .marketDashboard .mkStatCell:nth-child(2) {
+    border-bottom: 1px solid var(--grey4);
+  }
+
+  .pgpCmt .marketDashboard .mkStatLabel {
+    font-size: 9px;
+    letter-spacing: 0.5px;
+  }
+
+  .pgpCmt .marketDashboard .mkStatValue {
+    font-size: 17px;
+  }
+
+  .pgpCmt .marketDashboard .mkStatDelta {
+    font-size: 11px;
+  }
+
+  /* Board */
+  .pgpCmt .marketDashboard .mkBoard {
+    padding-top: 20px;
+  }
+
+  .pgpCmt .marketDashboard .mkNavTabs {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    margin-bottom: 14px;
+    padding: 4px;
+    border-radius: 10px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .pgpCmt .marketDashboard .mkNavTabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pgpCmt .marketDashboard .mkNt {
+    padding: 8px 14px;
+    font-size: 12px;
+    flex-shrink: 0;
+    border-radius: 6px;
+  }
+
+  .pgpCmt .marketDashboard .mkBoardGrid {
+    gap: 14px;
+  }
+
+  .pgpCmt .marketDashboard .mkBoardRight {
+    flex-direction: column;
+  }
+
+  .pgpCmt .marketDashboard .mkBoardRight > .mkCard {
+    flex: 1 1 auto;
+  }
+
+  .pgpCmt .marketDashboard .mkCard {
+    border-radius: 10px;
+  }
+
+  .pgpCmt .marketDashboard .mkCardHead {
+    padding: 12px 14px;
+  }
+
+  .pgpCmt .marketDashboard .mkCardTitle {
+    font-size: 13px;
+  }
+
+  .pgpCmt .marketDashboard .mkCardMeta {
+    font-size: 10px;
+  }
+
+  /* Search */
+  .pgpCmt .marketDashboard .mkSearch {
+    margin-bottom: 12px;
+  }
+
+  .pgpCmt .marketDashboard .mkSearchInput {
+    padding: 10px 14px;
+    border-radius: 8px;
+  }
+
+  .pgpCmt .marketDashboard .mkSearchInput input {
+    font-size: 12.5px;
+  }
+
+  .pgpCmt .marketDashboard .mkSrSym {
+    min-width: 70px;
+    font-size: 11px;
+  }
+
+  .pgpCmt .marketDashboard .mkSrName,
+  .pgpCmt .marketDashboard .mkSrPct {
+    font-size: 11px;
+  }
+
+  /* Table — hide 52W columns to reduce horizontal scroll */
+  .pgpCmt .marketDashboard .mkTable thead th:nth-child(6),
+  .pgpCmt .marketDashboard .mkTable thead th:nth-child(7),
+  .pgpCmt .marketDashboard .mkTable tbody td:nth-child(6),
+  .pgpCmt .marketDashboard .mkTable tbody td:nth-child(7),
+  .pgpCmt .marketDashboard .mkTable thead th:nth-child(5),
+  .pgpCmt .marketDashboard .mkTable tbody td:nth-child(5) {
+    display: none;
+  }
+
+  .pgpCmt .marketDashboard .mkTable thead th {
+    padding: 8px 10px;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+  }
+
+  .pgpCmt .marketDashboard .mkTable td {
+    padding: 10px;
+  }
+
+  .pgpCmt .marketDashboard .mkTable td.mkNum {
+    font-size: 12px;
+  }
+
+  .pgpCmt .marketDashboard .mkSn {
+    font-size: 12px;
+  }
+
+  .pgpCmt .marketDashboard .mkSs {
+    font-size: 10px;
+  }
+
+  .pgpCmt .marketDashboard .mkPill {
+    padding: 2px 7px;
+    font-size: 10px;
+  }
+
+  .pgpCmt .marketDashboard .mkSp {
+    width: 56px;
+    height: 22px;
+  }
+
+  /* Chart card */
+  .pgpCmt .marketDashboard .mkChartHead {
+    padding: 14px 14px 4px;
+  }
+
+  .pgpCmt .marketDashboard .mkCSym {
+    font-size: 14px;
+  }
+
+  .pgpCmt .marketDashboard .mkPriceRow {
+    padding: 4px 14px 10px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .pgpCmt .marketDashboard .mkLtp {
+    font-size: 22px;
+  }
+
+  .pgpCmt .marketDashboard .mkChg {
+    font-size: 12px;
+  }
+
+  .pgpCmt .marketDashboard .mkRangeRow {
+    padding: 0 14px 10px;
+  }
+
+  .pgpCmt .marketDashboard .mkRb {
+    padding: 4px 10px;
+    font-size: 10px;
+  }
+
+  .pgpCmt .marketDashboard .mkChartCanvas {
+    padding: 4px 10px 14px;
+    height: 200px;
+  }
+
+  /* Commodities side list */
+  .pgpCmt .marketDashboard .mkComRow {
+    padding: 11px 14px;
+    gap: 10px;
+  }
+
+  .pgpCmt .marketDashboard .mkComIcon {
+    width: 30px;
+    height: 30px;
+    font-size: 10px;
+  }
+
+  .pgpCmt .marketDashboard .mkComName {
+    font-size: 12px;
+  }
+
+  .pgpCmt .marketDashboard .mkComUnit {
+    font-size: 9px;
+  }
+
+  .pgpCmt .marketDashboard .mkComPrice {
+    font-size: 12px;
+  }
+
+  .pgpCmt .marketDashboard .mkComPct {
+    font-size: 10px;
+  }
+
+  .pgpCmt .marketDashboard .mkDisclaimer {
+    margin-top: 18px;
+    font-size: 10px;
+    padding: 0 10px;
+  }
+}
+
+/* SMALL PHONES */
+@media (max-width: 480px) {
+  .pgpCmt .marketDashboard .mkTop {
+    padding: 30px 0 22px;
+  }
+
+  .pgpCmt .marketDashboard .mkSubText {
+    font-size: 12.5px;
+  }
+
+  .pgpCmt .marketDashboard .mkStatValue {
+    font-size: 15px;
+  }
+
+  .pgpCmt .marketDashboard .mkStatLabel {
+    font-size: 8.5px;
+  }
+
+  .pgpCmt .marketDashboard .mkStatDelta {
+    font-size: 10px;
+  }
+
+  .pgpCmt .marketDashboard .mkStatCell {
+    padding: 10px 12px;
+  }
+
+  .pgpCmt .marketDashboard .mkNt {
+    padding: 7px 12px;
+    font-size: 11.5px;
+  }
+
+  /* Hide change column on tiny screens — %Chg pill is enough */
+  .pgpCmt .marketDashboard .mkTable thead th:nth-child(3),
+  .pgpCmt .marketDashboard .mkTable tbody td:nth-child(3) {
+    display: none;
+  }
+
+  .pgpCmt .marketDashboard .mkTable td {
+    padding: 9px 8px;
+  }
+
+  .pgpCmt .marketDashboard .mkTable thead th {
+    padding: 7px 8px;
+  }
+
+  .pgpCmt .marketDashboard .mkSp {
+    width: 48px;
+    height: 20px;
+  }
+
+  .pgpCmt .marketDashboard .mkLtp {
+    font-size: 20px;
+  }
+
+  .pgpCmt .marketDashboard .mkChartCanvas {
+    height: 180px;
+  }
+
+  .pgpCmt .marketDashboard .mkComIcon {
+    width: 28px;
+    height: 28px;
+  }
+}

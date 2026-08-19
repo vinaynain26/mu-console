@@ -1,0 +1,290 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Edit page · MU Console</title>
+<link rel="stylesheet" href="/console-ui/app.css">
+<style>
+  .tabbar{display:flex;gap:3px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:18px}
+  .tabbtn{border:0;background:none;padding:9px 13px;font:inherit;font-weight:600;font-size:13.5px;
+    color:var(--ink-sub);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;border-radius:0}
+  .tabbtn:hover{color:var(--ink)}
+  .tabbtn.on{color:var(--ink);border-bottom-color:var(--ink)}
+  .tabbtn .n{font-weight:450;opacity:.65;font-size:12px;margin-left:5px}
+  .tabbtn .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#b98900;margin-left:5px;vertical-align:middle}
+  details.sec{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh);margin-bottom:12px;overflow:hidden}
+  details.sec>summary{list-style:none;cursor:pointer;padding:13px 16px;display:flex;align-items:center;gap:11px}
+  details.sec>summary::-webkit-details-marker{display:none}
+  .caret{transition:transform .15s;color:var(--ink-mute);font-size:11px}
+  details[open] .caret{transform:rotate(90deg)}
+  details.sec h2{margin:0;font-size:14px;font-weight:650}
+  .secbody{padding:0 16px 14px;border-top:1px solid var(--line)}
+  .fld{padding:13px 0;border-bottom:1px solid #f1f2f4}
+  .fld:last-child{border-bottom:0}
+  .fldhead{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .fldhead .tag{background:#e3e3e3;color:#4a4a4a;border-radius:4px;padding:1px 6px;font-size:10.5px;font-weight:700;text-transform:uppercase}
+  .fldhead .name{font-size:12.5px;font-weight:600;color:var(--ink-sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
+  .fld.dirty input,.fld.dirty textarea{border-color:#b98900;background:#fffdf6}
+  .was{font-size:12px;color:var(--ink-sub);margin-top:5px}
+  .aiRow{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;align-items:center}
+  .aiOut{margin-top:8px}
+  .aiOpt{border:1px solid var(--line);border-radius:var(--r);padding:9px 11px;margin-top:7px;cursor:pointer;background:var(--surface-sub);font-size:13.5px}
+  .aiOpt:hover{border-color:var(--focus);background:#f3f8ff}
+  .aiOpt .angle{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--focus);margin-bottom:3px}
+  .aiErr{background:var(--crit-bg);color:var(--crit-ink);padding:8px 11px;border-radius:var(--r);font-size:12.5px;margin-top:7px}
+  .aiIns{flex:1;min-width:190px;font-size:13px;padding:6px 10px}
+</style></head><body>
+<div class="shell">
+  <nav class="side"></nav>
+  <main>
+    <div class="phead">
+      <div>
+        <a class="back" href="/console">← Pages</a>
+        <h1 id="ttl">Loading…</h1>
+        <div class="sub" id="sub"></div>
+      </div>
+      <div class="grow"></div>
+      <input type="search" id="q" placeholder="Search all tabs…" style="max-width:230px">
+      <a class="btn" id="prev" target="_blank">Preview draft ↗</a>
+      <a class="btn primary" id="livelink" target="_blank">Edit on page ↗</a>
+    </div>
+    <div id="notice"></div>
+    <div class="tabbar" id="tabs"></div>
+    <div id="body"><div class="empty">Loading content…</div></div>
+  </main>
+</div>
+<div class="savebar" id="savebar">
+  <span class="msg" id="msg"></span>
+  <div class="grow"></div>
+  <button class="btn" id="discard">Discard</button>
+  <button class="btn primary" id="save">Save draft</button>
+</div>
+<script type="module">
+import { chrome, api, esc, ago, $ } from '/console-ui/shell.js';
+
+const slug = location.pathname.split('/').pop();
+const changes = new Map();
+let data = null, acct = null, tab = null;
+
+acct = await chrome('pages');
+const CAN = {
+  edit: ['editor','admin'].includes(acct.user.role),
+  publish: acct.user.role === 'admin',
+  ai: acct.ai && ['editor','admin'].includes(acct.user.role),
+};
+
+function bar() {
+  const n = changes.size;
+  $('savebar').classList.toggle('up', n > 0);
+  $('msg').textContent = n ? `${n} unsaved change${n === 1 ? '' : 's'}` : '';
+}
+
+async function load() {
+  data = await api(`/api/pages/${slug}/content`);
+  $('ttl').textContent = data.page ? data.page.title : slug;
+  $('sub').innerHTML = data.lastPublish
+    ? `Last published by <b>${esc(data.lastPublish.user_name)}</b> — ${data.lastPublish.fields} field(s), ${ago(data.lastPublish.published_at)}`
+    : 'Never published from the studio.';
+  if (!tab || !data.tabs.some(t => t.key === tab)) {
+    tab = (data.tabs.find(t => t.key === 'highlight') || data.tabs[0]).key;
+  }
+  if (!CAN.ai) {
+    $('notice').innerHTML = acct.ai
+      ? ''
+      : '<div class="banner warn"><b>AI writer is off.</b> Set <code>ANTHROPIC_API_KEY</code> and restart.</div>';
+  }
+  renderTabs(); render();
+}
+
+function renderTabs() {
+  $('tabs').innerHTML = data.tabs.map(t =>
+    `<button class="tabbtn ${t.key === tab ? 'on' : ''}" data-t="${esc(t.key)}">${esc(t.title)}
+      <span class="n">${t.fields}</span>${t.changed ? '<span class="dot"></span>' : ''}</button>`).join('');
+  $('tabs').querySelectorAll('.tabbtn').forEach(b =>
+    b.addEventListener('click', () => { tab = b.dataset.t; renderTabs(); render(); }));
+  const ut = tab === '_all' ? 'highlight' : tab;
+  $('prev').href = `/page/${slug}?preview=1&tab=${ut}`;
+  $('livelink').href = `/page/${slug}?tab=${ut}`;
+}
+
+function render() {
+  const q = $('q').value.trim().toLowerCase();
+  const scope = q ? data.tabs : data.tabs.filter(t => t.key === tab);
+  const out = [];
+  for (const t of scope) {
+    const secs = t.sections
+      .map(s => ({ ...s, fields: q ? s.fields.filter(f => (f.value + ' ' + f.label).toLowerCase().includes(q)) : s.fields }))
+      .filter(s => s.fields.length);
+    if (!secs.length) continue;
+    if (q) out.push(`<div class="banner"><b>${esc(t.title)}</b> — ${secs.reduce((a, s) => a + s.fields.length, 0)} match(es)</div>`);
+    for (const s of secs) {
+      out.push(`<details class="sec" ${q ? 'open' : ''}>
+        <summary><span class="caret">▶</span><h2>${esc(s.title)}</h2>
+          <span class="badge">${s.fields.length}</span><span class="grow"></span>
+          ${s.changed ? `<span class="badge warn">${s.changed} unpublished</span>` : ''}
+          ${CAN.ai ? `<button class="btn sm" data-secai="${esc(s.key)}">AI: rewrite section</button>` : ''}
+        </summary>
+        <div class="secbody">
+          <div data-secout="${esc(s.key)}"></div>
+          ${s.fields.map(f => field(f)).join('')}
+        </div></details>`);
+    }
+  }
+  $('body').innerHTML = out.length ? out.join('') : '<div class="empty">Nothing to edit here.</div>';
+  wire();
+}
+
+const NOAI = new Set(['link', 'state', 'asset']);
+
+/** Field types get the control they deserve: a URL box, a fixed dropdown, or text. */
+function control(f, dis) {
+  if (f.tag === 'state' && f.options) {
+    // preserve a value the vocabulary does not know about rather than silently
+    // rewriting it on save
+    const known = f.options.some(o => o.value === f.value);
+    const opts = f.options.map(o =>
+      `<option value="${esc(o.value)}" ${o.value === f.value ? 'selected' : ''}>${esc(o.label)}</option>`).join('');
+    const custom = known ? '' :
+      `<option value="${esc(f.value)}" selected>Custom — ${esc(f.value || '(none)')}</option>`;
+    return `<select data-in="${esc(f.key)}" ${dis}>${opts}${custom}</select>`;
+  }
+  if (f.tag === 'link') {
+    return `<div style="display:flex;gap:7px;align-items:center">
+      <input type="text" data-in="${esc(f.key)}" value="${esc(f.value)}" ${dis}
+        placeholder="/path or https://…" style="font-family:ui-monospace,Menlo,monospace;font-size:13px">
+      <a class="btn sm" href="${esc(f.value)}" target="_blank" rel="noopener">Test ↗</a>
+    </div>`;
+  }
+  return f.multiline
+    ? `<textarea data-in="${esc(f.key)}" ${dis}>${esc(f.value)}</textarea>`
+    : `<input type="text" data-in="${esc(f.key)}" value="${esc(f.value)}" ${dis}>`;
+}
+
+function field(f) {
+  const dis = CAN.edit ? '' : 'disabled';
+  return `<div class="fld ${f.dirty ? 'dirty' : ''}" data-f="${esc(f.key)}">
+    <div class="fldhead">
+      <span class="tag">${esc(f.tag || '')}</span>
+      <span class="name" title="${esc(f.key)}">${esc(f.label)}</span>
+      ${f.comments ? `<span class="badge info">${f.comments} note${f.comments === 1 ? '' : 's'}</span>` : ''}
+      ${f.dirty ? '<span class="badge warn">draft</span>' : ''}
+    </div>
+    ${control(f, dis)}
+    ${f.dirty ? `<div class="was">Live: “${esc(f.published)}”</div>` : ''}
+    ${CAN.ai && !NOAI.has(f.tag) ? `<div class="aiRow">
+      <input type="text" class="aiIns" data-ins="${esc(f.key)}" placeholder="Tell the AI what to change…">
+      <button class="btn sm" data-ai="rewrite" data-k="${esc(f.key)}">Rewrite</button>
+      <button class="btn sm" data-ai="variants" data-k="${esc(f.key)}">3 options</button>
+    </div><div class="aiOut" data-out="${esc(f.key)}"></div>` : ''}
+  </div>`;
+}
+
+function wire() {
+  $('body').querySelectorAll('[data-in]').forEach(el => {
+    const on = el.tagName === 'SELECT' ? 'change' : 'input';
+    el.addEventListener(on, () => {
+      changes.set(el.dataset.in, el.value);
+      el.closest('.fld').classList.add('dirty');
+      bar();
+    });
+  });
+  $('body').querySelectorAll('[data-ai]').forEach(b => b.addEventListener('click', (e) => {
+    e.preventDefault(); runAI(b.dataset.ai, b.dataset.k, b);
+  }));
+  $('body').querySelectorAll('[data-secai]').forEach(b => b.addEventListener('click', (e) => {
+    e.preventDefault(); e.stopPropagation(); sectionAI(b.dataset.secai);
+  }));
+}
+
+function setValue(key, text) {
+  const input = $('body').querySelector(`[data-in="${CSS.escape(key)}"]`);
+  if (!input) return;
+  input.value = text;
+  changes.set(key, text);
+  input.closest('.fld').classList.add('dirty');
+  bar();
+}
+
+async function runAI(kind, key, btn) {
+  const out = $('body').querySelector(`[data-out="${CSS.escape(key)}"]`);
+  const ins = $('body').querySelector(`[data-ins="${CSS.escape(key)}"]`);
+  out.innerHTML = '<div class="hint"><span class="spin"></span> Claude is writing…</div>';
+  btn.disabled = true;
+  try {
+    const r = await api(`/api/pages/${slug}/ai/${kind}`, {
+      method: 'POST', body: JSON.stringify({ key, instruction: ins ? ins.value : '' })
+    });
+    if (kind === 'rewrite') {
+      out.innerHTML = `<div class="aiOpt"><div class="angle">Suggested${r.ceiling ? ` · ceiling ${r.ceiling}` : ''}</div>${esc(r.text)}</div>
+        ${r.note ? `<div class="hint">${esc(r.note)}</div>` : ''}`;
+      out.querySelector('.aiOpt').addEventListener('click', () => setValue(key, r.text));
+    } else {
+      out.innerHTML = (r.options || []).map((o, i) =>
+        `<div class="aiOpt" data-i="${i}"><div class="angle">${esc(o.angle)}</div>${esc(o.text)}</div>`).join('');
+      out.querySelectorAll('.aiOpt').forEach(n =>
+        n.addEventListener('click', () => setValue(key, r.options[Number(n.dataset.i)].text)));
+    }
+  } catch (e) {
+    out.innerHTML = `<div class="aiErr">${esc(e.message)}</div>`;
+  } finally { btn.disabled = false; }
+}
+
+async function sectionAI(sectionKey) {
+  const host = $('body').querySelector(`[data-secout="${CSS.escape(sectionKey)}"]`);
+  const what = prompt('What should change across this whole section?\n\ne.g. "make it tighter and more concrete"');
+  if (!what) return;
+  host.innerHTML = '<div class="hint"><span class="spin"></span> Claude is rewriting the section…</div>';
+  try {
+    const r = await api(`/api/pages/${slug}/ai/section`, {
+      method: 'POST', body: JSON.stringify({ section: sectionKey, instruction: what })
+    });
+    host.innerHTML = `<div class="banner"><b>${r.items.length} field(s) rewritten.</b>
+      Review below, then Save draft. <button class="btn sm" id="applyAll">Apply all</button></div>`;
+    host.querySelector('#applyAll').addEventListener('click', () => {
+      r.items.forEach(it => setValue(it.key, it.text));
+      host.innerHTML = '<div class="banner"><b>Applied as drafts.</b> Nothing is live until you publish.</div>';
+    });
+  } catch (e) {
+    host.innerHTML = `<div class="aiErr">${esc(e.message)}</div>`;
+  }
+}
+
+$('q').addEventListener('input', render);
+
+$('save').addEventListener('click', async () => {
+  if (!changes.size) return;
+  $('save').disabled = true;
+  try {
+    const r = await api(`/api/pages/${slug}/content`, {
+      method: 'PUT', body: JSON.stringify({ changes: Object.fromEntries(changes) })
+    });
+    changes.clear(); bar(); await load();
+    alert(`Saved ${r.saved} change(s) as a draft. Nothing is live yet.`);
+  } catch (e) { alert(e.message); }
+  finally { $('save').disabled = false; }
+});
+
+$('discard').addEventListener('click', async () => {
+  if (!confirm('Discard every unpublished change on this page?')) return;
+  await api(`/api/pages/${slug}/revert`, { method: 'POST' });
+  changes.clear(); bar(); await load();
+});
+
+if (CAN.publish) {
+  const b = document.createElement('button');
+  b.className = 'btn primary'; b.textContent = 'Publish';
+  b.style.marginLeft = '6px';
+  b.addEventListener('click', async () => {
+    if (changes.size && !confirm('Save your unsaved changes first, then publish?')) return;
+    if (changes.size) $('save').click();
+    if (!confirm('Publish all drafts to the live site?')) return;
+    try {
+      const r = await api(`/api/pages/${slug}/publish`, { method: 'POST' });
+      await load();
+      alert(r.published ? `Published ${r.published} change(s) — live now.` : 'Nothing to publish.');
+    } catch (e) { alert(e.message); }
+  });
+  document.querySelector('.phead').appendChild(b);
+}
+
+window.addEventListener('beforeunload', (e) => { if (changes.size) { e.preventDefault(); e.returnValue = ''; } });
+await load();
+</script></body></html>

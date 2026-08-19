@@ -1,0 +1,534 @@
+<script src="https://cdn.jsdelivr.net/npm/moment@2.30.1/moment.min.js"></script>
+
+
+
+<section class="eventsMU homeEvents pgp_rise_events  " id="section__events">
+    <div class="container">
+        <div class="headingWrapperButton ">
+
+            {{!-- <span class="lightMuVector">Upcoming Events </span> --}}
+            <nav class="navigationWrapper upcomingNew-Events hide">
+                <ul class="tabs faqtabs" id="eventcomponent">
+                    {{!-- <li data-rel="Eventtab41" class="active">EVENTS</li> --}}
+                    <li class=" active" data-rel="Eventtab42">RECENT HIGHLIGHTS</li>
+                    {{!-- <li data-rel="Eventtab43" class="">UPCOMING EVENTS</li> --}}
+                </ul>
+            </nav>
+            <h2 class="sectionHeadingTech font-white active" data-rel="Eventtab421">Upcoming
+                <span class="sectionGradientHeadIt">Events</span>
+                - Coming Soon!
+            </h2>
+            <div class="immersionBtn mob-hide hide">
+                <div class="intersectEventSwiper-next next" tabindex="0" role="button" aria-label="Next slide"
+                    aria-controls="swiper-wrapper-f618cb89a9df2dcc" aria-disabled="false">
+                    <img  src="https://images.mastersunion.link/uploads/21022025/v1/nextButton.svg"
+                        alt="">
+                </div>
+                <div class="intersectEventSwiper-prev prev swiper-button-disabled" tabindex="-1" role="button"
+                    aria-label="Previous slide" aria-controls="swiper-wrapper-f618cb89a9df2dcc" aria-disabled="true">
+                    <img  src="https://images.mastersunion.link/uploads/21022025/v1/nextButton.svg"
+                        alt="">
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section hide">
+            <div class="content hide" id="Eventtab41">
+                <div class="swiper eventSlider events">
+                    <div class="swiper-wrapper" id="latestEvents"> </div>
+                </div>
+            </div>
+            <div class="content active" id="Eventtab421">
+                <div class="swiper eventSlider intersectEventSwiper">
+                    <div class="swiper-wrapper" id="recentEvents"> </div>
+                </div>
+            </div>
+            <div class="content hide" id="Eventtab43">
+                <div class="swiper eventSlider events">
+                    <div class="swiper-wrapper" id="admissionsHome"> </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<script>
+    //events
+
+    function getLatestEvents() {
+        $.ajax({
+            url: '{{apiBaseURL}}/api/getUpcomingEventsMastersunion?limit=30',
+        }).done(function (response) {
+            if (response.IsSuccess == true) {
+                bindLatestEvents(response.Data.upcomingEvents);
+            }
+        });
+    }
+
+    function convertTime12to24(time12h) {
+        var [time, modifier] = time12h.split(' ');
+
+        var [hours, minutes] = time.split(':');
+
+        if (hours === '12') {
+            hours = '00';
+        }
+
+        if (modifier === 'PM') {
+            hours = parseInt(hours, 10) + 12;
+        }
+
+        return `${hours}:${minutes}`;
+    }
+
+
+
+    function bindLatestEvents(events) {
+        const customEventTags = {
+            "PGP Family Business Management": "PGP Rise: FBT"
+        }
+
+        const generator = new UniqueRandomGenerator();
+
+        events.forEach(event => {
+            var time = convertTime12to24(event.fromTime);
+            if (event.isBigEvent) {
+                time = "11:59";
+            }
+            const eventLocation = event.eventLocation.toLowerCase() === "offline" ? "On Campus" : event.eventLocation;
+
+
+            const eventTag = customEventTags[event.eventCourseType] || event.eventCourseType;
+            var eventHtml = `<div class="swiper-slide eventSlide ">
+                    <div class="eventImg">
+                        <img   src="${generator.getUniqueRandomLink()}" alt="Icon">
+                    </div>
+                    <div class="eventData">
+                        <div class="eventHeading mt-15">${event.title.replace(/<br\s*\/?>/gi, ' ').replace(/\s*\(.*?\)\s*/g, "")}</div>
+                          <div class="eventTagsWrapper mt8">
+                        <div class="eventTag blackeventTag"> <p>${eventTag}</p></div>
+                        <div class="eventTag">${eventLocation}</div>
+                        </div>
+                    
+                        <div class="datetimeWrapper">
+                        <div class="boxTime">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M11.3749 2.1875H2.62488C2.38325 2.1875 2.18738 2.38338 2.18738 2.625V11.375C2.18738 11.6166 2.38325 11.8125 2.62488 11.8125H11.3749C11.6165 11.8125 11.8124 11.6166 11.8124 11.375V2.625C11.8124 2.38338 11.6165 2.1875 11.3749 2.1875Z" stroke="#171717" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M9.62579 1.09277V2.18652" stroke="#171717" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M4.37613 1.09277V2.18652" stroke="#171717" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2.18738 4.81152H11.8124" stroke="#171717" stroke-linecap="round" stroke-linejoin="round"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M9.46821 6.99903C9.46821 6.80964 9.36121 6.63651 9.19182 6.55181C9.02242 6.46712 8.81972 6.48539 8.66821 6.59903L7.79321 7.25528C7.57229 7.42096 7.52752 7.73436 7.69321 7.95528C7.85889 8.17619 8.17229 8.22096 8.39321 8.05528L8.46821 7.99903V9.84278C8.46821 10.1189 8.69207 10.3428 8.96821 10.3428C9.24435 10.3428 9.46821 10.1189 9.46821 9.84278V6.99903ZM4.81207 6.49903C4.53593 6.49903 4.31207 6.72288 4.31207 6.99903C4.31207 7.27517 4.53593 7.49903 4.81207 7.49903H5.30301L5.07789 7.78043C4.95782 7.93051 4.93441 8.13614 5.01767 8.30937C5.10093 8.4826 5.27612 8.59278 5.46832 8.59278C5.52998 8.59278 5.59069 8.60798 5.64507 8.63704C5.69945 8.6661 5.74583 8.70813 5.78009 8.75939C5.81436 8.81065 5.83545 8.86957 5.84151 8.93093C5.84757 8.9923 5.8384 9.0542 5.81482 9.11118C5.79124 9.16815 5.75398 9.21843 5.70633 9.25756C5.65868 9.2967 5.60212 9.32348 5.54165 9.33554C5.48118 9.34759 5.41867 9.34455 5.35966 9.32669C5.30064 9.30882 5.24695 9.27668 5.20332 9.2331C5.00794 9.03796 4.69136 9.03815 4.49621 9.23353C4.30107 9.42892 4.30126 9.7455 4.49664 9.94064C4.65661 10.1004 4.8535 10.2183 5.06988 10.2838C5.28627 10.3493 5.51547 10.3604 5.73719 10.3162C5.95891 10.272 6.16631 10.1738 6.34102 10.0303C6.51573 9.88684 6.65236 9.70248 6.73882 9.49358C6.82527 9.28468 6.85888 9.05768 6.83667 8.83269C6.81446 8.6077 6.73711 8.39166 6.61148 8.20369C6.5242 8.07311 6.41549 7.95889 6.29039 7.86558L6.73376 7.31137C6.85383 7.16129 6.87723 6.95566 6.79397 6.78243C6.71071 6.6092 6.53553 6.49903 6.34332 6.49903H4.81207Z" fill="url(#paint0_linear_1_2372)"/>
+<defs>
+<linearGradient id="paint0_linear_1_2372" x1="4.63863" y1="7.67351" x2="9.29937" y2="7.69289" gradientUnits="userSpaceOnUse">
+<stop stop-color="#39B6D8"/>
+<stop offset="0.5" stop-color="#F7D344"/>
+<stop offset="1" stop-color="#E38330"/>
+</linearGradient>
+</defs>
+</svg>
+<p>${moment(event.eventDate).format('Do MMMM')}</p>
+
+                        </div>
+                        <div class="boxTime">
+<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="https://www.w3.org/2000/svg">
+<path d="M7 1.3125C5.87512 1.3125 4.7755 1.64607 3.8402 2.27102C2.90489 2.89597 2.17591 3.78423 1.74544 4.82349C1.31496 5.86274 1.20233 7.00631 1.42179 8.10958C1.64124 9.21284 2.18292 10.2263 2.97833 11.0217C3.77374 11.8171 4.78716 12.3588 5.89043 12.5782C6.99369 12.7977 8.13726 12.685 9.17651 12.2546C10.2158 11.8241 11.104 11.0951 11.729 10.1598C12.3539 9.2245 12.6875 8.12488 12.6875 7C12.6859 5.49207 12.0862 4.04636 11.0199 2.98009C9.95364 1.91382 8.50793 1.31409 7 1.3125ZM7 11.8125C6.04818 11.8125 5.11773 11.5303 4.32632 11.0014C3.53491 10.4726 2.91808 9.72103 2.55383 8.84166C2.18959 7.9623 2.09428 6.99466 2.27997 6.06113C2.46566 5.12759 2.92401 4.27009 3.59705 3.59705C4.27009 2.92401 5.1276 2.46566 6.06113 2.27997C6.99466 2.09428 7.9623 2.18958 8.84167 2.55383C9.72104 2.91808 10.4726 3.53491 11.0014 4.32632C11.5303 5.11773 11.8125 6.04818 11.8125 7C11.8111 8.27591 11.3036 9.49915 10.4014 10.4014C9.49915 11.3036 8.27591 11.8111 7 11.8125Z" fill="#171717"/>
+<path d="M10.3719 7.30936C10.4539 7.22731 10.5 7.11603 10.5 7C10.5 6.88397 10.4539 6.77269 10.3719 6.69064C10.2898 6.60859 10.1785 6.5625 10.0625 6.5625H7.4375V3.9375C7.4375 3.82147 7.39141 3.71019 7.30936 3.62814C7.22731 3.54609 7.11603 3.5 7 3.5C6.88397 3.5 6.77269 3.54609 6.69064 3.62814C6.60859 3.71019 6.5625 3.82147 6.5625 3.9375V7C6.5625 7.11603 6.60859 7.22731 6.69064 7.30936C6.77269 7.39141 6.88397 7.4375 7 7.4375H10.0625C10.1785 7.4375 10.2898 7.39141 10.3719 7.30936Z" fill="url(#paint0_linear_1_2384)"/>
+<defs>
+<linearGradient id="paint0_linear_1_2384" x1="6.81187" y1="4.70313" x2="10.3711" y2="4.71416" gradientUnits="userSpaceOnUse">
+<stop stop-color="#39B6D8"/>
+<stop offset="0.5" stop-color="#F7D344"/>
+<stop offset="1" stop-color="#E38330"/>
+</linearGradient>
+</defs>
+</svg>
+
+                            <p>${event.fromTime} - ${event.toTime}</p>
+                        </div>
+                        
+                              </div>
+                       
+                        <hr class="lineBreaker">
+                        <a class="registerLink " target="_blank" href="${event.isBigEvent ? `https://mastersunion.org/events/${event.slug}` : `/events/${event.slug}`}">
+                            Register Now
+                            <svg width="25" height="24" viewBox="0 0 25 24" fill="none"
+                                xmlns="https://www.w3.org/2000/svg">
+                                <path
+                                    d="M8.58984 16.59L13.1698 12L8.58984 7.41L9.99984 6L15.9998 12L9.99984 18L8.58984 16.59Z"
+                                    fill="url(#paint0_linear_2_24161)" />
+                                <defs>
+                                    <linearGradient id="paint0_linear_2_24161" x1="12.2948" y1="6" x2="12.2948" y2="18"
+                                        gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#39B6D8" />
+                                        <stop offset="0.5" stop-color="#F7D344" />
+                                        <stop offset="1" stop-color="#E38330" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </a>
+                    </div>
+                </div>`
+            //var eventHtml = ` <div class="experienceBox swiper-slide">
+            //        <img   src=${event.carouselImage} alt="carousal">
+            //        <div class="experienceDetails">
+            //            <h4 class="heading-6">${event.title}</h4>
+            //            <div class="expericeDateDetails mt-10">
+            //                <span class="ytag">${event.isBigEvent && event.fromDate != event.eventDate ? moment(event.fromDate).format('Do MMM YYYY') + " - " + moment(event.eventDate).format('Do MMM YYYY') :
+            //        moment(event.eventDate).format('Do MMM YYYY') + ", " + event.fromTime}</span>
+            //                <span class="ytag">${event.eventLocation}</span>
+            //            </div>
+            //            <p class="text-3 mt-10 mtopBtnHome">${event.description}</p>
+            //            <div class="heroButtonGroup mt-25">
+            //                 ${event.isRegistrationOpen === false || !moment(event.eventDate.split('T')[0] + "T" + time + ":00").isAfter() ? `<button class="exploreBtnRed disabledButton">Registration Closed</button>` :
+            //        `<a target="_blank" href="/events/${event.slug}" class="exploreBtnRed">Register Now</a>`}   
+            //            </div>
+            //        </div>
+            //    </div>`
+
+            $('#latestEvents').append(eventHtml)
+
+
+        })
+    }
+    //events ends
+
+    document.addEventListener("DOMContentLoaded", function () {
+        if (window.location.pathname === '/') {
+            getLatestEvents();
+            console.log("Home page");
+        } else {
+            setTimeout(getLatestEvents, 2000);
+        }
+    });
+
+
+    ///    - - - START LATEST NEWS BIND - --   
+
+    const latestNewsArray = [
+        {
+            newsTitle: " Intersect 5.0",
+            newsDate: "13th February, 2026",
+            cohort: "Flagship Event",
+            newsBannerCDN: "https://images.mastersunion.link/uploads/08042025/v1/Frame1321317237.webp",
+            nextLink: "https://mastersunion.org/events/intersectfifthedition"
+        },
+        /*
+        {
+            newsTitle: "The Dropshipping Challenge",
+            youtubeLink: "Y64eQw0UZZM",
+            newsDate: "8th December, 2024",
+            cohort: "Cohort III",
+            newsBannerCDN: "https://images.mastersunion.link/uploads/03012025/v1/dropshippingRiseEvent.webp",
+            nextLink: "https://economictimes.indiatimes.com/jobs/hr-policies-trends/masters-union-mba-cohort-2024-reports-rs-28-52-lakh-average-salary-top-offers-reach-rs-61-8-lakh/articleshow/115755571.cms?from=mdr"
+        },
+        {
+            newsTitle: "Venture Initiation Programme Demo Day",
+            youtubeLink: "QnFHhvaHrEQ",
+            newsDate: "17th November, 2024",
+            cohort: "Cohort II",
+            newsBannerCDN: "https://images.mastersunion.link/uploads/03012025/v1/dropshippingRiseEvent2.webp",
+            nextLink: "https://www.livemint.com/news/india/pwc-india-partners-with-masters-union-to-equip-future-leaders-with-industry-ready-skills-11732785829600.html"
+        },
+        {
+            newsTitle: "Global Immersion at H-Farm Business School",
+            youtubeLink: "dhxyKTyZ9zU",
+            newsDate: "5th July, 2024",
+            cohort: "Cohort II",
+            newsBannerCDN: "https://images.mastersunion.link/uploads/03012025/v1/dropshippingRiseEvent3.webp",
+            nextLink: "https://www.moneycontrol.com/education/masters-union-pgp-graduates-secure-rs-28-52-lpa-average-salary-highest-at-rs-61-8-lpa-article-12881752.html"
+        },
+        {
+            newsTitle: "Leadership Residency",
+            youtubeLink: "OB8Ro2EZ3ds",
+            newsDate: "7th April, 2024",
+            cohort: "Cohort I",
+            newsBannerCDN: "https://images.mastersunion.link/uploads/16012025/v1/leaderresidency.webp",
+            nextLink: "https://www.moneycontrol.com/education/masters-union-pgp-graduates-secure-rs-28-52-lpa-average-salary-highest-at-rs-61-8-lpa-article-12881752.html"
+        },
+        {
+            newsTitle: "Orientation Residency",
+            youtubeLink: "ceta9coFjs4",
+            newsDate: "1st March, 2024",
+            cohort: "Cohort II",
+            newsBannerCDN: "https://images.mastersunion.link/uploads/16012025/v1/orientresidency.webp",
+            nextLink: "https://www.moneycontrol.com/education/masters-union-pgp-graduates-secure-rs-28-52-lpa-average-salary-highest-at-rs-61-8-lpa-article-12881752.html"
+        },*/
+
+    ];
+
+
+    function bindLatestNews(latestNewsArray) {
+
+
+
+        latestNewsArray.forEach(news => {
+
+
+            var eventHtml = `<div class="swiper-slide eventSlide ">
+	<div class="eventImg masterImage">
+    
+		<img   src="${news.newsBannerCDN}" class="pgpRiseEventImg" alt="">
+        <div class="masterPlay hide" onclick="openPopup('${news.youtubeLink}');"><img  src="https://files.mastersunion.link/resources/svg/homePlayIcon.svg" alt="icon"></div>
+                    </div>
+		<div class="eventData">
+			<div class="eventHeading mt-15">${news.newsTitle}</div>
+			<div class="eventTagsWrapper mt8">
+				<div class="eventTag blackeventTag">
+					<p>${news.cohort}</p>
+				</div>
+			
+			</div>
+
+			<div class="datetimeWrapper">
+				<div class="boxTime">
+					<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="https://www.w3.org/2000/svg">
+						<path
+							d="M11.3749 2.1875H2.62488C2.38325 2.1875 2.18738 2.38338 2.18738 2.625V11.375C2.18738 11.6166 2.38325 11.8125 2.62488 11.8125H11.3749C11.6165 11.8125 11.8124 11.6166 11.8124 11.375V2.625C11.8124 2.38338 11.6165 2.1875 11.3749 2.1875Z"
+							stroke="#171717" stroke-linecap="round" stroke-linejoin="round" />
+						<path d="M9.62579 1.09277V2.18652" stroke="#171717" stroke-linecap="round"
+							stroke-linejoin="round" />
+						<path d="M4.37613 1.09277V2.18652" stroke="#171717" stroke-linecap="round"
+							stroke-linejoin="round" />
+						<path d="M2.18738 4.81152H11.8124" stroke="#171717" stroke-linecap="round"
+							stroke-linejoin="round" />
+						<path fill-rule="evenodd" clip-rule="evenodd"
+							d="M9.46821 6.99903C9.46821 6.80964 9.36121 6.63651 9.19182 6.55181C9.02242 6.46712 8.81972 6.48539 8.66821 6.59903L7.79321 7.25528C7.57229 7.42096 7.52752 7.73436 7.69321 7.95528C7.85889 8.17619 8.17229 8.22096 8.39321 8.05528L8.46821 7.99903V9.84278C8.46821 10.1189 8.69207 10.3428 8.96821 10.3428C9.24435 10.3428 9.46821 10.1189 9.46821 9.84278V6.99903ZM4.81207 6.49903C4.53593 6.49903 4.31207 6.72288 4.31207 6.99903C4.31207 7.27517 4.53593 7.49903 4.81207 7.49903H5.30301L5.07789 7.78043C4.95782 7.93051 4.93441 8.13614 5.01767 8.30937C5.10093 8.4826 5.27612 8.59278 5.46832 8.59278C5.52998 8.59278 5.59069 8.60798 5.64507 8.63704C5.69945 8.6661 5.74583 8.70813 5.78009 8.75939C5.81436 8.81065 5.83545 8.86957 5.84151 8.93093C5.84757 8.9923 5.8384 9.0542 5.81482 9.11118C5.79124 9.16815 5.75398 9.21843 5.70633 9.25756C5.65868 9.2967 5.60212 9.32348 5.54165 9.33554C5.48118 9.34759 5.41867 9.34455 5.35966 9.32669C5.30064 9.30882 5.24695 9.27668 5.20332 9.2331C5.00794 9.03796 4.69136 9.03815 4.49621 9.23353C4.30107 9.42892 4.30126 9.7455 4.49664 9.94064C4.65661 10.1004 4.8535 10.2183 5.06988 10.2838C5.28627 10.3493 5.51547 10.3604 5.73719 10.3162C5.95891 10.272 6.16631 10.1738 6.34102 10.0303C6.51573 9.88684 6.65236 9.70248 6.73882 9.49358C6.82527 9.28468 6.85888 9.05768 6.83667 8.83269C6.81446 8.6077 6.73711 8.39166 6.61148 8.20369C6.5242 8.07311 6.41549 7.95889 6.29039 7.86558L6.73376 7.31137C6.85383 7.16129 6.87723 6.95566 6.79397 6.78243C6.71071 6.6092 6.53553 6.49903 6.34332 6.49903H4.81207Z"
+							fill="url(#paint0_linear_1_2372)" />
+						<defs>
+							<linearGradient id="paint0_linear_1_2372" x1="4.63863" y1="7.67351" x2="9.29937"
+								y2="7.69289" gradientUnits="userSpaceOnUse">
+								<stop stop-color="#39B6D8" />
+								<stop offset="0.5" stop-color="#F7D344" />
+								<stop offset="1" stop-color="#E38330" />
+							</linearGradient>
+						</defs>
+					</svg>
+					<p>${news.newsDate}</p>
+
+				</div>
+
+                
+
+
+			</div>
+
+            
+	<hr class="lineBreaker">
+			<a class="registerLink " target="_blank" href="${news.nextLink}">
+				Apply Now
+				<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+					<path d="M8.58984 16.59L13.1698 12L8.58984 7.41L9.99984 6L15.9998 12L9.99984 18L8.58984 16.59Z"
+						fill="url(#paint0_linear_2_24161)" />
+					<defs>
+						<linearGradient id="paint0_linear_2_24161" x1="12.2948" y1="6" x2="12.2948" y2="18"
+							gradientUnits="userSpaceOnUse">
+							<stop stop-color="#39B6D8" />
+							<stop offset="0.5" stop-color="#F7D344" />
+							<stop offset="1" stop-color="#E38330" />
+						</linearGradient>
+					</defs>
+				</svg>
+			</a>
+			
+		</div>
+	</div>`
+
+            $('#recentEvents').append(eventHtml)
+
+
+        })
+    }
+
+    bindLatestNews(latestNewsArray);
+    ///    - - - END LATEST NEWS BIND - --   
+
+
+
+
+
+    ///    - - - START LATEST NEWS BIND - --   
+
+    const AdmissionsArray = [
+        {
+            admissionsTittle: "PGP in Tech & Business Management",
+            courseDuration: "16 Months",
+            admissionstype: "On Campus",
+            admissionsDate: "R3 Deadline: 23rd March",
+            admissionsBannerCDN: "https://new.mastersunion.link/assets/img/pgpinthechbusinesmgmtadmissions1.png",
+            nextLink: "/pgp-tbm-applynow"
+        },
+        /* {
+             admissionsTittle: "PGP in Family Business Legacy Management",
+             courseDuration: "16 Months",
+             admissionstype: "On Campus",
+             admissionsDate: "R3 Deadline: 23rd March",
+             admissionsBannerCDN: "https://images.mastersunion.link/uploads/30122024/pgpbfmprogramcard1.webp",
+             nextLink: "/pgp-tbm-applynow"
+         }, */
+        {
+            admissionsTittle: "UG Programme in Tech & Business Management",
+            courseDuration: "4 years",
+            admissionstype: "On Campus",
+            admissionsDate: "R2 Deadline: February '25",
+            admissionsBannerCDN: "https://files.mastersunion.link/media/img/ugProgramme.webp",
+            nextLink: "https://ug-admissions.mastersunion.org/ugadmissionsform/"
+        },
+        {
+            admissionsTittle: "UG Programme in Psychology & Marketing",
+            courseDuration: "4 years",
+            admissionstype: "On Campus",
+            admissionsDate: "R2 Deadline: February '25",
+            admissionsBannerCDN: "https://files.mastersunion.link/media/img/ugProgrammePsy.webp",
+            nextLink: "https://ug-admissions.mastersunion.org/ugadmissionsform/"
+        },
+        {
+            admissionsTittle: "PGP Rise: General Management",
+            courseDuration: "1 year",
+            admissionstype: "Blended",
+            admissionsDate: "R3 Deadline:  27th January '25",
+            admissionsBannerCDN: "https://files.mastersunion.link/media/img/pgpRise.webp",
+            nextLink: "https://admissions.mastersunion.org/pgp-rise-general-management-admissionportal"
+        },
+        {
+            admissionsTittle: "PGP Rise: Owners & Promoters Management",
+            courseDuration: "1 year",
+            admissionstype: "Blended",
+            admissionsDate: "R1 Deadline: 31st January '25",
+            admissionsBannerCDN: "https://files.mastersunion.link/media/img/pgpRiseFbt.webp",
+            nextLink: "/pgp-rise-opm-apply-now"
+        },
+        {
+            admissionsTittle: "PGP Rise: General Management (Global)",
+            courseDuration: "1 year",
+            admissionstype: "Online",
+            admissionsDate: "R1 Deadline: 31st January '25",
+            admissionsBannerCDN: "https://files.mastersunion.link/media/img/pgpRiseMena.webp",
+            nextLink: "https://admissions.mastersunion.org/pgp-rise-general-management-global"
+        }
+    ];
+
+
+    function BindAdmissions(AdmissionsArray) {
+
+
+
+        AdmissionsArray.forEach(admissions => {
+
+
+            var admissionsHtml = `
+            
+            <div class="swiper-slide eventSlide ">
+	<div class="eventImg">
+		<img   src="${admissions.admissionsBannerCDN}" alt="Icon">
+                    </div>
+		<div class="eventData">
+			<div class="eventHeading mt-15">${admissions.admissionsTittle}</div>
+			<div class="eventTagsWrapper mt8">
+				<div class="eventTag blackeventTag">
+					<p>${admissions.admissionstype.toUpperCase()}</p>
+				</div>
+				<div class="eventTag">${admissions.courseDuration}</div>
+			</div>
+
+			<div class="datetimeWrapper">
+				<div class="boxTime">
+					<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="https://www.w3.org/2000/svg">
+						<path
+							d="M11.3749 2.1875H2.62488C2.38325 2.1875 2.18738 2.38338 2.18738 2.625V11.375C2.18738 11.6166 2.38325 11.8125 2.62488 11.8125H11.3749C11.6165 11.8125 11.8124 11.6166 11.8124 11.375V2.625C11.8124 2.38338 11.6165 2.1875 11.3749 2.1875Z"
+							stroke="#171717" stroke-linecap="round" stroke-linejoin="round" />
+						<path d="M9.62579 1.09277V2.18652" stroke="#171717" stroke-linecap="round"
+							stroke-linejoin="round" />
+						<path d="M4.37613 1.09277V2.18652" stroke="#171717" stroke-linecap="round"
+							stroke-linejoin="round" />
+						<path d="M2.18738 4.81152H11.8124" stroke="#171717" stroke-linecap="round"
+							stroke-linejoin="round" />
+						<path fill-rule="evenodd" clip-rule="evenodd"
+							d="M9.46821 6.99903C9.46821 6.80964 9.36121 6.63651 9.19182 6.55181C9.02242 6.46712 8.81972 6.48539 8.66821 6.59903L7.79321 7.25528C7.57229 7.42096 7.52752 7.73436 7.69321 7.95528C7.85889 8.17619 8.17229 8.22096 8.39321 8.05528L8.46821 7.99903V9.84278C8.46821 10.1189 8.69207 10.3428 8.96821 10.3428C9.24435 10.3428 9.46821 10.1189 9.46821 9.84278V6.99903ZM4.81207 6.49903C4.53593 6.49903 4.31207 6.72288 4.31207 6.99903C4.31207 7.27517 4.53593 7.49903 4.81207 7.49903H5.30301L5.07789 7.78043C4.95782 7.93051 4.93441 8.13614 5.01767 8.30937C5.10093 8.4826 5.27612 8.59278 5.46832 8.59278C5.52998 8.59278 5.59069 8.60798 5.64507 8.63704C5.69945 8.6661 5.74583 8.70813 5.78009 8.75939C5.81436 8.81065 5.83545 8.86957 5.84151 8.93093C5.84757 8.9923 5.8384 9.0542 5.81482 9.11118C5.79124 9.16815 5.75398 9.21843 5.70633 9.25756C5.65868 9.2967 5.60212 9.32348 5.54165 9.33554C5.48118 9.34759 5.41867 9.34455 5.35966 9.32669C5.30064 9.30882 5.24695 9.27668 5.20332 9.2331C5.00794 9.03796 4.69136 9.03815 4.49621 9.23353C4.30107 9.42892 4.30126 9.7455 4.49664 9.94064C4.65661 10.1004 4.8535 10.2183 5.06988 10.2838C5.28627 10.3493 5.51547 10.3604 5.73719 10.3162C5.95891 10.272 6.16631 10.1738 6.34102 10.0303C6.51573 9.88684 6.65236 9.70248 6.73882 9.49358C6.82527 9.28468 6.85888 9.05768 6.83667 8.83269C6.81446 8.6077 6.73711 8.39166 6.61148 8.20369C6.5242 8.07311 6.41549 7.95889 6.29039 7.86558L6.73376 7.31137C6.85383 7.16129 6.87723 6.95566 6.79397 6.78243C6.71071 6.6092 6.53553 6.49903 6.34332 6.49903H4.81207Z"
+							fill="url(#paint0_linear_1_2372)" />
+						<defs>
+							<linearGradient id="paint0_linear_1_2372" x1="4.63863" y1="7.67351" x2="9.29937"
+								y2="7.69289" gradientUnits="userSpaceOnUse">
+								<stop stop-color="#39B6D8" />
+								<stop offset="0.5" stop-color="#F7D344" />
+								<stop offset="1" stop-color="#E38330" />
+							</linearGradient>
+						</defs>
+					</svg>
+					<p>${admissions.admissionsDate}</p>
+
+				</div>
+
+
+			</div>
+
+			<hr class="lineBreaker">
+			<a class="registerLink " target="_blank" href="${admissions.nextLink}">
+				Apply Now
+				<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="https://www.w3.org/2000/svg">
+					<path d="M8.58984 16.59L13.1698 12L8.58984 7.41L9.99984 6L15.9998 12L9.99984 18L8.58984 16.59Z"
+						fill="url(#paint0_linear_2_24161)" />
+					<defs>
+						<linearGradient id="paint0_linear_2_24161" x1="12.2948" y1="6" x2="12.2948" y2="18"
+							gradientUnits="userSpaceOnUse">
+							<stop stop-color="#39B6D8" />
+							<stop offset="0.5" stop-color="#F7D344" />
+							<stop offset="1" stop-color="#E38330" />
+						</linearGradient>
+					</defs>
+				</svg>
+			</a>
+		</div>
+	</div>
+            
+            `
+
+            $('#admissionsHome').append(admissionsHtml)
+
+
+        })
+    }
+
+    BindAdmissions(AdmissionsArray);
+    ///    - - - END LATEST NEWS BIND - --   
+
+
+
+
+    class UniqueRandomGenerator {
+
+        constructor(baseURLTemplate) {
+            this.baseURLTemplate = "https://images.mastersunion.link/events/carousel-images/Maskgroup-0.png";
+            this.range = 20;
+            this.resetNumbers();
+        }
+
+        resetNumbers() {
+            this.numbers = Array.from({ length: this.range }, (_, i) => i);
+            this.shuffle(this.numbers);
+        }
+
+        shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        getUniqueRandomLink() {
+            if (this.numbers.length === 0) {
+                this.resetNumbers();
+            }
+            const randomIndex = this.numbers.pop();
+            const img = new Image();
+            const uniqueLink = this.baseURLTemplate.replace('0.png', `${randomIndex}.png`);
+            img.src = uniqueLink;
+            return uniqueLink;
+        }
+    }
+
+
+
+
+</script>
+

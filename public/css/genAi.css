@@ -1,0 +1,3521 @@
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+
+
+/* ═══════════════════════════════════════════
+   GenAI Navigation
+   ═══════════════════════════════════════════ */
+
+.genai-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 100px;
+  background: linear-gradient(0deg, rgba(9, 9, 9, 0) 0%, rgba(9, 9, 9, 1) 100%);
+  transition: background 0.35s ease;
+}
+
+.genai-nav--scrolled {
+  background: var(--black);
+}
+
+.genai-nav__left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.genai-nav__mu-logo {
+  height: 32px;
+  width: auto;
+}
+
+.genai-nav__x {
+  font-family: 'Neue Kaine', sans-serif;
+  font-weight: 700;
+  font-size: 12.6px;
+  line-height: 1.2;
+  color: #FFFFFF;
+}
+
+.genai-nav__invideo-logo {
+  height: 29px;
+  width: auto;
+}
+
+.genai-nav__right {
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+
+.genai-nav__link {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.625;
+  text-transform: capitalize;
+  color: #A3A3A3;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.genai-nav__link:hover {
+  color: #FFFFFF;
+}
+
+.genai-nav__link--active {
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.genai-nav__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #FFFFFF;
+  border-radius: 4px;
+  font-family: 'Neue Kaine', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1;
+  color: #090909;
+  text-decoration: none;
+  backdrop-filter: blur(5px);
+  transition: background 0.3s ease;
+}
+
+.genai-nav__cta:hover {
+  background: #E5E5E5;
+}
+
+.genai-nav__cta-arrow {
+  width: 18px;
+  height: 18px;
+}
+
+.genai-nav__burger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.genai-nav__burger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* ── Nav Responsive ── */
+
+@media (max-width: 1280px) {
+  .genai-nav {
+    padding: 20px 60px;
+  }
+
+  .genai-nav__right {
+    gap: 32px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .genai-nav {
+    padding: 16px 40px;
+  }
+
+  .genai-nav__right {
+    gap: 24px;
+  }
+
+  .genai-nav__link {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .genai-nav {
+    padding: 16px 20px;
+    background: rgba(9, 9, 9, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .genai-nav__right {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: rgba(9, 9, 9, 0.97);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 16px 20px 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .genai-nav__right.is-open {
+    display: flex;
+  }
+
+  .genai-nav__link {
+    font-size: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .genai-nav__cta {
+    margin-top: 16px;
+    padding: 14px 20px;
+    font-size: 14px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .genai-nav__burger {
+    display: flex;
+  }
+
+  .genai-nav__invideo-logo {
+    height: 22px;
+  }
+
+  .genai-nav__mu-logo {
+    height: 24px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   GenAI Hero Section
+   ═══════════════════════════════════════════ */
+
+.genai-hero {
+  position: relative;
+  width: 100%;
+  height: 96vh;
+  overflow: hidden;
+  background: #090909;
+ 
+}
+.genai-hero__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 0; /* sits behind video and overlay */
+}
+.genai-hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.genai-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(9, 9, 9, 0) 43%, rgba(9, 9, 9, 1) 100%),
+    rgba(31, 31, 31, 0.5);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.genai-hero__top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding-top: 122px;
+}
+
+.genai-hero__top-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.genai-hero__typewriter {
+  max-width: 556px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.genai-hero__tw-title {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.2;
+  letter-spacing: -0.056em;
+  color: #D4D4D4;
+  margin: 0;
+}
+
+.genai-hero__tw-quote {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.2;
+  letter-spacing: -0.056em;
+  color: #FFFFFF;
+  margin: 0;
+  min-height: 66px;
+}
+
+.genai-hero__tw-quote::after {
+  content: '|';
+  animation: genai-blink 0.7s step-end infinite;
+  color: #0066FF;
+  margin-left: 2px;
+}
+
+@keyframes genai-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.genai-hero__tw-author {
+  font-family: "NeueKaine";
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.2;
+  color: #D4D4D4;
+}
+
+.genai-hero__tabs {
+  display: flex;
+  gap: 21px;
+}
+
+.genai-hero__tab {
+  width: 120px;
+  height: 90px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease;
+  background: none;
+}
+
+.genai-hero__tab--active {
+  opacity: 1;
+  box-shadow: 0 0 0 2px rgba(0, 102, 255, 0.5);
+}
+
+.genai-hero__tab:hover {
+  opacity: 0.85;
+}
+
+.genai-hero__tab img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.genai-hero__center {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 588px;
+  max-width: 90%;
+  padding-bottom: 60px;
+}
+
+.genai-hero__badges {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.genai-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 24px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 9999px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  font-family: "NeueKaine";
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.43;
+  color: #D4D4D4;
+}
+
+.genai-hero__badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 24px;
+  background: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.genai-hero__heading {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1.2;
+  color: #FFFFFF;
+  text-align: center;
+  margin: 0;
+}
+
+.genai-hero__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 32px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  color: #090909;
+  text-decoration: none;
+  backdrop-filter: blur(5px);
+  transition: background 0.3s ease;
+}
+
+.genai-hero__cta:hover {
+  background: #E5E5E5;
+}
+
+.genai-hero__cta svg {
+  width: 22px;
+  height: 22px;
+}
+
+/* ── Hero Responsive ── */
+
+@media (max-width: 1280px) {
+  .genai-hero__top {
+    padding-top: 100px;
+  }
+
+  .genai-hero__typewriter {
+    max-width: 460px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .genai-hero {
+    height: 640px;
+  }
+
+  .genai-hero__heading {
+    font-size: 38px;
+  }
+
+  .genai-hero__top {
+    padding-top: 80px;
+  }
+
+  .genai-hero__tab {
+    width: 100px;
+    height: 75px;
+  }
+
+  .genai-hero__tabs {
+    gap: 12px;
+  }
+
+  .genai-hero__typewriter {
+    max-width: 400px;
+  }
+
+  .genai-hero__tw-quote {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .genai-hero {
+    height: auto;
+    min-height: 720px;
+    padding-bottom: 40px;
+  }
+
+  .genai-hero__top {
+    position: relative;
+    padding-top: 40px;
+    padding-bottom: 20px;
+  }
+
+  .genai-hero__top-inner {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .genai-hero__typewriter {
+    max-width: 100%;
+  }
+
+  .genai-hero__tabs {
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .genai-hero__tab {
+    width: 90px;
+    height: 68px;
+    flex-shrink: 0;
+  }
+
+  .genai-hero__center {
+    position: absolute;
+    bottom: 64px;
+    left: auto;
+    transform: none;
+    width: 100%;
+    max-width: 100%;
+    padding: 20px 20px 0;
+  }
+
+  .genai-hero__heading {
+    font-size: 32px;
+  }
+
+  .genai-hero__badges {
+    flex-wrap: wrap;
+  }
+
+  .genai-hero__badge {
+    font-size: 12px;
+    padding: 4px 16px;
+  }
+
+  .genai-hero__overlay {
+    background:
+      linear-gradient(180deg, rgba(9, 9, 9, 0.3) 0%, rgba(9, 9, 9, 0.85) 100%),
+      rgba(31, 31, 31, 0.5);
+  }
+}
+
+@media (max-width: 480px) {
+  .genai-hero__heading {
+    font-size: 26px;
+  }
+
+  .genai-hero__tw-title,
+  .genai-hero__tw-quote {
+    font-size: 15px;
+  }
+
+  .genai-hero__tw-author {
+    font-size: 14px;
+  }
+
+  .genai-hero__cta {
+    padding: 14px 28px;
+    font-size: 15px;
+  }
+
+  .genai-hero__tab {
+    width: 80px;
+    height: 60px;
+  }
+}
+
+/* ── GenAI Prizes Section ── */
+
+.textWhite{
+    color: var(--white);
+}
+.textBlue{
+    color: #0066FF;
+}
+
+
+/* ── GenAI Prizes Section ── */
+
+.genai-prizes {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  padding: 120px 0;
+  background: #090909;
+  overflow: hidden;
+  min-height: 623px;
+}
+
+/* Blue ambient glow */
+.genai-prizes__glow {
+  position: absolute;
+  width: 907px;
+  height: 363px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #296BFF;
+  opacity: 0.2;
+  filter: blur(306px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Corner Borders ── */
+
+.genai-prizes__corner {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  z-index: 2;
+}
+
+.genai-prizes__corner--tl {
+  top: 24px;
+  left: 20px;
+  border-top: 1px solid #0066FF;
+  border-left: 1px solid #0066FF;
+}
+
+.genai-prizes__corner--tr {
+  top: 24px;
+  right: 20px;
+  border-top: 1px solid #0066FF;
+  border-right: 1px solid #0066FF;
+}
+
+.genai-prizes__corner--bl {
+  bottom: 24px;
+  left: 20px;
+  border-bottom: 1px solid #0066FF;
+  border-left: 1px solid #0066FF;
+}
+
+.genai-prizes__corner--br {
+  bottom: 24px;
+  right: 20px;
+  border-bottom: 1px solid #0066FF;
+  border-right: 1px solid #0066FF;
+}
+
+/* ── Main Content ── */
+
+.genai-prizes__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
+  padding: 37px 0;
+}
+
+/* ── Header / Total Prize ── */
+
+.genai-prizes__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.genai-prizes__total {
+  display: flex;
+  align-items: center;
+}
+
+.genai-prizes__line {
+  display: block;
+  width: 120px;
+  height: 1px;
+  flex-shrink: 0;
+}
+
+.genai-prizes__line--left {
+  background: linear-gradient(90deg, rgba(37, 99, 235, 1) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.genai-prizes__line--right {
+  background: linear-gradient(270deg, rgba(0, 102, 255, 1) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.genai-prizes__total-text {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.genai-prizes__label {
+  font-family: "NeueKaine";
+  font-weight: 300;
+  font-size: 30px;
+  line-height: 1.2;
+  color: #D1D5DB;
+}
+
+.genai-prizes__amount {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.2;
+  color: #FFFFFF;
+}
+
+.genai-prizes__plus {
+  font-family: "NeueKaine";
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.2;
+  color: #D1D5DB;
+}
+
+.genai-prizes__credits {
+  font-family: "NeueKaine";
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.2;
+  color: #D1D5DB;
+}
+
+/* ── Prize Cards Row ── */
+
+.genai-prizes__cards {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  width: 100%;
+  max-width: 1240px;
+  justify-content: center;
+}
+
+/* ── Individual Prize Card ── */
+
+.genai-prize-card {
+  position: relative;
+  flex: 0 1 398px;
+}
+
+.genai-prize-card--1st {
+  height: 247px;
+}
+
+.genai-prize-card--2nd {
+  height: 215px;
+}
+
+.genai-prize-card--3rd {
+  height: 183px;
+}
+
+/* Glow behind card */
+.genai-prize-card__glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  filter: blur(24px);
+  opacity: 0.5;
+  transition: all 0.3s ease;
+  z-index: 0;
+}
+
+.genai-prize-card--1st .genai-prize-card__glow {
+  background: linear-gradient(180deg, rgba(0, 102, 255, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.genai-prize-card--2nd .genai-prize-card__glow {
+  background: linear-gradient(180deg, rgba(0, 102, 255, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.genai-prize-card--3rd .genai-prize-card__glow {
+  background: linear-gradient(180deg, rgba(107, 114, 128, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.genai-prize-card:hover .genai-prize-card__glow {
+  filter: blur(48px);
+}
+
+.genai-prize-card--1st:hover .genai-prize-card__glow {
+  background: linear-gradient(180deg, rgba(0, 102, 255, 0.3) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.genai-prize-card--2nd:hover .genai-prize-card__glow {
+  background: linear-gradient(180deg, rgba(0, 102, 255, 0.2) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+.genai-prize-card--3rd:hover .genai-prize-card__glow {
+  background: linear-gradient(180deg, rgba(107, 114, 128, 0.3) 0%, rgba(0, 0, 0, 0) 100%);
+}
+
+/* Glass panel */
+.genai-prize-card__panel {
+  position: relative;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: border-color 0.3s ease;
+}
+
+.genai-prize-card--1st .genai-prize-card__panel,
+.genai-prize-card--2nd .genai-prize-card__panel {
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 2px solid rgba(0, 102, 255, 0.5);
+}
+
+.genai-prize-card--3rd .genai-prize-card__panel {
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 2px solid rgba(156, 163, 175, 0.5);
+}
+
+.genai-prize-card--1st:hover .genai-prize-card__panel {
+  border-top-color: #0066FF;
+}
+
+.genai-prize-card--2nd:hover .genai-prize-card__panel {
+  border-top-color: #0066FF;
+}
+
+.genai-prize-card--3rd:hover .genai-prize-card__panel {
+  border-top-color: #9CA3AF;
+}
+
+/* Decorative side borders */
+.genai-prize-card__border-top {
+  display: none;
+}
+
+.genai-prize-card__border-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.genai-prize-card__border-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.genai-prize-card--1st .genai-prize-card__border-left,
+.genai-prize-card--1st .genai-prize-card__border-right {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.genai-prize-card--3rd .genai-prize-card__border-right {
+  background: #0D2345;
+}
+
+/* Card body content */
+.genai-prize-card__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+/* Rank number + suffix */
+.genai-prize-card__rank {
+  display: flex;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.genai-prize-card__rank-num {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(107, 114, 128, 1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+.genai-prize-card--1st .genai-prize-card__rank-num {
+  font-size: 60px;
+}
+
+.genai-prize-card--2nd .genai-prize-card__rank-num {
+  font-size: 48px;
+}
+
+.genai-prize-card--3rd .genai-prize-card__rank-num {
+  font-size: 36px;
+}
+
+.genai-prize-card__rank-suffix {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  color: #0066FF;
+}
+
+.genai-prize-card--1st .genai-prize-card__rank-suffix {
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+.genai-prize-card--2nd .genai-prize-card__rank-suffix {
+  font-size: 18px;
+  line-height: 1.56;
+}
+
+.genai-prize-card--3rd .genai-prize-card__rank-suffix {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* "Prize" label */
+.genai-prize-card__prize-label {
+  font-family: "NeueKaine";
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #9CA3AF;
+}
+
+/* Prize value block */
+.genai-prize-card__value {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.genai-prize-card__money {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.genai-prize-card--1st .genai-prize-card__money {
+  font-size: 36px;
+}
+
+.genai-prize-card--2nd .genai-prize-card__money {
+  font-size: 30px;
+}
+
+.genai-prize-card--3rd .genai-prize-card__money {
+  font-size: 24px;
+  line-height: 1.33;
+}
+
+.genai-prize-card__value-plus {
+  font-family: "NeueKaine";
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1;
+  color: #D1D5DB;
+  margin: 4px 0;
+}
+
+.genai-prize-card__value-credits {
+  font-family: "NeueKaine";
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  color: #D1D5DB;
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 1280px) {
+  .genai-prizes {
+    padding: 100px 0;
+  }
+
+  .genai-prizes__cards {
+    max-width: 100%;
+  }
+
+  .genai-prize-card {
+    flex: 1 1 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .genai-prizes {
+    padding: 80px 0;
+  }
+
+  .genai-prizes__content {
+    gap: 40px;
+  }
+
+  .genai-prizes__label,
+  .genai-prizes__amount,
+  .genai-prizes__plus,
+  .genai-prizes__credits {
+    font-size: 24px;
+  }
+
+  .genai-prize-card--1st .genai-prize-card__rank-num {
+    font-size: 48px;
+  }
+
+  .genai-prize-card--2nd .genai-prize-card__rank-num {
+    font-size: 40px;
+  }
+
+  .genai-prize-card--3rd .genai-prize-card__rank-num {
+    font-size: 32px;
+  }
+
+  .genai-prize-card--1st .genai-prize-card__money {
+    font-size: 28px;
+  }
+
+  .genai-prize-card--2nd .genai-prize-card__money {
+    font-size: 24px;
+  }
+
+  .genai-prize-card--3rd .genai-prize-card__money {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .genai-prizes {
+    padding: 60px 0;
+    min-height: auto;
+  }
+
+  .genai-prizes__glow {
+    width: 400px;
+    height: 200px;
+    filter: blur(180px);
+  }
+
+  .genai-prizes__corner {
+    width: 20px;
+    height: 20px;
+  }
+
+  .genai-prizes__corner--tl {
+    top: 12px;
+    left: 12px;
+  }
+
+  .genai-prizes__corner--tr {
+    top: 12px;
+    right: 12px;
+  }
+
+  .genai-prizes__corner--bl {
+    bottom: 12px;
+    left: 12px;
+  }
+
+  .genai-prizes__corner--br {
+    bottom: 12px;
+    right: 12px;
+  }
+
+  .genai-prizes__content {
+    gap: 32px;
+    padding: 20px 0;
+  }
+
+  .genai-prizes__line {
+    width: 60px;
+  }
+
+  .genai-prizes__label,
+  .genai-prizes__amount,
+  .genai-prizes__plus,
+  .genai-prizes__credits {
+    font-size: 20px;
+  }
+
+  .genai-prizes__cards {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .genai-prize-card {
+    width: 100%;
+    max-width: 400px;
+    flex: none;
+  }
+
+  .genai-prize-card--1st {
+    height: 220px;
+  }
+
+  .genai-prize-card--2nd {
+    height: 200px;
+  }
+
+  .genai-prize-card--3rd {
+    height: 180px;
+  }
+
+  .genai-prize-card--1st .genai-prize-card__rank-num {
+    font-size: 52px;
+  }
+
+  .genai-prize-card--2nd .genai-prize-card__rank-num {
+    font-size: 44px;
+  }
+
+  .genai-prize-card--3rd .genai-prize-card__rank-num {
+    font-size: 36px;
+  }
+
+  .genai-prize-card--1st .genai-prize-card__money {
+    font-size: 32px;
+  }
+
+  .genai-prize-card--2nd .genai-prize-card__money {
+    font-size: 26px;
+  }
+
+  .genai-prize-card--3rd .genai-prize-card__money {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .genai-prizes {
+    padding: 48px 0;
+  }
+
+  .genai-prizes__content {
+    gap: 28px;
+  }
+
+  .genai-prizes__line {
+    width: 40px;
+  }
+
+  .genai-prizes__label,
+  .genai-prizes__amount,
+  .genai-prizes__plus,
+  .genai-prizes__credits {
+    font-size: 18px;
+  }
+
+  .genai-prize-card--1st {
+    height: 200px;
+  }
+
+  .genai-prize-card--2nd {
+    height: 185px;
+  }
+
+  .genai-prize-card--3rd {
+    height: 170px;
+  }
+
+  .genai-prize-card--1st .genai-prize-card__rank-num {
+    font-size: 44px;
+  }
+
+  .genai-prize-card--2nd .genai-prize-card__rank-num {
+    font-size: 38px;
+  }
+
+  .genai-prize-card--3rd .genai-prize-card__rank-num {
+    font-size: 30px;
+  }
+
+  .genai-prize-card--1st .genai-prize-card__money {
+    font-size: 28px;
+  }
+
+  .genai-prize-card--2nd .genai-prize-card__money {
+    font-size: 22px;
+  }
+
+  .genai-prize-card--3rd .genai-prize-card__money {
+    font-size: 18px;
+  }
+
+  .genai-prize-card__value-credits {
+    font-size: 12px;
+  }
+
+  .genai-prize-card__value-plus {
+    font-size: 14px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   GenAI About Section
+   ═══════════════════════════════════════════ */
+
+.genai-about {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.genai-about-section {
+  background: #090909;
+  padding: 100px 0;
+}
+
+/* ── Left Column ── */
+
+.genai-about__left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.genai-about__heading {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 38px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #0066FF;
+  margin: 0;
+}
+
+.genai-about__desc {
+  font-family: "NeueKaine";
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.2;
+  color: #D4D4D4;
+  margin: 0;
+}
+
+.genai-about__desc-bold{
+    font-weight: 900;
+}
+
+.genai-about__register {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.625;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+/* ── Challenge Card ── */
+
+.genai-challenge {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px;
+  background: rgba(23, 23, 23, 0.5);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.genai-challenge__accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: #0066FF;
+}
+
+.genai-challenge__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.genai-challenge__title {
+  font-family: "NeueKaine";
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1.22;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.genai-challenge__desc {
+  font-family: "NeueKaine";
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.625;
+  color: #D4D4D4;
+  margin: 0;
+}
+
+.genai-challenge__rules {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.genai-challenge__rule {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.genai-challenge__check {
+  width: 18px;
+  height: 18px;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.genai-challenge__rule span {
+  font-family: "NeueKaine";
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 1.625;
+  color: #D1D5DB;
+}
+
+.genai-challenge__note {
+  font-family: "NeueKaine";
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.625;
+  color: #0066FF;
+  margin: 0;
+}
+
+/* ── Right Column ── */
+
+.genai-about__right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+  flex-shrink: 0;
+  width: 440px;
+  position: sticky;
+  top: 80px;
+}
+
+/* Partner Cards */
+
+.genai-partner-card {
+  background: #171717;
+  border-radius: 16px;
+}
+
+.genai-partner-card--copowered {
+  padding: 32px 100px;
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.genai-partner-card--workshop {
+  padding: 32px 100px;
+  min-height: 134px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.genai-partner-card__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.genai-partner-card__content--compact {
+  gap: 8px;
+}
+
+.genai-partner-card__label {
+  font-family: "NeueKaine";
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.25;
+  color: #F5F5F5;
+}
+
+.genai-partner-card__logo--copowered {
+  width: 250px;
+  height: auto;
+  object-fit: cover;
+}
+
+.genai-partner-card__logo--workshop {
+  width: 206px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Next Tech Card */
+
+.genai-nexttech-card {
+  background: #171717;
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.genai-nexttech-card__title {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.22;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.genai-nexttech-card__desc {
+  font-family: "NeueKaine";
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.83;
+  color: #A3A3A3;
+  margin: 0;
+}
+
+/* ── About Section Responsive ── */
+
+@media (max-width: 1280px) {
+  .genai-about__right {
+    width: 380px;
+  }
+
+  .genai-partner-card--copowered,
+  .genai-partner-card--workshop {
+    padding: 32px 60px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .genai-about-section {
+    padding: 80px 0;
+  }
+
+  .genai-about {
+    flex-direction: column;
+  }
+
+  .genai-about__right {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .genai-partner-card--copowered,
+  .genai-partner-card--workshop {
+    flex: 1 1 calc(50% - 12px);
+    min-width: 280px;
+  }
+
+  .genai-nexttech-card {
+    flex: 1 1 100%;
+  }
+
+  .genai-about__heading {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .genai-about-section {
+    padding: 60px 0;
+  }
+
+  .genai-about {
+    gap: 32px;
+  }
+
+  .genai-about__heading {
+    font-size: 26px;
+  }
+
+  .genai-about__desc {
+    font-size: 17px;
+  }
+
+  .genai-about__register {
+    font-size: 16px;
+  }
+
+  .genai-challenge__title {
+    font-size: 20px;
+  }
+
+  .genai-challenge__desc,
+  .genai-challenge__rule span,
+  .genai-challenge__note {
+    font-size: 16px;
+  }
+
+  .genai-challenge {
+    padding: 24px;
+  }
+
+  .genai-about__right {
+    flex-direction: column;
+  }
+
+  .genai-partner-card--copowered,
+  .genai-partner-card--workshop {
+    flex: 1 1 100%;
+    min-width: auto;
+    padding: 32px 40px;
+  }
+
+  .genai-partner-card--copowered {
+    min-height: 200px;
+  }
+
+  .genai-partner-card__logo--copowered {
+    width: 200px;
+  }
+
+  .genai-partner-card__logo--workshop {
+    width: 170px;
+  }
+}
+
+@media (max-width: 480px) {
+  .genai-about-section {
+    padding: 48px 0;
+  }
+
+  .genai-about__heading {
+    font-size: 22px;
+  }
+
+  .genai-about__desc {
+    font-size: 16px;
+  }
+
+  .genai-challenge {
+    padding: 20px;
+    padding-left: 24px;
+  }
+
+  .genai-challenge__desc,
+  .genai-challenge__rule span,
+  .genai-challenge__note {
+    font-size: 15px;
+  }
+
+  .genai-partner-card--copowered {
+    min-height: 180px;
+    padding: 24px;
+  }
+
+  .genai-partner-card--workshop {
+    min-height: 110px;
+    padding: 24px;
+  }
+
+  .genai-nexttech-card {
+    padding: 24px;
+  }
+
+  .genai-nexttech-card__title {
+    font-size: 20px;
+  }
+
+  .genai-nexttech-card__desc {
+    font-size: 15px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   GenAI Jury Section
+   ═══════════════════════════════════════════ */
+
+.genai-jury {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  padding: 60px 0;
+  background: #090909;
+  border-bottom: 1px solid #262626;
+}
+
+.genai-jury__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.genai-jury__title {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  text-align: center;
+  margin: 0;
+}
+
+.genai-jury__scroller {
+  display: flex;
+  gap: 35px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 8px;
+  justify-content: center;
+}
+
+.genai-jury__scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.genai-jury__card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+  width: 220px;
+  scroll-snap-align: start;
+}
+
+.genai-jury__img-wrap {
+  position: relative;
+  width: 220px;
+  height: 250px;
+  overflow: hidden;
+}
+
+.genai-jury__img-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 220px;
+  height: 220px;
+     background: url(https://images.mastersunion.link/uploads/15042026/v1/Rectangle53543.webp);
+    background-size: contain;
+  border-radius: 4px;
+}
+
+.genai-jury__img {
+  position: relative;
+  width: 220px;
+  height: 250px;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.genai-jury__placeholder {
+  position: relative;
+  width: 220px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  top: 28px;
+}
+
+.genai-jury__placeholder-q {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 128px;
+  line-height: 0.8;
+  color: #404040;
+  
+}
+
+.genai-jury__placeholder-text {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.2;
+  color: #404040;
+  text-align: center;
+}
+
+.genai-jury__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.genai-jury__name {
+  font-family: "NeueKaine";
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.2;
+  color: #FFFFFF;
+}
+
+.genai-jury__name--hidden {
+  color: #404040;
+}
+
+.genai-jury__role {
+  font-family: "NeueKaine";
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.2;
+  color: #A3A3A3;
+}
+
+.genai-jury__role--hidden {
+  color: #404040;
+}
+
+.genai-jury__company {
+  width: 160px;
+  height: 24px;
+  margin-top: 4px;
+}
+
+.genai-jury__company-logo {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+}
+
+.genai-jury__company-logo--sm {
+  width: 60px;
+  height: auto;
+  max-height: 24px;
+}
+
+.genai-jury__company-logo--md {
+  width: 94px;
+  height: auto;
+  max-height: 24px;
+}
+
+.genai-jury__company-logo--lg {
+  width: 111px;
+  height: auto;
+  max-height: 25px;
+}
+
+/* ── Jury Responsive ── */
+
+@media (max-width: 1280px) {
+  .genai-jury {
+    padding: 60px 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .genai-jury {
+    padding: 48px 0;
+    gap: 32px;
+  }
+
+  .genai-jury__title {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .genai-jury {
+    padding: 40px 0;
+    gap: 28px;
+  }
+
+  .genai-jury__title {
+    font-size: 28px;
+  }
+
+  .genai-jury__card {
+    width: 180px;
+  }
+
+  .genai-jury__img-wrap {
+    width: 180px;
+    height: 205px;
+  }
+
+  .genai-jury__img-bg {
+    width: 180px;
+    height: 180px;
+  }
+
+  .genai-jury__img {
+    width: 180px;
+    height: 205px;
+  }
+
+  .genai-jury__placeholder {
+    width: 180px;
+    height: 205px;
+  }
+
+  .genai-jury__placeholder-q {
+    font-size: 80px;
+  }
+
+  .genai-jury__placeholder-text {
+    font-size: 24px;
+  }
+
+  .genai-jury__name {
+    font-size: 18px;
+  }
+
+  .genai-jury__role {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .genai-jury {
+    padding: 32px 0;
+  }
+
+  .genai-jury__title {
+    font-size: 24px;
+  }
+
+  .genai-jury__scroller {
+    gap: 16px;
+  }
+
+  .genai-jury__card {
+    width: 160px;
+  }
+
+  .genai-jury__img-wrap {
+    width: 160px;
+    height: 182px;
+  }
+
+  .genai-jury__img-bg {
+    width: 160px;
+    height: 160px;
+  }
+
+  .genai-jury__img {
+    width: 160px;
+    height: 182px;
+  }
+
+  .genai-jury__placeholder {
+    width: 160px;
+    height: 182px;
+  }
+
+  .genai-jury__placeholder-q {
+    font-size: 64px;
+  }
+
+  .genai-jury__placeholder-text {
+    font-size: 20px;
+  }
+
+  .genai-jury__name {
+    font-size: 16px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   GenAI Workshop Section
+   ═══════════════════════════════════════════ */
+
+.genai-workshop {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: 60px 0;
+  background: #090909;
+  border-bottom: 1px solid #262626;
+}
+
+.genai-workshop__card {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  padding: 40px 80px;
+  background: #171717;
+  border-radius: 16px;
+  width: 100%;
+}
+
+.genai-workshop__img-wrap {
+  position: relative;
+  width: 289px;
+  height: 337px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
+}
+
+.genai-workshop__img-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 289px;
+  height: 289px;
+  background: #090909;
+      background: url(https://images.mastersunion.link/uploads/15042026/v1/bgblack.webp);
+    background-size: contain;
+}
+
+.genai-workshop__img {
+  position: relative;
+  width: 289px;
+  height: 337px;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.genai-workshop__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 40px;
+  flex: 1;
+}
+
+.genai-workshop__text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.genai-workshop__title {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin: 0;
+}
+
+.genai-workshop__desc {
+  font-family: "NeueKaine";
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #A3A3A3;
+  margin: 0;
+}
+
+.genai-workshop__speaker {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.genai-workshop__speaker-name {
+  font-family: "NeueKaine";
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.2;
+  color: #FFFFFF;
+}
+
+.genai-workshop__speaker-role {
+  font-family: "NeueKaine";
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.2;
+  color: #A3A3A3;
+}
+
+/* ── Workshop Responsive ── */
+
+@media (max-width: 1280px) {
+  .genai-workshop {
+    padding: 60px 0;
+  }
+
+  .genai-workshop__card {
+    gap: 48px;
+    padding: 32px 48px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .genai-workshop {
+    padding: 48px 0;
+  }
+
+  .genai-workshop__card {
+    flex-direction: column;
+    gap: 32px;
+    padding: 32px;
+    align-items: flex-start;
+  }
+
+  .genai-workshop__img-wrap {
+    width: 240px;
+    height: 280px;
+    align-self: center;
+  }
+
+  .genai-workshop__img-bg {
+    width: 240px;
+    height: 240px;
+  }
+
+  .genai-workshop__img {
+    width: 240px;
+    height: 280px;
+  }
+
+  .genai-workshop__title {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 768px) {
+  .genai-workshop {
+    padding: 40px 0;
+  }
+
+  .genai-workshop__card {
+    padding: 24px;
+    gap: 24px;
+  }
+
+  .genai-workshop__img-wrap {
+    width: 200px;
+    height: 234px;
+  }
+
+  .genai-workshop__img-bg {
+    width: 200px;
+    height: 200px;
+  }
+
+  .genai-workshop__img {
+    width: 200px;
+    height: 234px;
+  }
+
+  .genai-workshop__title {
+    font-size: 22px;
+  }
+
+  .genai-workshop__desc {
+    font-size: 15px;
+  }
+
+  .genai-workshop__speaker-name {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .genai-workshop {
+    padding: 32px 0;
+  }
+
+  .genai-workshop__card {
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .genai-workshop__img-wrap {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 289 / 337;
+    max-width: 240px;
+  }
+
+  .genai-workshop__img-bg {
+    width: 100%;
+    height: 85%;
+  }
+
+  .genai-workshop__img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .genai-workshop__title {
+    font-size: 20px;
+  }
+
+  .genai-workshop__content {
+    gap: 24px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   GenAI Ticket / CTA Section
+   ═══════════════════════════════════════════ */
+
+.genai-ticket {
+  position: relative;
+  padding: 80px 0;
+  /* background: #090909; */
+  overflow: hidden;
+      background: url(https://images.mastersunion.link/uploads/23032026/v1/Awardsbg.webp);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+}
+
+.genai-ticket__glow {
+  position: absolute;
+  width: 907px;
+  height: 363px;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #296BFF;
+  opacity: 0.6;
+  filter: blur(306px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.genai-ticket__pattern {
+  position: absolute;
+  top: -42px;
+  left: -44px;
+  width: calc(100% + 88px);
+  height: calc(100% + 84px);
+  object-fit: cover;
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.genai-ticket .container {
+  position: relative;
+  z-index: 1;
+}
+
+.genai-ticket__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.genai-ticket__heading {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  text-align: center;
+  margin: 0;
+}
+
+.genai-ticket__card {
+  position: relative;
+  width: 596px;
+  height: 201px;
+  max-width: 100%;
+}
+
+.genai-ticket__shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.genai-ticket__card-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 43px;
+}
+
+.genai-ticket__card-left {
+  flex: 1;
+  /* padding-right: 40px; */
+  max-width: 330px;
+  width: 100%;
+}
+
+.genai-ticket__card-title {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.2;
+  color: #000000;
+  margin: 0;
+  max-width: 290px;
+}
+
+.genai-ticket__card-divider {
+  width: 1px;
+  height: 122px;
+  background: rgba(0, 102, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.genai-ticket__card-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 56px;
+  min-width: 135px;
+}
+.thinBlue{
+    color: #0066FF;
+    font-weight: 400;
+}
+
+.genai-ticket__old-price {
+  font-family: "NeueKaine";
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.2;
+  color: #A3A3A3;
+  text-decoration: line-through;
+}
+
+.genai-ticket__new-price {
+  font-family: "NeueKaine";
+  font-weight: 900;
+  font-size: 32px;
+  line-height: 1.2;
+  color: #0066FF;
+}
+
+.genai-ticket__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 32px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  color: #090909;
+  text-decoration: none;
+  backdrop-filter: blur(5px);
+  transition: background 0.3s ease;
+}
+
+.genai-ticket__btn:hover {
+  background: #E5E5E5;
+}
+
+.genai-ticket__btn-arrow {
+  width: 22px;
+  height: 22px;
+}
+
+/* ── Ticket Responsive ── */
+
+@media (max-width: 1024px) {
+  .genai-ticket {
+    padding: 60px 0;
+  }
+
+  .genai-ticket__heading {
+    font-size: 32px;
+  }
+
+  .genai-ticket__card {
+    width: 500px;
+    height: 170px;
+  }
+
+  .genai-ticket__card-title {
+    font-size: 20px;
+  }
+
+  .genai-ticket__new-price {
+    font-size: 28px;
+  }
+
+  .genai-ticket__card-content {
+    padding: 0 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .genai-ticket--desktop {
+    display: none;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   GenAI Ticket – Mobile (< 768px only)
+   ═══════════════════════════════════════════ */
+
+.genai-ticket-mob {
+  display: none;
+  position: relative;
+  padding: 80px 16px;
+  background: #090909;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .genai-ticket-mob {
+    display: block;
+  }
+}
+
+.genai-ticket-mob__glow {
+  position: absolute;
+  width: 907px;
+  height: 363px;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #296BFF;
+  opacity: 0.6;
+  filter: blur(306px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.genai-ticket-mob__pattern {
+  position: absolute;
+  top: -42px;
+  left: -44px;
+  width: calc(100% + 88px);
+  height: calc(100% + 84px);
+  object-fit: cover;
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.genai-ticket-mob__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.genai-ticket-mob__heading {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  text-align: center;
+  margin: 0;
+}
+
+.genai-ticket-mob__card {
+  position: relative;
+  width: 358px;
+  max-width: 100%;
+  aspect-ratio: 358 / 414;
+}
+
+.genai-ticket-mob__shape {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.genai-ticket-mob__card-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  text-align: center;
+}
+
+.genai-ticket-mob__card-title {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.2;
+  color: #000000;
+  margin: 0 0 32px;
+  max-width: 260px;
+  text-align: center;
+}
+
+.genai-ticket-mob__card-divider {
+  width: 270px;
+  max-width: 80%;
+  height: 1px;
+  background: rgba(0, 102, 255, 0.1);
+  margin-bottom: 20px;
+}
+
+.genai-ticket-mob__card-pricing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.genai-ticket-mob__old-price {
+  font-family: "NeueKaine";
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.2;
+  color: #A3A3A3;
+  text-decoration: line-through;
+}
+
+.genai-ticket-mob__new-price {
+  font-family: "NeueKaine";
+  font-weight: 900;
+  font-size: 32px;
+  line-height: 1.2;
+  color: #0066FF;
+}
+
+.genai-ticket-mob__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 32px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  color: #090909;
+  text-decoration: none;
+  backdrop-filter: blur(5px);
+  transition: background 0.3s ease;
+}
+
+.genai-ticket-mob__btn:hover {
+  background: #E5E5E5;
+}
+
+.genai-ticket-mob__btn-arrow {
+  width: 22px;
+  height: 22px;
+}
+
+@media (max-width: 480px) {
+  .genai-ticket-mob {
+    padding: 60px 16px;
+  }
+
+  .genai-ticket-mob__heading {
+    font-size: 26px;
+  }
+
+  .genai-ticket-mob__card-title {
+    font-size: 26px;
+        margin: 0 0 72px;
+  }
+
+  .genai-ticket-mob__new-price {
+    font-size: 28px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   GenAI Schedule – Flow of the Day
+   ═══════════════════════════════════════════ */
+
+.genai-schedule {
+  padding: 80px 0;
+  background: #090909;
+}
+
+.genai-schedule__heading {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  margin: 0 0 32px;
+  text-align: center;
+}
+
+.genai-schedule__panel {
+  display: flex;
+  flex-direction: column;
+  max-width: 894px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  margin: 0 auto;
+}
+
+.genai-schedule__row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 32px;
+  min-height: 93px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.3s ease;
+}
+
+.genai-schedule__row:last-child {
+  border-bottom: none;
+}
+
+.genai-schedule__row:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.genai-schedule__time {
+  display: flex;
+  align-items: baseline;
+  min-width: 200px;
+  flex-shrink: 0;
+  transition: color 0.3s ease;
+}
+
+.genai-schedule__time-start {
+  font-family: 'Space Grotesk', monospace;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.4;
+  color: #D4D4D4;
+  margin-right: 8px;
+  transition: color 0.3s ease;
+}
+
+.genai-schedule__time-end {
+  font-family: 'Space Grotesk', monospace;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.43;
+  color: #A3A3A3;
+  transition: color 0.3s ease;
+}
+
+.genai-schedule__desc {
+  font-family: "NeueKaine";
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.56;
+  color: #D4D4D4;
+  margin: 0;
+  padding-left: 36px;
+  transition: color 0.3s ease;
+}
+
+/* ── Active row (hackathon) ── */
+
+.genai-schedule__row--active {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.genai-schedule__row--active:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.genai-schedule__accent-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #0066FF;
+}
+
+.genai-schedule__ping {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #0066FF;
+  opacity: 0;
+  animation: genai-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes genai-ping {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(0, 102, 255, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 102, 255, 0);
+  }
+}
+
+.genai-schedule__row--active .genai-schedule__time-start {
+  color: #0066FF;
+}
+
+.genai-schedule__row--active .genai-schedule__time-end {
+  color: rgba(0, 102, 255, 0.5);
+}
+
+.genai-schedule__row--active .genai-schedule__desc {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.6;
+  color: #FFFFFF;
+}
+
+/* ── Hover: accent1 (blue) – rows 6 & 7 ── */
+
+.genai-schedule__row--accent1:hover .genai-schedule__time-start {
+    
+  color: #0066FF;
+}
+
+
+.genai-schedule__row--accent1:hover .genai-schedule__ping {
+    opacity: 1;
+}
+
+.genai-schedule__row--accent1:hover .genai-schedule__time-end {
+  color: rgba(0, 102, 255, 0.5);
+}
+
+.genai-schedule__row--accent1:hover .genai-schedule__desc {
+  color: #FFFFFF;
+}
+
+.genai-schedule__row--accent1::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #0066FF;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.genai-schedule__row--accent1:hover::before {
+  opacity: 1;
+}
+
+/* ── Hover: accent2 (green) – rows 2, 4, 5 ── */
+
+.genai-schedule__row--accent2:hover .genai-schedule__time-start {
+  color: #22C55E;
+}
+
+.genai-schedule__row--accent2:hover .genai-schedule__time-end {
+  color: rgba(34, 197, 94, 0.5);
+}
+
+.genai-schedule__row--accent2:hover .genai-schedule__desc {
+  color: #FFFFFF;
+}
+
+.genai-schedule__row--accent2::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #22C55E;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.genai-schedule__row--accent2:hover::before {
+  opacity: 1;
+}
+
+/* ── Schedule Responsive ── */
+
+@media (max-width: 1024px) {
+  .genai-schedule {
+    padding: 60px 0;
+  }
+
+  .genai-schedule__heading {
+    font-size: 32px;
+  }
+
+  .genai-schedule__time {
+    min-width: 170px;
+  }
+
+  .genai-schedule__desc {
+    padding-left: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .genai-schedule {
+    padding: 48px 0;
+  }
+
+  .genai-schedule__heading {
+    font-size: 28px;
+  }
+
+  .genai-schedule__panel {
+    border-radius: 16px;
+  }
+
+  .genai-schedule__row {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 24px;
+    gap: 8px;
+    min-height: auto;
+  }
+
+  .genai-schedule__time {
+    min-width: auto;
+  }
+
+  .genai-schedule__desc {
+    padding-left: 0;
+    font-size: 16px;
+  }
+
+  .genai-schedule__row--active .genai-schedule__desc {
+    font-size: 17px;
+  }
+
+  .genai-schedule__ping {
+    left: 12px;
+    top: 28px;
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .genai-schedule {
+    padding: 40px 0;
+  }
+
+  .genai-schedule__heading {
+    font-size: 24px;
+    margin-bottom: 24px;
+  }
+
+  .genai-schedule__panel {
+    border-radius: 12px;
+  }
+
+  .genai-schedule__row {
+    padding: 16px 20px;
+    gap: 6px;
+  }
+
+  .genai-schedule__time-start {
+    font-size: 17px;
+  }
+
+  .genai-schedule__time-end {
+    font-size: 13px;
+  }
+
+  .genai-schedule__desc {
+    font-size: 15px;
+  }
+
+  .genai-schedule__row--active .genai-schedule__desc {
+    font-size: 16px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   GenAI Rules & Regulations
+   ═══════════════════════════════════════════ */
+
+.genai-rules {
+  padding: 60px 0;
+  background: #090909;
+}
+
+.genai-rules__grid {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.genai-rules__col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.genai-rules__heading {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  color: #0066FF;
+  margin: 0;
+}
+
+.genai-rules__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.genai-rules__text p {
+  font-family: "NeueKaine";
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.2;
+  color: #D4D4D4;
+  margin: 0 0 16px;
+}
+
+.genai-rules__text p:last-child {
+  margin-bottom: 0;
+}
+
+.genai-rules__card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 32px 34px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  flex: 1;
+}
+
+.genai-rules__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.genai-rules__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.genai-rules__icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.genai-rules__item span {
+  font-family: "NeueKaine";
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #D1D5DB;
+}
+
+/* ── Rules Responsive ── */
+
+@media (max-width: 1024px) {
+  .genai-rules {
+    padding: 48px 0;
+  }
+
+  .genai-rules__heading {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .genai-rules__grid {
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .genai-rules__heading {
+    font-size: 28px;
+  }
+
+  .genai-rules__card {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .genai-rules {
+    padding: 40px 0;
+  }
+
+  .genai-rules__heading {
+    font-size: 24px;
+  }
+
+  .genai-rules__text p {
+    font-size: 15px;
+  }
+
+  .genai-rules__item span {
+    font-size: 15px;
+  }
+
+  .genai-rules__card {
+    padding: 20px;
+  }
+
+  .genai-rules__list {
+    gap: 20px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   GenAI Awards Ceremony
+   ═══════════════════════════════════════════ */
+
+.genai-awards {
+  padding: 60px 0;
+  background: #090909;
+}
+
+.genai-awards__content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.genai-awards__header {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.genai-awards__title {
+  font-family: "NeueKaine";
+  font-weight: 700;
+  font-size: 40px;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+  color: #0066FF;
+  margin: 0;
+}
+
+.genai-awards__desc {
+  font-family: "NeueKaine";
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.5;
+  color: #D4D4D4;
+  margin: 0;
+}
+
+.genai-awards__venue-card {
+  display: flex;
+  gap: 32px;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+}
+
+.genai-awards__venue-label {
+  font-family: "NeueKaine";
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.5;
+  color: #D4D4D4;
+  margin: 0;
+  max-width: 327px;
+  flex-shrink: 0;
+}
+
+.genai-awards__venue-text {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.font-semiBold{
+    font-weight: 600;
+    color: var(--white);
+}
+
+.genai-awards__venue-text p {
+  font-family: "NeueKaine";
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.5;
+  color: #D4D4D4;
+  margin: 0;
+}
+
+.genai-awards__partner-card {
+  display: flex;
+  
+  gap: 32px;
+  padding: 40px 60px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  justify-content: space-between;
+}
+
+.genai-awards__partner-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.genai-awards__partner-label-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.genai-awards__partner-label {
+  font-family: "NeueKaine";
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.5;
+  color: #D4D4D4;
+}
+
+.genai-awards__partner-logo {
+  width: 185px;
+  height: auto;
+}
+
+.genai-awards__partner-desc {
+  font-family: "NeueKaine";
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.5;
+  color: #D4D4D4;
+  margin: 0;
+  max-width: 769px;
+}
+
+.genai-awards__social {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.genai-awards__social-text {
+  font-family: "NeueKaine";
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.5;
+  color: #D4D4D4;
+  margin: 0;
+  max-width: 613px;
+}
+
+.genai-awards__social-btns {
+  display: flex;
+  gap: 24px;
+  flex: 1;
+}
+
+.genai-awards__social-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  border-radius: 32px;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.genai-awards__social-btn--instagram {
+  border: 1px solid #C13584;
+}
+
+.genai-awards__social-btn--instagram:hover {
+  background: rgba(193, 53, 132, 0.1);
+}
+
+.genai-awards__social-btn--whatsapp {
+  border: 1px solid #25D366;
+}
+
+.genai-awards__social-btn--whatsapp:hover {
+  background: rgba(37, 211, 102, 0.1);
+}
+
+.genai-awards__social-icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* ── Awards Responsive ── */
+
+@media (max-width: 1024px) {
+  .genai-awards {
+    padding: 48px 0;
+  }
+
+  .genai-awards__title {
+    font-size: 32px;
+  }
+
+  .genai-awards__desc,
+  .genai-awards__venue-text p,
+  .genai-awards__partner-desc,
+  .genai-awards__social-text {
+    font-size: 18px;
+  }
+
+  .genai-awards__venue-label,
+  .genai-awards__partner-label {
+    font-size: 20px;
+  }
+
+  .genai-awards__venue-label {
+    min-width: 260px;
+  }
+
+  .genai-awards__partner-card {
+    padding: 32px 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .genai-awards__venue-card {
+    flex-direction: column;
+    gap: 20px;
+    padding: 28px;
+  }
+
+  .genai-awards__venue-label {
+    min-width: auto;
+  }
+
+  .genai-awards__partner-card {
+    padding: 28px;
+    flex-direction: column;
+  }
+
+  .genai-awards__social {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .genai-awards__social-btns {
+    gap: 16px;
+  }
+
+  .genai-awards__title {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .genai-awards {
+    padding: 40px 0;
+  }
+
+  .genai-awards__title {
+    font-size: 24px;
+  }
+
+  .genai-awards__desc,
+  .genai-awards__venue-text p,
+  .genai-awards__partner-desc,
+  .genai-awards__social-text {
+    font-size: 16px;
+  }
+
+  .genai-awards__venue-label,
+  .genai-awards__partner-label {
+    font-size: 18px;
+  }
+
+  .genai-awards__venue-card,
+  .genai-awards__partner-card {
+    padding: 20px;
+  }
+
+  .genai-awards__partner-logo {
+    width: 140px;
+  }
+
+  .genai-awards__social-btn {
+    height: 48px;
+  }
+
+  .genai-awards__content {
+    gap: 24px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   GenAI Marquee / Infinite Slider
+   ═══════════════════════════════════════════ */
+
+.genai-marquee {
+  position: relative;
+  /* overflow: hidden; */
+  background: #090909;
+  padding: 12px 0;
+}
+
+.genai-marquee__band {
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 15px 0;
+  transform: rotate(-2deg);
+}
+
+.genai-marquee__band--dark {
+  background: #002153;
+  margin-bottom: -10px;
+  z-index: 1;
+  position: relative;
+}
+
+.genai-marquee__band--blue {
+  background: #0066FF;
+  transform: rotate(2deg);
+  z-index: 2;
+  position: relative;
+}
+
+.genai-marquee__track {
+  display: inline-flex;
+  align-items: center;
+  gap: 32px;
+  width: max-content;
+}
+
+.genai-marquee__track--left {
+  animation: genai-marquee-left 20s linear infinite;
+}
+
+.genai-marquee__track--right {
+  animation: genai-marquee-right 20s linear infinite;
+}
+
+@keyframes genai-marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes genai-marquee-right {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.genai-marquee__text {
+  font-family: "NeueKaine";
+  font-weight: 900;
+  font-size: 24px;
+  line-height: 1.02;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.genai-marquee__star {
+  width: 27px;
+  height: 27px;
+  flex-shrink: 0;
+}
+
+/* ── Marquee Responsive ── */
+
+@media (max-width: 768px) {
+  .genai-marquee__text {
+    font-size: 18px;
+  }
+
+  .genai-marquee__star {
+    width: 20px;
+    height: 20px;
+  }
+
+  .genai-marquee__track {
+    gap: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .genai-marquee__text {
+    font-size: 15px;
+  }
+
+  .genai-marquee__star {
+    width: 16px;
+    height: 16px;
+  }
+
+  .genai-marquee__track {
+    gap: 20px;
+  }
+
+  .genai-marquee__band {
+    padding: 12px 0;
+  }
+}
+
+
+
+.aiFooter {
+
+    .footherLogoWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        align-items: flex-start;
+        justify-content: space-between;
+        max-width: 25%;
+        width: 100%;
+    }
+
+    .pb-36 {
+        padding-bottom: 36px;
+    }
+
+    .scalebig2 {
+        max-width: 100px;
+        min-width: 100px;
+        width: 100%;
+    }
+
+    .aiFootherDetailsColWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .bottomFooter {
+        gap: 60px;
+        max-width: 65%;
+        width: 100%;
+    }
+
+    .aiFooterDetailHeading {
+        font: 16px "go-regular";
+        font-weight: 800;
+        line-height: 100%;
+        color: var(--white);
+    }
+
+    .aiFooterDetailName {
+        font: 12px "neueKaine";
+        font-weight: 600;
+        line-height: 120%;
+        color: var(--grey18);
+    }
+
+    .aiFooterDetailPoints {
+        font: 12px "neueKaine";
+        font-weight: 600;
+        line-height: 120%;
+        color: var(--grey10);
+    }
+
+    .aiFootherDetailsWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .footer-imgs img {
+        max-width: 40%;
+        width: 100%;
+    }
+
+    footer {
+        background: var(--black);
+    }
+
+
+
+    @media (max-width: 767px) {
+        .footer-imgs img {
+            max-width: 20%;
+            width: 100%;
+        }
+
+        .bottomFooter {
+            gap: 24px;
+        }
+
+        .aiFootherDetailsColWrapper {
+            gap: 24px;
+        }
+
+        .upperFooter .container {
+            gap: 40px;
+        }
+
+        .pb-36 {
+            padding-bottom: 0;
+        }
+
+        .footherLogoWrapper {
+            max-width: 100%;
+        }
+
+
+    }
+
+
+}
+
+/* ═══════════════════════════════════════════
+   Scroll-Reveal Animations
+   ═══════════════════════════════════════════ */
+
+[data-reveal] {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+[data-reveal="up"] { transform: translateY(60px); }
+[data-reveal="down"] { transform: translateY(-40px); }
+[data-reveal="left"] { transform: translateX(-60px); }
+[data-reveal="right"] { transform: translateX(60px); }
+[data-reveal="scale"] { transform: scale(0.92); }
+[data-reveal="fade"] { transform: none; }
+
+[data-reveal].revealed {
+  opacity: 1;
+  transform: none;
+}
+
+[data-reveal-d="1"] { transition-delay: 0.1s; }
+[data-reveal-d="2"] { transition-delay: 0.2s; }
+[data-reveal-d="3"] { transition-delay: 0.3s; }
+[data-reveal-d="4"] { transition-delay: 0.4s; }
+[data-reveal-d="5"] { transition-delay: 0.5s; }
+[data-reveal-d="6"] { transition-delay: 0.6s; }
+
+/* ── Hero On-Load Animations ── */
+
+@keyframes genai-heroFadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes genai-heroFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.genai-hero__badges {
+  animation: genai-heroFadeUp 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s both;
+}
+
+.genai-hero__heading {
+  animation: genai-heroFadeUp 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both;
+}
+
+.genai-hero__cta {
+  animation: genai-heroFadeUp 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.7s both;
+}
+
+.genai-hero__typewriter {
+  animation: genai-heroFadeIn 1s ease 0.4s both;
+}
+
+.genai-hero__tabs {
+  animation: genai-heroFadeIn 1s ease 0.6s both;
+}
+
+/* ── Reduced Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .genai-hero__badges,
+  .genai-hero__heading,
+  .genai-hero__cta,
+  .genai-hero__typewriter,
+  .genai-hero__tabs {
+    animation: none !important;
+  }
+}
