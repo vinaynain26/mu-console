@@ -1,17 +1,20 @@
 /* eslint-disable */
 /**
- * Inline editor — click the thing you want to change.
+ * Inline editor.
  *
- * Ships only to a signed-in user (server decides). A visitor's page never loads
- * this file; all they carry is the data-c attribute, ~1.8 KB gzipped.
+ * Ships only to a signed-in user; a visitor's page carries nothing but the
+ * data-c anchors.
  *
- * Three modes:
- *   Browse   — the page behaves exactly as it does for a visitor
- *   Edit     — every [data-c] becomes editable; AI and comments per field
- *   Arrange  — every [data-sec] can be dragged into a new order
+ * The editing surface is a right-hand sidebar rather than controls floated over
+ * the page. Dropdowns and handles sitting on top of live UI fought the design
+ * they were sitting on — a state picker parked over a button covered it and
+ * passed clicks through to the link underneath. So: in Edit mode each section
+ * gets one small "Edit" pill in its corner, and everything inside that section
+ * — copy, button labels, link targets, states, images and video — is edited in
+ * the sidebar, where there is room to lay it out properly.
  *
- * Nothing here writes to the live site. Saves land in draft_value and go
- * through the same publish gate a studio edit does.
+ * Typing directly on the page still works for text. Both surfaces write through
+ * setField(), so they never disagree.
  */
 (function () {
   "use strict";
@@ -19,13 +22,17 @@
   if (!BOOT) return;
 
   var CAN = BOOT.can, SLUG = BOOT.slug, TAB = BOOT.tab;
-  var dirty = new Map();          // key -> new text
-  var original = new Map();       // key -> text as loaded
+  var dirty = new Map();          // key -> new value
+  var original = new Map();       // key -> value as loaded
+  var meta = new Map();           // key -> field record from the API
+  var sectionsById = new Map();   // section key -> { title, fields[] }
+  var comments = new Map();
   var mode = "browse";
-  var live = null;                // element currently being edited
-  var pop = null;
-  var comments = new Map();       // key -> [comment]
-  var meta = new Map();           // key -> {tag, value, options}
+  var live = null;                // node being typed into
+  var activeSection = null;
+
+  var VIDEO_RE = /\.(mp4|webm|mov|m4v)(\?|#|$)/i;
+  var isVideo = function (v) { return VIDEO_RE.test(String(v || "")); };
 
   /* ---------------- helpers ---------------- */
   function el(tag, cls, html) {
@@ -56,7 +63,57 @@
     if (!res.ok) throw new Error(out.error || "Request failed (" + res.status + ")");
     return out;
   }
-  function fields() { return Array.prototype.slice.call(document.querySelectorAll("[data-c]")); }
+  function valueOf(key) {
+    if (dirty.has(key)) return dirty.get(key);
+    var f = meta.get(key);
+    return f ? f.value : "";
+  }
+
+  /* ---------------- the one place a value changes ---------------- */
+  function setField(key, value, opts) {
+    opts = opts || {};
+    if (!original.has(key)) {
+      var f = meta.get(key);
+      original.set(key, f ? f.value : "");
+    }
+    if (value === original.get(key)) dirty.delete(key);
+    else dirty.set(key, value);
+
+    // keep the page in step, unless the page is what just changed
+    if (!opts.fromPage) {
+      var node = document.querySelector('[data-c="' + CSS.escape(key) + '"]');
+      if (node && node !== live) node.textContent = value;
+
+      var link = document.querySelector('a[data-c-link="' + CSS.escape(key) + '"]');
+      if (link) link.setAttribute("href", value);
+
+      var stateHost = document.querySelector('[data-c-state="' + CSS.escape(key) + '"]');
+      if (stateHost) applyState(stateHost, key, value);
+
+      var media = document.querySelector('[data-c-media="' + CSS.escape(key) + '"]');
+      if (media && media.tagName === "IMG" && !isVideo(value)) media.src = value;
+    }
+    if (!opts.fromSidebar) syncSidebarInput(key, value);
+    markNode(key);
+    refreshCount();
+  }
+
+  function applyState(host, key, value) {
+    var f = meta.get(key);
+    if (!f || !f.options) return;
+    var all = [];
+    f.options.forEach(function (o) { all = all.concat(String(o.value).split(/\s+/).filter(Boolean)); });
+    all.forEach(function (t) { host.classList.remove(t); });
+    String(value).split(/\s+/).filter(Boolean).forEach(function (t) { host.classList.add(t); });
+  }
+
+  function markNode(key) {
+    var d = dirty.has(key);
+    ["[data-c=", "[data-c-link=", "[data-c-state=", "[data-c-media="].forEach(function (sel) {
+      var n = document.querySelector(sel + '"' + CSS.escape(key) + '"]');
+      if (n) n.classList.toggle("mu-dirty", d);
+    });
+  }
 
   /* ---------------- toolbar ---------------- */
   var bar, elCount, btnSave, btnPub;
@@ -89,7 +146,6 @@
       btnPub.addEventListener("click", publish);
       bar.appendChild(btnPub);
     }
-
     var prev = el("a", "mu-btn", BOOT.preview ? "Live" : "Preview");
     prev.href = "/page/" + SLUG + "?tab=" + encodeURIComponent(TAB) + (BOOT.preview ? "" : "&preview=1");
     bar.appendChild(prev);
@@ -105,108 +161,364 @@
 
   function refreshCount() {
     var n = dirty.size;
-    elCount.innerHTML = n
-      ? "<b>" + n + "</b> unsaved"
-      : (BOOT.preview ? "Previewing draft" : "No changes");
+    elCount.innerHTML = n ? "<b>" + n + "</b> unsaved" : (BOOT.preview ? "Previewing draft" : "No changes");
     if (btnSave) btnSave.disabled = !n;
   }
 
   /* ---------------- modes ---------------- */
   function setMode(m) {
-    if (mode === "edit" && m !== "edit") closeEditing();
+    if (mode === "edit" && m !== "edit") { stopTyping(); closeSidebar(); }
     mode = m;
     document.body.classList.toggle("mu-editing", m === "edit");
     document.body.classList.toggle("mu-arranging", m === "arrange");
     Array.prototype.forEach.call(bar.querySelectorAll(".mu-seg button"), function (b) {
       b.classList.toggle("on", b.dataset.mode === m);
     });
-    closePop();
     if (m === "arrange") enterArrange(); else exitArrange();
     if (m === "edit") {
       loadComments();
-      loadMeta().then(function () { addStatePickers(); addMediaButtons(); });
+      loadMeta().then(addSectionPills);
     } else {
-      removeStatePickers();
-      removeMediaButtons();
+      removeSectionPills();
     }
   }
 
-  /* ---------------- editing ---------------- */
-  function markDirty(node) {
-    var key = node.dataset.c;
-    var now = node.textContent;
-    if (!original.has(key)) original.set(key, now);
-    if (now === original.get(key)) { dirty.delete(key); node.classList.remove("mu-dirty"); }
-    else { dirty.set(key, now); node.classList.add("mu-dirty"); }
-    refreshCount();
+  /* ---------------- data ---------------- */
+  async function loadMeta() {
+    try {
+      var data = await api("/api/pages/" + SLUG + "/content");
+      meta.clear(); sectionsById.clear();
+      (data.tabs || []).forEach(function (t) {
+        (t.sections || []).forEach(function (sec) {
+          var bucket = sectionsById.get(sec.key) || { title: sec.title, fields: [] };
+          (sec.fields || []).forEach(function (f) {
+            meta.set(f.key, f);
+            bucket.fields.push(f);
+          });
+          sectionsById.set(sec.key, bucket);
+        });
+      });
+    } catch (e) { toast("Could not load fields: " + e.message, 3500); }
+  }
+  async function loadComments() {
+    if (!CAN.comment) return;
+    try {
+      var list = await api("/api/pages/" + SLUG + "/comments");
+      comments.clear();
+      list.forEach(function (c) {
+        if (c.resolved) return;
+        if (!comments.has(c.field_key)) comments.set(c.field_key, []);
+        comments.get(c.field_key).push(c);
+      });
+    } catch (e) { /* optional chrome */ }
   }
 
-  function beginEdit(node) {
+  /* ---------------- section pills ---------------- */
+  var pills = [];
+  function addSectionPills() {
+    removeSectionPills();
+    Array.prototype.forEach.call(document.querySelectorAll("[data-sec]"), function (sec) {
+      var key = sec.dataset.sec;
+      var bucket = sectionsById.get(key);
+      if (!bucket || !bucket.fields.length) return;
+      if (!(sec.offsetParent !== null || sec.getClientRects().length)) return;
+
+      var pill = el("button", "mu-pill");
+      pill.type = "button";
+      pill.innerHTML = '<span class="mu-pill__i">✎</span> Edit section' +
+        '<span class="mu-pill__n">' + bucket.fields.filter(notMeta).length + "</span>";
+      pill.addEventListener("click", function (e) {
+        e.preventDefault(); e.stopPropagation();
+        openSidebar(key);
+      });
+      if (getComputedStyle(sec).position === "static") sec.style.position = "relative";
+      sec.appendChild(pill);
+      pills.push(pill);
+    });
+  }
+  function removeSectionPills() {
+    pills.forEach(function (p) { p.remove(); });
+    pills = [];
+    Array.prototype.forEach.call(document.querySelectorAll(".mu-sec-active"), function (n) {
+      n.classList.remove("mu-sec-active");
+    });
+  }
+  function notMeta(f) { return f.tag !== "meta"; }
+
+  /* ---------------- sidebar ---------------- */
+  var side = null;
+
+  function closeSidebar() {
+    if (side) { side.remove(); side = null; }
+    document.body.classList.remove("mu-side-open");
+    Array.prototype.forEach.call(document.querySelectorAll(".mu-sec-active"), function (n) {
+      n.classList.remove("mu-sec-active");
+    });
+    activeSection = null;
+  }
+
+  function openSidebar(sectionKey, focusKey) {
+    var bucket = sectionsById.get(sectionKey);
+    if (!bucket) return;
+    activeSection = sectionKey;
+
+    Array.prototype.forEach.call(document.querySelectorAll(".mu-sec-active"), function (n) {
+      n.classList.remove("mu-sec-active");
+    });
+    var host = document.querySelector('[data-sec="' + CSS.escape(sectionKey) + '"]');
+    if (host) host.classList.add("mu-sec-active");
+
+    if (!side) {
+      side = el("aside", "mu-side");
+      document.body.appendChild(side);
+      document.body.classList.add("mu-side-open");
+    }
+
+    var fields = bucket.fields.filter(notMeta);
+    var groups = {
+      text: fields.filter(function (f) { return ["link", "state", "media", "image"].indexOf(f.tag) < 0; }),
+      buttons: buttonGroups(fields),
+      media: fields.filter(function (f) { return f.tag === "media"; }),
+    };
+
+    side.innerHTML =
+      '<header class="mu-side__head">' +
+        '<div><div class="mu-side__eyebrow">Editing section</div>' +
+        '<h2>' + esc(bucket.title) + "</h2></div>" +
+        '<button class="mu-side__x" type="button" aria-label="Close">✕</button>' +
+      "</header>" +
+      '<div class="mu-side__body">' +
+        section("Copy", groups.text.map(textRow).join("") || empty("No text in this section.")) +
+        (groups.buttons.length ? section("Buttons & links", groups.buttons.map(buttonRow).join("")) : "") +
+        (groups.media.length ? section("Images & video", groups.media.map(mediaRow).join("")) : "") +
+      "</div>";
+
+    side.querySelector(".mu-side__x").addEventListener("click", closeSidebar);
+    wireSidebar();
+
+    if (focusKey) {
+      var input = side.querySelector('[data-f="' + CSS.escape(focusKey) + '"]');
+      if (input) { input.focus(); input.scrollIntoView({ block: "center" }); }
+    }
+  }
+
+  function section(title, inner) {
+    return '<section class="mu-grp"><h3>' + esc(title) + "</h3>" + inner + "</section>";
+  }
+  function empty(msg) { return '<p class="mu-empty">' + esc(msg) + "</p>"; }
+
+  /** A button is its label, its destination and its state — shown together. */
+  function buttonGroups(fields) {
+    var out = [];
+    fields.filter(function (f) { return f.tag === "state"; }).forEach(function (st) {
+      var host = document.querySelector('[data-c-state="' + CSS.escape(st.key) + '"]');
+      var labelField = null, linkField = null;
+      if (host) {
+        var lab = host.querySelector("[data-c]");
+        if (lab) labelField = meta.get(lab.dataset.c) || null;
+        var lk = host.matches("a[data-c-link]") ? host : host.querySelector("a[data-c-link]");
+        if (lk) linkField = meta.get(lk.dataset.cLink) || null;
+      }
+      out.push({ state: st, label: labelField, link: linkField, host: host });
+    });
+    // links that are not attached to a state switch still need somewhere to live
+    fields.filter(function (f) { return f.tag === "link"; }).forEach(function (lf) {
+      if (out.some(function (g) { return g.link && g.link.key === lf.key; })) return;
+      out.push({ state: null, label: null, link: lf, host: null });
+    });
+    return out;
+  }
+
+  function textRow(f) {
+    var v = valueOf(f.key);
+    var notes = (comments.get(f.key) || []).length;
+    return '<div class="mu-row" data-row="' + esc(f.key) + '">' +
+      '<label class="mu-lab"><span class="mu-tag">' + esc(f.tag) + "</span>" +
+        esc(f.label) + (notes ? '<span class="mu-note">' + notes + " note" + (notes === 1 ? "" : "s") + "</span>" : "") +
+      "</label>" +
+      (f.multiline
+        ? '<textarea data-f="' + esc(f.key) + '">' + esc(v) + "</textarea>"
+        : '<input type="text" data-f="' + esc(f.key) + '" value="' + esc(v) + '">') +
+      (CAN.ai
+        ? '<div class="mu-ai">' +
+            '<input type="text" class="mu-ai__ins" data-ins="' + esc(f.key) + '" placeholder="Tell the AI what to change…">' +
+            '<button class="mu-mini" type="button" data-ai="rewrite" data-k="' + esc(f.key) + '">Rewrite</button>' +
+            '<button class="mu-mini" type="button" data-ai="variants" data-k="' + esc(f.key) + '">3 options</button>' +
+          '</div><div class="mu-out" data-out="' + esc(f.key) + '"></div>'
+        : "") +
+      "</div>";
+  }
+
+  function buttonRow(g) {
+    var name = g.label ? valueOf(g.label.key) : (g.link ? "Link" : "Button");
+    var rows = '<div class="mu-card">' +
+      '<div class="mu-card__h">' + esc(name || "Button") + "</div>";
+    if (g.label) {
+      rows += '<label class="mu-lab">Label</label>' +
+        '<input type="text" data-f="' + esc(g.label.key) + '" value="' + esc(valueOf(g.label.key)) + '">';
+    }
+    if (g.link) {
+      rows += '<label class="mu-lab">Links to</label>' +
+        '<input type="text" class="mu-mono" data-f="' + esc(g.link.key) + '" value="' + esc(valueOf(g.link.key)) + '" placeholder="/path or https://…">';
+    }
+    if (g.state) {
+      var cur = valueOf(g.state.key);
+      var known = (g.state.options || []).some(function (o) { return o.value === cur; });
+      rows += '<label class="mu-lab">State</label><select data-f="' + esc(g.state.key) + '">' +
+        (g.state.options || []).map(function (o) {
+          return '<option value="' + esc(o.value) + '"' + (o.value === cur ? " selected" : "") + ">" + esc(o.label) + "</option>";
+        }).join("") +
+        (known ? "" : '<option value="' + esc(cur) + '" selected>Custom — ' + esc(cur || "(none)") + "</option>") +
+        "</select>";
+    }
+    return rows + "</div>";
+  }
+
+  function mediaRow(f) {
+    var v = valueOf(f.key);
+    var poster = valueOf(f.key + "@poster");
+    var vid = isVideo(v);
+    return '<div class="mu-card" data-row="' + esc(f.key) + '">' +
+      '<div class="mu-media-row">' +
+        '<div class="mu-thumb">' + (v
+          ? (vid ? '<video src="' + esc(v) + '" muted playsinline preload="metadata"></video>'
+                 : '<img src="' + esc(v) + '" alt="" loading="lazy">')
+          : '<span>empty</span>') + "</div>" +
+        '<div class="mu-media-fields">' +
+          '<label class="mu-lab">Source</label>' +
+          '<input type="text" class="mu-mono" data-f="' + esc(f.key) + '" value="' + esc(v) + '" placeholder="https://…">' +
+          '<p class="mu-hint">' + (vid
+            ? "Rendering as a video with the house play button."
+            : "Paste an .mp4 or .webm to turn this into a video.") + "</p>" +
+        "</div>" +
+      "</div>" +
+      '<div data-poster="' + esc(f.key) + '"' + (vid ? "" : ' style="display:none"') + ">" +
+        '<label class="mu-lab">Poster frame</label>' +
+        '<input type="text" class="mu-mono" data-f="' + esc(f.key) + '@poster" value="' + esc(poster) + '" placeholder="https://… still image">' +
+      "</div>" +
+      "</div>";
+  }
+
+  function wireSidebar() {
+    side.querySelectorAll("[data-f]").forEach(function (input) {
+      var ev = input.tagName === "SELECT" ? "change" : "input";
+      input.addEventListener(ev, function () {
+        var key = input.dataset.f;
+        setField(key, input.value, { fromSidebar: true });
+        var media = side.querySelector('[data-poster="' + CSS.escape(key) + '"]');
+        if (media) media.style.display = isVideo(input.value) ? "" : "none";
+      });
+      input.addEventListener("focus", function () {
+        var n = document.querySelector('[data-c="' + CSS.escape(input.dataset.f) + '"]') ||
+                document.querySelector('[data-c-media="' + CSS.escape(input.dataset.f) + '"]');
+        if (n) {
+          n.classList.add("mu-spot");
+          setTimeout(function () { n.classList.remove("mu-spot"); }, 1400);
+        }
+      });
+    });
+    side.querySelectorAll("[data-ai]").forEach(function (b) {
+      b.addEventListener("click", function () { runAI(b.dataset.ai, b.dataset.k, b); });
+    });
+  }
+
+  function syncSidebarInput(key, value) {
+    if (!side) return;
+    var input = side.querySelector('[data-f="' + CSS.escape(key) + '"]');
+    if (input && input.value !== value) input.value = value;
+  }
+
+  /* ---------------- AI ---------------- */
+  async function runAI(kind, key, btn) {
+    var out = side.querySelector('[data-out="' + CSS.escape(key) + '"]');
+    var ins = side.querySelector('[data-ins="' + CSS.escape(key) + '"]');
+    out.innerHTML = '<div class="mu-hint"><span class="mu-spin"></span> Claude is writing…</div>';
+    btn.disabled = true;
+    try {
+      var r = await api("/api/pages/" + SLUG + "/ai/" + kind, {
+        method: "POST", body: JSON.stringify({ key: key, instruction: ins ? ins.value : "" })
+      });
+      if (kind === "rewrite") {
+        out.innerHTML = '<div class="mu-opt"><div class="mu-opt__a">Suggested' +
+          (r.ceiling ? " · ceiling " + r.ceiling : "") + "</div>" + esc(r.text) + "</div>" +
+          (r.note ? '<p class="mu-hint">' + esc(r.note) + "</p>" : "");
+        out.querySelector(".mu-opt").addEventListener("click", function () { setField(key, r.text); });
+      } else {
+        out.innerHTML = (r.options || []).map(function (o, i) {
+          return '<div class="mu-opt" data-i="' + i + '"><div class="mu-opt__a">' + esc(o.angle) + "</div>" + esc(o.text) + "</div>";
+        }).join("");
+        out.querySelectorAll(".mu-opt").forEach(function (n) {
+          n.addEventListener("click", function () { setField(key, r.options[Number(n.dataset.i)].text); });
+        });
+      }
+    } catch (e) {
+      out.innerHTML = '<div class="mu-err">' + esc(e.message) + "</div>";
+    } finally { btn.disabled = false; }
+  }
+
+  /* ---------------- typing on the page ---------------- */
+  function beginTyping(node) {
     if (live === node) return;
-    closeEditing();
+    stopTyping();
     live = node;
-    if (!original.has(node.dataset.c)) original.set(node.dataset.c, node.textContent);
+    var key = node.dataset.c;
+    if (!original.has(key)) original.set(key, meta.has(key) ? meta.get(key).value : node.textContent);
     node.setAttribute("contenteditable", "plaintext-only");
     node.classList.add("mu-live");
     node.focus();
-    node.addEventListener("input", onInput);
-    node.addEventListener("keydown", onKey);
-    openPop(node);
+    node.addEventListener("input", onType);
+    node.addEventListener("keydown", onTypeKey);
   }
-  function onInput() { markDirty(live); syncCounter(); }
-  function onKey(e) {
-    if (e.key === "Escape") { e.preventDefault(); revertLive(); closeEditing(); }
-    // Enter commits for single-line elements; Shift+Enter always inserts.
-    if (e.key === "Enter" && !e.shiftKey && !/^(P|DIV|LI)$/.test(live.tagName)) {
-      e.preventDefault(); closeEditing();
-    }
+  function onType() { setField(live.dataset.c, live.textContent, { fromPage: true }); }
+  function onTypeKey(e) {
+    if (e.key === "Escape") { e.preventDefault(); stopTyping(); }
+    if (e.key === "Enter" && !e.shiftKey && !/^(P|DIV|LI)$/.test(live.tagName)) { e.preventDefault(); stopTyping(); }
   }
-  function revertLive() {
-    if (!live) return;
-    var key = live.dataset.c;
-    if (original.has(key)) live.textContent = original.get(key);
-    dirty.delete(key);
-    live.classList.remove("mu-dirty");
-    refreshCount();
-  }
-  function closeEditing() {
+  function stopTyping() {
     if (!live) return;
     live.removeAttribute("contenteditable");
     live.classList.remove("mu-live");
-    live.removeEventListener("input", onInput);
-    live.removeEventListener("keydown", onKey);
+    live.removeEventListener("input", onType);
+    live.removeEventListener("keydown", onTypeKey);
     live = null;
   }
 
-  /* Capture phase: in edit mode the page's own click handlers (sliders, tabs,
-     video triggers) must not fire when someone is aiming at a text node. */
+  /* Nothing on the page navigates while editing. Before this, only [data-c]
+     clicks were swallowed, so hitting a button's padding followed the link and
+     threw away unsaved work. */
   document.addEventListener("click", function (e) {
     if (mode !== "edit" && mode !== "arrange") return;
     if (!e.target.closest) return;
-    // never swallow clicks on the editor's own chrome
-    if (e.target.closest(".mu-bar, .mu-pop, .mu-toast, .mu-state, .mu-media-edit, .mu-grip")) return;
+    if (e.target.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-grip")) return;
 
-    // While editing, following a link would throw away unsaved work and take the
-    // editor off the page they are editing. Nothing navigates until Browse.
     var link = e.target.closest("a[href]");
     if (link) { e.preventDefault(); e.stopPropagation(); }
-
     if (mode !== "edit") return;
+
     var node = e.target.closest("[data-c]");
     if (node) {
       e.preventDefault(); e.stopPropagation();
-      beginEdit(node);
-    } else if (!link) {
-      closeEditing(); closePop();
+      beginTyping(node);
+      var secEl = node.closest("[data-sec]");
+      if (secEl && sectionsById.has(secEl.dataset.sec)) {
+        if (activeSection !== secEl.dataset.sec) openSidebar(secEl.dataset.sec, node.dataset.c);
+        else syncSidebarInput(node.dataset.c, node.textContent);
+      }
+      return;
+    }
+    var media = e.target.closest("[data-c-media]");
+    if (media) {
+      e.preventDefault(); e.stopPropagation();
+      var ms = media.closest("[data-sec]");
+      if (ms && sectionsById.has(ms.dataset.sec)) openSidebar(ms.dataset.sec, media.dataset.cMedia);
     }
   }, true);
 
-  /* Same for the drag handlers the slider binds. */
   ["mousedown", "touchstart", "pointerdown"].forEach(function (evt) {
     document.addEventListener(evt, function (e) {
-      if (mode !== "edit") return;
-      if (e.target.closest && e.target.closest(".mu-bar, .mu-pop")) return;
-      if (e.target.closest && e.target.closest("[data-c]")) e.stopPropagation();
+      if (mode !== "edit" || !e.target.closest) return;
+      if (e.target.closest(".mu-bar, .mu-side, .mu-pill")) return;
+      if (e.target.closest("[data-c], a[href]")) e.stopPropagation();
     }, true);
   });
 
@@ -218,25 +530,23 @@
     try {
       var changes = {};
       dirty.forEach(function (v, k) { changes[k] = v; });
-      var out = await api("/api/pages/" + SLUG + "/content", {
-        method: "PUT", body: JSON.stringify({ changes: changes })
+      var out = await api("/api/pages/" + SLUG + "/content", { method: "PUT", body: JSON.stringify({ changes: changes }) });
+      dirty.forEach(function (v, k) {
+        original.set(k, v);
+        if (meta.has(k)) meta.get(k).value = v;
       });
-      dirty.forEach(function (v, k) { original.set(k, v); });
       dirty.clear();
-      fields().forEach(function (n) { n.classList.remove("mu-dirty"); });
-      loadMeta();
+      Array.prototype.forEach.call(document.querySelectorAll(".mu-dirty"), function (n) { n.classList.remove("mu-dirty"); });
       toast("Saved " + out.saved + " change" + (out.saved === 1 ? "" : "s") + " as a draft");
-    } catch (e) {
-      toast(e.message, 4000);
-    } finally {
-      btnSave.innerHTML = "Save draft";
-      refreshCount();
-    }
+    } catch (e) { toast(e.message, 4000); }
+    finally { btnSave.innerHTML = "Save draft"; refreshCount(); }
   }
 
   async function publish() {
-    if (dirty.size && !confirm("You have " + dirty.size + " unsaved change(s). Save them first?\n\nOK saves, then publishes.")) return;
-    if (dirty.size) await save();
+    if (dirty.size) {
+      if (!confirm("You have " + dirty.size + " unsaved change(s). Save them first?\n\nOK saves, then publishes.")) return;
+      await save();
+    }
     if (!confirm("Publish all drafts on this page to the live site?")) return;
     btnPub.innerHTML = '<span class="mu-spin"></span> Publishing';
     try {
@@ -247,334 +557,12 @@
     finally { btnPub.innerHTML = "Publish"; }
   }
 
-  /* ---------------- popover: AI + comments ---------------- */
-  function closePop() { if (pop) { pop.remove(); pop = null; } }
-
-  function syncCounter() {
-    if (!pop || !live) return;
-    var c = pop.querySelector(".ctr");
-    if (!c) return;
-    var n = live.textContent.length, max = Number(pop.dataset.ceiling || 0);
-    c.textContent = n + (max ? " / " + max + " characters" : " characters");
-    c.classList.toggle("over", !!max && n > max);
-  }
-
-  function openPop(node) {
-    closePop();
-    var key = node.dataset.c;
-    pop = el("div", "mu-pop");
-    pop.innerHTML =
-      '<header><b>Edit field</b><span class="k">' + esc(key) + '</span><span style="flex:1"></span>' +
-      '<button class="b" data-x>Done</button></header>' +
-      '<div class="body">' +
-        (CAN.ai
-          ? '<input type="text" data-ins placeholder="Tell the AI what to change — or leave blank to tighten">' +
-            '<div class="row">' +
-              '<button class="b pri" data-ai="rewrite">Rewrite</button>' +
-              '<button class="b" data-ai="variants">3 options</button>' +
-            '</div>'
-          : '<div class="hint">Type directly in the page to edit. The AI writer is off.</div>') +
-        '<div class="ctr"></div>' +
-        '<div data-out></div>' +
-        linkRow(node) +
-      '</div>' +
-      (CAN.comment
-        ? '<div class="mu-cmt"><div data-clist></div>' +
-          '<div class="row" style="margin-top:4px">' +
-            '<input type="text" data-cbody placeholder="Leave a note…" style="flex:1">' +
-            '<button class="b" data-csend>Note</button>' +
-          '</div></div>'
-        : "");
-
-    document.body.appendChild(pop);
-    place(node);
-
-    pop.querySelector("[data-x]").addEventListener("click", function () { closeEditing(); closePop(); });
-    var ins = pop.querySelector("[data-ins]");
-    Array.prototype.forEach.call(pop.querySelectorAll("[data-ai]"), function (b) {
-      b.addEventListener("click", function () { runAI(b.dataset.ai, key, ins ? ins.value : ""); });
-    });
-    if (ins) ins.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") { e.preventDefault(); runAI("rewrite", key, ins.value); }
-    });
-    var send = pop.querySelector("[data-csend]");
-    if (send) send.addEventListener("click", function () { addComment(key); });
-    renderComments(key);
-    wireLinkRow();
-    syncCounter();
-  }
-
-  function place(node) {
-    var r = node.getBoundingClientRect();
-    var top = window.scrollY + r.bottom + 9;
-    var left = Math.min(window.scrollX + r.left, window.scrollX + document.documentElement.clientWidth - 352);
-    pop.style.top = top + "px";
-    pop.style.left = Math.max(window.scrollX + 8, left) + "px";
-  }
-
-  async function runAI(kind, key, instruction) {
-    var out = pop.querySelector("[data-out]");
-    out.innerHTML = '<div class="hint"><span class="mu-spin"></span> Claude is writing…</div>';
-    Array.prototype.forEach.call(pop.querySelectorAll("[data-ai]"), function (b) { b.disabled = true; });
-    try {
-      var r = await api("/api/pages/" + SLUG + "/ai/" + kind, {
-        method: "POST", body: JSON.stringify({ key: key, instruction: instruction })
-      });
-      if (r.ceiling) { pop.dataset.ceiling = r.ceiling; syncCounter(); }
-
-      if (kind === "rewrite") {
-        out.innerHTML = '<div class="opt"><div class="angle">Suggested</div>' + esc(r.text) + "</div>" +
-          (r.note ? '<div class="hint">' + esc(r.note) + "</div>" : "");
-        out.querySelector(".opt").addEventListener("click", function () { applyText(r.text); });
-      } else {
-        out.innerHTML = (r.options || []).map(function (o, i) {
-          return '<div class="opt" data-i="' + i + '"><div class="angle">' + esc(o.angle) + "</div>" + esc(o.text) + "</div>";
-        }).join("");
-        Array.prototype.forEach.call(out.querySelectorAll(".opt"), function (n) {
-          n.addEventListener("click", function () { applyText(r.options[Number(n.dataset.i)].text); });
-        });
-      }
-    } catch (e) {
-      out.innerHTML = '<div class="err">' + esc(e.message) + "</div>";
-    } finally {
-      Array.prototype.forEach.call(pop.querySelectorAll("[data-ai]"), function (b) { b.disabled = false; });
-    }
-  }
-
-  function applyText(text) {
-    if (!live) return;
-    live.textContent = text;
-    markDirty(live);
-    syncCounter();
-    var out = pop.querySelector("[data-out]");
-    out.innerHTML = '<div class="ok">Applied. Still a draft until you save and publish.</div>';
-  }
-
-  /* ---------------- comments ---------------- */
-  async function loadComments() {
-    if (!CAN.comment) return;
-    try {
-      var list = await api("/api/pages/" + SLUG + "/comments");
-      comments.clear();
-      list.forEach(function (c) {
-        if (c.resolved) return;
-        if (!comments.has(c.field_key)) comments.set(c.field_key, []);
-        comments.get(c.field_key).push(c);
-      });
-    } catch (e) { /* comments are optional chrome */ }
-  }
-  function renderComments(key) {
-    if (!pop) return;
-    var host = pop.querySelector("[data-clist]");
-    if (!host) return;
-    var list = comments.get(key) || [];
-    host.innerHTML = list.length
-      ? list.map(function (c) { return '<div class="c"><b>' + esc(c.author_name) + "</b> " + esc(c.body) + "</div>"; }).join("")
-      : '<div class="c" style="color:#8a8a8a">No notes on this field.</div>';
-  }
-  async function addComment(key) {
-    var input = pop.querySelector("[data-cbody]");
-    if (!input.value.trim()) return;
-    try {
-      await api("/api/pages/" + SLUG + "/comments", {
-        method: "POST", body: JSON.stringify({ field_key: key, body: input.value })
-      });
-      input.value = "";
-      await loadComments();
-      renderComments(key);
-    } catch (e) { toast(e.message, 3500); }
-  }
-
-  /* ---------------- link + state fields ---------------- *
-   * These are not text nodes, so they cannot be edited by typing on the page.
-   * Links hang off the <a> that wraps the label; state lives in a row's class
-   * list. Both get a proper control instead.
-   */
-  async function loadMeta() {
-    try {
-      var data = await api("/api/pages/" + SLUG + "/content");
-      meta.clear();
-      (data.tabs || []).forEach(function (t) {
-        (t.sections || []).forEach(function (sec) {
-          (sec.fields || []).forEach(function (f) { meta.set(f.key, f); });
-        });
-      });
-    } catch (e) { /* the editor still works for plain text without this */ }
-  }
-
-  /** The URL row inside the popover, when the field sits inside a link. */
-  function linkRow(node) {
-    var a = node.closest("a[data-c-link]");
-    if (!a) return "";
-    var key = a.dataset.cLink;
-    var f = meta.get(key);
-    var val = dirty.has(key) ? dirty.get(key) : (f ? f.value : a.getAttribute("href") || "");
-    return '<div style="margin-top:11px;padding-top:11px;border-top:1px solid #e3e3e3">' +
-      '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#616161;margin-bottom:5px">Link target</div>' +
-      '<input type="text" data-link="' + esc(key) + '" value="' + esc(val) + '" ' +
-      'placeholder="/path or https://…" style="font-family:ui-monospace,Menlo,monospace;font-size:12.5px">' +
-      '<div class="hint">Where this button goes. Saved as a draft like any other change.</div>' +
-      '</div>';
-  }
-
-  function wireLinkRow() {
-    if (!pop) return;
-    var input = pop.querySelector("[data-link]");
-    if (!input) return;
-    input.addEventListener("input", function () {
-      var key = input.dataset.link;
-      var f = meta.get(key);
-      if (!original.has(key)) original.set(key, f ? f.value : "");
-      if (input.value === original.get(key)) dirty.delete(key);
-      else dirty.set(key, input.value);
-      // reflect it on the page so the change is visible immediately
-      var a = document.querySelector('a[data-c-link="' + CSS.escape(key) + '"]');
-      if (a) a.setAttribute("href", input.value);
-      refreshCount();
-    });
-  }
-
-  /* Media slots are not text, so they get their own handle rather than
-     contentEditable. One button per slot, opening a small URL form. */
-  function addMediaButtons() {
-    removeMediaButtons();
-    Array.prototype.forEach.call(document.querySelectorAll("[data-c-media]"), function (host) {
-      var key = host.dataset.cMedia;
-      var b = el("button", "mu-media-edit", "Replace");
-      b.type = "button";
-      b.addEventListener("click", function (e) {
-        e.preventDefault(); e.stopPropagation();
-        openMediaPop(host, key, b);
-      });
-      document.body.appendChild(b);
-      b.__host = host;
-      placeBeside(b, host);
-      mediaBtns.push(b);
-    });
-  }
-  function removeMediaButtons() {
-    mediaBtns.forEach(function (b) { b.remove(); });
-    mediaBtns = [];
-  }
-
-  function openMediaPop(host, key, btn) {
-    closePop();
-    var f = meta.get(key) || { value: "" };
-    var pf = meta.get(key + "@poster") || { value: "" };
-    var src = dirty.has(key) ? dirty.get(key) : f.value;
-    var poster = dirty.has(key + "@poster") ? dirty.get(key + "@poster") : pf.value;
-
-    pop = el("div", "mu-pop");
-    pop.innerHTML =
-      '<header><b>Image or video</b><span class="k">' + esc(key) + '</span>' +
-      '<span style="flex:1"></span><button class="b" data-x>Done</button></header>' +
-      '<div class="body">' +
-        '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#616161;margin-bottom:5px">Source</div>' +
-        '<input type="text" data-media="' + esc(key) + '" value="' + esc(src) + '" placeholder="https://…">' +
-        '<div class="hint">Paste an image URL, or an .mp4 / .webm to turn this into a video with the play button.</div>' +
-        '<div data-posterrow style="margin-top:11px;' + (isVideo(src) ? '' : 'display:none') + '">' +
-          '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#616161;margin-bottom:5px">Poster frame</div>' +
-          '<input type="text" data-media="' + esc(key) + '@poster" value="' + esc(poster) + '" placeholder="https://… still image">' +
-          '<div class="hint">Shown before the video plays.</div>' +
-        '</div>' +
-        '<div class="hint" style="margin-top:9px">Save the draft, then reload to see the swap on the page.</div>' +
-      '</div>';
-    document.body.appendChild(pop);
-    place(btn);
-
-    pop.querySelector("[data-x]").addEventListener("click", function () { closePop(); });
-    Array.prototype.forEach.call(pop.querySelectorAll("[data-media]"), function (input) {
-      input.addEventListener("input", function () {
-        var k = input.dataset.media;
-        var base = meta.get(k);
-        if (!original.has(k)) original.set(k, base ? base.value : "");
-        if (input.value === original.get(k)) dirty.delete(k);
-        else dirty.set(k, input.value);
-        if (k === key) {
-          var row = pop.querySelector("[data-posterrow]");
-          if (row) row.style.display = isVideo(input.value) ? "" : "none";
-          // an image swap can be shown at once; a video needs the reload
-          if (!isVideo(input.value) && host.tagName === "IMG") host.src = input.value;
-        }
-        refreshCount();
-      });
-    });
-  }
-  function isVideo(v) { return /\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(String(v || "")); }
-
-  var mediaBtns = [];
-  var statePickers = [];
-  function addStatePickers() {
-    removeStatePickers();
-    Array.prototype.forEach.call(document.querySelectorAll("[data-c-state]"), function (host) {
-      var key = host.dataset.cState;
-      var f = meta.get(key);
-      if (!f || !f.options) return;
-
-      var sel = el("select", "mu-state");
-      var current = dirty.has(key) ? dirty.get(key) : f.value;
-      var known = false;
-      f.options.forEach(function (o) {
-        var op = el("option", null, esc(o.label));
-        op.value = o.value;
-        if (o.value === current) { op.selected = true; known = true; }
-        sel.appendChild(op);
-      });
-      if (!known) {
-        var op2 = el("option", null, "Custom — " + esc(current || "(none)"));
-        op2.value = current; op2.selected = true;
-        sel.appendChild(op2);
-      }
-
-      sel.addEventListener("change", function () {
-        if (!original.has(key)) original.set(key, f.value);
-        if (sel.value === original.get(key)) dirty.delete(key);
-        else dirty.set(key, sel.value);
-        // swap the classes live so the row greys out / hides as you choose
-        var allTokens = [];
-        f.options.forEach(function (o) { allTokens = allTokens.concat(o.value.split(/\s+/).filter(Boolean)); });
-        allTokens.forEach(function (t) { host.classList.remove(t); });
-        sel.value.split(/\s+/).filter(Boolean).forEach(function (t) { host.classList.add(t); });
-        refreshCount();
-      });
-      sel.addEventListener("click", function (e) { e.stopPropagation(); });
-
-      document.body.appendChild(sel);
-      sel.__host = host;
-      placeBeside(sel, host);
-      statePickers.push(sel);
-    });
-  }
-  /** Sit a control just outside its element — never on top of it. */
-  function placeBeside(node, host) {
-    var r = host.getBoundingClientRect();
-    var w = node.offsetWidth || 150;
-    var left = window.scrollX + r.right + 8;
-    // fall back to the left side when there is no room on the right
-    if (left + w > window.scrollX + document.documentElement.clientWidth - 8) {
-      left = Math.max(window.scrollX + 8, window.scrollX + r.left - w - 8);
-    }
-    node.style.left = left + "px";
-    node.style.top = (window.scrollY + r.top) + "px";
-  }
-  function repositionPickers() {
-    statePickers.forEach(function (n) { if (n.__host) placeBeside(n, n.__host); });
-    mediaBtns.forEach(function (n) { if (n.__host) placeBeside(n, n.__host); });
-  }
-  window.addEventListener("scroll", function () { if (mode === "edit") repositionPickers(); }, { passive: true });
-  window.addEventListener("resize", function () { if (mode === "edit") repositionPickers(); });
-
-  function removeStatePickers() {
-    statePickers.forEach(function (s2) { s2.remove(); });
-    statePickers = [];
-  }
-
   /* ---------------- arrange ---------------- */
   var grips = [];
   function enterArrange() {
     exitArrange();
     Array.prototype.forEach.call(document.querySelectorAll("[data-sec]"), function (sec) {
-      if (!isVisible(sec)) return;
+      if (!(sec.offsetParent !== null || sec.getClientRects().length)) return;
       sec.setAttribute("data-sec-label", sec.dataset.sec);
       var g = el("button", "mu-grip", "⠿ drag");
       g.draggable = true;
@@ -587,7 +575,6 @@
       if (getComputedStyle(sec).position === "static") sec.style.position = "relative";
       sec.appendChild(g);
       grips.push(g);
-
       sec.addEventListener("dragover", onOver);
       sec.addEventListener("dragleave", onLeave);
       sec.addEventListener("drop", onDrop);
@@ -603,30 +590,24 @@
       sec.removeEventListener("drop", onDrop);
     });
   }
-  function isVisible(n) { return n.offsetParent !== null || n.getClientRects().length > 0; }
   function onOver(e) { e.preventDefault(); this.classList.add("mu-over"); }
   function onLeave() { this.classList.remove("mu-over"); }
   async function onDrop(e) {
     e.preventDefault(); e.stopPropagation();
     this.classList.remove("mu-over");
-    var from = e.dataTransfer.getData("text/plain");
-    var to = this.dataset.sec;
+    var from = e.dataTransfer.getData("text/plain"), to = this.dataset.sec;
     if (!from || from === to) return;
-
-    var order = Array.prototype.map.call(document.querySelectorAll("[data-sec]"), function (s) { return s.dataset.sec; })
-      .filter(function (k, i, a) { return a.indexOf(k) === i; });
-    var vis = order.filter(function (k) {
-      var n = document.querySelector('[data-sec="' + k + '"]');
-      return n && isVisible(n);
-    });
+    var vis = Array.prototype.map.call(document.querySelectorAll("[data-sec]"), function (s) { return s.dataset.sec; })
+      .filter(function (k, i, a) { return a.indexOf(k) === i; })
+      .filter(function (k) {
+        var n = document.querySelector('[data-sec="' + CSS.escape(k) + '"]');
+        return n && (n.offsetParent !== null || n.getClientRects().length);
+      });
     var i = vis.indexOf(from), j = vis.indexOf(to);
     if (i < 0 || j < 0) return;
     vis.splice(j, 0, vis.splice(i, 1)[0]);
-
     try {
-      await api("/api/pages/" + SLUG + "/order", {
-        method: "PUT", body: JSON.stringify({ tab: TAB, order: vis })
-      });
+      await api("/api/pages/" + SLUG + "/order", { method: "PUT", body: JSON.stringify({ tab: TAB, order: vis }) });
       toast("Order saved — reloading");
       setTimeout(function () { location.reload(); }, 700);
     } catch (err) { toast(err.message, 4000); }
@@ -635,6 +616,9 @@
   /* ---------------- go ---------------- */
   window.addEventListener("beforeunload", function (e) {
     if (dirty.size) { e.preventDefault(); e.returnValue = ""; }
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && side && !live) closeSidebar();
   });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", buildBar);
   else buildBar();
