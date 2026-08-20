@@ -183,6 +183,68 @@ html = html.replace(/<a\b([^>]*?)class="([^"]*)"([^>]*)>/gi, (full, pre, cls, po
 });
 remap();
 
+/* ---------- a whole block of copy, kept whole ---------- *
+ * `<h1>Pricing that <em>scales</em> with your team</h1>` is ONE sentence.
+ * Anchoring each text node inside it splits that into "Pricing that",
+ * "scales", "with your team" — an editor cannot rewrite a sentence they can
+ * only see in pieces, and the emphasis belongs to them anyway.
+ *
+ * So when a block contains nothing but inline formatting, take the whole inner
+ * markup as one rich-text field. Blocks holding a link, image or nested block
+ * fall through to the per-node passes, because those carry structure an editor
+ * should not be retyping.
+ */
+const INLINE_OK = /^(b|strong|i|em|u|s|small|sup|sub|span|br|mark|wbr)$/i;
+let richCount = 0;
+
+function blockEnd(src, tag, from) {
+  const re = new RegExp("<" + tag + "\\b[^>]*>|</" + tag + "\\s*>", "gi");
+  re.lastIndex = from;
+  let depth = 0, m;
+  while ((m = re.exec(src))) {
+    if (m[0].startsWith("</")) { depth--; if (depth === 0) return { end: m.index, after: re.lastIndex }; }
+    else depth++;
+  }
+  return null;
+}
+
+{
+  const open = /<(h1|h2|h3|h4|h5|h6|p|li|figcaption|blockquote|dt|dd)\b([^>]*)>/gi;
+  const found = [];
+  let m;
+  while ((m = open.exec(html))) {
+    const tag = m[1], attrs = m[2];
+    const close = blockEnd(html, tag, m.index);
+    if (!close) continue;
+    const inner = html.slice(m.index + m[0].length, close.end);
+    if (!inner.trim() || inner.includes("{{") || inner.includes("@@CODE")) continue;
+
+    const tags = [...inner.matchAll(/<\/?([a-zA-Z][a-zA-Z0-9]*)\b/g)].map((t) => t[1]);
+    if (!tags.length) continue;                                   // plain text: handled below
+    if (!tags.every((t) => INLINE_OK.test(t))) continue;           // has real structure
+    if (!/[A-Za-z]{2}/.test(inner.replace(/<[^>]*>/g, ""))) continue;
+
+    found.push({ start: m.index, end: close.end, after: close.after, tag, attrs, inner });
+    open.lastIndex = close.after;
+  }
+
+  // back to front so earlier offsets stay valid
+  for (let i = found.length - 1; i >= 0; i--) {
+    const b = found[i];
+    const sec = sectionAt(b.start);
+    const key = nextKey(sec, "rich");
+    const plain = b.inner.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+    fields.push({ ...base(sec), key, tag: "rich",
+      label: plain.slice(0, 70) + (plain.length > 70 ? "\u2026" : ""),
+      value: b.inner.trim(), multiline: plain.length > 90 ? 1 : 0, ord: fields.length });
+    richCount++;
+    html = html.slice(0, b.start) +
+      "<" + b.tag + b.attrs + " data-c=\"" + key + "\" data-c-rich=\"1\">{{{c \"" + key + "\"}}}</" + b.tag + ">" +
+      html.slice(b.after);
+  }
+}
+remap();
+
 /* ---------- text in a pure-text element ---------- */
 const EDITABLE = /<(h1|h2|h3|h4|h5|h6|p|a|button|li|span|th|td|div|strong|b|em|i|label|figcaption|caption|blockquote|dt|dd|summary|small)\b([^>]*)>([^<>{}]+?)<\/\1>/gi;
 let textCount = 0;
@@ -259,7 +321,7 @@ fs.writeFileSync(
 
 console.log(`\n  ingested "${title}"  ->  /page/${slug}`);
 console.log(`  ${fields.filter((f) => f.tag !== "meta").length} editable fields` +
-            `   text ${textCount + wrapped}   media ${mediaCount}   links ${linkCount}   states ${stateCount}`);
+            `   rich ${richCount}   text ${textCount + wrapped}   media ${mediaCount}   links ${linkCount}   states ${stateCount}`);
 console.log(`  -> views/${slug}.hbs`);
 if (layoutName !== "main") console.log(`  -> views/layouts/${slug}.hbs`);
 console.log(`  -> data/seed-${slug}.json   (restart the server to publish it)\n`);

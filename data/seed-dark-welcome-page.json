@@ -1,7 +1,7 @@
 {
   "page": {
     "slug": "dark-welcome-page",
-    "title": "SecureFlow",
+    "title": "Dark Welcome Page",
     "template": "dark-welcome-page",
     "layout": "dark-welcome-page",
     "source": "lovable"
@@ -80,11 +80,11 @@
       "section_ord": 1,
       "tab_key": "_all",
       "tab_title": "Whole page",
-      "multiline": 1,
-      "key": "s1.p4",
-      "tag": "p",
-      "label": "Empower your operations with an intelligent platform that automates, s…",
-      "value": "Empower your operations with an intelligent platform that automates, secures, and refines your data workflows — delivering unparalleled efficiency.",
+      "multiline": 0,
+      "key": "s1.rich4",
+      "tag": "rich",
+      "label": "Secure Data Orchestration. Engineered for Precision.",
+      "value": "Secure Data Orchestration.<br class=\"hidden md:inline\"> Engineered for Precision.",
       "ord": 5
     },
     {
@@ -93,11 +93,11 @@
       "section_ord": 1,
       "tab_key": "_all",
       "tab_title": "Whole page",
-      "multiline": 0,
-      "key": "s1.a5",
-      "tag": "a",
-      "label": "Request Demo",
-      "value": "Request Demo",
+      "multiline": 1,
+      "key": "s1.p5",
+      "tag": "p",
+      "label": "Empower your operations with an intelligent platform that automates, s…",
+      "value": "Empower your operations with an intelligent platform that automates, secures, and refines your data workflows — delivering unparalleled efficiency.",
       "ord": 6
     },
     {
@@ -109,9 +109,22 @@
       "multiline": 0,
       "key": "s1.a6",
       "tag": "a",
+      "label": "Request Demo",
+      "value": "Request Demo",
+      "ord": 7
+    },
+    {
+      "section_key": "s1",
+      "section_title": "Secure Data Orchestration.",
+      "section_ord": 1,
+      "tab_key": "_all",
+      "tab_title": "Whole page",
+      "multiline": 0,
+      "key": "s1.a7",
+      "tag": "a",
       "label": "Learn More",
       "value": "Learn More",
-      "ord": 7
+      "ord": 8
     },
     {
       "section_key": "s2",
@@ -124,7 +137,7 @@
       "tag": "h2",
       "label": "Engineered for the Modern Enterprise",
       "value": "Engineered for the Modern Enterprise",
-      "ord": 8
+      "ord": 9
     },
     {
       "section_key": "s2",
@@ -137,7 +150,7 @@
       "tag": "p",
       "label": "Discover the core functionalities that drive our platform's exceptiona…",
       "value": "Discover the core functionalities that drive our platform's exceptional performance and security.",
-      "ord": 9
+      "ord": 10
     },
     {
       "section_key": "s2",
@@ -150,7 +163,7 @@
       "tag": "h3",
       "label": "Automated Workflows",
       "value": "Automated Workflows",
-      "ord": 10
+      "ord": 11
     },
     {
       "section_key": "s2",
@@ -163,7 +176,7 @@
       "tag": "p",
       "label": "Streamline complex processes with intelligent automation, reducing man…",
       "value": "Streamline complex processes with intelligent automation, reducing manual effort and increasing operational speed.",
-      "ord": 11
+      "ord": 12
     },
     {
       "section_key": "s2",
@@ -176,7 +189,7 @@
       "tag": "h3",
       "label": "Robust Security",
       "value": "Robust Security",
-      "ord": 12
+      "ord": 13
     },
     {
       "section_key": "s2",
@@ -189,7 +202,7 @@
       "tag": "p",
       "label": "State-of-the-art encryption and access controls ensure your data remai…",
       "value": "State-of-the-art encryption and access controls ensure your data remains secure and compliant at all times.",
-      "ord": 13
+      "ord": 14
     },
     {
       "section_key": "s2",
@@ -202,7 +215,7 @@
       "tag": "h3",
       "label": "Actionable Insights",
       "value": "Actionable Insights",
-      "ord": 14
+      "ord": 15
     },
     {
       "section_key": "s2",
@@ -215,7 +228,7 @@
       "tag": "p",
       "label": "Gain deeper understanding with real-time analytics and intelligent rep…",
       "value": "Gain deeper understanding with real-time analytics and intelligent reporting that guide strategic decisions.",
-      "ord": 15
+      "ord": 16
     },
     {
       "section_key": "s3",
@@ -228,7 +241,7 @@
       "tag": "h2",
       "label": "Let's Build the Future of Data",
       "value": "Let's Build the Future of Data",
-      "ord": 16
+      "ord": 17
     },
     {
       "section_key": "s3",
@@ -241,7 +254,7 @@
       "tag": "p",
       "label": "Connect with our experts to explore how our platform can transform you…",
       "value": "Connect with our experts to explore how our platform can transform your business. We're ready to listen.",
-      "ord": 17
+      "ord": 18
     },
     {
       "section_key": "s3",
@@ -254,7 +267,7 @@
       "tag": "label",
       "label": "Full Name",
       "value": "Full Name",
-      "ord": 18
+      "ord": 19
     },
     {
       "section_key": "s3",
@@ -267,7 +280,7 @@
       "tag": "label",
       "label": "Email Address",
       "value": "Email Address",
-      "ord": 19
+      "ord": 20
     },
     {
       "section_key": "s3",
@@ -280,7 +293,7 @@
       "tag": "label",
       "label": "Message",
       "value": "Message",
-      "ord": 20
+      "ord": 21
     },
     {
       "section_key": "s3",
@@ -293,33 +306,7 @@
       "tag": "button",
       "label": "Send Message",
       "value": "Send Message",
-      "ord": 21
-    },
-    {
-      "section_key": "s1",
-      "section_title": "Secure Data Orchestration.",
-      "section_ord": 1,
-      "tab_key": "_all",
-      "tab_title": "Whole page",
-      "multiline": 0,
-      "key": "s1.text7",
-      "tag": "text",
-      "label": "Secure Data Orchestration.",
-      "value": "Secure Data Orchestration.",
       "ord": 22
-    },
-    {
-      "section_key": "s1",
-      "section_title": "Secure Data Orchestration.",
-      "section_ord": 1,
-      "tab_key": "_all",
-      "tab_title": "Whole page",
-      "multiline": 0,
-      "key": "s1.text8",
-      "tag": "text",
-      "label": "Engineered for Precision.",
-      "value": "Engineered for Precision.",
-      "ord": 23
     }
   ]
 }
