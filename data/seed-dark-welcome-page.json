@@ -1,7 +1,7 @@
 {
   "page": {
     "slug": "dark-welcome-page",
-    "title": "Dark Welcome Page",
+    "title": "SecureFlow",
     "template": "dark-welcome-page",
     "layout": "dark-welcome-page",
     "source": "lovable"
