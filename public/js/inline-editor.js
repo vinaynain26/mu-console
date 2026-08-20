@@ -31,33 +31,73 @@
   var live = null;                // node being typed into
   var activeSection = null;
 
-  /* The page's emphasis is carried by classes, not by <b>/<i>. .fr-HeadingItalic
-     is `font: italic 34px/1.2 "Fraunces", serif` — a different TYPEFACE, so a
-     plain <i> would render the wrong font. Counts are from the page itself.  */
-  var HOUSE = [
-    { cmd: "bold",      cls: "font-semibold",    label: "B",  title: "Bold (house semibold)", style: "font-weight:700" },
-    { cmd: "italic",    cls: null,               label: "It", title: "Italic (Fraunces)", style: 'font-family:Fraunces,serif;font-style:italic' },
-    { cmd: "highlight", cls: "textHighlight",    label: "H",  title: "Highlight", style: "text-decoration:underline" },
-  ];
-  /* h1 titles and h2/h3 headings use different italic classes. */
+  /* Emphasis on this page is carried by CLASSES, and not the same class
+     everywhere: the hero subtitle uses .textHighlight, one section uses
+     .white-medium, another .black-medium, another .boldColor. A fixed three-
+     button toolbar therefore applied the WRONG class half the time — hitting
+     Bold on a .textHighlight word gave .font-semibold, which looks different.
+     So the buttons are derived from what the block itself already uses. */
+  var STYLE_NAMES = {
+    "font-semibold": "Bold", "textHighlight": "Highlight",
+    "white-medium": "Emphasis", "black-medium": "Emphasis",
+    "boldColor": "Bold colour", "futureListBold": "Bold",
+    "fr-TitleItalic": "Italic", "fr-HeadingItalic": "Italic",
+    "textGradient": "Gradient", "bharatBold": "Bold", "font-white": "White",
+    "industrySpan": "Emphasis",
+  };
+  /* Not every class on a span is a text style. These carry responsive
+     visibility, geo targeting or block layout — offering them as formatting
+     would let an editor break the page by "bolding" something. */
+  var NOT_A_STYLE = /^(mob-|fellowship-geo|overlay|card|fr-Block|fr-Breather|tech)/;
+  var ITALIC_CLASSES = ["fr-TitleItalic", "fr-HeadingItalic"];
+
   function italicClassFor(key) {
     var n = document.querySelector('[data-c="' + CSS.escape(key) + '"]');
     return n && n.tagName === "H1" ? "fr-TitleItalic" : "fr-HeadingItalic";
   }
-  function classFor(item, key) { return item.cls || italicClassFor(key); }
+  var prettyStyle = function (cls) { return STYLE_NAMES[cls] || cls; };
+
+  /** The style buttons for one block: what it already uses, plus its italic. */
+  function stylesForBlock(key) {
+    var f = meta.get(key);
+    var seen = [];
+    var push = function (c) { if (c && seen.indexOf(c) < 0) seen.push(c); };
+    var harvest = function (html, onlyKnown) {
+      var m, re = /class="([^"]+)"/g;
+      while ((m = re.exec(html || ""))) {
+        m[1].split(/\s+/).forEach(function (c) {
+          if (!c || NOT_A_STYLE.test(c)) return;
+          if (onlyKnown && !STYLE_NAMES[c]) return;
+          push(c);
+        });
+      }
+    };
+    harvest(valueOf(key), false);                       // this block's own styles first
+    if (f) {
+      var bucket = sectionsById.get(f.section_key || "");
+      if (bucket) {
+        bucket.fields.forEach(function (o) {
+          if (o.tag === "rich" && o.key !== key) harvest(o.value, true);
+        });
+      }
+    }
+    push(italicClassFor(key));
+    if (!seen.length) push("font-semibold");
+    return seen.slice(0, 5).map(function (cls) {
+      return { cls: cls, label: prettyStyle(cls), italic: ITALIC_CLASSES.indexOf(cls) >= 0 };
+    });
+  }
 
   /** Wrap the selection in a span, or unwrap it when it is already wrapped. */
-  function applyHouseStyle(box, key, item) {
-    var cls = classFor(item, key);
+  function applyHouseStyle(box, key, cls) {
     var sel = window.getSelection();
     if (!sel || sel.rangeCount === 0) return;
     var range = sel.getRangeAt(0);
     if (!box.contains(range.commonAncestorContainer)) return;
 
-    // already inside a span of this class? then this is a toggle off
     var node = range.commonAncestorContainer;
     var host = node.nodeType === 3 ? node.parentNode : node;
-    var existing = host.closest ? host.closest("span." + cls) : null;
+    var existing = host.closest ? host.closest("span." + CSS.escape(cls)) : null;
     if (existing && box.contains(existing)) {
       var parent = existing.parentNode;
       while (existing.firstChild) parent.insertBefore(existing.firstChild, existing);
@@ -65,12 +105,11 @@
       parent.normalize();
       return;
     }
+
     if (range.collapsed) {
-      // no selection: take the word the caret is in, which is what people expect
       var tn = range.startContainer;
       if (tn.nodeType !== 3 || !tn.textContent.trim()) return;
-      var text = tn.textContent, i = range.startOffset;
-      var a = i, b2 = i;
+      var text = tn.textContent, i = range.startOffset, a = i, b2 = i;
       while (a > 0 && !/\s/.test(text[a - 1])) a--;
       while (b2 < text.length && !/\s/.test(text[b2])) b2++;
       if (a === b2) return;
@@ -83,17 +122,23 @@
 
     var span = document.createElement("span");
     span.className = cls;
-    try {
-      range.surroundContents(span);
-    } catch (e) {
-      // the selection crosses element boundaries; extract and re-insert instead
-      span.appendChild(range.extractContents());
-      range.insertNode(span);
-    }
+    try { range.surroundContents(span); }
+    catch (e) { span.appendChild(range.extractContents()); range.insertNode(span); }
     sel.removeAllRanges();
     var r2 = document.createRange();
     r2.selectNodeContents(span);
     sel.addRange(r2);
+  }
+
+  /** Strip styling from the SELECTION only — never the whole block. */
+  function clearSelectionStyles(box) {
+    var sel = window.getSelection();
+    if (!sel || !sel.rangeCount) return;
+    var range = sel.getRangeAt(0);
+    if (range.collapsed || !box.contains(range.commonAncestorContainer)) return;
+    var text = range.extractContents().textContent;
+    range.insertNode(document.createTextNode(text));
+    box.normalize();
   }
 
   var VIDEO_RE = /\.(mp4|webm|mov|m4v)(\?|#|$)/i;
@@ -549,8 +594,10 @@
       (f.tag === "rich"
         ? '<div class="mu-rt">' +
             '<div class="mu-rt__bar">' +
-              HOUSE.map(function (h) {
-                return '<button type="button" data-rt="' + h.cmd + '" title="' + esc(h.title) + '" style="' + h.style + '">' + h.label + "</button>";
+              stylesForBlock(f.key).map(function (h) {
+                return '<button type="button" data-cls="' + esc(h.cls) + '" title="' + esc(h.label + " \u2014 ." + h.cls) + '"' +
+                  (h.italic ? ' style="font-family:Fraunces,Georgia,serif;font-style:italic"' : "") +
+                  ">" + esc(h.label) + "</button>";
               }).join("") +
               '<span class="mu-rt__gap"></span>' +
               '<button type="button" data-rt="br" title="Line break">↵</button>' +
@@ -692,16 +739,14 @@
         var sel = window.getSelection();
         var node = sel && sel.rangeCount ? sel.getRangeAt(0).commonAncestorContainer : null;
         var host = node && (node.nodeType === 3 ? node.parentNode : node);
-        barEl.querySelectorAll("[data-rt]").forEach(function (b) {
-          var item = HOUSE.filter(function (h) { return h.cmd === b.dataset.rt; })[0];
-          if (!item || !host || !host.closest) return b.classList.remove("on");
-          var cls = classFor(item, box.dataset.rich);
-          b.classList.toggle("on", !!host.closest("span." + cls) && box.contains(host));
+        barEl.querySelectorAll("[data-cls]").forEach(function (b) {
+          if (!host || !host.closest) return b.classList.remove("on");
+          b.classList.toggle("on", !!host.closest("span." + CSS.escape(b.dataset.cls)) && box.contains(host));
         });
       }
       ["keyup", "mouseup"].forEach(function (e) { box.addEventListener(e, refreshBar); });
 
-      barEl.querySelectorAll("[data-rt]").forEach(function (b) {
+      barEl.querySelectorAll("button").forEach(function (b) {
         // mousedown + preventDefault keeps focus in the box entirely
         b.addEventListener("mousedown", function (e) {
           e.preventDefault();
@@ -709,23 +754,9 @@
           if (document.activeElement !== box) box.focus();
           restore();
 
-          var cmd = b.dataset.rt;
-          if (cmd === "br") {
-            insertBreak();
-          } else if (cmd === "clear") {
-            HOUSE.forEach(function (h) {
-              var cls = classFor(h, key);
-              Array.prototype.forEach.call(box.querySelectorAll("span." + cls), function (sp) {
-                var par = sp.parentNode;
-                while (sp.firstChild) par.insertBefore(sp.firstChild, sp);
-                par.removeChild(sp);
-                par.normalize();
-              });
-            });
-          } else {
-            var item = HOUSE.filter(function (h) { return h.cmd === cmd; })[0];
-            if (item) applyHouseStyle(box, key, item);
-          }
+          if (b.dataset.rt === "br") insertBreak();
+          else if (b.dataset.rt === "clear") clearSelectionStyles(box);
+          else if (b.dataset.cls) applyHouseStyle(box, key, b.dataset.cls);
           setField(key, box.innerHTML, { fromSidebar: true });
           remember();
           refreshBar();
