@@ -31,6 +31,57 @@
   var live = null;                // node being typed into
   var activeSection = null;
 
+  /* The page's emphasis is carried by classes, not by <b>/<i>. .fr-HeadingItalic
+     is `font: italic 34px/1.2 "Fraunces", serif` — a different TYPEFACE, so a
+     plain <i> would render the wrong font. Counts are from the page itself.  */
+  var HOUSE = [
+    { cmd: "bold",      cls: "font-semibold",    label: "B",  title: "Bold (house semibold)", style: "font-weight:700" },
+    { cmd: "italic",    cls: null,               label: "It", title: "Italic (Fraunces)", style: 'font-family:Fraunces,serif;font-style:italic' },
+    { cmd: "highlight", cls: "textHighlight",    label: "H",  title: "Highlight", style: "text-decoration:underline" },
+  ];
+  /* h1 titles and h2/h3 headings use different italic classes. */
+  function italicClassFor(key) {
+    var n = document.querySelector('[data-c="' + CSS.escape(key) + '"]');
+    return n && n.tagName === "H1" ? "fr-TitleItalic" : "fr-HeadingItalic";
+  }
+  function classFor(item, key) { return item.cls || italicClassFor(key); }
+
+  /** Wrap the selection in a span, or unwrap it when it is already wrapped. */
+  function applyHouseStyle(box, key, item) {
+    var cls = classFor(item, key);
+    var sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return;
+    var range = sel.getRangeAt(0);
+    if (!box.contains(range.commonAncestorContainer)) return;
+
+    // already inside a span of this class? then this is a toggle off
+    var node = range.commonAncestorContainer;
+    var host = node.nodeType === 3 ? node.parentNode : node;
+    var existing = host.closest ? host.closest("span." + cls) : null;
+    if (existing && box.contains(existing)) {
+      var parent = existing.parentNode;
+      while (existing.firstChild) parent.insertBefore(existing.firstChild, existing);
+      parent.removeChild(existing);
+      parent.normalize();
+      return;
+    }
+    if (range.collapsed) return;
+
+    var span = document.createElement("span");
+    span.className = cls;
+    try {
+      range.surroundContents(span);
+    } catch (e) {
+      // the selection crosses element boundaries; extract and re-insert instead
+      span.appendChild(range.extractContents());
+      range.insertNode(span);
+    }
+    sel.removeAllRanges();
+    var r2 = document.createRange();
+    r2.selectNodeContents(span);
+    sel.addRange(r2);
+  }
+
   var VIDEO_RE = /\.(mp4|webm|mov|m4v)(\?|#|$)/i;
   var isVideo = function (v) { return VIDEO_RE.test(String(v || "")); };
 
@@ -110,8 +161,27 @@
     String(value).split(/\s+/).filter(Boolean).forEach(function (t) { host.classList.add(t); });
   }
 
+  /** Put one field back to what it was before this session's edits. */
+  function revertField(key) {
+    if (!original.has(key)) return;
+    setField(key, original.get(key));
+    var f = meta.get(key);
+    if (f) f.value = original.get(key);
+  }
+
+  function revertAll() {
+    if (!dirty.size) return;
+    if (!confirm("Undo all " + dirty.size + " unsaved change(s) on this page?")) return;
+    Array.prototype.slice.call(dirty.keys()).forEach(revertField);
+    toast("Changes undone");
+  }
+
   function markNode(key) {
     var d = dirty.has(key);
+    if (side) {
+      var row = side.querySelector('[data-row="' + CSS.escape(key) + '"]');
+      if (row) row.classList.toggle("is-dirty", d);
+    }
     ["[data-c=", "[data-c-link=", "[data-c-state=", "[data-c-media="].forEach(function (sel) {
       var n = document.querySelector(sel + '"' + CSS.escape(key) + '"]');
       if (n) n.classList.toggle("mu-dirty", d);
@@ -119,7 +189,7 @@
   }
 
   /* ---------------- toolbar ---------------- */
-  var bar, elCount, btnSave, btnPub;
+  var bar, elCount, btnSave, btnPub, btnUndo;
 
   function buildBar() {
     bar = el("div", "mu-bar");
@@ -144,6 +214,12 @@
       btnSave.addEventListener("click", save);
       bar.appendChild(btnSave);
     }
+    if (CAN.edit) {
+      btnUndo = el("button", "mu-btn", "Undo all");
+      btnUndo.disabled = true;
+      btnUndo.addEventListener("click", revertAll);
+      bar.appendChild(btnUndo);
+    }
     if (CAN.publish) {
       btnPub = el("button", "mu-btn pri", "Publish");
       btnPub.addEventListener("click", publish);
@@ -166,6 +242,7 @@
     var n = dirty.size;
     elCount.innerHTML = n ? "<b>" + n + "</b> unsaved" : (BOOT.preview ? "Previewing draft" : "No changes");
     if (btnSave) btnSave.disabled = !n;
+    if (btnUndo) btnUndo.disabled = !n;
   }
 
   /* ---------------- modes ---------------- */
@@ -452,13 +529,16 @@
       '<div class="mu-lab">' +
         "<span>" + esc(friendly(f.tag)) + "</span>" +
         (notes ? '<span class="mu-note">' + notes + "</span>" : "") +
+        '<button type="button" class="mu-revert" data-revert="' + esc(f.key) + '" title="Undo this field">↺ Undo</button>' +
         (CAN.ai ? '<button type="button" class="mu-aibtn" data-aitoggle="' + esc(f.key) + '" title="Ask the AI to rewrite this">✦ AI</button>' : "") +
       "</div>" +
       (f.tag === "rich"
         ? '<div class="mu-rt">' +
             '<div class="mu-rt__bar">' +
-              '<button type="button" data-rt="bold" title="Bold"><b>B</b></button>' +
-              '<button type="button" data-rt="italic" title="Italic"><i>I</i></button>' +
+              HOUSE.map(function (h) {
+                return '<button type="button" data-rt="' + h.cmd + '" title="' + esc(h.title) + '" style="' + h.style + '">' + h.label + "</button>";
+              }).join("") +
+              '<span class="mu-rt__gap"></span>' +
               '<button type="button" data-rt="br" title="Line break">↵</button>' +
               '<button type="button" data-rt="clear" title="Remove formatting">✕</button>' +
             "</div>" +
@@ -553,6 +633,9 @@
         }
       });
     });
+    side.querySelectorAll("[data-revert]").forEach(function (b) {
+      b.addEventListener("click", function () { revertField(b.dataset.revert); });
+    });
     side.querySelectorAll("[data-rich]").forEach(function (box) {
       box.addEventListener("input", function () {
         setField(box.dataset.rich, box.innerHTML, { fromSidebar: true });
@@ -565,10 +648,26 @@
           e.preventDefault();
           box.focus();
           var cmd = b.dataset.rt;
-          if (cmd === "br") document.execCommand("insertLineBreak");
-          else if (cmd === "clear") document.execCommand("removeFormat");
-          else document.execCommand(cmd);
-          setField(box.dataset.rich, box.innerHTML, { fromSidebar: true });
+          var key = box.dataset.rich;
+          if (cmd === "br") {
+            document.execCommand("insertLineBreak");
+          } else if (cmd === "clear") {
+            // drop the house spans too, not just <b>/<i>
+            HOUSE.forEach(function (h) {
+              var cls = classFor(h, key);
+              Array.prototype.forEach.call(box.querySelectorAll("span." + cls), function (sp) {
+                var par = sp.parentNode;
+                while (sp.firstChild) par.insertBefore(sp.firstChild, sp);
+                par.removeChild(sp);
+                par.normalize();
+              });
+            });
+            document.execCommand("removeFormat");
+          } else {
+            var item = HOUSE.filter(function (h) { return h.cmd === cmd; })[0];
+            if (item) applyHouseStyle(box, key, item);
+          }
+          setField(key, box.innerHTML, { fromSidebar: true });
         });
       });
     });
@@ -703,7 +802,7 @@
       dirty.forEach(function (v, k) { changes[k] = v; });
       var out = await api("/api/pages/" + SLUG + "/content", { method: "PUT", body: JSON.stringify({ changes: changes }) });
       dirty.forEach(function (v, k) {
-        original.set(k, v);
+        original.set(k, v);            // saved value is the new baseline for Undo
         if (meta.has(k)) meta.get(k).value = v;
       });
       dirty.clear();

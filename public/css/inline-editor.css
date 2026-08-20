@@ -237,3 +237,18 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #005bd3;outline-offset:-4
 .mu-rt__box:focus{box-shadow:inset 0 0 0 2px #005bd3}
 .mu-rt__box b,.mu-rt__box strong{font-weight:700}
 .mu-rt__box br{content:""}
+
+/* house-style buttons in the rich toolbar */
+.mu-rt__bar button{min-width:26px;padding:0 6px;font-size:12px}
+.mu-rt__gap{flex:1}
+.mu-rt__box .fr-TitleItalic,.mu-rt__box .fr-HeadingItalic{font-family:Fraunces,Georgia,serif;font-style:italic}
+.mu-rt__box .font-semibold{font-weight:700}
+.mu-rt__box .textHighlight{background:#fff3cd;border-radius:2px}
+
+/* undo — only offered once a field has actually changed */
+.mu-revert{
+  flex:none;border:1px solid #e3e3e3;background:#fff;border-radius:6px;padding:3px 7px;
+  font:700 10px/1 inherit;color:#8e1f0b;cursor:pointer;text-transform:none;display:none;
+}
+.mu-row.is-dirty .mu-revert,.mu-card.is-dirty .mu-revert{display:inline-block}
+.mu-revert:hover{background:#ffd6d6;border-color:#e0201a}
