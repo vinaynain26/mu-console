@@ -124,7 +124,7 @@ body.mu-side-open{ margin-right:372px }
 .mu-tab{
   flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
   border:1px solid transparent;background:transparent;border-radius:8px;padding:7px 6px;
-  font:600 12.5px/1 inherit;color:#616161;cursor:pointer;
+  font-weight:600;font-size:12.5px;line-height:1;color:#616161;cursor:pointer;
 }
 .mu-tab:hover:not([disabled]){background:#eef0f2}
 .mu-tab.on{background:#fff;border-color:#c9cccf;color:#303030;box-shadow:0 1px 2px rgba(0,0,0,.06)}
@@ -144,7 +144,7 @@ body.mu-side-open{ margin-right:372px }
 /* the AI row is folded away until asked for — it was most of the clutter */
 .mu-aibtn{
   flex:none;border:1px solid #e3e3e3;background:#fff;border-radius:6px;padding:3px 7px;
-  font:700 10px/1 inherit;letter-spacing:.04em;color:#005bd3;cursor:pointer;text-transform:none;
+  font-weight:700;font-size:10px;line-height:1;letter-spacing:.04em;color:#005bd3;cursor:pointer;text-transform:none;
 }
 .mu-aibtn:hover{background:#f3f8ff;border-color:#005bd3}
 .mu-aibtn.on{background:#005bd3;border-color:#005bd3;color:#fff}
@@ -175,7 +175,7 @@ body.mu-side-open{ margin-right:372px }
 .mu-ai{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
 .mu-ai[hidden]{display:none}
 .mu-ai__ins{flex:1;min-width:120px}
-.mu-mini{border:1px solid #c9cccf;background:#fff;border-radius:7px;padding:6px 9px;font:600 12px/1 inherit;cursor:pointer;white-space:nowrap}
+.mu-mini{border:1px solid #c9cccf;background:#fff;border-radius:7px;padding:6px 9px;font-weight:600;font-size:12px;line-height:1;cursor:pointer;white-space:nowrap}
 .mu-mini:hover{background:#f1f2f4}
 .mu-mini[disabled]{opacity:.45;cursor:not-allowed}
 .mu-out{margin-top:6px}
@@ -224,12 +224,13 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #005bd3;outline-offset:-4
 
 /* rich text — a whole sentence with its own bold, italics and line breaks */
 .mu-rt{border:1px solid #c9cccf;border-radius:8px;overflow:hidden;background:#fff}
-.mu-rt__bar{display:flex;gap:2px;padding:4px;border-bottom:1px solid #e3e3e3;background:#fafbfb}
+.mu-rt__bar{display:flex;flex-wrap:wrap;gap:4px;padding:5px;border-bottom:1px solid #e3e3e3;background:#fafbfb;align-items:center}
 .mu-rt__bar button{
-  width:26px;height:26px;border:0;background:transparent;border-radius:5px;
-  font:600 12px/1 inherit;color:#303030;cursor:pointer;
+  flex:0 0 auto; height:26px; padding:0 9px; border:1px solid transparent;
+  background:#fff; border-radius:6px; font-weight:600;font-size:11.5px;line-height:1; color:#303030;
+  cursor:pointer; white-space:nowrap;
 }
-.mu-rt__bar button:hover{background:#e3e3e3}
+.mu-rt__bar button:hover{background:#f1f2f4;border-color:#c9cccf}
 .mu-rt__box{
   padding:10px 12px;min-height:64px;max-height:320px;overflow-y:auto;
   font-size:15px;line-height:1.55;color:#303030;outline:none;word-break:break-word;
@@ -242,8 +243,7 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #005bd3;outline-offset:-4
 .mu-rt__box br{content:""}
 
 /* house-style buttons in the rich toolbar */
-.mu-rt__bar button{min-width:26px;padding:0 6px;font-size:12px}
-.mu-rt__gap{flex:1}
+.mu-rt__gap{flex:1 0 auto;min-width:4px}
 .mu-rt__box .fr-TitleItalic,.mu-rt__box .fr-HeadingItalic{font-family:Fraunces,Georgia,serif;font-style:italic}
 .mu-rt__box .font-semibold{font-weight:700}
 .mu-rt__box .textHighlight{background:#fff3cd;border-radius:2px}
@@ -251,7 +251,7 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #005bd3;outline-offset:-4
 /* undo — only offered once a field has actually changed */
 .mu-revert{
   flex:none;border:1px solid #e3e3e3;background:#fff;border-radius:6px;padding:3px 7px;
-  font:700 10px/1 inherit;color:#8e1f0b;cursor:pointer;text-transform:none;display:none;
+  font-weight:700;font-size:10px;line-height:1;color:#8e1f0b;cursor:pointer;text-transform:none;display:none;
 }
 .mu-row.is-dirty .mu-revert,.mu-card.is-dirty .mu-revert{display:inline-block}
 .mu-revert:hover{background:#ffd6d6;border-color:#e0201a}
