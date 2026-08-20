@@ -82,8 +82,13 @@ function sectionMap(src) {
    will recognise in the studio. */
 function sectionTitle(src, sec, i) {
   const body = src.slice(sec.start, sec.end);
-  const h = body.match(/<h[1-6][^>]*>([^<]{2,60})</i);
-  if (h) return h[1].trim().replace(/\s+/g, " ").slice(0, 48);
+  // take the WHOLE heading, then strip tags — matching to the first "<" cut
+  // "Pricing that <em>scales</em> with your ambition" down to "Pricing that"
+  const h = body.match(/<h[1-6][^>]*>([\s\S]*?)<\/h[1-6]>/i);
+  if (h) {
+    const text = h[1].replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+    if (text.length >= 2) return text.slice(0, 48) + (text.length > 48 ? "\u2026" : "");
+  }
   if (sec.id) return sec.id.replace(/[-_]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
   return "Section " + (i + 1);
 }
@@ -308,6 +313,37 @@ if (layoutPath && fs.existsSync(layoutPath)) {
   fs.mkdirSync(path.join(ROOT, "views/layouts"), { recursive: true });
   fs.writeFileSync(path.join(ROOT, "views/layouts", slug + ".hbs"), layout);
   if (missing.length) console.log("  ! layout referenced missing partial(s): " + missing.join(", "));
+}
+
+
+/* ---------- put the fields in reading order ---------- *
+ * Each pass appends as it runs, so `ord` ended up being "which pass found this
+ * first" — media, then links, then states, then text, then rich blocks. In the
+ * sidebar that meant a paragraph from the bottom of a section appearing above
+ * the headline. Renumber from the finished markup instead, which is the order a
+ * reader actually meets them in.
+ */
+{
+  const seen = new Map();
+  let n = 0;
+  // three shapes carry a key: the data-c* anchors, and the {{{media}}} call,
+  // whose data-c-media attribute only appears once the server renders it
+  const re = /data-c(?:-link|-state|-media)?="([^"]+)"|\{\{\{media\s+'([^']+)'\}\}\}/g;
+  let mm;
+  while ((mm = re.exec(final))) {
+    const k = mm[1] || mm[2];
+    if (k && !seen.has(k)) seen.set(k, n++);
+  }
+
+  for (const f of fields) {
+    const own = seen.has(f.key) ? seen.get(f.key) : null;
+    // a poster or attrs field belongs immediately after the media it describes
+    const parent = f.key.includes("@") ? f.key.split("@")[0] : null;
+    const at = own !== null ? own
+      : (parent && seen.has(parent) ? seen.get(parent) : 99999);
+    f.ord = at * 10 + (f.key.includes("@") ? 1 : 0);
+  }
+  fields.sort((a, b) => a.ord - b.ord);
 }
 
 fs.writeFileSync(path.join(ROOT, "views", slug + ".hbs"), final);

@@ -158,6 +158,20 @@ function applySeed(seed, { layout = "main", template = null, source = "handbuilt
     if (n) console.log(`  ${slug}: realigned ${n} untouched field(s)`);
   }
 
+  /* Position, section and label describe where a field SITS, which is the
+     template's business, not the editor's. Only value/draft_value belong to a
+     human. Without refreshing these, a rebuild that reorders a section leaves
+     the studio listing fields in the order a previous build happened to find
+     them — a paragraph from the bottom of a section above the headline. */
+  {
+    const meta = db.prepare(`UPDATE page_content
+      SET ord = ?, section_key = ?, section_title = ?, section_ord = ?, tag = ?, multiline = ?
+      WHERE page_slug = ? AND field_key = ?`);
+    for (const f of seed.fields) {
+      meta.run(f.ord, f.section_key, f.section_title, f.section_ord, f.tag, f.multiline, slug, f.key);
+    }
+  }
+
   {
     const setOpt = db.prepare("UPDATE page_content SET options = ? WHERE page_slug = ? AND field_key = ?");
     for (const f of seed.fields) if (f.options) setOpt.run(f.options, slug, f.key);

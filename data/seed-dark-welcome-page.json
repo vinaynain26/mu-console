@@ -9,46 +9,33 @@
   "fields": [
     {
       "section_key": "s1",
-      "section_title": "Secure Data Orchestration.",
+      "section_title": "Secure Data Orchestration. Engineered for Precis…",
       "section_ord": 1,
       "tab_key": "_all",
       "tab_title": "Whole page",
       "multiline": 0,
-      "key": "s1.media1",
-      "tag": "media",
-      "label": "SecureFlow analytics dashboard preview — image / video",
-      "value": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&amp;fit=crop&amp;w=1200&amp;q=80",
+      "key": "s1.rich4",
+      "tag": "rich",
+      "label": "Secure Data Orchestration. Engineered for Precision.",
+      "value": "Secure Data Orchestration.<br class=\"hidden md:inline\"> Engineered for Precision.",
       "ord": 0
     },
     {
       "section_key": "s1",
-      "section_title": "Secure Data Orchestration.",
+      "section_title": "Secure Data Orchestration. Engineered for Precis…",
       "section_ord": 1,
       "tab_key": "_all",
       "tab_title": "Whole page",
-      "multiline": 0,
-      "key": "s1.media1@poster",
-      "tag": "image",
-      "label": "Poster frame (used only when the above is a video)",
-      "value": "",
-      "ord": 1
+      "multiline": 1,
+      "key": "s1.p5",
+      "tag": "p",
+      "label": "Empower your operations with an intelligent platform that automates, s…",
+      "value": "Empower your operations with an intelligent platform that automates, secures, and refines your data workflows — delivering unparalleled efficiency.",
+      "ord": 10
     },
     {
       "section_key": "s1",
-      "section_title": "Secure Data Orchestration.",
-      "section_ord": 1,
-      "tab_key": "_all",
-      "tab_title": "Whole page",
-      "multiline": 0,
-      "key": "s1.media1@attrs",
-      "tag": "meta",
-      "label": "markup attributes (not editable)",
-      "value": "alt=\"SecureFlow analytics dashboard preview\" class=\"w-full h-full object-cover\" loading=\"eager\"",
-      "ord": 2
-    },
-    {
-      "section_key": "s1",
-      "section_title": "Secure Data Orchestration.",
+      "section_title": "Secure Data Orchestration. Engineered for Precis…",
       "section_ord": 1,
       "tab_key": "_all",
       "tab_title": "Whole page",
@@ -58,11 +45,24 @@
       "label": "Button — Active",
       "value": "",
       "options": "[{\"label\":\"Active — clickable\",\"value\":\"\"},{\"label\":\"Closed — greyed out, not clickable\",\"value\":\"mu-disabled\"},{\"label\":\"Hidden — not on the page\",\"value\":\"hide\"}]",
-      "ord": 3
+      "ord": 20
     },
     {
       "section_key": "s1",
-      "section_title": "Secure Data Orchestration.",
+      "section_title": "Secure Data Orchestration. Engineered for Precis…",
+      "section_ord": 1,
+      "tab_key": "_all",
+      "tab_title": "Whole page",
+      "multiline": 0,
+      "key": "s1.a6",
+      "tag": "a",
+      "label": "Request Demo",
+      "value": "Request Demo",
+      "ord": 30
+    },
+    {
+      "section_key": "s1",
+      "section_title": "Secure Data Orchestration. Engineered for Precis…",
       "section_ord": 1,
       "tab_key": "_all",
       "tab_title": "Whole page",
@@ -72,50 +72,11 @@
       "label": "Button — Active",
       "value": "",
       "options": "[{\"label\":\"Active — clickable\",\"value\":\"\"},{\"label\":\"Closed — greyed out, not clickable\",\"value\":\"mu-disabled\"},{\"label\":\"Hidden — not on the page\",\"value\":\"hide\"}]",
-      "ord": 4
+      "ord": 40
     },
     {
       "section_key": "s1",
-      "section_title": "Secure Data Orchestration.",
-      "section_ord": 1,
-      "tab_key": "_all",
-      "tab_title": "Whole page",
-      "multiline": 0,
-      "key": "s1.rich4",
-      "tag": "rich",
-      "label": "Secure Data Orchestration. Engineered for Precision.",
-      "value": "Secure Data Orchestration.<br class=\"hidden md:inline\"> Engineered for Precision.",
-      "ord": 5
-    },
-    {
-      "section_key": "s1",
-      "section_title": "Secure Data Orchestration.",
-      "section_ord": 1,
-      "tab_key": "_all",
-      "tab_title": "Whole page",
-      "multiline": 1,
-      "key": "s1.p5",
-      "tag": "p",
-      "label": "Empower your operations with an intelligent platform that automates, s…",
-      "value": "Empower your operations with an intelligent platform that automates, secures, and refines your data workflows — delivering unparalleled efficiency.",
-      "ord": 6
-    },
-    {
-      "section_key": "s1",
-      "section_title": "Secure Data Orchestration.",
-      "section_ord": 1,
-      "tab_key": "_all",
-      "tab_title": "Whole page",
-      "multiline": 0,
-      "key": "s1.a6",
-      "tag": "a",
-      "label": "Request Demo",
-      "value": "Request Demo",
-      "ord": 7
-    },
-    {
-      "section_key": "s1",
-      "section_title": "Secure Data Orchestration.",
+      "section_title": "Secure Data Orchestration. Engineered for Precis…",
       "section_ord": 1,
       "tab_key": "_all",
       "tab_title": "Whole page",
@@ -124,7 +85,46 @@
       "tag": "a",
       "label": "Learn More",
       "value": "Learn More",
-      "ord": 8
+      "ord": 50
+    },
+    {
+      "section_key": "s1",
+      "section_title": "Secure Data Orchestration. Engineered for Precis…",
+      "section_ord": 1,
+      "tab_key": "_all",
+      "tab_title": "Whole page",
+      "multiline": 0,
+      "key": "s1.media1",
+      "tag": "media",
+      "label": "SecureFlow analytics dashboard preview — image / video",
+      "value": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&amp;fit=crop&amp;w=1200&amp;q=80",
+      "ord": 60
+    },
+    {
+      "section_key": "s1",
+      "section_title": "Secure Data Orchestration. Engineered for Precis…",
+      "section_ord": 1,
+      "tab_key": "_all",
+      "tab_title": "Whole page",
+      "multiline": 0,
+      "key": "s1.media1@poster",
+      "tag": "image",
+      "label": "Poster frame (used only when the above is a video)",
+      "value": "",
+      "ord": 61
+    },
+    {
+      "section_key": "s1",
+      "section_title": "Secure Data Orchestration. Engineered for Precis…",
+      "section_ord": 1,
+      "tab_key": "_all",
+      "tab_title": "Whole page",
+      "multiline": 0,
+      "key": "s1.media1@attrs",
+      "tag": "meta",
+      "label": "markup attributes (not editable)",
+      "value": "alt=\"SecureFlow analytics dashboard preview\" class=\"w-full h-full object-cover\" loading=\"eager\"",
+      "ord": 61
     },
     {
       "section_key": "s2",
@@ -137,7 +137,7 @@
       "tag": "h2",
       "label": "Engineered for the Modern Enterprise",
       "value": "Engineered for the Modern Enterprise",
-      "ord": 9
+      "ord": 70
     },
     {
       "section_key": "s2",
@@ -150,7 +150,7 @@
       "tag": "p",
       "label": "Discover the core functionalities that drive our platform's exceptiona…",
       "value": "Discover the core functionalities that drive our platform's exceptional performance and security.",
-      "ord": 10
+      "ord": 80
     },
     {
       "section_key": "s2",
@@ -163,7 +163,7 @@
       "tag": "h3",
       "label": "Automated Workflows",
       "value": "Automated Workflows",
-      "ord": 11
+      "ord": 90
     },
     {
       "section_key": "s2",
@@ -176,7 +176,7 @@
       "tag": "p",
       "label": "Streamline complex processes with intelligent automation, reducing man…",
       "value": "Streamline complex processes with intelligent automation, reducing manual effort and increasing operational speed.",
-      "ord": 12
+      "ord": 100
     },
     {
       "section_key": "s2",
@@ -189,7 +189,7 @@
       "tag": "h3",
       "label": "Robust Security",
       "value": "Robust Security",
-      "ord": 13
+      "ord": 110
     },
     {
       "section_key": "s2",
@@ -202,7 +202,7 @@
       "tag": "p",
       "label": "State-of-the-art encryption and access controls ensure your data remai…",
       "value": "State-of-the-art encryption and access controls ensure your data remains secure and compliant at all times.",
-      "ord": 14
+      "ord": 120
     },
     {
       "section_key": "s2",
@@ -215,7 +215,7 @@
       "tag": "h3",
       "label": "Actionable Insights",
       "value": "Actionable Insights",
-      "ord": 15
+      "ord": 130
     },
     {
       "section_key": "s2",
@@ -228,7 +228,7 @@
       "tag": "p",
       "label": "Gain deeper understanding with real-time analytics and intelligent rep…",
       "value": "Gain deeper understanding with real-time analytics and intelligent reporting that guide strategic decisions.",
-      "ord": 16
+      "ord": 140
     },
     {
       "section_key": "s3",
@@ -241,7 +241,7 @@
       "tag": "h2",
       "label": "Let's Build the Future of Data",
       "value": "Let's Build the Future of Data",
-      "ord": 17
+      "ord": 150
     },
     {
       "section_key": "s3",
@@ -254,7 +254,7 @@
       "tag": "p",
       "label": "Connect with our experts to explore how our platform can transform you…",
       "value": "Connect with our experts to explore how our platform can transform your business. We're ready to listen.",
-      "ord": 18
+      "ord": 160
     },
     {
       "section_key": "s3",
@@ -267,7 +267,7 @@
       "tag": "label",
       "label": "Full Name",
       "value": "Full Name",
-      "ord": 19
+      "ord": 170
     },
     {
       "section_key": "s3",
@@ -280,7 +280,7 @@
       "tag": "label",
       "label": "Email Address",
       "value": "Email Address",
-      "ord": 20
+      "ord": 180
     },
     {
       "section_key": "s3",
@@ -293,7 +293,7 @@
       "tag": "label",
       "label": "Message",
       "value": "Message",
-      "ord": 21
+      "ord": 190
     },
     {
       "section_key": "s3",
@@ -306,7 +306,7 @@
       "tag": "button",
       "label": "Send Message",
       "value": "Send Message",
-      "ord": 22
+      "ord": 200
     }
   ]
 }

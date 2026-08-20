@@ -365,7 +365,7 @@
       var pill = el("button", "mu-pill");
       pill.type = "button";
       var b0 = bucketsFor(key);
-      var total = b0 ? b0.content.length + b0.buttons.length + b0.images.length : 0;
+      var total = b0 ? b0.all.length : 0;
       if (!total) return;
       pill.innerHTML = '<span class="mu-pill__i">✎</span> Edit section' +
         '<span class="mu-pill__n">' + total + "</span>";
@@ -429,17 +429,48 @@
     activeSection = null;
   }
 
-  var sideTab = "content";
+  var sideTab = "all";
 
   function bucketsFor(sectionKey) {
     var bucket = sectionsById.get(sectionKey);
     if (!bucket) return null;
     var fields = bucket.fields.filter(notMeta);
+    var buttons = buttonGroups(fields);
+
+    /* Everything, in the order it appears on the page. Splitting copy from its
+       buttons meant opening a section, then leaving it to find the button that
+       belongs to it — and the tabs were showing fields out of sequence, so a
+       paragraph from the bottom sat above the headline. */
+    var consumed = {};
+    buttons.forEach(function (g) {
+      if (g.label) consumed[g.label.key] = 1;
+      if (g.link) consumed[g.link.key] = 1;
+      if (g.state) consumed[g.state.key] = 1;
+      (g.icons || []).forEach(function (ic) { consumed[ic.key] = 1; });
+    });
+
+    var all = [];
+    fields.forEach(function (f) {
+      if (f.tag === "image" && /@poster$/.test(f.key)) return;   // shown with its media
+      if (consumed[f.key]) {
+        // emit the button card at the position of its FIRST field
+        var g = buttons.filter(function (x) {
+          return (x.state && x.state.key === f.key) || (x.link && x.link.key === f.key) ||
+                 (x.label && x.label.key === f.key) ||
+                 (x.icons || []).some(function (ic) { return ic.key === f.key; });
+        })[0];
+        if (g && !g.__emitted) { g.__emitted = 1; all.push({ kind: "button", group: g }); }
+        return;
+      }
+      if (f.tag === "media") all.push({ kind: "media", field: f });
+      else all.push({ kind: "text", field: f });
+    });
+    buttons.forEach(function (g) { delete g.__emitted; });
+
     return {
       title: bucket.title,
-      content: fields.filter(function (f) { return ["link", "state", "media", "image"].indexOf(f.tag) < 0; }),
-      buttons: buttonGroups(fields),
-      // an icon inside a button is part of that button, not a page image
+      all: all,
+      buttons: buttons,
       images: fields.filter(function (f) {
         if (f.tag !== "media") return false;
         var n = document.querySelector('[data-c-media="' + CSS.escape(f.key) + '"]');
@@ -468,10 +499,10 @@
     // land on a tab that actually has something in it
     if (focusKey) {
       var f = meta.get(focusKey);
-      if (f) sideTab = f.tag === "media" ? "images" : (["link", "state"].indexOf(f.tag) >= 0 ? "buttons" : "content");
+      if (f) sideTab = "all";
     }
     if (!b[sideTab] || !b[sideTab].length) {
-      sideTab = ["content", "buttons", "images"].filter(function (t) { return b[t].length; })[0] || "content";
+      sideTab = ["all", "buttons", "images"].filter(function (t) { return b[t].length; })[0] || "all";
     }
 
     side.innerHTML =
@@ -483,7 +514,7 @@
         '<button class="mu-side__x" type="button" title="Close (Esc)" aria-label="Close">✕</button>' +
       "</div>" +
       '<div class="mu-tabs">' +
-        tabBtn("content", "Content", b.content.length) +
+        tabBtn("all", "All", b.all.length) +
         tabBtn("buttons", "Buttons", b.buttons.length) +
         tabBtn("images", "Images", b.images.length) +
       "</div>" +
@@ -512,8 +543,12 @@
     });
     var body = side.querySelector("#mu-side-body");
     var html;
-    if (sideTab === "content") {
-      html = b.content.length ? b.content.map(textRow).join("") : empty("No text in this section.");
+    if (sideTab === "all") {
+      html = b.all.length ? b.all.map(function (item) {
+        if (item.kind === "button") return buttonRow(item.group);
+        if (item.kind === "media") return mediaRow(item.field);
+        return textRow(item.field);
+      }).join("") : empty("Nothing editable in this section.");
     } else if (sideTab === "buttons") {
       html = b.buttons.length ? b.buttons.map(buttonRow).join("") : empty("No buttons or links in this section.");
     } else {
@@ -521,7 +556,7 @@
     }
     /* Tabs fix most of the scrolling, but a few sections genuinely hold dozens
        of fields. Offer a filter there rather than making everyone scroll. */
-    var count = sideTab === "content" ? b.content.length
+    var count = sideTab === "all" ? b.all.length
               : sideTab === "buttons" ? b.buttons.length : b.images.length;
     body.innerHTML = (count > 8
       ? '<input type="search" class="mu-filter" placeholder="Filter ' + count + ' items…" data-filter>'
