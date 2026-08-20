@@ -144,3 +144,12 @@ textarea{min-height:84px; resize:vertical; line-height:1.5}
 .spin{width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;
   border-radius:50%;display:inline-block;animation:sp .6s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
+
+/* media field: a real preview beats a URL you have to imagine */
+.mediaField{display:flex;gap:11px;align-items:flex-start}
+.mediaPrev{
+  width:82px;height:60px;flex:none;border-radius:var(--r);overflow:hidden;
+  background:var(--surface-sub);border:1px solid var(--line);display:grid;place-items:center;
+}
+.mediaPrev img,.mediaPrev video{width:100%;height:100%;object-fit:cover;display:block}
+.mediaEmpty{font-size:11px;color:var(--ink-mute)}

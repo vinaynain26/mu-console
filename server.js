@@ -31,6 +31,11 @@ const PORT = process.env.PORT || 4000;
 const CONSOLE = "/" + (process.env.CONSOLE_SLUG || "console").replace(/^\/+|\/+$/g, "");
 const app = express();
 
+/* The play/pause artwork this page already uses on its video sections — reused
+   so a video an editor swaps in looks native instead of bolted on. */
+const MU_PLAY  = "https://images.mastersunion.link/uploads/16062025/v2/MainButton.svg";
+const MU_PAUSE = "https://images.mastersunion.link/uploads/27062025/v1/MainButton4.svg";
+
 /* ------------------------------------------------------------------ *
  * database
  * ------------------------------------------------------------------ */
@@ -213,6 +218,40 @@ app.engine("hbs", engine({
       }
       return JSON.stringify(rows.filter(Boolean), null, 2);
     },
+    /**
+     * A media slot: an image, or a video the editor swapped in.
+     *
+     * For an image this emits exactly the <img> that was there before —
+     * same attributes, same position — so nothing about the existing CSS
+     * changes. Only a video gets a wrapper, and only then does the layout
+     * differ, which is a deliberate editorial choice at that point.
+     *
+     * The play button is the same MainButton.svg this page already uses, so
+     * a swapped-in video looks native rather than bolted on.
+     */
+    media(key, options) {
+      const map = options?.data?.root?.__content;
+      if (!map) return "";
+      const src = (map.get(key) || "").trim();
+      if (!src) return "";
+      const attrs = map.get(key + "@attrs") || "";
+      const poster = (map.get(key + "@poster") || "").trim();
+      const esc = (v) => String(v).replace(/"/g, "&quot;");
+
+      if (!/\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(src)) {
+        return `<img ${attrs} src="${esc(src)}" data-c-media="${esc(key)}">`;
+      }
+      return (
+        `<span class="mu-media" data-c-media="${esc(key)}">` +
+          `<img ${attrs} src="${esc(poster)}" data-mu-poster>` +
+          `<video class="mu-media__video" playsinline preload="none" ` +
+                 `data-src="${esc(src)}"${poster ? ` poster="${esc(poster)}"` : ""}></video>` +
+          `<button type="button" class="mu-media__play" aria-label="Play video">` +
+            `<img src="${MU_PLAY}" alt="">` +
+          `</button>` +
+        `</span>`
+      );
+    },
     eq: (a, b) => a === b,
   },
 }));
@@ -370,6 +409,20 @@ app.get("/page/:slug", (req, res, next) => {
         (_m, a, cls, b) => a + cls.trim() + " active" + b
       );
 
+    /* Playback chrome for any video an editor has swapped in. This one DOES
+       go to visitors — a published video has to play for them — but it is only
+       injected when the page actually contains a media wrapper. */
+    {
+      // button states can appear anywhere, so the (tiny) stylesheet always ships;
+      // the playback script only when the page actually holds a video
+      let tag = `<link rel="stylesheet" href="/assets/css/mu-media.css">`;
+      if (out.includes('class="mu-media"')) {
+        tag += `\n<script>window.__MU_MEDIA__=${JSON.stringify({ play: MU_PLAY, pause: MU_PAUSE })};</script>` +
+               `\n<script src="/assets/js/mu-media.js" defer></script>`;
+      }
+      out = out.includes("</body>") ? out.replace("</body>", tag + "\n</body>") : out + tag;
+    }
+
     /* The editor ships only to someone who is signed in. A visitor's page is
        byte-for-byte what it was, apart from the data-c anchors. */
     if (editing) {
@@ -413,7 +466,7 @@ app.get("/api/pages/:slug/content", auth.require_("read"), (req, res) => {
   const rows = db.prepare(`
     SELECT field_key, section_key, section_title, section_ord, tab_key, tab_title,
            label, tag, multiline, ord, value, draft_value, updated_at, updated_by, options
-    FROM page_content WHERE page_slug = ? AND retired = 0 ORDER BY section_ord, ord
+    FROM page_content WHERE page_slug = ? AND retired = 0 AND tag <> 'meta' ORDER BY section_ord, ord
   `).all(req.params.slug);
 
   const counts = new Map();
@@ -488,7 +541,8 @@ app.post("/api/pages/:slug/publish", auth.require_("publish"), (req, res) => {
 });
 
 app.post("/api/pages/:slug/revert", auth.require_("edit"), (req, res) => {
-  const info = db.prepare("UPDATE page_content SET draft_value = value WHERE page_slug = ?").run(req.params.slug);
+  // scope to rows that actually differ, so the count means something
+  const info = db.prepare("UPDATE page_content SET draft_value = value WHERE page_slug = ? AND draft_value <> value").run(req.params.slug);
   res.json({ reverted: info.changes });
 });
 

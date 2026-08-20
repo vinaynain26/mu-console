@@ -116,3 +116,15 @@ body.mu-editing a[data-c-link]::after{
   background:#005bd3; color:#fff; border-radius:50%; width:16px; height:16px;
   display:grid; place-items:center; pointer-events:none;
 }
+
+/* media replace handle — only visible while editing */
+.mu-media-edit{
+  position:absolute; z-index:2147482400; top:6px; right:6px;
+  font:700 10.5px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Arial,sans-serif;
+  letter-spacing:.03em; text-transform:uppercase;
+  padding:5px 9px; border-radius:6px; border:0; cursor:pointer;
+  background:#005bd3; color:#fff; opacity:0; pointer-events:none; transition:opacity .12s;
+}
+body.mu-editing .mu-media-edit{ opacity:.9; pointer-events:auto }
+body.mu-editing .mu-media-edit:hover{ opacity:1 }
+body.mu-editing [data-c-media]{ outline:1px dashed rgba(0,91,211,.35); outline-offset:2px }

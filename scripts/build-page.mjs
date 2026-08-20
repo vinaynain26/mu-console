@@ -208,9 +208,18 @@ const JS_BOUND = {
 };
 let boundCount = 0;
 
+remap();
+
 const EDITABLE = /<(h1|h2|h3|h4|h5|h6|p|a|button|li|span|th|td|div|strong|b|em|i|label|figcaption|caption|blockquote|dt|dd|summary|small)\b([^>]*)>([^<>{}]+?)<\/\1>/gi;
 const fields = [];
 const counters = new Map();
+
+/* Every pass below rewrites `html`, which moves every offset after the edit.
+   sectionAt()/tabAt() read the maps built from the PREVIOUS shape of the
+   string, so without re-mapping between passes a field gets filed under the
+   wrong section — silently, and only visible later as keys that will not match
+   across a rebuild. */
+function remap() { sections = sectionMap(html); panels = panelMap(html); }
 
 /* ---------- 4b. link targets ---------- *
  * A button's words were editable but the URL behind it was not, so repointing
@@ -244,6 +253,61 @@ html = html.replace(/<a\b([^>]*?)href="([^"]*)"([^>]*)>/gi, (full, pre, href, po
   return "<a" + pre + "href=\"{{{c '" + key + "'}}}\" data-c-link=\"" + key + "\"" + post + ">";
 });
 
+remap();
+
+/* ---------- 4b2. images, and swapping one for a video ---------- *
+ * An <img> becomes a {{{media}}} call. The helper decides at render time what
+ * to emit: the same <img> when the value is a picture, or the house video block
+ * — poster, floating play button, the same MainButton.svg used elsewhere on
+ * this page — when the value is a video file. That is what lets an editor drop
+ * a video where a photo was without anyone touching the template.
+ *
+ * The element's original attributes ride along in a hidden companion field so
+ * the helper can put class/alt/loading back exactly as they were.
+ */
+const VIDEO_RE = /\.(mp4|webm|mov|m4v)(\?|#|$)/i;
+let mediaCount = 0;
+html = html.replace(/<img\b([^>]*)>/gi, (full, attrs, offset) => {
+  const srcM = attrs.match(/\ssrc="([^"]*)"/i);
+  if (!srcM) return full;
+  const src = srcM[1].trim();
+  if (!src || src.includes("${") || src.includes("{{")) return full;   // JS-built, not content
+  if (/^data:/i.test(src)) return full;                                // inline blob
+
+  const rest = attrs.replace(/\ssrc="[^"]*"/i, "").trim();
+
+  const sec = sectionAt(offset);
+  const tab = tabAt(offset);
+  const n = (counters.get(sec.key) || 0) + 1;
+  counters.set(sec.key, n);
+  const key = sec.key + ".media" + n;
+
+  const alt = (attrs.match(/\salt="([^"]*)"/i) || [])[1] || "";
+  const base = {
+    section_key: sec.key, section_title: sec.title, section_ord: sec.ord,
+    tab_key: tab.key, tab_title: tab.title, multiline: 0,
+  };
+  fields.push({
+    ...base, key, tag: "media",
+    label: (alt ? alt.slice(0, 40) + " — " : "") + "image / video",
+    value: src, ord: fields.length,
+  });
+  fields.push({
+    ...base, key: key + "@poster", tag: "image",
+    label: "Poster frame (used only when the above is a video)",
+    value: "", ord: fields.length,
+  });
+  fields.push({
+    ...base, key: key + "@attrs", tag: "meta",
+    label: "markup attributes (not editable)",
+    value: rest, ord: fields.length,
+  });
+  mediaCount++;
+  return "{{{media '" + key + "'}}}";
+});
+
+remap();
+
 /* ---------- 4c. active / inactive states ---------- *
  * State lives in the class list: a cohort row is open, closed, or pulled from
  * the page entirely. Letting an editor type raw class names would be a
@@ -251,6 +315,20 @@ html = html.replace(/<a\b([^>]*?)href="([^"]*)"([^>]*)>/gi, (full, pre, href, po
  * Anything not listed here is left exactly as it is.
  */
 const STATE_SETS = [
+  {
+    /* A button's own state, independent of the row it sits in. "Closed" keeps
+       it visible but greyed and unclickable — the pattern this page already
+       uses for a shut application round; "Hidden" removes it entirely. */
+    name: "Button",
+    el: "a",
+    base: /\bbtn(Black|White)\b/,
+    modifiers: ["mu-disabled", "hide"],
+    options: [
+      { label: "Active \u2014 clickable", value: "" },
+      { label: "Closed \u2014 greyed out, not clickable", value: "mu-disabled" },
+      { label: "Hidden \u2014 not on the page", value: "hide" },
+    ],
+  },
   {
     name: "Cohort row",
     el: "tr",
@@ -439,7 +517,8 @@ for (const f of fields) {
 console.log("\n  editable fields: " + fields.length);
 console.log("  bound to a JS array instead of duplicated: " + boundCount);
 console.log("  loose text nodes wrapped for editing: " + wrapped);
-console.log("  editable links: " + linkCount + "   state switches: " + stateCount + "\n");
+console.log("  editable links: " + linkCount + "   state switches: " + stateCount);
+console.log("  media slots (image or video): " + mediaCount + "\n");
 for (const [t, v] of byTab) {
   console.log("   " + String(v.fields).padStart(4) + " fields  " +
               String(v.sections.size).padStart(3) + " sections   " + t);

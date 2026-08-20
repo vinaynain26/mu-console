@@ -124,9 +124,10 @@
     if (m === "arrange") enterArrange(); else exitArrange();
     if (m === "edit") {
       loadComments();
-      loadMeta().then(addStatePickers);
+      loadMeta().then(function () { addStatePickers(); addMediaButtons(); });
     } else {
       removeStatePickers();
+      removeMediaButtons();
     }
   }
 
@@ -423,6 +424,75 @@
       refreshCount();
     });
   }
+
+  /* Media slots are not text, so they get their own handle rather than
+     contentEditable. One button per slot, opening a small URL form. */
+  var mediaBtns = [];
+  function addMediaButtons() {
+    removeMediaButtons();
+    Array.prototype.forEach.call(document.querySelectorAll("[data-c-media]"), function (host) {
+      var key = host.dataset.cMedia;
+      var b = el("button", "mu-media-edit", "Replace");
+      b.type = "button";
+      b.addEventListener("click", function (e) {
+        e.preventDefault(); e.stopPropagation();
+        openMediaPop(host, key, b);
+      });
+      var anchor = host.tagName === "SPAN" ? host : host.parentNode;
+      if (anchor && getComputedStyle(anchor).position === "static") anchor.style.position = "relative";
+      (anchor || host).appendChild(b);
+      mediaBtns.push(b);
+    });
+  }
+  function removeMediaButtons() {
+    mediaBtns.forEach(function (b) { b.remove(); });
+    mediaBtns = [];
+  }
+
+  function openMediaPop(host, key, btn) {
+    closePop();
+    var f = meta.get(key) || { value: "" };
+    var pf = meta.get(key + "@poster") || { value: "" };
+    var src = dirty.has(key) ? dirty.get(key) : f.value;
+    var poster = dirty.has(key + "@poster") ? dirty.get(key + "@poster") : pf.value;
+
+    pop = el("div", "mu-pop");
+    pop.innerHTML =
+      '<header><b>Image or video</b><span class="k">' + esc(key) + '</span>' +
+      '<span style="flex:1"></span><button class="b" data-x>Done</button></header>' +
+      '<div class="body">' +
+        '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#616161;margin-bottom:5px">Source</div>' +
+        '<input type="text" data-media="' + esc(key) + '" value="' + esc(src) + '" placeholder="https://…">' +
+        '<div class="hint">Paste an image URL, or an .mp4 / .webm to turn this into a video with the play button.</div>' +
+        '<div data-posterrow style="margin-top:11px;' + (isVideo(src) ? '' : 'display:none') + '">' +
+          '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#616161;margin-bottom:5px">Poster frame</div>' +
+          '<input type="text" data-media="' + esc(key) + '@poster" value="' + esc(poster) + '" placeholder="https://… still image">' +
+          '<div class="hint">Shown before the video plays.</div>' +
+        '</div>' +
+        '<div class="hint" style="margin-top:9px">Save the draft, then reload to see the swap on the page.</div>' +
+      '</div>';
+    document.body.appendChild(pop);
+    place(btn);
+
+    pop.querySelector("[data-x]").addEventListener("click", function () { closePop(); });
+    Array.prototype.forEach.call(pop.querySelectorAll("[data-media]"), function (input) {
+      input.addEventListener("input", function () {
+        var k = input.dataset.media;
+        var base = meta.get(k);
+        if (!original.has(k)) original.set(k, base ? base.value : "");
+        if (input.value === original.get(k)) dirty.delete(k);
+        else dirty.set(k, input.value);
+        if (k === key) {
+          var row = pop.querySelector("[data-posterrow]");
+          if (row) row.style.display = isVideo(input.value) ? "" : "none";
+          // an image swap can be shown at once; a video needs the reload
+          if (!isVideo(input.value) && host.tagName === "IMG") host.src = input.value;
+        }
+        refreshCount();
+      });
+    });
+  }
+  function isVideo(v) { return /\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(String(v || "")); }
 
   var statePickers = [];
   function addStatePickers() {

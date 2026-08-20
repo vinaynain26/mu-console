@@ -1,0 +1,31 @@
+/* A video sitting in a slot that used to hold an image. The poster keeps the
+   original <img> and all its classes, so the surrounding layout is unchanged;
+   the video and the play button are layered over it. */
+.mu-media{ position:relative; display:inline-block; max-width:100%; line-height:0 }
+.mu-media > img{ max-width:100%; height:auto }
+.mu-media__video{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; border-radius:inherit; opacity:0; pointer-events:none;
+}
+.mu-media__video.is-playing{ opacity:1; pointer-events:auto; position:relative; inset:auto }
+.mu-media.is-playing > [data-mu-poster]{ visibility:hidden }
+.mu-media__play{
+  position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+  z-index:3; border:0; background:none; padding:0; cursor:pointer; line-height:0;
+  transition:transform .18s ease;
+}
+.mu-media__play:hover{ transform:translate(-50%,-50%) scale(1.06) }
+.mu-media__play img{ width:clamp(48px,7vw,74px); height:auto; display:block }
+@media (max-width:767px){ .mu-media__play img{ width:52px } }
+
+/* ---- button states, set from the studio ---- *
+   "Closed" matches how this page already greys a shut application round:
+   visible so the round still reads as existing, but plainly not clickable. */
+a.mu-disabled{
+  pointer-events:none; cursor:default;
+  background:#e3e3e3 !important; border-color:#e3e3e3 !important;
+  color:#8a8a8a !important; opacity:1;
+}
+a.mu-disabled *{ color:#8a8a8a !important; fill:#8a8a8a !important }
+a.mu-disabled svg path{ fill:#8a8a8a !important }
+a.mu-disabled:hover{ background:#e3e3e3 !important }
