@@ -1,0 +1,174 @@
+# Lovable → Handlebars → this CMS.
+#
+# The pipeline lives HERE rather than in the Lovable repo, which means the only
+# credential needed is a READ token for the Lovable repo. Pushing the result is
+# done with GitHub's built-in GITHUB_TOKEN, because this workflow commits to its
+# own repository — no write-scoped personal token anywhere.
+#
+# ── One-time setup ────────────────────────────────────────────────────────────
+# Add ONE repository secret here (Settings → Secrets and variables → Actions):
+#
+#   LOVABLE_REPO_TOKEN
+#     A fine-grained personal access token, scoped to vinaynain26/dark-welcome-page,
+#     with Repository permissions → Contents: Read-only.
+#     Read-only is deliberate: this workflow never writes to the Lovable repo.
+#
+# Then run it from the Actions tab, or leave the schedule to pick up changes.
+# ──────────────────────────────────────────────────────────────────────────────
+name: Sync page from Lovable
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_repo:
+        description: "Lovable repo to convert"
+        required: false
+        default: vinaynain26/dark-welcome-page
+      slug:
+        description: "URL slug the page will live at"
+        required: false
+        default: dark-welcome-page
+      title:
+        description: "Page title shown in the console"
+        required: false
+        default: Dark Welcome Page
+      force:
+        description: "Re-ingest even if the Lovable repo has not moved"
+        type: boolean
+        required: false
+        default: false
+  schedule:
+    # every 30 minutes; the run exits in seconds when nothing has changed
+    - cron: "*/30 * * * *"
+
+permissions:
+  contents: write        # to commit the converted page back to this repo
+
+concurrency:
+  group: lovable-sync
+  cancel-in-progress: false
+
+env:
+  SOURCE_REPO: ${{ github.event.inputs.source_repo || 'vinaynain26/dark-welcome-page' }}
+  PAGE_SLUG:   ${{ github.event.inputs.slug        || 'dark-welcome-page' }}
+  PAGE_TITLE:  ${{ github.event.inputs.title       || 'Dark Welcome Page' }}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the CMS
+        uses: actions/checkout@v4
+
+      - name: Check the token is present
+        run: |
+          if [ -z "${{ secrets.LOVABLE_REPO_TOKEN }}" ]; then
+            echo "::error::LOVABLE_REPO_TOKEN is not set. Add it under Settings → Secrets and variables → Actions (fine-grained PAT, Contents: Read-only on $SOURCE_REPO)."
+            exit 1
+          fi
+
+      - name: Check out the Lovable app
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.SOURCE_REPO }}
+          token: ${{ secrets.LOVABLE_REPO_TOKEN }}
+          path: lovable
+
+      # Converting means a full Vite build and a headless browser. Skip all of
+      # it when the Lovable repo has not moved since the last ingest.
+      - name: Has anything changed?
+        id: changed
+        run: |
+          sha="$(git -C lovable rev-parse HEAD)"
+          stamp=".lovable-sync/$PAGE_SLUG.sha"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            echo "run=yes" >> "$GITHUB_OUTPUT"; echo "forced"; exit 0
+          fi
+          if [ -f "$stamp" ] && [ "$(cat "$stamp")" = "$sha" ]; then
+            echo "run=no" >> "$GITHUB_OUTPUT"
+            echo "Lovable repo is unchanged at $sha — nothing to do."
+          else
+            echo "run=yes" >> "$GITHUB_OUTPUT"
+            echo "Lovable repo is at $sha; last ingest was $( [ -f "$stamp" ] && cat "$stamp" || echo 'never' )"
+          fi
+
+      - uses: actions/setup-node@v4
+        if: steps.changed.outputs.run == 'yes'
+        with:
+          node-version: 20
+
+      - name: Install Chromium dependencies
+        if: steps.changed.outputs.run == 'yes'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libgbm-dev libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 \
+            libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 \
+            libxrandr2 libpango-1.0-0 libcairo2 libasound2t64
+
+      - name: Build and convert
+        if: steps.changed.outputs.run == 'yes'
+        working-directory: lovable
+        run: |
+          npm ci || npm install
+          npm install puppeteer serve --save-dev
+          node convert.cjs "$PAGE_SLUG"
+
+      - name: Refuse an empty scrape
+        if: steps.changed.outputs.run == 'yes'
+        run: |
+          view="lovable/hbs-output/views/$PAGE_SLUG.hbs"
+          test -s "$view" || { echo "::error::$view is missing or empty"; exit 1; }
+          size=$(wc -c < "$view")
+          # a scrape that ran before the page rendered produces a near-empty shell;
+          # overwriting a good page with that is worse than failing the run
+          if [ "$size" -lt 500 ]; then
+            echo "::error::$view is only $size bytes — the scrape probably ran before the page rendered"
+            exit 1
+          fi
+          echo "converted $size bytes"
+
+      - name: Ingest into the CMS
+        if: steps.changed.outputs.run == 'yes'
+        run: |
+          npm ci --omit=dev || npm install --omit=dev
+          node scripts/ingest-page.mjs \
+            --view   "lovable/hbs-output/views/$PAGE_SLUG.hbs" \
+            --layout "lovable/hbs-output/views/layouts/$PAGE_SLUG.hbs" \
+            --slug   "$PAGE_SLUG" \
+            --title  "$PAGE_TITLE"
+
+      - name: Commit
+        if: steps.changed.outputs.run == 'yes'
+        run: |
+          mkdir -p .lovable-sync
+          echo "${{ steps.changed.outputs.sha }}" > ".lovable-sync/$PAGE_SLUG.sha"
+          git config user.name  "Lovable Sync"
+          git config user.email "automation@mastersunion.org"
+          git add "views/$PAGE_SLUG.hbs" "data/seed-$PAGE_SLUG.json" ".lovable-sync/$PAGE_SLUG.sha"
+          [ -f "views/layouts/$PAGE_SLUG.hbs" ] && git add "views/layouts/$PAGE_SLUG.hbs"
+          if git diff --cached --quiet; then
+            echo "The rendered page is byte-identical — recording the sha only."
+          fi
+          git commit -q -m "Sync $PAGE_SLUG from Lovable
+
+          Source: $SOURCE_REPO @ ${{ steps.changed.outputs.sha }}
+          Converted and ingested by .github/workflows/lovable-sync.yml" || exit 0
+          # no --force: a rejected push means main moved and deserves a look
+          git push
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Lovable → CMS"
+            if [ "${{ steps.changed.outputs.run }}" = "yes" ]; then
+              echo "Ingested \`$PAGE_SLUG\` from \`$SOURCE_REPO\`"
+              echo ""
+              echo "- Live page: \`/page/$PAGE_SLUG\`"
+              echo "- Edit it at: \`/console/page/$PAGE_SLUG\`"
+            else
+              echo "No change in \`$SOURCE_REPO\` — skipped."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
