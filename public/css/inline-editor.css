@@ -55,67 +55,98 @@ body.mu-editing [data-c-media]{ outline:1px dashed rgba(0,91,211,.34); outline-o
 .mu-spot{ animation:mu-spot 1.4s ease }
 @keyframes mu-spot{ 0%,100%{box-shadow:none} 30%{box-shadow:0 0 0 4px rgba(0,91,211,.35)} }
 
-/* ---- sidebar ---- */
+/* ---- sidebar ---- *
+   Three tabs, one short list at a time. The previous version stacked copy,
+   buttons and images into one column, which on a long section meant scrolling
+   past everything to reach anything. */
 .mu-side{
-  position:fixed; top:0; right:0; bottom:0; width:380px; max-width:92vw; z-index:2147483050;
+  position:fixed; top:0; right:0; bottom:0; width:372px; max-width:92vw; z-index:2147483050;
   background:#fff; color:#303030; border-left:1px solid #e3e3e3;
   box-shadow:-8px 0 28px rgba(0,0,0,.14); display:flex; flex-direction:column;
   font:14px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,Arial,sans-serif;
   animation:mu-slide .18s ease;
 }
 @keyframes mu-slide{ from{transform:translateX(100%)} to{transform:translateX(0)} }
-/* push the page instead of covering it, so you can see what you are editing */
-body.mu-side-open{ margin-right:380px }
+/* push the page rather than cover it, so you can see what you are editing */
+body.mu-side-open{ margin-right:372px }
 @media (max-width:900px){ body.mu-side-open{ margin-right:0 } }
+
 .mu-side__head{
-  display:flex; align-items:flex-start; gap:12px; padding:15px 16px;
-  border-bottom:1px solid #e3e3e3; background:#fafbfb;
+  display:flex; align-items:center; gap:10px; padding:14px 14px 12px;
+  border-bottom:1px solid #e3e3e3;
 }
-.mu-side__eyebrow{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8a8a8a}
-.mu-side__head h2{margin:3px 0 0;font-size:15px;font-weight:650;line-height:1.3}
-.mu-side__x{margin-left:auto;border:0;background:transparent;font-size:15px;cursor:pointer;color:#616161;padding:3px 6px;border-radius:6px}
-.mu-side__x:hover{background:#e3e3e3}
-.mu-side__body{flex:1;overflow-y:auto;padding:4px 16px 90px}
+.mu-side__title{min-width:0;flex:1}
+.mu-side__eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#8a8a8a}
+.mu-side__head h2{
+  margin:2px 0 0;font-size:15.5px;font-weight:650;line-height:1.3;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+/* a close control an editor cannot miss */
+.mu-side__x{
+  flex:none;width:32px;height:32px;border:1px solid #e3e3e3;background:#fff;border-radius:8px;
+  font-size:14px;line-height:1;cursor:pointer;color:#303030;
+}
+.mu-side__x:hover{background:#f1f2f4;border-color:#c9cccf}
 
-.mu-grp{padding:14px 0 4px;border-bottom:1px solid #f1f2f4}
-.mu-grp:last-child{border-bottom:0}
-.mu-grp h3{margin:0 0 10px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8a8a8a}
-.mu-row{margin-bottom:15px}
-.mu-lab{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#616161;margin-bottom:5px;line-height:1.35}
-.mu-tag{background:#e3e3e3;color:#4a4a4a;border-radius:4px;padding:1px 5px;font-size:9.5px;font-weight:700;text-transform:uppercase;flex:none}
-.mu-note{background:#d3e5ff;color:#00366d;border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;flex:none}
+.mu-tabs{display:flex;gap:4px;padding:10px 12px;border-bottom:1px solid #e3e3e3;background:#fafbfb}
+.mu-tab{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:6px;
+  border:1px solid transparent;background:transparent;border-radius:8px;padding:7px 6px;
+  font:600 12.5px/1 inherit;color:#616161;cursor:pointer;
+}
+.mu-tab:hover:not([disabled]){background:#eef0f2}
+.mu-tab.on{background:#fff;border-color:#c9cccf;color:#303030;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.mu-tab[disabled]{opacity:.4;cursor:default}
+.mu-tab__n{background:#e3e3e3;color:#4a4a4a;border-radius:20px;padding:1px 6px;font-size:10.5px;font-weight:700}
+.mu-tab.on .mu-tab__n{background:#005bd3;color:#fff}
+
+.mu-side__body{flex:1;overflow-y:auto;padding:12px 14px 90px}
+
+.mu-row{margin-bottom:13px}
+.mu-lab{
+  display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.05em;color:#8a8a8a;margin-bottom:4px;
+}
+.mu-lab > span:first-child{flex:1;min-width:0}
+.mu-note{background:#d3e5ff;color:#00366d;border-radius:20px;padding:1px 6px;font-size:10px;flex:none}
+/* the AI row is folded away until asked for — it was most of the clutter */
+.mu-aibtn{
+  flex:none;border:1px solid #e3e3e3;background:#fff;border-radius:6px;padding:3px 7px;
+  font:700 10px/1 inherit;letter-spacing:.04em;color:#005bd3;cursor:pointer;text-transform:none;
+}
+.mu-aibtn:hover{background:#f3f8ff;border-color:#005bd3}
+.mu-aibtn.on{background:#005bd3;border-color:#005bd3;color:#fff}
+
 .mu-side input[type=text],.mu-side textarea,.mu-side select{
-  width:100%; padding:7px 10px; border:1px solid #c9cccf; border-radius:8px;
-  font:inherit; font-size:13.5px; background:#fff; color:#303030;
+  width:100%;padding:8px 10px;border:1px solid #c9cccf;border-radius:8px;
+  font:inherit;font-size:13.5px;background:#fff;color:#303030;
 }
-.mu-side textarea{min-height:76px;resize:vertical;line-height:1.5}
-.mu-side .mu-mono{font-family:ui-monospace,Menlo,monospace;font-size:12.5px}
+.mu-side textarea{min-height:72px;resize:vertical;line-height:1.5}
+.mu-side .mu-mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
 .mu-side input:focus,.mu-side textarea:focus,.mu-side select:focus{outline:2px solid #005bd3;outline-offset:-1px;border-color:transparent}
-.mu-hint{font-size:11.5px;color:#616161;margin:5px 0 0}
-.mu-empty{font-size:12.5px;color:#8a8a8a;margin:0 0 10px}
+.mu-hint{font-size:11.5px;color:#616161;margin:4px 0 0}
+.mu-empty{font-size:13px;color:#8a8a8a;margin:18px 0;text-align:center}
 
-.mu-card{border:1px solid #e3e3e3;border-radius:10px;padding:11px 12px;margin-bottom:11px;background:#fafbfb}
-.mu-card__h{font-size:13px;font-weight:650;margin-bottom:9px}
-.mu-card .mu-lab{margin-top:9px}
+.mu-card{border:1px solid #e3e3e3;border-radius:10px;padding:12px;margin-bottom:11px;background:#fff}
+.mu-card__h{font-size:13.5px;font-weight:650;margin-bottom:10px}
+.mu-card .mu-lab{margin-top:10px}
 .mu-card .mu-lab:first-of-type{margin-top:0}
 
 .mu-media-row{display:flex;gap:11px;align-items:flex-start}
 .mu-thumb{
-  width:74px;height:56px;flex:none;border-radius:8px;overflow:hidden;background:#f1f2f4;
-  border:1px solid #e3e3e3;display:grid;place-items:center;font-size:10.5px;color:#8a8a8a;
+  width:70px;height:52px;flex:none;border-radius:8px;overflow:hidden;background:#f1f2f4;
+  border:1px solid #e3e3e3;display:grid;place-items:center;font-size:10px;color:#8a8a8a;
 }
 .mu-thumb img,.mu-thumb video{width:100%;height:100%;object-fit:cover;display:block}
 .mu-media-fields{flex:1;min-width:0}
 
-.mu-ai{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap}
-.mu-ai__ins{flex:1;min-width:130px}
-.mu-mini{
-  border:1px solid #c9cccf;background:#fff;border-radius:7px;padding:5px 9px;
-  font:600 12px/1 inherit;cursor:pointer;white-space:nowrap;
-}
+.mu-ai{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.mu-ai[hidden]{display:none}
+.mu-ai__ins{flex:1;min-width:120px}
+.mu-mini{border:1px solid #c9cccf;background:#fff;border-radius:7px;padding:6px 9px;font:600 12px/1 inherit;cursor:pointer;white-space:nowrap}
 .mu-mini:hover{background:#f1f2f4}
 .mu-mini[disabled]{opacity:.45;cursor:not-allowed}
-.mu-out{margin-top:7px}
+.mu-out{margin-top:6px}
 .mu-opt{border:1px solid #e3e3e3;border-radius:8px;padding:8px 10px;margin-top:6px;cursor:pointer;background:#fff;font-size:13px}
 .mu-opt:hover{border-color:#005bd3;background:#f3f8ff}
 .mu-opt__a{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#005bd3;margin-bottom:3px}
@@ -146,3 +177,10 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #005bd3;outline-offset:-4
 .mu-toast.show{opacity:1}
 .mu-spin{width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;display:inline-block;animation:mu-sp .6s linear infinite}
 @keyframes mu-sp{to{transform:rotate(360deg)}}
+
+/* filter — only rendered when a list is long enough to need one */
+.mu-filter{
+  width:100%; padding:8px 10px; margin-bottom:11px;
+  border:1px solid #c9cccf; border-radius:8px; font:inherit; font-size:13px; background:#fafbfb;
+}
+.mu-filter:focus{outline:2px solid #005bd3;outline-offset:-1px;border-color:transparent;background:#fff}

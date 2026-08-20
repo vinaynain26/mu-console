@@ -233,6 +233,9 @@
       });
       if (getComputedStyle(sec).position === "static") sec.style.position = "relative";
       sec.appendChild(pill);
+      // only sections that actually start under a pinned header need the offset
+      var inset = topInset();
+      if (inset && sec.getBoundingClientRect().top < inset + 40) pill.style.top = (inset + 12) + "px";
       pills.push(pill);
     });
   }
@@ -244,6 +247,31 @@
     });
   }
   function notMeta(f) { return f.tag !== "meta"; }
+
+  /* An editor should never have to know what a <span> is. */
+  var FRIENDLY = {
+    h1: "Heading", h2: "Heading", h3: "Heading", h4: "Heading", h5: "Heading", h6: "Heading",
+    p: "Paragraph", span: "Text", text: "Text", li: "List item", a: "Link text",
+    button: "Button text", th: "Table heading", td: "Table cell", label: "Label",
+    strong: "Bold text", b: "Bold text", em: "Italic text", i: "Italic text",
+    div: "Text", small: "Small text", caption: "Caption", figcaption: "Caption",
+    blockquote: "Quote", dt: "Term", dd: "Definition", summary: "Summary",
+    media: "Image or video", image: "Image", link: "Link", state: "State",
+  };
+  var friendly = function (tag) { return FRIENDLY[tag] || "Text"; };
+
+  /* A fixed or sticky header would sit over a pill placed at the very top of the
+     page, so measure whatever is pinned up there and start below it. */
+  function topInset() {
+    var inset = 0;
+    Array.prototype.forEach.call(document.body.querySelectorAll("header, nav, .navbar, [class*=header], [class*=nav]"), function (n) {
+      var cs = getComputedStyle(n);
+      if (cs.position !== "fixed" && cs.position !== "sticky") return;
+      var r = n.getBoundingClientRect();
+      if (r.top <= 4 && r.height > 8 && r.height < 220) inset = Math.max(inset, r.bottom);
+    });
+    return Math.round(inset);
+  }
 
   /* ---------------- sidebar ---------------- */
   var side = null;
@@ -257,9 +285,23 @@
     activeSection = null;
   }
 
-  function openSidebar(sectionKey, focusKey) {
+  var sideTab = "content";
+
+  function bucketsFor(sectionKey) {
     var bucket = sectionsById.get(sectionKey);
-    if (!bucket) return;
+    if (!bucket) return null;
+    var fields = bucket.fields.filter(notMeta);
+    return {
+      title: bucket.title,
+      content: fields.filter(function (f) { return ["link", "state", "media", "image"].indexOf(f.tag) < 0; }),
+      buttons: buttonGroups(fields),
+      images: fields.filter(function (f) { return f.tag === "media"; }),
+    };
+  }
+
+  function openSidebar(sectionKey, focusKey) {
+    var b = bucketsFor(sectionKey);
+    if (!b) return;
     activeSection = sectionKey;
 
     Array.prototype.forEach.call(document.querySelectorAll(".mu-sec-active"), function (n) {
@@ -274,28 +316,82 @@
       document.body.classList.add("mu-side-open");
     }
 
-    var fields = bucket.fields.filter(notMeta);
-    var groups = {
-      text: fields.filter(function (f) { return ["link", "state", "media", "image"].indexOf(f.tag) < 0; }),
-      buttons: buttonGroups(fields),
-      media: fields.filter(function (f) { return f.tag === "media"; }),
-    };
+    // land on a tab that actually has something in it
+    if (focusKey) {
+      var f = meta.get(focusKey);
+      if (f) sideTab = f.tag === "media" ? "images" : (["link", "state"].indexOf(f.tag) >= 0 ? "buttons" : "content");
+    }
+    if (!b[sideTab] || !b[sideTab].length) {
+      sideTab = ["content", "buttons", "images"].filter(function (t) { return b[t].length; })[0] || "content";
+    }
 
     side.innerHTML =
       '<header class="mu-side__head">' +
-        '<div><div class="mu-side__eyebrow">Editing section</div>' +
-        '<h2>' + esc(bucket.title) + "</h2></div>" +
-        '<button class="mu-side__x" type="button" aria-label="Close">✕</button>' +
+        '<div class="mu-side__title">' +
+          '<div class="mu-side__eyebrow">Editing section</div>' +
+          "<h2>" + esc(b.title) + "</h2>" +
+        "</div>" +
+        '<button class="mu-side__x" type="button" title="Close (Esc)" aria-label="Close">✕</button>' +
       "</header>" +
-      '<div class="mu-side__body">' +
-        section("Copy", groups.text.map(textRow).join("") || empty("No text in this section.")) +
-        (groups.buttons.length ? section("Buttons & links", groups.buttons.map(buttonRow).join("")) : "") +
-        (groups.media.length ? section("Images & video", groups.media.map(mediaRow).join("")) : "") +
-      "</div>";
+      '<nav class="mu-tabs">' +
+        tabBtn("content", "Content", b.content.length) +
+        tabBtn("buttons", "Buttons", b.buttons.length) +
+        tabBtn("images", "Images", b.images.length) +
+      "</nav>" +
+      '<div class="mu-side__body" id="mu-side-body"></div>';
 
     side.querySelector(".mu-side__x").addEventListener("click", closeSidebar);
-    wireSidebar();
+    side.querySelectorAll("[data-tab]").forEach(function (t) {
+      t.addEventListener("click", function () {
+        if (t.disabled) return;
+        sideTab = t.dataset.tab;
+        renderTab(b);
+      });
+    });
+    renderTab(b, focusKey);
+  }
 
+  function tabBtn(key, label, n) {
+    return '<button type="button" class="mu-tab' + (sideTab === key ? " on" : "") + '" data-tab="' + key + '"' +
+      (n ? "" : " disabled") + ">" + esc(label) +
+      '<span class="mu-tab__n">' + n + "</span></button>";
+  }
+
+  function renderTab(b, focusKey) {
+    side.querySelectorAll("[data-tab]").forEach(function (t) {
+      t.classList.toggle("on", t.dataset.tab === sideTab);
+    });
+    var body = side.querySelector("#mu-side-body");
+    var html;
+    if (sideTab === "content") {
+      html = b.content.length ? b.content.map(textRow).join("") : empty("No text in this section.");
+    } else if (sideTab === "buttons") {
+      html = b.buttons.length ? b.buttons.map(buttonRow).join("") : empty("No buttons or links in this section.");
+    } else {
+      html = b.images.length ? b.images.map(mediaRow).join("") : empty("No images in this section.");
+    }
+    /* Tabs fix most of the scrolling, but a few sections genuinely hold dozens
+       of fields. Offer a filter there rather than making everyone scroll. */
+    var count = sideTab === "content" ? b.content.length
+              : sideTab === "buttons" ? b.buttons.length : b.images.length;
+    body.innerHTML = (count > 8
+      ? '<input type="search" class="mu-filter" placeholder="Filter ' + count + ' items…" data-filter>'
+      : "") + '<div data-list>' + html + "</div>";
+    body.scrollTop = 0;
+
+    var filter = body.querySelector("[data-filter]");
+    if (filter) {
+      filter.addEventListener("input", function () {
+        var q = filter.value.trim().toLowerCase();
+        body.querySelectorAll("[data-row], .mu-card").forEach(function (row) {
+          if (!q) { row.style.display = ""; return; }
+          var input = row.querySelector("[data-f]");
+          var text = ((input && input.value) || "") + " " + row.textContent;
+          row.style.display = text.toLowerCase().indexOf(q) >= 0 ? "" : "none";
+        });
+      });
+    }
+    wireSidebar();
     if (focusKey) {
       var input = side.querySelector('[data-f="' + CSS.escape(focusKey) + '"]');
       if (input) { input.focus(); input.scrollIntoView({ block: "center" }); }
@@ -333,17 +429,19 @@
     var v = valueOf(f.key);
     var notes = (comments.get(f.key) || []).length;
     return '<div class="mu-row" data-row="' + esc(f.key) + '">' +
-      '<label class="mu-lab"><span class="mu-tag">' + esc(f.tag) + "</span>" +
-        esc(f.label) + (notes ? '<span class="mu-note">' + notes + " note" + (notes === 1 ? "" : "s") + "</span>" : "") +
-      "</label>" +
+      '<div class="mu-lab">' +
+        "<span>" + esc(friendly(f.tag)) + "</span>" +
+        (notes ? '<span class="mu-note">' + notes + "</span>" : "") +
+        (CAN.ai ? '<button type="button" class="mu-aibtn" data-aitoggle="' + esc(f.key) + '" title="Ask the AI to rewrite this">✦ AI</button>' : "") +
+      "</div>" +
       (f.multiline
         ? '<textarea data-f="' + esc(f.key) + '">' + esc(v) + "</textarea>"
         : '<input type="text" data-f="' + esc(f.key) + '" value="' + esc(v) + '">') +
       (CAN.ai
-        ? '<div class="mu-ai">' +
-            '<input type="text" class="mu-ai__ins" data-ins="' + esc(f.key) + '" placeholder="Tell the AI what to change…">' +
+        ? '<div class="mu-ai" data-aibox="' + esc(f.key) + '" hidden>' +
+            '<input type="text" class="mu-ai__ins" data-ins="' + esc(f.key) + '" placeholder="What should change?">' +
             '<button class="mu-mini" type="button" data-ai="rewrite" data-k="' + esc(f.key) + '">Rewrite</button>' +
-            '<button class="mu-mini" type="button" data-ai="variants" data-k="' + esc(f.key) + '">3 options</button>' +
+            '<button class="mu-mini" type="button" data-ai="variants" data-k="' + esc(f.key) + '">Options</button>' +
           '</div><div class="mu-out" data-out="' + esc(f.key) + '"></div>'
         : "") +
       "</div>";
@@ -415,6 +513,15 @@
           n.classList.add("mu-spot");
           setTimeout(function () { n.classList.remove("mu-spot"); }, 1400);
         }
+      });
+    });
+    side.querySelectorAll("[data-aitoggle]").forEach(function (t) {
+      t.addEventListener("click", function () {
+        var box = side.querySelector('[data-aibox="' + CSS.escape(t.dataset.aitoggle) + '"]');
+        if (!box) return;
+        box.hidden = !box.hidden;
+        t.classList.toggle("on", !box.hidden);
+        if (!box.hidden) box.querySelector(".mu-ai__ins").focus();
       });
     });
     side.querySelectorAll("[data-ai]").forEach(function (b) {
