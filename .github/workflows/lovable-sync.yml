@@ -1,5 +1,9 @@
 # Lovable → Handlebars → this CMS.
 #
+# Every route the Lovable app declares becomes its own page here. Add a page in
+# Lovable and it arrives at /page/<slug>, fully editable — no workflow change,
+# no route to register.
+#
 # The pipeline lives HERE rather than in the Lovable repo, which means the only
 # credential needed is a READ token for the Lovable repo. Pushing the result is
 # done with GitHub's built-in GITHUB_TOKEN, because this workflow commits to its
@@ -24,14 +28,10 @@ on:
         description: "Lovable repo to convert"
         required: false
         default: vinaynain26/dark-welcome-page
-      slug:
-        description: "URL slug the page will live at"
+      home_slug:
+        description: "Slug for the Lovable home route (/)"
         required: false
         default: dark-welcome-page
-      title:
-        description: "Page title shown in the console"
-        required: false
-        default: Dark Welcome Page
       force:
         description: "Re-ingest even if the Lovable repo has not moved"
         type: boolean
@@ -50,8 +50,7 @@ concurrency:
 
 env:
   SOURCE_REPO: ${{ github.event.inputs.source_repo || 'vinaynain26/dark-welcome-page' }}
-  PAGE_SLUG:   ${{ github.event.inputs.slug        || 'dark-welcome-page' }}
-  PAGE_TITLE:  ${{ github.event.inputs.title       || 'Dark Welcome Page' }}
+  HOME_SLUG:   ${{ github.event.inputs.home_slug   || 'dark-welcome-page' }}
 
 jobs:
   sync:
@@ -80,7 +79,7 @@ jobs:
         id: changed
         run: |
           sha="$(git -C lovable rev-parse HEAD)"
-          stamp=".lovable-sync/$PAGE_SLUG.sha"
+          stamp=".lovable-sync/$HOME_SLUG.sha"
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
           if [ "${{ github.event.inputs.force }}" = "true" ]; then
             echo "run=yes" >> "$GITHUB_OUTPUT"; echo "forced"; exit 0
@@ -113,48 +112,53 @@ jobs:
         run: |
           npm ci || npm install
           npm install puppeteer serve --save-dev
-          node convert.cjs "$PAGE_SLUG"
+          node convert.cjs "$HOME_SLUG"
 
-      - name: Refuse an empty scrape
+      - name: Ingest every page the converter produced
         if: steps.changed.outputs.run == 'yes'
         run: |
-          view="lovable/hbs-output/views/$PAGE_SLUG.hbs"
-          test -s "$view" || { echo "::error::$view is missing or empty"; exit 1; }
-          size=$(wc -c < "$view")
-          # a scrape that ran before the page rendered produces a near-empty shell;
-          # overwriting a good page with that is worse than failing the run
-          if [ "$size" -lt 500 ]; then
-            echo "::error::$view is only $size bytes — the scrape probably ran before the page rendered"
-            exit 1
-          fi
-          echo "converted $size bytes"
-
-      - name: Ingest into the CMS
-        if: steps.changed.outputs.run == 'yes'
-        run: |
+          manifest="lovable/hbs-output/pages.json"
+          test -s "$manifest" || { echo "::error::$manifest missing — the converter produced nothing"; exit 1; }
           npm ci --omit=dev || npm install --omit=dev
-          node scripts/ingest-page.mjs \
-            --view   "lovable/hbs-output/views/$PAGE_SLUG.hbs" \
-            --layout "lovable/hbs-output/views/layouts/$PAGE_SLUG.hbs" \
-            --slug   "$PAGE_SLUG" \
-            --title  "$PAGE_TITLE"
+          node -e '
+            const { execFileSync } = require("child_process");
+            const fs = require("fs");
+            const { pages } = JSON.parse(fs.readFileSync("lovable/hbs-output/pages.json", "utf8"));
+            if (!pages || !pages.length) { console.error("::error::no pages in the manifest"); process.exit(1); }
+            for (const p of pages) {
+              const view = `lovable/hbs-output/views/${p.slug}.hbs`;
+              // a route that rendered almost nothing means the scrape ran too
+              // early; publishing that over a good page is worse than failing
+              if (!fs.existsSync(view) || fs.statSync(view).size < 200) {
+                console.error(`::error::${view} is missing or too small (${p.slug})`);
+                process.exit(1);
+              }
+              console.log(`\n── ${p.slug} (${p.route}) ──`);
+              execFileSync("node", ["scripts/ingest-page.mjs",
+                "--view", view,
+                "--layout", `lovable/hbs-output/views/layouts/${p.slug}.hbs`,
+                "--slug", p.slug, "--title", p.title], { stdio: "inherit" });
+            }
+            console.log(`\ningested ${pages.length} page(s)`);
+          ' 
 
       - name: Commit
         if: steps.changed.outputs.run == 'yes'
         run: |
           mkdir -p .lovable-sync
-          echo "${{ steps.changed.outputs.sha }}" > ".lovable-sync/$PAGE_SLUG.sha"
+          echo "${{ steps.changed.outputs.sha }}" > ".lovable-sync/$HOME_SLUG.sha"
           git config user.name  "Lovable Sync"
           git config user.email "automation@mastersunion.org"
-          git add "views/$PAGE_SLUG.hbs" "data/seed-$PAGE_SLUG.json" ".lovable-sync/$PAGE_SLUG.sha"
-          [ -f "views/layouts/$PAGE_SLUG.hbs" ] && git add "views/layouts/$PAGE_SLUG.hbs"
+          git add views/ views/layouts/ data/ .lovable-sync/
           if git diff --cached --quiet; then
-            echo "The rendered page is byte-identical — recording the sha only."
+            echo "Nothing changed — the rendered pages are byte-identical."
+            exit 0
           fi
-          git commit -q -m "Sync $PAGE_SLUG from Lovable
+          names=$(node -e 'const {pages}=require("./lovable/hbs-output/pages.json");console.log(pages.map(p=>p.slug).join(", "))')
+          git commit -q -m "Sync from Lovable: $names
 
           Source: $SOURCE_REPO @ ${{ steps.changed.outputs.sha }}
-          Converted and ingested by .github/workflows/lovable-sync.yml" || exit 0
+          Converted and ingested by .github/workflows/lovable-sync.yml"
           # no --force: a rejected push means main moved and deserves a look
           git push
 
@@ -163,11 +167,11 @@ jobs:
         run: |
           {
             echo "### Lovable → CMS"
-            if [ "${{ steps.changed.outputs.run }}" = "yes" ]; then
-              echo "Ingested \`$PAGE_SLUG\` from \`$SOURCE_REPO\`"
+            if [ "${{ steps.changed.outputs.run }}" = "yes" ] && [ -f lovable/hbs-output/pages.json ]; then
+              echo "From \`$SOURCE_REPO\`:"
               echo ""
-              echo "- Live page: \`/page/$PAGE_SLUG\`"
-              echo "- Edit it at: \`/console/page/$PAGE_SLUG\`"
+              node -e 'const {pages}=require("./lovable/hbs-output/pages.json");
+                for (const p of pages) console.log(`- \`${p.route}\` → [/page/${p.slug}] · edit at \`/console/page/${p.slug}\``);'
             else
               echo "No change in \`$SOURCE_REPO\` — skipped."
             fi
