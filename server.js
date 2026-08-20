@@ -78,6 +78,17 @@ db.exec(`
   );
 `);
 
+{
+  const pcols = db.prepare("PRAGMA table_info(pages)").all().map((c) => c.name);
+  if (!pcols.includes("layout")) {
+    // a converted page ships its own layout with that build's CSS inlined
+    db.exec("ALTER TABLE pages ADD COLUMN layout TEXT NOT NULL DEFAULT 'main'");
+  }
+  if (!pcols.includes("source")) {
+    db.exec("ALTER TABLE pages ADD COLUMN source TEXT NOT NULL DEFAULT 'handbuilt'");
+  }
+}
+
 const cols = db.prepare("PRAGMA table_info(page_content)").all().map((c) => c.name);
 if (!cols.includes("retired")) {
   db.exec("ALTER TABLE page_content ADD COLUMN retired INTEGER NOT NULL DEFAULT 0");
@@ -91,92 +102,92 @@ if (!cols.includes("tab_key")) {
   db.exec("ALTER TABLE page_content ADD COLUMN tab_title TEXT NOT NULL DEFAULT 'Shown on every tab'");
   console.log("  migrated: added tab columns");
 }
-{
-  const seed = JSON.parse(fs.readFileSync(path.join(ROOT, "data/seed.json"), "utf8"));
-  const upd = db.prepare("UPDATE page_content SET tab_key = ?, tab_title = ? WHERE page_slug = ? AND field_key = ?");
-  let n = 0;
-  for (const f of seed.fields) if (f.tab_key) n += upd.run(f.tab_key, f.tab_title, seed.page.slug, f.key).changes;
-  if (n) console.log("  tagged " + n + " fields with their tab");
-}
+/* ------------------------------------------------------------------ *
+ * seeding, per page
+ *
+ * One file per page under data/: seed.json is the original hand-built page,
+ * seed-<slug>.json is anything ingested since — a converted Lovable build, for
+ * instance. Every page goes through the same four steps, so a new page needs no
+ * new code: seed it, backfill what a rebuild added, realign what nobody has
+ * edited, retire what the template no longer renders.
+ * ------------------------------------------------------------------ */
+function applySeed(seed, { layout = "main", template = null, source = "handbuilt" } = {}) {
+  const slug = seed.page.slug;
+  const tpl = template || seed.page.template || "page";
 
-const seeded = db.prepare("SELECT COUNT(*) AS n FROM page_content").get().n;
-if (!seeded) {
-  const seed = JSON.parse(fs.readFileSync(path.join(ROOT, "data/seed.json"), "utf8"));
-  db.prepare("INSERT OR REPLACE INTO pages (slug,title,template) VALUES (?,?,?)")
-    .run(seed.page.slug, seed.page.title, "page");
-  const ins = db.prepare(`INSERT OR REPLACE INTO page_content
-    (page_slug, field_key, section_key, section_title, section_ord, tab_key, tab_title,
-     label, tag, multiline, ord, value, draft_value, updated_at, updated_by, options)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
+  db.prepare("INSERT OR IGNORE INTO pages (slug,title,template,layout,source) VALUES (?,?,?,?,?)")
+    .run(slug, seed.page.title, tpl, seed.page.layout || layout, seed.page.source || source);
+  db.prepare("UPDATE pages SET title = ?, template = ?, layout = ? WHERE slug = ?")
+    .run(seed.page.title, tpl, seed.page.layout || layout, slug);
+
+  const cols = `(page_slug, field_key, section_key, section_title, section_ord, tab_key, tab_title,
+                 label, tag, multiline, ord, value, draft_value, updated_at, updated_by, options)`;
+  const ins = db.prepare(`INSERT OR IGNORE INTO page_content ${cols} VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
   const now = new Date().toISOString();
-  for (const f of seed.fields) {
-    ins.run(seed.page.slug, f.key, f.section_key, f.section_title, f.section_ord,
+
+  const has = new Set(
+    db.prepare("SELECT field_key FROM page_content WHERE page_slug = ?").all(slug).map((r) => r.field_key)
+  );
+  const missing = seed.fields.filter((f) => !has.has(f.key));
+  for (const f of missing) {
+    ins.run(slug, f.key, f.section_key, f.section_title, f.section_ord,
             f.tab_key || "_all", f.tab_title || "Shown on every tab",
             f.label, f.tag, f.multiline, f.ord, f.value, f.value, now, "import", f.options || null);
   }
-  console.log(`  seeded ${seed.fields.length} fields from the original page`);
-}
-
-/* A rebuild can introduce fields that were not in the database yet — a JS array
-   the extractor previously missed, for example. Seeding only runs on an empty
-   table, so without this the new keys render empty and the section they drive
-   goes blank. Insert what is missing; never touch what already exists. */
-{
-  const seed = JSON.parse(fs.readFileSync(path.join(ROOT, "data/seed.json"), "utf8"));
-  const has = new Set(
-    db.prepare("SELECT field_key FROM page_content WHERE page_slug = ?").all(seed.page.slug).map((r) => r.field_key)
-  );
-  const missing = seed.fields.filter((f) => !has.has(f.key));
   if (missing.length) {
-    const ins = db.prepare(`INSERT INTO page_content
-      (page_slug, field_key, section_key, section_title, section_ord, tab_key, tab_title,
-       label, tag, multiline, ord, value, draft_value, updated_at, updated_by, options)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
-    const now = new Date().toISOString();
-    for (const f of missing) {
-      ins.run(seed.page.slug, f.key, f.section_key, f.section_title, f.section_ord,
-              f.tab_key || "_all", f.tab_title || "Shown on every tab",
-              f.label, f.tag, f.multiline, f.ord, f.value, f.value, now, "import", f.options || null);
-    }
-    console.log("  backfilled " + missing.length + " new field(s) from the rebuild");
+    console.log(`  ${slug}: ${has.size ? "backfilled" : "seeded"} ${missing.length} field(s)`);
   }
 
-  /* Keys are positional (`s5.h21` = "the 21st field found in section 5"), so a
-     change to what the extractor matches renumbers everything after it and a key
-     silently comes to mean a DIFFERENT piece of copy. Backfilling only inserts,
-     so without this the old wording stays parked on the new key and the page
-     renders the wrong text.
+  /* tab attribution can change without the wording changing */
+  {
+    const upd = db.prepare("UPDATE page_content SET tab_key = ?, tab_title = ? WHERE page_slug = ? AND field_key = ? AND tab_key <> ?");
+    for (const f of seed.fields) if (f.tab_key) upd.run(f.tab_key, f.tab_title, slug, f.key, f.tab_key);
+  }
 
-     The invariant: a field nobody has touched must equal the seed. Realign
-     those; never overwrite anything a human has edited — those are recovered by
-     scripts/heal-drift.mjs, which matches on wording instead of position. */
+  /* Keys are positional, so a change to what the extractor matches renumbers
+     everything after it and a key comes to mean a DIFFERENT piece of copy.
+     Invariant: a field nobody has touched must equal the seed. Human edits are
+     never overwritten — those are recovered by scripts/heal-drift.mjs, which
+     matches on wording instead of position. */
   {
     const fix = db.prepare(`UPDATE page_content SET value = ?, draft_value = ?, label = ?
                             WHERE page_slug = ? AND field_key = ?
                               AND updated_by = 'import' AND value = draft_value AND value <> ?`);
     let n = 0;
-    for (const f of seed.fields) n += fix.run(f.value, f.value, f.label, seed.page.slug, f.key, f.value).changes;
-    if (n) console.log("  realigned " + n + " untouched field(s) to the rebuilt template");
+    for (const f of seed.fields) n += fix.run(f.value, f.value, f.label, slug, f.key, f.value).changes;
+    if (n) console.log(`  ${slug}: realigned ${n} untouched field(s)`);
   }
 
-  /* A field the current build no longer emits is dead: nothing renders it, so
-     editing it does nothing. Mark it rather than delete it — the wording is
-     still wanted if the template brings the slot back. */
-  const keys = new Set(seed.fields.map((f) => f.key));
-  const retired = db.prepare(
-    "SELECT field_key FROM page_content WHERE page_slug = ? AND retired = 0"
-  ).all(seed.page.slug).filter((r) => !keys.has(r.field_key));
-  if (retired.length) {
-    const mark = db.prepare("UPDATE page_content SET retired = 1 WHERE page_slug = ? AND field_key = ?");
-    for (const r of retired) mark.run(seed.page.slug, r.field_key);
-    console.log("  retired " + retired.length + " field(s) the rebuild no longer renders");
-  }
   {
     const setOpt = db.prepare("UPDATE page_content SET options = ? WHERE page_slug = ? AND field_key = ?");
-    for (const f of seed.fields) if (f.options) setOpt.run(f.options, seed.page.slug, f.key);
+    for (const f of seed.fields) if (f.options) setOpt.run(f.options, slug, f.key);
   }
-  db.prepare("UPDATE page_content SET retired = 0 WHERE page_slug = ? AND field_key IN (" +
-    seed.fields.map(() => "?").join(",") + ")").run(seed.page.slug, ...seed.fields.map((f) => f.key));
+
+  /* A field the current build no longer emits renders nowhere. Mark it rather
+     than delete it — the wording still matters if the slot comes back. */
+  {
+    const keys = new Set(seed.fields.map((f) => f.key));
+    const gone = db.prepare("SELECT field_key FROM page_content WHERE page_slug = ? AND retired = 0")
+      .all(slug).filter((r) => !keys.has(r.field_key));
+    if (gone.length) {
+      const mark = db.prepare("UPDATE page_content SET retired = 1 WHERE page_slug = ? AND field_key = ?");
+      for (const r of gone) mark.run(slug, r.field_key);
+      console.log(`  ${slug}: retired ${gone.length} field(s) the rebuild no longer renders`);
+    }
+    const unretire = db.prepare("UPDATE page_content SET retired = 0 WHERE page_slug = ? AND field_key = ? AND retired = 1");
+    for (const f of seed.fields) unretire.run(slug, f.key);
+  }
+}
+
+/* Every seed file in data/ becomes a page. Dropping one in is all an ingest has
+   to do — no route to register, no code to change. */
+for (const file of fs.readdirSync(path.join(ROOT, "data")).filter((f) => /^seed(-.+)?\.json$/.test(f)).sort()) {
+  try {
+    const seed = JSON.parse(fs.readFileSync(path.join(ROOT, "data", file), "utf8"));
+    if (seed?.page?.slug && Array.isArray(seed.fields)) applySeed(seed);
+  } catch (e) {
+    console.log(`  ! ${file}: ${e.message}`);
+  }
 }
 
 auth.initAuth(db);
@@ -391,7 +402,7 @@ app.get("/page/:slug", (req, res, next) => {
   res.set("Cache-Control", "no-store, must-revalidate");
 
   res.render(page.template, {
-    layout: "main",
+    layout: page.layout || "main",
     title: page.title,
     __content: contentFor(page.slug, { draft }),
     isPreview: draft,
@@ -451,9 +462,9 @@ app.get("/page/:slug", (req, res, next) => {
  * ------------------------------------------------------------------ */
 app.get("/api/pages", auth.require_("read"), (_req, res) => {
   res.json(db.prepare(`
-    SELECT p.slug, p.title,
-           COUNT(c.field_key) AS fields,
-           COUNT(DISTINCT c.section_key) AS sections,
+    SELECT p.slug, p.title, p.source,
+           COUNT(CASE WHEN c.retired = 0 AND c.tag <> 'meta' THEN 1 END) AS fields,
+           COUNT(DISTINCT CASE WHEN c.retired = 0 THEN c.section_key END) AS sections,
            SUM(CASE WHEN c.value <> c.draft_value AND c.retired = 0 THEN 1 ELSE 0 END) AS unpublished,
            (SELECT user_name FROM publishes WHERE page_slug = p.slug ORDER BY id DESC LIMIT 1) AS last_publisher,
            (SELECT published_at FROM publishes WHERE page_slug = p.slug ORDER BY id DESC LIMIT 1) AS last_published

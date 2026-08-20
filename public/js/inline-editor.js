@@ -181,13 +181,22 @@
   /* Capture phase: in edit mode the page's own click handlers (sliders, tabs,
      video triggers) must not fire when someone is aiming at a text node. */
   document.addEventListener("click", function (e) {
+    if (mode !== "edit" && mode !== "arrange") return;
+    if (!e.target.closest) return;
+    // never swallow clicks on the editor's own chrome
+    if (e.target.closest(".mu-bar, .mu-pop, .mu-toast, .mu-state, .mu-media-edit, .mu-grip")) return;
+
+    // While editing, following a link would throw away unsaved work and take the
+    // editor off the page they are editing. Nothing navigates until Browse.
+    var link = e.target.closest("a[href]");
+    if (link) { e.preventDefault(); e.stopPropagation(); }
+
     if (mode !== "edit") return;
-    var node = e.target.closest ? e.target.closest("[data-c]") : null;
-    if (e.target.closest && e.target.closest(".mu-bar, .mu-pop, .mu-toast")) return;
+    var node = e.target.closest("[data-c]");
     if (node) {
       e.preventDefault(); e.stopPropagation();
       beginEdit(node);
-    } else {
+    } else if (!link) {
       closeEditing(); closePop();
     }
   }, true);
@@ -427,7 +436,6 @@
 
   /* Media slots are not text, so they get their own handle rather than
      contentEditable. One button per slot, opening a small URL form. */
-  var mediaBtns = [];
   function addMediaButtons() {
     removeMediaButtons();
     Array.prototype.forEach.call(document.querySelectorAll("[data-c-media]"), function (host) {
@@ -438,9 +446,9 @@
         e.preventDefault(); e.stopPropagation();
         openMediaPop(host, key, b);
       });
-      var anchor = host.tagName === "SPAN" ? host : host.parentNode;
-      if (anchor && getComputedStyle(anchor).position === "static") anchor.style.position = "relative";
-      (anchor || host).appendChild(b);
+      document.body.appendChild(b);
+      b.__host = host;
+      placeBeside(b, host);
       mediaBtns.push(b);
     });
   }
@@ -494,6 +502,7 @@
   }
   function isVideo(v) { return /\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(String(v || "")); }
 
+  var mediaBtns = [];
   var statePickers = [];
   function addStatePickers() {
     removeStatePickers();
@@ -502,7 +511,6 @@
       var f = meta.get(key);
       if (!f || !f.options) return;
 
-      var cell = host.querySelector("th, td") || host;
       var sel = el("select", "mu-state");
       var current = dirty.has(key) ? dirty.get(key) : f.value;
       var known = false;
@@ -531,11 +539,31 @@
       });
       sel.addEventListener("click", function (e) { e.stopPropagation(); });
 
-      if (getComputedStyle(cell).position === "static") cell.style.position = "relative";
-      cell.appendChild(sel);
+      document.body.appendChild(sel);
+      sel.__host = host;
+      placeBeside(sel, host);
       statePickers.push(sel);
     });
   }
+  /** Sit a control just outside its element — never on top of it. */
+  function placeBeside(node, host) {
+    var r = host.getBoundingClientRect();
+    var w = node.offsetWidth || 150;
+    var left = window.scrollX + r.right + 8;
+    // fall back to the left side when there is no room on the right
+    if (left + w > window.scrollX + document.documentElement.clientWidth - 8) {
+      left = Math.max(window.scrollX + 8, window.scrollX + r.left - w - 8);
+    }
+    node.style.left = left + "px";
+    node.style.top = (window.scrollY + r.top) + "px";
+  }
+  function repositionPickers() {
+    statePickers.forEach(function (n) { if (n.__host) placeBeside(n, n.__host); });
+    mediaBtns.forEach(function (n) { if (n.__host) placeBeside(n, n.__host); });
+  }
+  window.addEventListener("scroll", function () { if (mode === "edit") repositionPickers(); }, { passive: true });
+  window.addEventListener("resize", function () { if (mode === "edit") repositionPickers(); });
+
   function removeStatePickers() {
     statePickers.forEach(function (s2) { s2.remove(); });
     statePickers = [];

@@ -5,7 +5,10 @@
   "scripts": {
     "build": "node scripts/build-page.mjs",
     "start": "node server.js",
-    "reset": "rm -f data/content.db && node server.js"
+    "reset": "rm -f data/content.db && node server.js",
+    "ingest": "node scripts/ingest-page.mjs",
+    "voice": "node scripts/extract-voice.mjs",
+    "heal": "node scripts/heal-drift.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.117.1",
