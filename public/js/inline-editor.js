@@ -65,7 +65,21 @@
       parent.normalize();
       return;
     }
-    if (range.collapsed) return;
+    if (range.collapsed) {
+      // no selection: take the word the caret is in, which is what people expect
+      var tn = range.startContainer;
+      if (tn.nodeType !== 3 || !tn.textContent.trim()) return;
+      var text = tn.textContent, i = range.startOffset;
+      var a = i, b2 = i;
+      while (a > 0 && !/\s/.test(text[a - 1])) a--;
+      while (b2 < text.length && !/\s/.test(text[b2])) b2++;
+      if (a === b2) return;
+      range = document.createRange();
+      range.setStart(tn, a);
+      range.setEnd(tn, b2);
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
 
     var span = document.createElement("span");
     span.className = cls;
@@ -637,22 +651,68 @@
       b.addEventListener("click", function () { revertField(b.dataset.revert); });
     });
     side.querySelectorAll("[data-rich]").forEach(function (box) {
+      /* The selection has to be remembered. Clicking a toolbar button moves
+         focus, and calling box.focus() to bring it back COLLAPSES the range to
+         the start — which is why the format buttons silently did nothing: by
+         the time the handler ran there was no selection left to wrap. */
+      var saved = null;
+      function remember() {
+        var sel = window.getSelection();
+        if (!sel || !sel.rangeCount) return;
+        var r = sel.getRangeAt(0);
+        if (box.contains(r.commonAncestorContainer)) saved = r.cloneRange();
+      }
+      function restore() {
+        if (!saved) return false;
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(saved);
+        return true;
+      }
+      ["keyup", "mouseup", "input"].forEach(function (e) { box.addEventListener(e, remember); });
+      document.addEventListener("selectionchange", function () {
+        if (document.activeElement === box) remember();
+      });
+
+      function grow() {
+        box.style.height = "auto";
+        box.style.height = Math.min(box.scrollHeight, 320) + "px";
+      }
       box.addEventListener("input", function () {
         setField(box.dataset.rich, box.innerHTML, { fromSidebar: true });
+        grow();
       });
+      grow();
+
       var barEl = box.parentNode.querySelector(".mu-rt__bar");
       if (!barEl) return;
+
+      /* Light up whichever styles the cursor is currently sitting inside. */
+      function refreshBar() {
+        var sel = window.getSelection();
+        var node = sel && sel.rangeCount ? sel.getRangeAt(0).commonAncestorContainer : null;
+        var host = node && (node.nodeType === 3 ? node.parentNode : node);
+        barEl.querySelectorAll("[data-rt]").forEach(function (b) {
+          var item = HOUSE.filter(function (h) { return h.cmd === b.dataset.rt; })[0];
+          if (!item || !host || !host.closest) return b.classList.remove("on");
+          var cls = classFor(item, box.dataset.rich);
+          b.classList.toggle("on", !!host.closest("span." + cls) && box.contains(host));
+        });
+      }
+      ["keyup", "mouseup"].forEach(function (e) { box.addEventListener(e, refreshBar); });
+
       barEl.querySelectorAll("[data-rt]").forEach(function (b) {
-        // mousedown, not click: clicking would blur the box and lose the selection
+        // mousedown + preventDefault keeps focus in the box entirely
         b.addEventListener("mousedown", function (e) {
           e.preventDefault();
-          box.focus();
-          var cmd = b.dataset.rt;
           var key = box.dataset.rich;
+          if (document.activeElement !== box) box.focus();
+          restore();
+
+          var cmd = b.dataset.rt;
           if (cmd === "br") {
-            document.execCommand("insertLineBreak");
+            insertBreak();
           } else if (cmd === "clear") {
-            // drop the house spans too, not just <b>/<i>
             HOUSE.forEach(function (h) {
               var cls = classFor(h, key);
               Array.prototype.forEach.call(box.querySelectorAll("span." + cls), function (sp) {
@@ -662,15 +722,32 @@
                 par.normalize();
               });
             });
-            document.execCommand("removeFormat");
           } else {
             var item = HOUSE.filter(function (h) { return h.cmd === cmd; })[0];
             if (item) applyHouseStyle(box, key, item);
           }
           setField(key, box.innerHTML, { fromSidebar: true });
+          remember();
+          refreshBar();
+          grow();
         });
       });
+
+      function insertBreak() {
+        var sel = window.getSelection();
+        if (!sel || !sel.rangeCount) return;
+        var r = sel.getRangeAt(0);
+        r.deleteContents();
+        var br = document.createElement("br");
+        r.insertNode(br);
+        // put the caret after the break, or it lands before it
+        r.setStartAfter(br);
+        r.collapse(true);
+        sel.removeAllRanges();
+        sel.addRange(r);
+      }
     });
+
     side.querySelectorAll("[data-aitoggle]").forEach(function (t) {
       t.addEventListener("click", function () {
         var box = side.querySelector('[data-aibox="' + CSS.escape(t.dataset.aitoggle) + '"]');

@@ -231,9 +231,12 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #005bd3;outline-offset:-4
 }
 .mu-rt__bar button:hover{background:#e3e3e3}
 .mu-rt__box{
-  padding:8px 10px;min-height:44px;font-size:13.5px;line-height:1.5;color:#303030;
-  outline:none;word-break:break-word;
+  padding:10px 12px;min-height:64px;max-height:320px;overflow-y:auto;
+  font-size:15px;line-height:1.55;color:#303030;outline:none;word-break:break-word;
 }
+/* the toolbar shows which styles the caret is sitting inside */
+.mu-rt__bar button.on{background:#005bd3;color:#fff}
+.mu-rt__bar button.on b,.mu-rt__bar button.on i{color:#fff}
 .mu-rt__box:focus{box-shadow:inset 0 0 0 2px #005bd3}
 .mu-rt__box b,.mu-rt__box strong{font-weight:700}
 .mu-rt__box br{content:""}
