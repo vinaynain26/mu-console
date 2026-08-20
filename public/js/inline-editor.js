@@ -225,8 +225,11 @@
 
       var pill = el("button", "mu-pill");
       pill.type = "button";
+      var b0 = bucketsFor(key);
+      var total = b0 ? b0.content.length + b0.buttons.length + b0.images.length : 0;
+      if (!total) return;
       pill.innerHTML = '<span class="mu-pill__i">✎</span> Edit section' +
-        '<span class="mu-pill__n">' + bucket.fields.filter(notMeta).length + "</span>";
+        '<span class="mu-pill__n">' + total + "</span>";
       pill.addEventListener("click", function (e) {
         e.preventDefault(); e.stopPropagation();
         openSidebar(key);
@@ -235,7 +238,9 @@
       sec.appendChild(pill);
       // only sections that actually start under a pinned header need the offset
       var inset = topInset();
-      if (inset && sec.getBoundingClientRect().top < inset + 40) pill.style.top = (inset + 12) + "px";
+      if (inset && sec.getBoundingClientRect().top < inset + 40) {
+        pill.style.setProperty("top", (inset + 12) + "px", "important");
+      }
       pills.push(pill);
     });
   }
@@ -311,7 +316,7 @@
     if (host) host.classList.add("mu-sec-active");
 
     if (!side) {
-      side = el("aside", "mu-side");
+      side = el("div", "mu-side");
       document.body.appendChild(side);
       document.body.classList.add("mu-side-open");
     }
@@ -326,18 +331,18 @@
     }
 
     side.innerHTML =
-      '<header class="mu-side__head">' +
+      '<div class="mu-side__head">' +
         '<div class="mu-side__title">' +
           '<div class="mu-side__eyebrow">Editing section</div>' +
-          "<h2>" + esc(b.title) + "</h2>" +
+          '<div class="mu-side__h">' + esc(b.title) + "</div>" +
         "</div>" +
         '<button class="mu-side__x" type="button" title="Close (Esc)" aria-label="Close">✕</button>' +
-      "</header>" +
-      '<nav class="mu-tabs">' +
+      "</div>" +
+      '<div class="mu-tabs">' +
         tabBtn("content", "Content", b.content.length) +
         tabBtn("buttons", "Buttons", b.buttons.length) +
         tabBtn("images", "Images", b.images.length) +
-      "</nav>" +
+      "</div>" +
       '<div class="mu-side__body" id="mu-side-body"></div>';
 
     side.querySelector(".mu-side__x").addEventListener("click", closeSidebar);
@@ -399,9 +404,9 @@
   }
 
   function section(title, inner) {
-    return '<section class="mu-grp"><h3>' + esc(title) + "</h3>" + inner + "</section>";
+    return '<div class="mu-grp"><div class="mu-grp__h">' + esc(title) + "</div>" + inner + "</div>";
   }
-  function empty(msg) { return '<p class="mu-empty">' + esc(msg) + "</p>"; }
+  function empty(msg) { return '<div class="mu-empty">' + esc(msg) + "</div>"; }
 
   /** A button is its label, its destination and its state — shown together. */
   function buttonGroups(fields) {
@@ -485,9 +490,9 @@
         '<div class="mu-media-fields">' +
           '<label class="mu-lab">Source</label>' +
           '<input type="text" class="mu-mono" data-f="' + esc(f.key) + '" value="' + esc(v) + '" placeholder="https://…">' +
-          '<p class="mu-hint">' + (vid
+          '<div class="mu-hint">' + (vid
             ? "Rendering as a video with the house play button."
-            : "Paste an .mp4 or .webm to turn this into a video.") + "</p>" +
+            : "Paste an .mp4 or .webm to turn this into a video.") + "</div>" +
         "</div>" +
       "</div>" +
       '<div data-poster="' + esc(f.key) + '"' + (vid ? "" : ' style="display:none"') + ">" +
@@ -548,7 +553,7 @@
       if (kind === "rewrite") {
         out.innerHTML = '<div class="mu-opt"><div class="mu-opt__a">Suggested' +
           (r.ceiling ? " · ceiling " + r.ceiling : "") + "</div>" + esc(r.text) + "</div>" +
-          (r.note ? '<p class="mu-hint">' + esc(r.note) + "</p>" : "");
+          (r.note ? '<div class="mu-hint">' + esc(r.note) + "</p>" : "");
         out.querySelector(".mu-opt").addEventListener("click", function () { setField(key, r.text); });
       } else {
         out.innerHTML = (r.options || []).map(function (o, i) {
