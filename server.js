@@ -458,6 +458,39 @@ app.get("/page/:slug", (req, res, next) => {
 });
 
 /* ------------------------------------------------------------------ *
+ * sanitising rich text
+ *
+ * A rich field holds markup and renders through {{{c}}}, which does not escape.
+ * That is deliberate — it is what lets an editor keep the bold and the line
+ * breaks inside a sentence. It also means whatever they paste goes straight
+ * into the page, and people paste out of Word and Google Docs.
+ *
+ * So: an allowlist of inline formatting, `class` as the only surviving
+ * attribute, and everything else unwrapped rather than dropped, so the words
+ * survive even when the markup does not.
+ * ------------------------------------------------------------------ */
+const RICH_TAGS = new Set(["b", "strong", "i", "em", "u", "s", "small", "sup", "sub", "span", "br", "mark"]);
+
+function sanitizeRich(html) {
+  let out = String(html);
+  // whole elements whose content should never survive
+  out = out.replace(/<(script|style|iframe|object|embed|link|meta)\b[\s\S]*?<\/\1\s*>/gi, "");
+  out = out.replace(/<(script|style|iframe|object|embed|link|meta)\b[^>]*>/gi, "");
+
+  out = out.replace(/<(\/)?([a-zA-Z][a-zA-Z0-9]*)\b([^>]*)>/g, (full, slash, tag, attrs) => {
+    const t = tag.toLowerCase();
+    if (!RICH_TAGS.has(t)) return "";            // unwrap: keep the words, drop the tag
+    if (slash) return "</" + t + ">";
+    if (t === "br") return "<br>";
+    const cls = attrs.match(/\sclass\s*=\s*"([^"]*)"/i) || attrs.match(/\sclass\s*=\s*'([^']*)'/i);
+    // class only, and no javascript: smuggled through it
+    const safe = cls && !/[<>"]|javascript:/i.test(cls[1]) ? ' class="' + cls[1] + '"' : "";
+    return "<" + t + safe + ">";
+  });
+  return out.trim();
+}
+
+/* ------------------------------------------------------------------ *
  * content API
  * ------------------------------------------------------------------ */
 app.get("/api/pages", auth.require_("read"), (_req, res) => {
@@ -517,15 +550,17 @@ app.get("/api/pages/:slug/content", auth.require_("read"), (req, res) => {
 
 app.put("/api/pages/:slug/content", auth.require_("edit"), (req, res) => {
   const { changes = {} } = req.body || {};
-  const get = db.prepare("SELECT draft_value FROM page_content WHERE page_slug = ? AND field_key = ?");
+  const get = db.prepare("SELECT draft_value, tag FROM page_content WHERE page_slug = ? AND field_key = ?");
   const upd = db.prepare(`UPDATE page_content SET draft_value = ?, updated_at = ?, updated_by = ?
                           WHERE page_slug = ? AND field_key = ?`);
   const now = new Date().toISOString();
   let n = 0;
   for (const [key, val] of Object.entries(changes)) {
     const row = get.get(req.params.slug, key);
-    if (!row || row.draft_value === val) continue;
-    upd.run(String(val), now, req.user.name, req.params.slug, key);
+    if (!row) continue;
+    const clean = row.tag === "rich" ? sanitizeRich(val) : String(val);
+    if (row.draft_value === clean) continue;
+    upd.run(clean, now, req.user.name, req.params.slug, key);
     n++;
   }
   res.json({ saved: n });

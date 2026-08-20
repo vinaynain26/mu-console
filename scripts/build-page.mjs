@@ -221,6 +221,83 @@ const counters = new Map();
    across a rebuild. */
 function remap() { sections = sectionMap(html); panels = panelMap(html); }
 
+/* ---------- 4d. a whole block of copy, kept whole ---------- *
+ * `<h1>Learn <span>Business</span> by<br> travelling …</h1>` is ONE sentence.
+ * Anchoring each text node inside it turned that into eight fields — "Learn",
+ * "Business", "by", "travelling" — which is unusable: an editor cannot rewrite
+ * a sentence they can only see in pieces, and the bold and the line breaks
+ * belong to them anyway, not to us.
+ *
+ * So when a block contains nothing but inline formatting, take the whole inner
+ * markup as a single rich-text field. Anything with a link, image, svg or a
+ * nested block inside falls through to the per-node passes below, because those
+ * carry structure an editor should not be retyping.
+ */
+const INLINE_OK = /^(b|strong|i|em|u|s|small|sup|sub|span|br|mark|wbr)$/i;
+let richCount = 0;
+
+function blockEnd(src, tag, from) {
+  const re = new RegExp("<" + tag + "\\b[^>]*>|</" + tag + "\\s*>", "gi");
+  re.lastIndex = from;
+  let depth = 0, m;
+  while ((m = re.exec(src))) {
+    if (m[0].startsWith("</")) { depth--; if (depth === 0) return { end: m.index, after: re.lastIndex }; }
+    else depth++;
+  }
+  return null;
+}
+
+{
+  const open = /<(h1|h2|h3|h4|h5|h6|p|li|figcaption|blockquote|dt|dd)\b([^>]*)>/gi;
+  const out = [];
+  let m;
+  while ((m = open.exec(html))) {
+    const tag = m[1], attrs = m[2];
+    const close = blockEnd(html, tag, m.index);
+    if (!close) continue;
+    const inner = html.slice(m.index + m[0].length, close.end);
+
+    if (!inner.trim()) continue;
+    if (inner.includes("{{") || inner.includes("@@CODE")) continue;
+    // only worth it when there IS inline markup; plain text is handled below
+    const tags = [...inner.matchAll(/<\/?([a-zA-Z][a-zA-Z0-9]*)\b/g)].map((t) => t[1]);
+    if (!tags.length) continue;
+    if (!tags.every((t) => INLINE_OK.test(t))) continue;
+    if (!/[A-Za-z]{2}/.test(inner.replace(/<[^>]*>/g, ""))) continue;
+
+    out.push({ start: m.index, openLen: m[0].length, end: close.end, after: close.after, tag, attrs, inner });
+    open.lastIndex = close.after;
+  }
+
+  // back to front so earlier offsets stay valid
+  for (let i = out.length - 1; i >= 0; i--) {
+    const b = out[i];
+    const sec = sectionAt(b.start);
+    const tab = tabAt(b.start);
+    const n = (counters.get(sec.key) || 0) + 1;
+    counters.set(sec.key, n);
+    const key = sec.key + ".rich" + n;
+    const plain = b.inner.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+
+    fields.push({
+      key,
+      section_key: sec.key, section_title: sec.title, section_ord: sec.ord,
+      tab_key: tab.key, tab_title: tab.title,
+      tag: "rich",
+      label: plain.slice(0, 70) + (plain.length > 70 ? "\u2026" : ""),
+      value: b.inner.trim(),
+      multiline: plain.length > 90 ? 1 : 0,
+      ord: fields.length,
+    });
+    richCount++;
+    html = html.slice(0, b.start) +
+      "<" + b.tag + b.attrs + " data-c=\"" + key + "\" data-c-rich=\"1\">{{{c \"" + key + "\"}}}</" + b.tag + ">" +
+      html.slice(b.after);
+  }
+}
+remap();
+
+
 /* ---------- 4b. link targets ---------- *
  * A button's words were editable but the URL behind it was not, so repointing
  * "Apply Now" meant a developer and a deploy. This runs AFTER the script/style
@@ -320,8 +397,8 @@ const STATE_SETS = [
        it visible but greyed and unclickable — the pattern this page already
        uses for a shut application round; "Hidden" removes it entirely. */
     name: "Button",
-    el: "a",
-    base: /\bbtn(Black|White)\b/,
+    el: "(?:a|button)",
+    base: /\bbtn(Black|White)\b|\bbtn\b/,
     modifiers: ["mu-disabled", "hide"],
     options: [
       { label: "Active \u2014 clickable", value: "" },
@@ -347,6 +424,15 @@ for (const set of STATE_SETS) {
   const re = new RegExp("<" + set.el + "\\b([^>]*?)class=\"([^\"]*)\"([^>]*)>", "gi");
   html = html.replace(re, (full, pre, cls, post, offset) => {
     if (!set.base.test(cls) || cls.includes("{{")) return full;
+    /* An icon-only control — a carousel arrow, a close cross — is chrome, not
+       content. Requiring a word of visible text keeps those out of the editor. */
+    const elName0 = full.slice(1).match(/^[a-zA-Z]+/)[0];
+    const close = html.indexOf("</" + elName0, offset);
+    const body = close > 0 ? html.slice(offset, close) : "";
+    // strip tags AND any template call an earlier pass already put there,
+    // or `{{{media 's17.media70'}}}` reads as words
+    const words = body.replace(/\{\{[\s\S]*?\}\}/g, " ").replace(/<[^>]*>/g, " ");
+    if (!/[A-Za-z]{2}/.test(words)) return full;
 
     const tokens = cls.split(/\s+/).filter(Boolean);
     const keep = tokens.filter((t) => !set.modifiers.includes(t));
@@ -371,7 +457,8 @@ for (const set of STATE_SETS) {
       multiline: 0, ord: fields.length,
     });
     stateCount++;
-    return "<" + set.el + pre + "class=\"" + keep.join(" ") + " {{{c '" + key + "'}}}\" data-c-state=\"" + key + "\"" + post + ">";
+    const elName = full.slice(1).match(/^[a-zA-Z]+/)[0];
+    return "<" + elName + pre + "class=\"" + keep.join(" ") + " {{{c '" + key + "'}}}\" data-c-state=\"" + key + "\"" + post + ">";
   });
 }
 
@@ -518,7 +605,8 @@ console.log("\n  editable fields: " + fields.length);
 console.log("  bound to a JS array instead of duplicated: " + boundCount);
 console.log("  loose text nodes wrapped for editing: " + wrapped);
 console.log("  editable links: " + linkCount + "   state switches: " + stateCount);
-console.log("  media slots (image or video): " + mediaCount + "\n");
+console.log("  media slots (image or video): " + mediaCount);
+console.log("  rich-text blocks kept whole: " + richCount + "\n");
 for (const [t, v] of byTab) {
   console.log("   " + String(v.fields).padStart(4) + " fields  " +
               String(v.sections.size).padStart(3) + " sections   " + t);

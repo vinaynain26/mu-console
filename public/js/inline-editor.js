@@ -82,7 +82,10 @@
     // keep the page in step, unless the page is what just changed
     if (!opts.fromPage) {
       var node = document.querySelector('[data-c="' + CSS.escape(key) + '"]');
-      if (node && node !== live) node.textContent = value;
+      if (node && node !== live) {
+        if (node.hasAttribute("data-c-rich")) node.innerHTML = value;
+        else node.textContent = value;
+      }
 
       var link = document.querySelector('a[data-c-link="' + CSS.escape(key) + '"]');
       if (link) link.setAttribute("href", value);
@@ -261,7 +264,7 @@
     strong: "Bold text", b: "Bold text", em: "Italic text", i: "Italic text",
     div: "Text", small: "Small text", caption: "Caption", figcaption: "Caption",
     blockquote: "Quote", dt: "Term", dd: "Definition", summary: "Summary",
-    media: "Image or video", image: "Image", link: "Link", state: "State",
+    media: "Image or video", image: "Image", link: "Link", state: "State", rich: "Text block",
   };
   var friendly = function (tag) { return FRIENDLY[tag] || "Text"; };
 
@@ -300,7 +303,12 @@
       title: bucket.title,
       content: fields.filter(function (f) { return ["link", "state", "media", "image"].indexOf(f.tag) < 0; }),
       buttons: buttonGroups(fields),
-      images: fields.filter(function (f) { return f.tag === "media"; }),
+      // an icon inside a button is part of that button, not a page image
+      images: fields.filter(function (f) {
+        if (f.tag !== "media") return false;
+        var n = document.querySelector('[data-c-media="' + CSS.escape(f.key) + '"]');
+        return !(n && n.closest("a[data-c-link], [data-c-state]"));
+      }),
     };
   }
 
@@ -420,7 +428,14 @@
         var lk = host.matches("a[data-c-link]") ? host : host.querySelector("a[data-c-link]");
         if (lk) linkField = meta.get(lk.dataset.cLink) || null;
       }
-      out.push({ state: st, label: labelField, link: linkField, host: host });
+      var icons = [];
+      if (host) {
+        Array.prototype.forEach.call(host.querySelectorAll("[data-c-media]"), function (n) {
+          var mf = meta.get(n.dataset.cMedia);
+          if (mf) icons.push(mf);
+        });
+      }
+      out.push({ state: st, label: labelField, link: linkField, host: host, icons: icons });
     });
     // links that are not attached to a state switch still need somewhere to live
     fields.filter(function (f) { return f.tag === "link"; }).forEach(function (lf) {
@@ -439,9 +454,19 @@
         (notes ? '<span class="mu-note">' + notes + "</span>" : "") +
         (CAN.ai ? '<button type="button" class="mu-aibtn" data-aitoggle="' + esc(f.key) + '" title="Ask the AI to rewrite this">✦ AI</button>' : "") +
       "</div>" +
-      (f.multiline
-        ? '<textarea data-f="' + esc(f.key) + '">' + esc(v) + "</textarea>"
-        : '<input type="text" data-f="' + esc(f.key) + '" value="' + esc(v) + '">') +
+      (f.tag === "rich"
+        ? '<div class="mu-rt">' +
+            '<div class="mu-rt__bar">' +
+              '<button type="button" data-rt="bold" title="Bold"><b>B</b></button>' +
+              '<button type="button" data-rt="italic" title="Italic"><i>I</i></button>' +
+              '<button type="button" data-rt="br" title="Line break">↵</button>' +
+              '<button type="button" data-rt="clear" title="Remove formatting">✕</button>' +
+            "</div>" +
+            '<div class="mu-rt__box" contenteditable="true" data-rich="' + esc(f.key) + '">' + v + "</div>" +
+          "</div>"
+        : f.multiline
+          ? '<textarea data-f="' + esc(f.key) + '">' + esc(v) + "</textarea>"
+          : '<input type="text" data-f="' + esc(f.key) + '" value="' + esc(v) + '">') +
       (CAN.ai
         ? '<div class="mu-ai" data-aibox="' + esc(f.key) + '" hidden>' +
             '<input type="text" class="mu-ai__ins" data-ins="' + esc(f.key) + '" placeholder="What should change?">' +
@@ -464,6 +489,14 @@
       rows += '<label class="mu-lab">Links to</label>' +
         '<input type="text" class="mu-mono" data-f="' + esc(g.link.key) + '" value="' + esc(valueOf(g.link.key)) + '" placeholder="/path or https://…">';
     }
+    (g.icons || []).forEach(function (ic) {
+      rows += '<label class="mu-lab">Icon</label>' +
+        '<div class="mu-media-row"><div class="mu-thumb">' +
+          (valueOf(ic.key) ? '<img src="' + esc(valueOf(ic.key)) + '" alt="">' : "<span>none</span>") +
+        '</div><div class="mu-media-fields">' +
+          '<input type="text" class="mu-mono" data-f="' + esc(ic.key) + '" value="' + esc(valueOf(ic.key)) + '">' +
+        "</div></div>";
+    });
     if (g.state) {
       var cur = valueOf(g.state.key);
       var known = (g.state.options || []).some(function (o) { return o.value === cur; });
@@ -520,6 +553,25 @@
         }
       });
     });
+    side.querySelectorAll("[data-rich]").forEach(function (box) {
+      box.addEventListener("input", function () {
+        setField(box.dataset.rich, box.innerHTML, { fromSidebar: true });
+      });
+      var barEl = box.parentNode.querySelector(".mu-rt__bar");
+      if (!barEl) return;
+      barEl.querySelectorAll("[data-rt]").forEach(function (b) {
+        // mousedown, not click: clicking would blur the box and lose the selection
+        b.addEventListener("mousedown", function (e) {
+          e.preventDefault();
+          box.focus();
+          var cmd = b.dataset.rt;
+          if (cmd === "br") document.execCommand("insertLineBreak");
+          else if (cmd === "clear") document.execCommand("removeFormat");
+          else document.execCommand(cmd);
+          setField(box.dataset.rich, box.innerHTML, { fromSidebar: true });
+        });
+      });
+    });
     side.querySelectorAll("[data-aitoggle]").forEach(function (t) {
       t.addEventListener("click", function () {
         var box = side.querySelector('[data-aibox="' + CSS.escape(t.dataset.aitoggle) + '"]');
@@ -536,6 +588,8 @@
 
   function syncSidebarInput(key, value) {
     if (!side) return;
+    var rich = side.querySelector('[data-rich="' + CSS.escape(key) + '"]');
+    if (rich) { if (rich.innerHTML !== value) rich.innerHTML = value; return; }
     var input = side.querySelector('[data-f="' + CSS.escape(key) + '"]');
     if (input && input.value !== value) input.value = value;
   }
@@ -574,14 +628,19 @@
     stopTyping();
     live = node;
     var key = node.dataset.c;
-    if (!original.has(key)) original.set(key, meta.has(key) ? meta.get(key).value : node.textContent);
-    node.setAttribute("contenteditable", "plaintext-only");
+    if (!original.has(key)) {
+      original.set(key, meta.has(key) ? meta.get(key).value
+        : (node.hasAttribute("data-c-rich") ? node.innerHTML : node.textContent));
+    }
+    node.setAttribute("contenteditable", node.hasAttribute("data-c-rich") ? "true" : "plaintext-only");
     node.classList.add("mu-live");
     node.focus();
     node.addEventListener("input", onType);
     node.addEventListener("keydown", onTypeKey);
   }
-  function onType() { setField(live.dataset.c, live.textContent, { fromPage: true }); }
+  function onType() {
+    setField(live.dataset.c, live.hasAttribute("data-c-rich") ? live.innerHTML : live.textContent, { fromPage: true });
+  }
   function onTypeKey(e) {
     if (e.key === "Escape") { e.preventDefault(); stopTyping(); }
     if (e.key === "Enter" && !e.shiftKey && !/^(P|DIV|LI)$/.test(live.tagName)) { e.preventDefault(); stopTyping(); }
@@ -614,7 +673,7 @@
       var secEl = node.closest("[data-sec]");
       if (secEl && sectionsById.has(secEl.dataset.sec)) {
         if (activeSection !== secEl.dataset.sec) openSidebar(secEl.dataset.sec, node.dataset.c);
-        else syncSidebarInput(node.dataset.c, node.textContent);
+        else syncSidebarInput(node.dataset.c, node.hasAttribute("data-c-rich") ? node.innerHTML : node.textContent);
       }
       return;
     }

@@ -52,6 +52,40 @@ for (const slug of slugs) {
         AND updated_by = 'import' AND value = draft_value
     `).all(slug, f.section_key, f.tag, was);
 
+    /* A span that used to be its own field can end up ABSORBED into a rich
+       block — that is the point of rich text, but it means the old edit has no
+       whole field to move to. Splice the edited words into the block instead,
+       and only when there is exactly one place they could go. */
+    if (hits.length !== 1 && was && was.trim()) {
+      const blocks = db.prepare(`
+        SELECT field_key, value, draft_value FROM page_content
+        WHERE page_slug = ? AND retired = 0 AND tag = 'rich'
+          AND section_key = ? AND updated_by = 'import' AND value = draft_value
+      `).all(slug, f.section_key).filter((b) => b.value.split(was).length === 2);
+
+      if (blocks.length === 1) {
+        const b = blocks[0];
+        const merged = b.value.replace(was, f.value);
+        console.log(`  merge ${f.field_key} into ${b.field_key}   ${JSON.stringify(was.slice(0, 30))} -> ${JSON.stringify(String(f.value).slice(0, 30))}`);
+        if (apply) {
+          db.prepare(`UPDATE page_content SET value = ?, draft_value = ?, updated_at = ?, updated_by = ?
+                      WHERE page_slug = ? AND field_key = ?`)
+            .run(merged, merged, f.updated_at, f.updated_by, slug, b.field_key);
+          db.prepare("UPDATE revisions SET field_key = ? WHERE page_slug = ? AND field_key = ?")
+            .run(b.field_key, slug, f.field_key);
+          db.prepare("DELETE FROM page_content WHERE page_slug = ? AND field_key = ?").run(slug, f.field_key);
+        }
+        moved++;
+        continue;
+      }
+    }
+
+    // nothing to carry across
+    if (!String(f.value).trim()) {
+      if (apply) db.prepare("DELETE FROM page_content WHERE page_slug = ? AND field_key = ?").run(slug, f.field_key);
+      continue;
+    }
+
     if (hits.length !== 1) {
       skipped++;
       console.log(`  skip  ${f.field_key}  (${hits.length} candidates for ${JSON.stringify(was.slice(0, 40))})`);
