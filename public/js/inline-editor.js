@@ -231,6 +231,8 @@
   /** Put one field back to what it was before this session's edits. */
   function revertField(key) {
     if (!original.has(key)) return;
+    // a field being typed in is skipped by setField's page sync — release it
+    if (live && live.dataset.c === key) stopTyping();
     setField(key, original.get(key));
     var f = meta.get(key);
     if (f) f.value = original.get(key);
@@ -429,6 +431,10 @@
       n.removeAttribute("data-sec");
       n.removeAttribute("data-mu-vsec");
     });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-mu-adopted]"), function (n) {
+      n.removeAttribute("data-c");
+      n.removeAttribute("data-mu-adopted");
+    });
 
     var norm = function (s) {
       return String(s == null ? "" : s)
@@ -574,6 +580,18 @@
       var fh = fileHosts.get(f.__src);
       if (!fh) { fh = new Map(); fileHosts.set(f.__src, fh); }
       fh.set(host, (fh.get(host) || 0) + 1);
+
+      /* A data field has no build-time anchor, but we just FOUND its node.
+         Tagging it makes it behave like anchored copy — click to type, live
+         sync from the sidebar — but only when the node holds nothing except
+         this text, so typing cannot eat sibling markup. */
+      if (!node.hasAttribute("data-c") && !node.hasAttribute("data-c-media") &&
+          node.childElementCount === 0 && f.tag !== "rich" &&
+          String(f.value).indexOf("<") < 0 &&
+          norm(node.textContent) === norm(f.value)) {
+        node.setAttribute("data-c", f.key);
+        node.setAttribute("data-mu-adopted", "1");
+      }
     };
 
     var ambiguous = [];
@@ -748,6 +766,10 @@
 
     if (!side) {
       side = el("div", "mu-side");
+      /* The site scrolls through Lenis, which takes the wheel everywhere and
+         would scroll the PAGE under a scrolling sidebar. Lenis honours this
+         attribute on anything in the event's path. */
+      side.setAttribute("data-lenis-prevent", "");
       document.body.appendChild(side);
       document.body.classList.add("mu-side-open");
     }

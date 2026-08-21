@@ -118,6 +118,14 @@ roles, drafts, revisions, AI writer.
 2. 500s and a 404 in the browser console, untraced. (One 404 seen on home:
    `/__l5e/assets-v1/.../widget-campus-life.jpg` — one of the 13 assets that
    are 404 on Lovable too.)
+
+Also since fixed: the plugin skipped plain `.ts` files, so seven data files —
+`chapters.ts` (the whole 10-things dossier), `pgp-tbm-content.ts`,
+`campus-radio.ts`, the faculty lists — were invisible to the CMS. Now
+instrumented (3,223 → 3,992 fields, seeded). The sidebar carries
+`data-lenis-prevent` so scrolling it no longer scrolls the page, and
+data fields whose exact text is found on the page are adopted for live
+click-to-type editing like anchored copy.
 3. React #418 hydration warning — likely the live clock in the footer, unconfirmed.
 4. No coverage audit has been run, so nobody knows what percentage of visible
    copy is actually editable. This is what would justify calling it complete.
