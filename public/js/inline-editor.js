@@ -511,6 +511,12 @@
         });
         return hits.length ? hits : null;
       }
+      /* An empty image SLOT has no picture to find — its label is the copy it
+         sits beside (the news card's headline), so place it by that. */
+      if (!v && f.tag === "media" && (f.label || "").length >= 12) {
+        var near = byText.get(norm(f.label.replace(/\u2026$/, "")));
+        if (near) return near;
+      }
       if (!v) return null;
       if (/^(https?:)?\//.test(v) || /\.(png|jpe?g|webp|svg|gif|avif|mp4|webm|mov)([?#]|$)/i.test(v)) {
         var hit = byUrl.get(urlKey(v));
@@ -644,11 +650,14 @@
       if (!els || !els.length) return;
       var seen = [];
       els.forEach(function (node) {
-        if (taken.has(node)) return;
+        // media placed by a nearby label shares that node with the label's
+        // own field — placement is not ownership, so it never takes the node
+        var owns = f.tag !== "media";
+        if (owns && taken.has(node)) return;
         var host = hostOf(node);
         if (!host || seen.indexOf(host) >= 0) return;
         seen.push(host);
-        taken.add(node);
+        if (owns) taken.add(node);
         claim(f, node, host);
       });
     });
@@ -1060,7 +1069,9 @@
       if (mn) shown = mn.currentSrc || mn.src || "";
     }
     var vid = isVideo(v || shown);
-    return '<div class="mu-card" data-row="' + esc(f.key) + '">' +
+    var head = !v && f.label && !/\.(png|jpe?g|webp|svg|gif|avif|mp4|webm)$/i.test(f.label)
+      ? '<div class="mu-card__h">Image \u00b7 ' + esc(f.label) + "</div>" : "";
+    return '<div class="mu-card" data-row="' + esc(f.key) + '">' + head +
       '<div class="mu-media-row">' +
         '<div class="mu-thumb">' + (shown
           ? (vid ? '<video src="' + esc(shown) + '" muted playsinline preload="metadata"></video>'
