@@ -1221,6 +1221,78 @@
     live = null;
   }
 
+  /* A page that re-renders sheds its anchors: the dossier remounts its slide
+     on every advance and the img loses data-c-media moments after regroup
+     tagged it. So an unanchored click resolves against the fields THEN —
+     match the image's src (or the element's text), adopt on the spot, and
+     open the right editor. */
+  var normText = function (s) {
+    return String(s == null ? "" : s).replace(/<[^>]*>/g, " ")
+      .replace(/&nbsp;|\u00a0/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
+  };
+  function bucketFor(el, f) {
+    var host = el.closest("[data-sec]");
+    if (!host) return null;
+    var key = host.dataset.sec;
+    var bucket = sectionsById.get(key);
+    if (!bucket) return null;
+    if (bucket.fields.indexOf(f) < 0) bucket.fields.push(f);   // a late-mounted field
+    f.section_key = key;
+    return key;
+  }
+  function lazyAdopt(target) {
+    if (!target || !target.closest || !sectionsById.size) return null;
+
+    var mediaEl = target.closest("img, video");
+    if (mediaEl && !mediaEl.closest("[data-c-media]")) {
+      var srcPath = (mediaEl.currentSrc || mediaEl.src || "").split(/[?#]/)[0].replace(/^https?:\/\/[^/]+/, "");
+      var base = srcPath.split("/").pop();
+      var found = null;
+      meta.forEach(function (f) {
+        if (found || f.tag !== "media") return;
+        if (document.querySelector('[data-c-media="' + CSS.escape(f.key) + '"]')) return;
+        var v = String(f.value || "").split(/[?#]/)[0].replace(/^https?:\/\/[^/]+/, "");
+        if (v) { if (v === srcPath) found = f; return; }
+        if (/\.(png|jpe?g|webp|svg|gif|avif|mp4|webm|mov)$/i.test(f.label || "")) {
+          var stem = f.label.replace(/\.[a-z0-9]+$/i, "");
+          if (base === f.label || base.indexOf(stem + "-") === 0 || base.indexOf(stem + ".") === 0) found = f;
+        }
+      });
+      if (!found) return null;
+      mediaEl.setAttribute("data-c-media", found.key);
+      mediaEl.setAttribute("data-mu-adopted", "1");
+      if (!mediaEl.dataset.muSrc) mediaEl.dataset.muSrc = mediaEl.currentSrc || mediaEl.src || "";
+      return { kind: "media", key: found.key, sec: bucketFor(mediaEl, found), node: mediaEl };
+    }
+
+    // text: the clicked element, or a close ancestor, holds exactly one field's value
+    var el = target, depth = 0, hit = null;
+    while (el && el !== document.body && depth < 4 && !hit) {
+      if (!el.closest("[data-c]")) {
+        var t = normText(el.textContent);
+        if (t) {
+          meta.forEach(function (f) {
+            if (hit || f.tag === "rich" || f.tag === "media") return;
+            var v = String(f.value == null ? "" : f.value);
+            if (!v.trim() || v.indexOf("<") >= 0) return;
+            if (normText(v) !== t) return;
+            if (document.querySelector('[data-c="' + CSS.escape(f.key) + '"]')) return;
+            hit = { f: f, el: el };
+          });
+        }
+      }
+      el = el.parentElement; depth++;
+    }
+    if (!hit) return null;
+    var adopted = false;
+    if (hit.el.childElementCount === 0) {
+      hit.el.setAttribute("data-c", hit.f.key);
+      hit.el.setAttribute("data-mu-adopted", "1");
+      adopted = true;
+    }
+    return { kind: "text", key: hit.f.key, sec: bucketFor(hit.el, hit.f), node: hit.el, adopted: adopted };
+  }
+
   /* Nothing on the page navigates while editing. Before this, only [data-c]
      clicks were swallowed, so hitting a button's padding followed the link and
      threw away unsaved work. */
@@ -1249,6 +1321,14 @@
       e.preventDefault(); e.stopPropagation();
       var ms = media.closest("[data-sec]");
       if (ms && sectionsById.has(ms.dataset.sec)) openSidebar(ms.dataset.sec, media.dataset.cMedia);
+      return;
+    }
+
+    var ad = lazyAdopt(e.target);
+    if (ad) {
+      e.preventDefault(); e.stopPropagation();
+      if (ad.kind === "text" && ad.adopted) beginTyping(ad.node);
+      if (ad.sec) openSidebar(ad.sec, ad.key);
     }
   }, true);
 

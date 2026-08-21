@@ -137,6 +137,11 @@ rendering `project.image` at all — `TenThings.tsx` now renders it (all ten
 grey boxes have NO image data in the export — adding CMS image slots there
 is a decision, not a bug fix. One visible string belongs to one field now:
 four chapters sharing the value "₹3.38 Cr" no longer produce four rows.
+Anchors on remounting content (the dossier advances its slide and React
+recreates the img seconds after regroup tagged it) are re-resolved lazily:
+clicking any unanchored image or text matches it against the fields at
+click time, adopts it on the spot, and opens its editor — so content that
+mounts late (chapters 02–10) is editable the moment it is clicked.
 3. React #418 hydration warning — likely the live clock in the footer, unconfirmed.
 4. No coverage audit has been run, so nobody knows what percentage of visible
    copy is actually editable. This is what would justify calling it complete.
