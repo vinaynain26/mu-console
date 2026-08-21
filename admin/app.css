@@ -2,7 +2,7 @@
    status badges that carry meaning, and a contextual save bar that only
    appears when there is something to save. */
 :root{
-  --bg:#f1f2f4; --surface:#fff; --surface-sub:#fafbfb; --surface-hover:#f6f6f7;
+  --bg:#f5f5f7; --surface:#fff; --surface-sub:#fafbfb; --surface-hover:#f6f6f7;
   --ink:#303030; --ink-sub:#616161; --ink-mute:#8a8a8a;
   --line:#e3e3e3; --line-strong:#c9cccf;
   --brand:#303030; --brand-hover:#1a1a1a;
@@ -26,8 +26,15 @@ a{color:inherit}
 
 /* ---- top bar ---- */
 .topbar{
-  position:sticky; top:0; z-index:40; background:#1a1a1a; color:#e3e3e3;
-  display:flex; align-items:center; gap:14px; padding:10px 16px;
+  /* a floating layer with content passing under it, not an opaque strip */
+  position:sticky; top:0; z-index:40;
+  background:rgba(28,28,30,.78);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  color:#f2f2f7;
+  display:flex; align-items:center; gap:14px; padding:11px 16px;
+  letter-spacing:-0.01em;
 }
 .topbar .brand{font-weight:650; color:#fff; font-size:14px; letter-spacing:-.01em; text-decoration:none}
 .topbar .brand span{opacity:.55; font-weight:450}
@@ -54,7 +61,7 @@ main{padding:22px 26px 120px; max-width:1180px; width:100%}
 
 /* ---- page header ---- */
 .phead{display:flex; align-items:flex-start; gap:14px; margin-bottom:18px; flex-wrap:wrap}
-.phead h1{margin:0; font-size:20px; font-weight:650; letter-spacing:-.01em}
+.phead h1{margin:0; font-size:22px; font-weight:600; letter-spacing:-.021em}
 .phead .sub{color:var(--ink-sub); font-size:13px; margin-top:3px}
 .phead .grow{flex:1}
 .back{color:var(--ink-sub); text-decoration:none; font-size:13px; display:inline-block; margin-bottom:5px}
@@ -62,6 +69,7 @@ main{padding:22px 26px 120px; max-width:1180px; width:100%}
 
 /* ---- card ---- */
 .card{background:var(--surface); border-radius:var(--r-lg); box-shadow:var(--sh); margin-bottom:16px}
+.rrow{transition:background 140ms ease}
 .card > header{
   padding:13px 16px; border-bottom:1px solid var(--line);
   display:flex; align-items:center; gap:10px;
@@ -77,6 +85,7 @@ main{padding:22px 26px 120px; max-width:1180px; width:100%}
 }
 .rrow:last-child{border-bottom:0}
 .rrow:hover{background:var(--surface-hover)}
+.rrow h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rrow h3{margin:0 0 2px; font-size:14px; font-weight:600}
 .rrow .meta{color:var(--ink-sub); font-size:12.5px}
 
@@ -94,11 +103,14 @@ main{padding:22px 26px 120px; max-width:1180px; width:100%}
 /* ---- buttons ---- */
 .btn{
   font:inherit; font-weight:600; font-size:13px; border-radius:var(--r);
+  /* acknowledged on pointer-down, not on release */
+  transition:transform 90ms cubic-bezier(.2,0,0,1), background 140ms ease, border-color 140ms ease;
   border:1px solid var(--line-strong); background:#fff; color:var(--ink);
   padding:7px 13px; cursor:pointer; text-decoration:none; display:inline-flex;
   align-items:center; gap:6px; white-space:nowrap;
 }
 .btn:hover{background:var(--surface-hover)}
+.btn:active{transform:scale(.97)}
 .btn:focus-visible{outline:2px solid var(--focus); outline-offset:1px}
 .btn.primary{background:var(--brand); border-color:var(--brand); color:#fff}
 .btn.primary:hover{background:var(--brand-hover)}
@@ -129,9 +141,14 @@ textarea{min-height:84px; resize:vertical; line-height:1.5}
 /* ---- contextual save bar (Shopify's signature move) ---- */
 .savebar{
   position:fixed; left:0; right:0; bottom:0; z-index:60;
-  background:#1a1a1a; color:#e3e3e3; padding:11px 16px;
+  background:rgba(28,28,30,.82);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-top:1px solid rgba(255,255,255,.12);
+  color:#f2f2f7; padding:12px 16px;
   display:flex; align-items:center; gap:12px;
-  transform:translateY(100%); transition:transform .18s ease;
+  /* critically damped: arrives without overshoot, because nothing threw it */
+  transform:translateY(100%); transition:transform .34s cubic-bezier(.32,.72,0,1);
 }
 .savebar.up{transform:translateY(0)}
 .savebar .msg{font-size:13.5px; font-weight:500}
@@ -153,3 +170,19 @@ textarea{min-height:84px; resize:vertical; line-height:1.5}
 }
 .mediaPrev img,.mediaPrev video{width:100%;height:100%;object-fit:cover;display:block}
 .mediaEmpty{font-size:11px;color:var(--ink-mute)}
+
+
+/* ---- accessibility ---- */
+@media (prefers-reduced-motion: reduce){
+  .btn{transition:opacity 140ms ease}
+  .btn:active{transform:none; opacity:.7}
+  .savebar{transition:opacity 180ms ease}
+}
+@media (prefers-reduced-transparency: reduce){
+  .topbar{background:#1c1c1e; backdrop-filter:none; -webkit-backdrop-filter:none}
+  .savebar{background:#1c1c1e; backdrop-filter:none; -webkit-backdrop-filter:none}
+}
+@media (prefers-contrast: more){
+  .topbar,.savebar{background:#000}
+  .btn{border-color:#000}
+}

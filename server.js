@@ -605,8 +605,11 @@ app.get("/api/pages/:slug/content", auth.require_("read"), (req, res) => {
     ORDER BY CASE page_slug WHEN ? THEN 0 ELSE 1 END, section_ord, ord
   `).all(...slugs, req.params.slug).map((r) => ({
     ...r,
-    tab_key: r.page_slug === req.params.slug ? "_all" : "_shared",
-    tab_title: r.page_slug === req.params.slug ? "This page" : "Shared components",
+    tab_key: "_all",
+    tab_title: "Whole page",
+    // marks a section whose copy is rendered on every page, so an editor
+    // can see that a change there is not local to this page
+    shared: r.page_slug !== req.params.slug,
   }));
 
   const counts = new Map();
@@ -622,7 +625,7 @@ app.get("/api/pages/:slug/content", auth.require_("read"), (req, res) => {
     }
     const tab = tabIndex.get(r.tab_key);
     if (!index.has(r.section_key)) {
-      const s = { key: r.section_key, title: r.section_title, fields: [], changed: 0 };
+      const s = { key: r.section_key, title: r.section_title, fields: [], changed: 0, shared: r.shared };
       index.set(r.section_key, s); tab.sections.push(s);
     }
     const s = index.get(r.section_key);
@@ -640,7 +643,7 @@ app.get("/api/pages/:slug/content", auth.require_("read"), (req, res) => {
   const lastPublish = db.prepare(
     "SELECT user_name, user_email, fields, published_at FROM publishes WHERE page_slug = ? ORDER BY id DESC LIMIT 1"
   ).get(req.params.slug) || null;
-  tabs.sort((a, b) => (a.key === "_shared" ? 1 : b.key === "_shared" ? -1 : 0));
+
   res.json({ page, tabs, lastPublish });
 });
 

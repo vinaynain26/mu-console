@@ -34,9 +34,27 @@ const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
 const db = new DatabaseSync(path.join(ROOT, "data/content.db"));
 
 /* A readable name for a source file, since that is what groups fields. */
-const sectionTitle = (scope) =>
-  scope.replace(/^routes-/, "").replace(/^components-/, "")
-       .replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+/* "components-pg-layout-pghero" is a filename, not a name. An editor needs to
+   recognise the part of the page they are looking at, so strip the plumbing and
+   spell out the abbreviations the codebase uses. */
+const WORDS = {
+  pg: "Programme", ug: "Undergraduate", nav: "Navigation", cta: "Call to action",
+  faq: "FAQ", ai: "AI", d2c: "D2C", tbm: "Tech & Business", hr: "HR",
+  bottombar: "Bottom bar", mobilebottombar: "Mobile bottom bar",
+  sectionnav: "Section navigation", homesections: "Home sections",
+  widgetcarousel: "Widget carousel", pghero: "Hero", pgfaculty: "Faculty",
+  pgcareers: "Careers", pgoutclass: "Outside the classroom", mastersvideos: "Videos",
+  root: "Page shell", layout: "", index: "Home page",
+};
+const sectionTitle = (scope) => {
+  const cleaned = scope.replace(/^routes-/, "").replace(/^components-/, "");
+  const words = cleaned.split("-").filter(Boolean)
+    .map((w) => (WORDS[w] !== undefined ? WORDS[w] : w))
+    .filter(Boolean);
+  if (!words.length) return "Content";
+  const out = words.join(" ").replace(/\s+/g, " ").trim();
+  return out.charAt(0).toUpperCase() + out.slice(1);
+};
 
 const pageTitle = (slug) =>
   slug === manifest.homeSlug ? "Home"

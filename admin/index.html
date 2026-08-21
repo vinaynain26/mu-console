@@ -29,18 +29,24 @@ if (!acct.ai) {
 
 try {
   const pages = await api('/api/pages');
+  /* This row used to be one big <a> with another <a> nested inside it for the
+     live link. Nested anchors are invalid HTML, so the browser silently dropped
+     the inner one and the row rendered with no visible button at all —
+     clickable, but with nothing to tell you so. Explicit buttons instead. */
   $('list').innerHTML = pages.length ? pages.map(p => `
-    <a class="rrow" href="/console/page/${esc(p.slug)}">
-      <div style="flex:1">
+    <div class="rrow">
+      <div style="flex:1;min-width:0">
         <h3>${esc(p.title)}</h3>
-        <div class="meta">${p.fields} fields · ${p.sections} sections ·
+        <div class="meta">${p.fields} fields &middot; ${p.sections} sections &middot;
           last published ${p.last_publisher ? esc(p.last_publisher) + ' ' + ago(p.last_published) : 'never'}</div>
       </div>
+      ${p.source === 'instrumented' ? '<span class="badge info" title="Rendered by its own app">app</span>' : ''}
       ${p.unpublished > 0
         ? `<span class="badge warn"><span class="dot"></span>${p.unpublished} unpublished</span>`
         : `<span class="badge ok">Published</span>`}
-      <a class="btn sm" href="/page/${esc(p.slug)}" target="_blank" onclick="event.stopPropagation()">Open live ↗</a>
-    </a>`).join('') : '<div class="empty">No pages yet.</div>';
+      <a class="btn primary" href="/console/page/${esc(p.slug)}">Edit</a>
+      <a class="btn" href="/page/${esc(p.slug)}" target="_blank" rel="noopener">View &#8599;</a>
+    </div>`).join('') : '<div class="empty">No pages yet.</div>';
 } catch (e) {
   $('list').innerHTML = '<div class="empty">Could not load pages: ' + esc(e.message) + '</div>';
 }

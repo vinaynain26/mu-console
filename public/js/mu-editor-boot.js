@@ -15,8 +15,12 @@
   var CMS = (self && self.dataset.cms) || "http://localhost:4000";
   var KEY = "mu.cms.token";
 
-  var wants = /[?&]edit=1\b/.test(location.search);
-  if (!wants) return;
+  /* Once someone has signed in, the editor should simply be there — having to
+     remember ?edit=1 on every page is not an editing experience. A visitor with
+     no stored session still gets nothing but this file. */
+  var asked = /[?&]edit=1\b/.test(location.search);
+  var signedIn = !!localStorage.getItem(KEY);
+  if (!asked && !signedIn) return;
 
   /** URL -> the CMS page holding its copy. Mirrors the build-time owner rule. */
   function slugFor() {
@@ -70,6 +74,8 @@
     if (!user) {
       // a stored token that no longer works is worse than none
       localStorage.removeItem(KEY);
+      // only interrupt someone who actually asked to edit
+      if (!asked) return;
       user = await signIn();
       token = localStorage.getItem(KEY);
       if (!user || !token) return;

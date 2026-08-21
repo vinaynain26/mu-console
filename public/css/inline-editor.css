@@ -37,21 +37,36 @@
 .mu-bar{
   position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
   z-index:2147483000; display:flex; align-items:center; gap:8px;
-  background:#1a1a1a; color:#e3e3e3; padding:8px 10px; border-radius:12px;
-  box-shadow:0 8px 28px rgba(0,0,0,.36); max-width:calc(100vw - 24px);
-  font:500 13px/1.4 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,Arial,sans-serif;
+  /* a floating material rather than a solid bar: content stays visible
+     underneath, and the bright top edge reads as light catching the surface */
+  background:rgba(28,28,30,.72);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid rgba(255,255,255,.10);
+  border-top-color:rgba(255,255,255,.18);
+  color:#f2f2f7; padding:8px 10px; border-radius:16px;
+  box-shadow:0 12px 40px rgba(0,0,0,.34), 0 2px 8px rgba(0,0,0,.2);
+  max-width:calc(100vw - 24px);
+  font:500 13px/1.4 -apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Inter,Roboto,Arial,sans-serif;
+  letter-spacing:-0.01em;
 }
 .mu-bar *{box-sizing:border-box}
 body.mu-side-open .mu-bar{ left:calc(50% - 186px) !important }
-.mu-seg{display:flex;background:#303030;border-radius:8px;padding:2px;gap:2px}
-.mu-seg button{border:0;background:transparent;color:#b5b5b5;font:inherit;font-weight:600;padding:5px 11px;border-radius:6px;cursor:pointer}
-.mu-seg button.on{background:#e3e3e3;color:#1a1a1a}
+.mu-seg{display:flex;background:rgba(0,0,0,.28);border-radius:11px;padding:2px;gap:2px}
+.mu-seg button{border:0;background:transparent;color:rgba(255,255,255,.6);font:inherit;font-weight:600;padding:5px 12px;border-radius:9px;cursor:pointer}
+.mu-seg button.on{background:#f2f2f7;color:#1c1c1e;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 .mu-btn{
-  border:1px solid #4a4a4a;background:#303030;color:#e3e3e3;font:inherit;font-weight:600;
+  border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.08);color:#e3e3e3;font:inherit;font-weight:600;
   padding:6px 12px;border-radius:8px;cursor:pointer;white-space:nowrap;text-decoration:none;
   display:inline-flex;align-items:center;gap:6px;
 }
-.mu-btn:hover{background:#4a4a4a}
+.mu-btn:hover{background:rgba(255,255,255,.14)}
+/* the press is acknowledged the instant the pointer goes down; waiting for
+   click feels dead */
+.mu-btn:active,.mu-seg button:active,.mu-pill:active{transform:scale(.96)}
+.mu-btn,.mu-seg button,.mu-pill,.mu-side__x,.mu-tab{
+  transition:transform 90ms cubic-bezier(.2,0,0,1), background 140ms ease, opacity 140ms ease;
+}
 .mu-btn.pri{background:#fff;border-color:#fff;color:#1a1a1a}
 .mu-btn.pri:hover{background:#e3e3e3}
 .mu-btn[disabled]{opacity:.4;cursor:not-allowed}
@@ -68,7 +83,10 @@ body.mu-side-open .mu-bar{ left:calc(50% - 186px) !important }
   font:700 11px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Arial,sans-serif;
   letter-spacing:.03em; text-transform:uppercase;
   padding:7px 11px; border-radius:20px; border:0; cursor:pointer;
-  background:#005bd3; color:#fff; box-shadow:0 2px 10px rgba(0,0,0,.22);
+  background:rgba(0,91,211,.92); color:#fff;
+  backdrop-filter:blur(12px) saturate(160%); -webkit-backdrop-filter:blur(12px) saturate(160%);
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:0 4px 16px rgba(0,0,0,.22);
   opacity:0; pointer-events:none; transition:opacity .14s, transform .14s;
 }
 body.mu-editing .mu-pill{ opacity:.92; pointer-events:auto }
@@ -93,14 +111,23 @@ body.mu-editing [data-c-media]{ outline:1px dashed rgba(0,91,211,.34); outline-o
    past everything to reach anything. */
 .mu-side{
   width:372px; max-width:92vw; z-index:2147483050;
-  background:#fff; color:#303030; border-left:1px solid #e3e3e3;
-  box-shadow:-8px 0 28px rgba(0,0,0,.14); display:flex; flex-direction:column;
+  background:rgba(252,252,253,.86);
+  backdrop-filter:blur(30px) saturate(180%);
+  -webkit-backdrop-filter:blur(30px) saturate(180%);
+  color:#1c1c1e; border-left:1px solid rgba(0,0,0,.08);
+  box-shadow:-16px 0 48px rgba(0,0,0,.12), -1px 0 0 rgba(255,255,255,.6) inset;
+  display:flex; flex-direction:column;
   font:14px/1.5 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,Roboto,Arial,sans-serif;
   animation:mu-slide .18s ease;
 }
-@keyframes mu-slide{ from{transform:translateX(100%)} to{transform:translateX(0)} }
+/* the panel arrives as a material — blur and scale resolve together — rather
+   than sliding in as a flat rectangle */
+@keyframes mu-slide{
+  from{ transform:translateX(14px) scale(.985); opacity:0; filter:blur(6px) }
+  to  { transform:translateX(0) scale(1);       opacity:1; filter:blur(0) }
+}
 /* push the page rather than cover it, so you can see what you are editing */
-body.mu-side-open{ margin-right:372px }
+body.mu-side-open{ margin-right:372px; transition:margin-right .34s cubic-bezier(.32,.72,0,1) }
 @media (max-width:900px){ body.mu-side-open{ margin-right:0 } }
 
 .mu-side__head{
@@ -108,9 +135,10 @@ body.mu-side-open{ margin-right:372px }
   border-bottom:1px solid #e3e3e3;
 }
 .mu-side__title{min-width:0;flex:1}
-.mu-side__eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#8a8a8a}
+.mu-side__eyebrow{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:rgba(60,60,67,.6)}
 .mu-side__h{
-  margin:2px 0 0;font-size:15.5px;font-weight:650;line-height:1.3;
+  margin:2px 0 0;font-size:16px;font-weight:600;line-height:1.25;
+  letter-spacing:-0.014em;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 /* a close control an editor cannot miss */
@@ -219,7 +247,9 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #005bd3;outline-offset:-4
 
 /* the sidebar animates in; the containment sweep above kills animation on
    children only, so re-enable it on the panel itself */
-.mu-side{ animation:mu-slide .18s ease !important }
+/* critically damped: settles without overshoot, which is right for a panel
+   that appeared on its own rather than being thrown */
+.mu-side{ animation:mu-slide .34s cubic-bezier(.32,.72,0,1) !important }
 .mu-grp__h{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8a8a8a;margin-bottom:9px}
 
 /* rich text — a whole sentence with its own bold, italics and line breaks */
@@ -255,3 +285,26 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #005bd3;outline-offset:-4
 }
 .mu-row.is-dirty .mu-revert,.mu-card.is-dirty .mu-revert{display:inline-block}
 .mu-revert:hover{background:#ffd6d6;border-color:#e0201a}
+
+
+/* ---- accessibility ----
+   Reduced motion is not "no feedback" — the press response and cross-fades
+   stay, the travel and blur go. Reduced transparency swaps the materials for
+   solid surfaces rather than leaving unreadable glass. */
+@media (prefers-reduced-motion: reduce){
+  .mu-side{ animation:none !important }
+  body.mu-side-open{ transition:none }
+  .mu-btn,.mu-seg button,.mu-pill,.mu-side__x,.mu-tab{ transition:opacity 140ms ease }
+  .mu-btn:active,.mu-seg button:active,.mu-pill:active{ transform:none; opacity:.7 }
+  .mu-toast{ transition:opacity 140ms ease }
+}
+@media (prefers-reduced-transparency: reduce){
+  .mu-bar{ background:#1c1c1e; backdrop-filter:none; -webkit-backdrop-filter:none }
+  .mu-side{ background:#fcfcfd; backdrop-filter:none; -webkit-backdrop-filter:none }
+  .mu-pill{ background:#005bd3; backdrop-filter:none; -webkit-backdrop-filter:none }
+}
+@media (prefers-contrast: more){
+  .mu-bar{ background:#000; border-color:rgba(255,255,255,.5) }
+  .mu-side{ background:#fff; border-left-color:#000 }
+  .mu-side input,.mu-side textarea,.mu-side select{ border-color:#000 }
+}

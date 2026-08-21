@@ -122,7 +122,9 @@ function render() {
     for (const s of secs) {
       out.push(`<details class="sec" ${q ? 'open' : ''}>
         <summary><span class="caret">▶</span><h2>${esc(s.title)}</h2>
-          <span class="badge">${s.fields.length}</span><span class="grow"></span>
+          <span class="badge">${s.fields.length}</span>
+          ${s.shared ? '<span class="badge info" title="This copy appears on every page">every page</span>' : ''}
+          <span class="grow"></span>
           ${s.changed ? `<span class="badge warn">${s.changed} unpublished</span>` : ''}
           ${CAN.ai ? `<button class="btn sm" data-secai="${esc(s.key)}">AI: rewrite section</button>` : ''}
         </summary>
