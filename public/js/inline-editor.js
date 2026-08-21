@@ -212,7 +212,10 @@
       if (stateHost) applyState(stateHost, key, value);
 
       var media = document.querySelector('[data-c-media="' + CSS.escape(key) + '"]');
-      if (media && media.tagName === "IMG" && !isVideo(value)) media.src = value;
+      if (media && media.tagName === "IMG" && !isVideo(value)) {
+        media.src = value || media.dataset.muSrc || value;
+        if (media.srcset) media.removeAttribute("srcset");   // or the browser keeps the old picture
+      }
     }
     if (!opts.fromSidebar) syncSidebarInput(key, value);
     markNode(key);
@@ -342,6 +345,11 @@
           var bucket = sectionsById.get(sec.key) || { title: sec.title, fields: [] };
           (sec.fields || []).forEach(function (f) {
             f.__src = sec.key;      // the source file that carried this string
+            /* An instrumented app records what it saw — src, poster, href —
+               not what the studio's ingest calls it. Normalise so an image
+               gets the image card and a link gets the link row. */
+            if (f.tag === "src" || f.tag === "poster") f.tag = "media";
+            else if (f.tag === "href" || f.tag === "to") f.tag = "link";
             meta.set(f.key, f);
             bucket.fields.push(f);
           });
@@ -433,6 +441,7 @@
     });
     Array.prototype.forEach.call(document.querySelectorAll("[data-mu-adopted]"), function (n) {
       n.removeAttribute("data-c");
+      n.removeAttribute("data-c-media");
       n.removeAttribute("data-mu-adopted");
     });
 
@@ -488,6 +497,20 @@
         '[data-c-link="' + sel + '"], [data-c-state="' + sel + '"]');
       if (a) return [a];
       var v = String(f.value == null ? "" : f.value).trim();
+      /* A bundled image has no value in the CMS — the build renamed the file
+         (mu-01.webp -> mu-01-B2xq.webp), so the seeder stored the source
+         filename as the label and we match on its stem. */
+      if (!v && f.tag === "media" && /\.(png|jpe?g|webp|svg|gif|avif|mp4|webm)$/i.test(f.label || "")) {
+        var stem = f.label.replace(/\.[a-z0-9]+$/i, "");
+        var hits = [];
+        byUrl.forEach(function (els2, k2) {
+          var b = k2.split("/").pop();
+          if (b === f.label || b.indexOf(stem + "-") === 0 || b.indexOf(stem + ".") === 0) {
+            hits = hits.concat(els2);
+          }
+        });
+        return hits.length ? hits : null;
+      }
       if (!v) return null;
       if (/^(https?:)?\//.test(v) || /\.(png|jpe?g|webp|svg|gif|avif|mp4|webm|mov)([?#]|$)/i.test(v)) {
         var hit = byUrl.get(urlKey(v));
@@ -584,9 +607,20 @@
       /* A data field has no build-time anchor, but we just FOUND its node.
          Tagging it makes it behave like anchored copy — click to type, live
          sync from the sidebar — but only when the node holds nothing except
-         this text, so typing cannot eat sibling markup. */
+         this text, so typing cannot eat sibling markup. An image adopts as a
+         media anchor instead, remembering the src it rendered with so an
+         Undo can put the picture back. */
+      if (f.tag === "media") {
+        if (/^(IMG|VIDEO)$/.test(node.tagName) && !node.hasAttribute("data-c-media")) {
+          node.setAttribute("data-c-media", f.key);
+          node.setAttribute("data-mu-adopted", "1");
+          if (!node.dataset.muSrc) node.dataset.muSrc = node.currentSrc || node.src || "";
+        }
+        return;
+      }
       if (!node.hasAttribute("data-c") && !node.hasAttribute("data-c-media") &&
           node.childElementCount === 0 && f.tag !== "rich" &&
+          String(f.value).trim() &&
           String(f.value).indexOf("<") < 0 &&
           norm(node.textContent) === norm(f.value)) {
         node.setAttribute("data-c", f.key);
@@ -594,6 +628,7 @@
       }
     };
 
+    var taken = new Set();   // a visible thing belongs to ONE field
     var ambiguous = [];
     meta.forEach(function (f) {
       var sel = CSS.escape(f.key);
@@ -608,9 +643,11 @@
       if (!els || !els.length) return;
       var seen = [];
       els.forEach(function (node) {
+        if (taken.has(node)) return;
         var host = hostOf(node);
         if (!host || seen.indexOf(host) >= 0) return;
         seen.push(host);
+        taken.add(node);
         claim(f, node, host);
       });
     });
@@ -622,12 +659,13 @@
       if (!fh) return;
       var bestHost = null, bestNode = null, bestScore = 0;
       els.forEach(function (node) {
+        if (taken.has(node)) return;
         var host = hostOf(node);
         if (!host) return;
         var score = fh.get(host) || 0;
         if (score > bestScore) { bestScore = score; bestHost = host; bestNode = node; }
       });
-      if (bestHost) claim(f, bestNode, bestHost);
+      if (bestHost) { taken.add(bestNode); claim(f, bestNode, bestHost); }
     });
 
     var before = function (x, y) {
@@ -967,17 +1005,26 @@
   function mediaRow(f) {
     var v = valueOf(f.key);
     var poster = valueOf(f.key + "@poster");
-    var vid = isVideo(v);
+    /* No CMS value yet just means the page still shows the built-in file —
+       find it through the anchor so the editor sees what a visitor sees. */
+    var shown = v;
+    if (!shown) {
+      var mn = document.querySelector('[data-c-media="' + CSS.escape(f.key) + '"]');
+      if (mn) shown = mn.currentSrc || mn.src || "";
+    }
+    var vid = isVideo(v || shown);
     return '<div class="mu-card" data-row="' + esc(f.key) + '">' +
       '<div class="mu-media-row">' +
-        '<div class="mu-thumb">' + (v
-          ? (vid ? '<video src="' + esc(v) + '" muted playsinline preload="metadata"></video>'
-                 : '<img src="' + esc(v) + '" alt="" loading="lazy">')
+        '<div class="mu-thumb">' + (shown
+          ? (vid ? '<video src="' + esc(shown) + '" muted playsinline preload="metadata"></video>'
+                 : '<img src="' + esc(shown) + '" alt="" loading="lazy">')
           : '<span>empty</span>') + "</div>" +
         '<div class="mu-media-fields">' +
           '<label class="mu-lab">Source</label>' +
           '<input type="text" class="mu-mono" data-f="' + esc(f.key) + '" value="' + esc(v) + '" placeholder="https://…">' +
-          '<div class="mu-hint">' + (vid
+          '<div class="mu-hint">' + (!v && shown
+            ? "Showing the built-in image — paste a URL to replace it, clear to restore."
+            : vid
             ? "Rendering as a video with the house play button."
             : "Paste an .mp4 or .webm to turn this into a video.") + "</div>" +
         "</div>" +

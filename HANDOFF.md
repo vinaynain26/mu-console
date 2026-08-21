@@ -122,10 +122,21 @@ roles, drafts, revisions, AI writer.
 Also since fixed: the plugin skipped plain `.ts` files, so seven data files —
 `chapters.ts` (the whole 10-things dossier), `pgp-tbm-content.ts`,
 `campus-radio.ts`, the faculty lists — were invisible to the CMS. Now
-instrumented (3,223 → 3,992 fields, seeded). The sidebar carries
+instrumented (3,223 → 4,041 fields, seeded). The sidebar carries
 `data-lenis-prevent` so scrolling it no longer scrolls the page, and
 data fields whose exact text is found on the page are adopted for live
 click-to-type editing like anchored copy.
+
+Images: the plugin now wraps media-valued data props (`image: mu01`) with the
+import's filename carried as a hint into the field's label; the editor matches
+that hint against the hashed bundle URL, adopts the rendered `<img>` as a
+media anchor, and the sidebar's Images tab gives live swap with
+clear-to-restore. The dossier's grey rectangle was the Lovable export never
+rendering `project.image` at all — `TenThings.tsx` now renders it (all ten
+`mu-0*.webp` files were sitting unused in `src/assets`). The news cards'
+grey boxes have NO image data in the export — adding CMS image slots there
+is a decision, not a bug fix. One visible string belongs to one field now:
+four chapters sharing the value "₹3.38 Cr" no longer produce four rows.
 3. React #418 hydration warning — likely the live clock in the footer, unconfirmed.
 4. No coverage audit has been run, so nobody knows what percentage of visible
    copy is actually editable. This is what would justify calling it complete.

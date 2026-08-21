@@ -92,7 +92,8 @@ for (const f of manifest.fields) {
     insField.run(
       f.page, f.key, f.scope, sectionTitle(f.scope), page.scopes.get(f.scope),
       "_all", "Whole page",
-      f.value.slice(0, 70) + (f.value.length > 70 ? "…" : ""),
+      f.value ? f.value.slice(0, 70) + (f.value.length > 70 ? "…" : "")
+              : (f.hint || ""),   // an asset field's filename, so the editor can find it
       f.tag, f.value.length > 90 ? 1 : 0, f.__ord,
       f.value, f.value, now, "import", null);
   }
