@@ -600,6 +600,7 @@
       var g = groups.get(host);
       if (!g) { g = { host: host, entries: [] }; groups.set(host, g); }
       g.entries.push({ f: f, node: node });
+      f.__node = node;              // where it sits, for sidebar order and grouping
       var fh = fileHosts.get(f.__src);
       if (!fh) { fh = new Map(); fileHosts.set(f.__src, fh); }
       fh.set(host, (fh.get(host) || 0) + 1);
@@ -713,6 +714,12 @@
     div: "Text", small: "Small text", caption: "Caption", figcaption: "Caption",
     blockquote: "Quote", dt: "Term", dd: "Definition", summary: "Summary",
     media: "Image or video", image: "Image", link: "Link", state: "State", rich: "Text block",
+    "aria-label": "Screen-reader label", alt: "Image description", title: "Page title",
+    placeholder: "Placeholder", name: "Name", role: "Role", headline: "Headline",
+    quote: "Quote", pullQuote: "Pull quote", closing: "Closing line", tag: "Tag",
+    stat: "Stat", eyebrow: "Eyebrow", heading: "Heading", body: "Paragraph",
+    proof: "Proof point", chips: "Chip", cta: "Button text", description: "Description",
+    tagline: "Tagline", note: "Note", blurb: "Blurb", summary2: "Summary",
   };
   var friendly = function (tag) { return FRIENDLY[tag] || "Text"; };
 
@@ -860,11 +867,51 @@
     var body = side.querySelector("#mu-side-body");
     var html;
     if (sideTab === "all") {
-      html = b.all.length ? b.all.map(function (item) {
-        if (item.kind === "button") return buttonRow(item.group);
-        if (item.kind === "media") return mediaRow(item.field);
-        return textRow(item.field);
-      }).join("") : empty("Nothing editable in this section.");
+      /* Sixty flat rows are unreadable. The section's own sub-headings — the
+         ones a reader scans on the page — become cluster labels, so the
+         sidebar has the same shape as what it edits. */
+      var host = activeSection ? document.querySelector('[data-sec="' + CSS.escape(activeSection) + '"]') : null;
+      var heads = host ? Array.prototype.slice.call(host.querySelectorAll("h1, h2, h3, h4")) : [];
+      var headTitle = function (h) {
+        var t = (h.innerText || h.textContent || "").replace(/\s+/g, " ").trim();
+        return t.length > 30 ? t.slice(0, 29).replace(/\s+\S*$/, "") + "\u2026" : t;
+      };
+      var nodeOf = function (item) {
+        var f = item.field || (item.group && (item.group.label || item.group.state || item.group.link));
+        if (!f) return null;
+        var sel = CSS.escape(f.key);
+        var n = document.querySelector('[data-c="' + sel + '"], [data-c-media="' + sel + '"], a[data-c-link="' + sel + '"]');
+        if (n) return n;
+        return f.__node && f.__node.isConnected ? f.__node : null;
+      };
+      // the last heading at or above this node; undefined = unknown, stay put
+      var clusterOf = function (n) {
+        if (!n) return undefined;
+        var last = null;
+        for (var i = 0; i < heads.length; i++) {
+          if (heads[i] === n ||
+              (heads[i].compareDocumentPosition(n) & Node.DOCUMENT_POSITION_FOLLOWING)) last = heads[i];
+          else break;
+        }
+        return last;
+      };
+      if (!b.all.length) {
+        html = empty("Nothing editable in this section.");
+      } else {
+        html = "";
+        var cur = "__start";
+        b.all.forEach(function (item) {
+          var cl = clusterOf(nodeOf(item));
+          if (cl !== undefined && cl !== cur) {
+            cur = cl;
+            var ct = cl ? headTitle(cl) : "";
+            if (ct && ct !== b.title) html += '<div class="mu-grp__h">' + esc(ct) + "</div>";
+          }
+          if (item.kind === "button") html += buttonRow(item.group);
+          else if (item.kind === "media") html += mediaRow(item.field);
+          else html += textRow(item.field);
+        });
+      }
     } else if (sideTab === "buttons") {
       html = b.buttons.length ? b.buttons.map(buttonRow).join("") : empty("No buttons or links in this section.");
     } else {
@@ -1236,7 +1283,17 @@
     var key = host.dataset.sec;
     var bucket = sectionsById.get(key);
     if (!bucket) return null;
-    if (bucket.fields.indexOf(f) < 0) bucket.fields.push(f);   // a late-mounted field
+    f.__node = el;
+    if (bucket.fields.indexOf(f) < 0) {
+      // slot a late-mounted field where it sits on the page, not at the end
+      var at = bucket.fields.length;
+      for (var i = 0; i < bucket.fields.length; i++) {
+        var n = bucket.fields[i].__node;
+        if (n && n.isConnected &&
+            (el.compareDocumentPosition(n) & Node.DOCUMENT_POSITION_FOLLOWING)) { at = i; break; }
+      }
+      bucket.fields.splice(at, 0, f);
+    }
     f.section_key = key;
     return key;
   }

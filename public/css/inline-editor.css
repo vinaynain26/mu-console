@@ -251,6 +251,8 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #005bd3;outline-offset:-4
    that appeared on its own rather than being thrown */
 .mu-side{ animation:mu-slide .34s cubic-bezier(.32,.72,0,1) !important }
 .mu-grp__h{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#8a8a8a;margin-bottom:9px}
+[data-list] > .mu-grp__h{margin:18px 2px 8px;padding-top:12px;border-top:1px solid rgba(0,0,0,.07)}
+[data-list] > .mu-grp__h:first-child{margin-top:4px;padding-top:0;border-top:0}
 
 /* rich text — a whole sentence with its own bold, italics and line breaks */
 .mu-rt{border:1px solid #c9cccf;border-radius:8px;overflow:hidden;background:#fff}

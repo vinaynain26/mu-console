@@ -78,6 +78,8 @@ const insField = db.prepare(`INSERT OR IGNORE INTO page_content
    label, tag, multiline, ord, value, draft_value, updated_at, updated_by, options)
   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`);
 const existing = db.prepare("SELECT 1 FROM page_content WHERE page_slug = ? AND field_key = ?");
+const fillLabel = db.prepare(
+  "UPDATE page_content SET label = ? WHERE page_slug = ? AND field_key = ? AND (label = '' OR label IS NULL)");
 
 let added = 0, already = 0;
 for (const f of manifest.fields) {
@@ -86,7 +88,11 @@ for (const f of manifest.fields) {
     // instrumented pages are rendered by the app itself, not by a template here
     insPage.run(f.page, pageTitle(f.page), "__external", "__external", "instrumented");
   }
-  if (existing.get(f.page, f.key)) { already++; continue; }
+  if (existing.get(f.page, f.key)) {
+    // a hint learned since this row was seeded still helps the editor find it
+    if (APPLY && f.hint && !f.value) fillLabel.run(f.hint, f.page, f.key);
+    already++; continue;
+  }
   added++;
   if (APPLY) {
     insField.run(

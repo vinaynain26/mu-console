@@ -142,6 +142,16 @@ recreates the img seconds after regroup tagged it) are re-resolved lazily:
 clicking any unanchored image or text matches it against the fields at
 click time, adopts it on the spot, and opens its editor — so content that
 mounts late (chapters 02–10) is editable the moment it is clicked.
+
+Image coverage: media-valued data props reach through member expressions
+too (`img: ftBhupesh.url` on an `.asset.json` import), so the faculty and
+practitioner photos are fields now — 320 media fields, 255 with filename
+hints, 47 of the home page's 58 visible images anchored. The sidebar's All
+tab clusters rows under the section's own sub-headings (the ones a reader
+scans), attribute fields carry human labels ("Screen-reader label", not
+"Text"), and a late-adopted field slots in reading order. React #418 was
+reproduced twice today on home — intermittent, consistent with the
+header clock crossing a minute between SSR and hydration; still untraced.
 3. React #418 hydration warning — likely the live clock in the footer, unconfirmed.
 4. No coverage audit has been run, so nobody knows what percentage of visible
    copy is actually editable. This is what would justify calling it complete.
