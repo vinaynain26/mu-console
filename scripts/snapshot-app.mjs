@@ -89,6 +89,11 @@ async function waitForServer(ms = 40000) {
     const browser = await puppeteer.launch({ headless: "new", args: ["--no-sandbox", "--disable-setuid-sandbox"] });
     const page = await browser.newPage();
     await page.setViewport({ width: 1440, height: 900 });
+    /* This site animates numbers upward on view (CountUp). Captured mid-count
+       the digits differ between any two runs, which would make every
+       comparison fail for a reason that has nothing to do with the change
+       being tested. The app honours prefers-reduced-motion, so ask for it. */
+    await page.emulateMediaFeatures([{ name: "prefers-reduced-motion", value: "reduce" }]);
     fs.mkdirSync(OUT, { recursive: true });
 
     let pass = 0, fail = 0;
@@ -125,14 +130,22 @@ async function waitForServer(ms = 40000) {
           if (!fs.existsSync(file)) { console.log("NO BASELINE"); problems.push(r.route + ": no baseline"); fail++; continue; }
           const base = JSON.parse(fs.readFileSync(file, "utf8"));
           const issues = [];
+          let animated = false;
           if (base.text !== snap.text) {
-            const i = [...base.text].findIndex((c, k) => c !== snap.text[k]);
-            issues.push(`text differs at char ${i}: was ${JSON.stringify(base.text.slice(i, i + 45))}, now ${JSON.stringify(snap.text.slice(i, i + 45))}`);
+            // a counter that has not finished counting is not a regression;
+            // a changed WORD always is
+            const mask = (x) => x.replace(/[0-9]/g, "#");
+            if (mask(base.text) === mask(snap.text)) {
+              animated = true;
+            } else {
+              const i = [...base.text].findIndex((c, k) => c !== snap.text[k]);
+              issues.push(`text differs at char ${i}: was ${JSON.stringify(base.text.slice(i, i + 45))}, now ${JSON.stringify(snap.text.slice(i, i + 45))}`);
+            }
           }
           if (base.srcs.join("|") !== snap.srcs.join("|")) issues.push(`image targets differ (${base.srcs.length} -> ${snap.srcs.length})`);
           if (base.hrefs.join("|") !== snap.hrefs.join("|")) issues.push(`link targets differ (${base.hrefs.length} -> ${snap.hrefs.length})`);
           if (issues.length) { console.log("CHANGED"); issues.forEach((x) => problems.push(r.route + ": " + x)); fail++; }
-          else { console.log("identical"); pass++; }
+          else { console.log(animated ? "identical (bar animated digits)" : "identical"); pass++; }
         }
       } catch (e) {
         console.log("ERROR  " + e.message);

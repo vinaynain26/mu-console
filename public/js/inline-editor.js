@@ -22,6 +22,11 @@
   if (!BOOT) return;
 
   var CAN = BOOT.can, SLUG = BOOT.slug, TAB = BOOT.tab;
+  /* The editor also runs inside an instrumented app on its own origin. There
+     the CMS is elsewhere and a SameSite cookie never arrives, so calls carry an
+     explicit base URL and a bearer token. Empty base = same-origin studio. */
+  var API = (BOOT.apiBase || "").replace(/\/+$/, "");
+  var TOKEN = BOOT.token || null;
   var dirty = new Map();          // key -> new value
   var original = new Map();       // key -> value as loaded
   var meta = new Map();           // key -> field record from the API
@@ -167,8 +172,11 @@
   }
   async function api(url, opts) {
     opts = opts || {};
-    if (opts.body) opts.headers = Object.assign({ "Content-Type": "application/json" }, opts.headers || {});
-    var res = await fetch(url, opts);
+    var headers = Object.assign({}, opts.headers || {});
+    if (opts.body) headers["Content-Type"] = "application/json";
+    if (TOKEN) headers["Authorization"] = "Bearer " + TOKEN;
+    opts.headers = headers;
+    var res = await fetch(API + url, opts);
     var out = await res.json().catch(function () { return {}; });
     if (!res.ok) throw new Error(out.error || "Request failed (" + res.status + ")");
     return out;
@@ -289,7 +297,7 @@
     bar.appendChild(prev);
 
     var studio = el("a", "mu-btn", "Studio ↗");
-    studio.href = BOOT.consoleUrl + "/page/" + SLUG;
+    studio.href = (BOOT.consoleBase || "") + BOOT.consoleUrl + "/page/" + SLUG;
     bar.appendChild(studio);
 
     bar.appendChild(el("span", "mu-role", esc(BOOT.user.role)));
@@ -356,6 +364,12 @@
   var pills = [];
   function addSectionPills() {
     removeSectionPills();
+
+    /* A page rendered by its own app carries data-c anchors but no data-sec
+       wrappers — there is no template here that knows where a section starts.
+       Anchor each section's pill to the common ancestor of its own fields. */
+    if (!document.querySelector("[data-sec]")) return addPillsByField();
+
     Array.prototype.forEach.call(document.querySelectorAll("[data-sec]"), function (sec) {
       var key = sec.dataset.sec;
       var bucket = sectionsById.get(key);
@@ -383,6 +397,54 @@
       pills.push(pill);
     });
   }
+  /** Deepest element that contains every one of these nodes. */
+  function commonAncestor(nodes) {
+    if (!nodes.length) return null;
+    var a = nodes[0];
+    for (var i = 1; i < nodes.length; i++) {
+      var b = nodes[i];
+      while (a && !a.contains(b)) a = a.parentElement;
+      if (!a) return null;
+    }
+    return a;
+  }
+
+  function addPillsByField() {
+    sectionsById.forEach(function (bucket, key) {
+      var nodes = [];
+      bucket.fields.forEach(function (f) {
+        var n = document.querySelector('[data-c="' + CSS.escape(f.key) + '"]')
+             || document.querySelector('[data-c-media="' + CSS.escape(f.key) + '"]');
+        if (n) nodes.push(n);
+      });
+      if (!nodes.length) return;
+      var host = commonAncestor(nodes);
+      // walk out of an inline element; a pill inside a heading looks broken
+      while (host && /^(SPAN|A|B|I|EM|STRONG|SMALL|LI|P|H[1-6])$/.test(host.tagName)) host = host.parentElement;
+      if (!host || host === document.body) return;
+
+      var b0 = bucketsFor(key);
+      var total = b0 ? b0.all.length : 0;
+      if (!total) return;
+
+      var pill = el("button", "mu-pill");
+      pill.type = "button";
+      pill.innerHTML = '<span class="mu-pill__i">\u270e</span> Edit section<span class="mu-pill__n">' + total + "</span>";
+      pill.addEventListener("click", function (e) {
+        e.preventDefault(); e.stopPropagation();
+        openSidebar(key);
+      });
+      if (getComputedStyle(host).position === "static") host.style.position = "relative";
+      host.setAttribute("data-sec", key);
+      host.appendChild(pill);
+      var inset = topInset();
+      if (inset && host.getBoundingClientRect().top < inset + 40) {
+        pill.style.setProperty("top", (inset + 12) + "px", "important");
+      }
+      pills.push(pill);
+    });
+  }
+
   function removeSectionPills() {
     pills.forEach(function (p) { p.remove(); });
     pills = [];

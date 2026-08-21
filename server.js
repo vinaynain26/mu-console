@@ -286,6 +286,20 @@ app.set("views", path.join(ROOT, "views"));
 app.use("/assets", express.static(path.join(ROOT, "public")));
 app.use("/console-ui", express.static(path.join(ROOT, "admin")));
 app.use(express.json({ limit: "2mb" }));
+
+/* The inline editor runs inside the instrumented app, on a different origin.
+   Credentials travel as a bearer token rather than a cookie, so the wildcard
+   origin here is safe: without a valid token these routes return 401. */
+app.use((req, res, next) => {
+  if (!req.path.startsWith("/api/")) return next();
+  res.set("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.set("Vary", "Origin");
+  res.set("Access-Control-Allow-Headers", "authorization, content-type, accept");
+  res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  next();
+});
+
 app.use(auth.attachUser(db));
 
 /* ------------------------------------------------------------------ *
@@ -302,7 +316,8 @@ app.post("/api/account/login", (req, res) => {
   const { token, expires } = auth.createSession(db, row.id);
   auth.setSessionCookie(res, token, expires);
   db.prepare("UPDATE users SET last_seen = ? WHERE id = ?").run(new Date().toISOString(), row.id);
-  res.json({ user: { name: row.name, email: row.email, role: row.role } });
+  // the token is returned as well as set, for an editor on another origin
+  res.json({ user: { name: row.name, email: row.email, role: row.role }, token, expires });
 });
 
 app.post("/api/account/logout", (req, res) => {
@@ -409,6 +424,18 @@ function applyOrder(html, slug, tab) {
 app.get("/page/:slug", (req, res, next) => {
   const page = db.prepare("SELECT * FROM pages WHERE slug = ?").get(req.params.slug);
   if (!page) return next();
+
+  /* An instrumented page is rendered by its own app, not by this server — that
+     is the whole point of instrumenting rather than converting. There is no
+     template here to render, so send the editor to where the page actually
+     lives instead of failing to look up a view that was never meant to exist. */
+  if (page.template === "__external") {
+    const base = (process.env.APP_BASE_URL || "http://localhost:3000").replace(/\/+$/, "");
+    const path0 = page.slug === "mu-home" ? "/"
+      : page.slug === "shared" ? "/"
+        : "/" + page.slug.replace(/-/g, "/");
+    return res.redirect(base + path0);
+  }
   const draft = req.query.preview === "1";
   const tab = String(req.query.tab || "highlight");
   const editing = req.user && auth.can(req.user.role, "read");
@@ -505,6 +532,45 @@ function sanitizeRich(html) {
 }
 
 /* ------------------------------------------------------------------ *
+ * public content, for an app that renders itself
+ *
+ * An instrumented app is not rendered by this server — it fetches its copy and
+ * renders it with its own components, which is what keeps every animation
+ * intact. So it needs one unauthenticated, cross-origin, published-only
+ * endpoint. Drafts are deliberately not served here: an unauthenticated caller
+ * gets exactly what a visitor should see.
+ * ------------------------------------------------------------------ */
+const PUBLIC_ORIGINS = (process.env.CMS_ALLOWED_ORIGINS ||
+  "http://localhost:3000,http://localhost:5173,http://localhost:5678,http://127.0.0.1:3000,http://127.0.0.1:5173")
+  .split(",").map((s) => s.trim()).filter(Boolean);
+
+function publicCors(req, res) {
+  const origin = req.headers.origin;
+  // an app on an unknown origin still gets the content; it is public copy
+  res.set("Access-Control-Allow-Origin", origin && PUBLIC_ORIGINS.includes(origin) ? origin : "*");
+  res.set("Vary", "Origin");
+  res.set("Cache-Control", "public, max-age=30, stale-while-revalidate=300");
+}
+
+app.options("/api/public/content/:slug", (req, res) => {
+  publicCors(req, res);
+  res.set("Access-Control-Allow-Headers", "accept, content-type");
+  res.sendStatus(204);
+});
+
+app.get("/api/public/content/:slug", (req, res) => {
+  publicCors(req, res);
+  const draft = req.query.preview === "1" && req.user && auth.can(req.user.role, "read");
+  const col = draft ? "draft_value" : "value";
+  const rows = db.prepare(
+    `SELECT field_key, ${col} AS v FROM page_content WHERE page_slug = ? AND retired = 0`
+  ).all(req.params.slug);
+  const fields = {};
+  for (const r of rows) fields[r.field_key] = r.v;
+  res.json({ slug: req.params.slug, count: rows.length, draft: Boolean(draft), fields });
+});
+
+/* ------------------------------------------------------------------ *
  * content API
  * ------------------------------------------------------------------ */
 app.get("/api/pages", auth.require_("read"), (_req, res) => {
@@ -521,11 +587,27 @@ app.get("/api/pages", auth.require_("read"), (_req, res) => {
 });
 
 app.get("/api/pages/:slug/content", auth.require_("read"), (req, res) => {
+  const page0 = db.prepare("SELECT * FROM pages WHERE slug = ?").get(req.params.slug);
+
+  /* An instrumented page renders shared components too — the nav, the footer,
+     the home sections — and their copy lives in one `shared` bucket so it is
+     edited once rather than once per page. Opening a page and finding almost
+     nothing in it is not useful, so the shared copy is folded in here as its
+     own tab, clearly labelled, rather than hidden on another page. */
+  const withShared = page0 && page0.source === "instrumented" && req.params.slug !== "shared";
+  const slugs = withShared ? [req.params.slug, "shared"] : [req.params.slug];
+
   const rows = db.prepare(`
-    SELECT field_key, section_key, section_title, section_ord, tab_key, tab_title,
+    SELECT page_slug, field_key, section_key, section_title, section_ord, tab_key, tab_title,
            label, tag, multiline, ord, value, draft_value, updated_at, updated_by, options
-    FROM page_content WHERE page_slug = ? AND retired = 0 AND tag <> 'meta' ORDER BY section_ord, ord
-  `).all(req.params.slug);
+    FROM page_content
+    WHERE page_slug IN (${slugs.map(() => "?").join(",")}) AND retired = 0 AND tag <> 'meta'
+    ORDER BY CASE page_slug WHEN ? THEN 0 ELSE 1 END, section_ord, ord
+  `).all(...slugs, req.params.slug).map((r) => ({
+    ...r,
+    tab_key: r.page_slug === req.params.slug ? "_all" : "_shared",
+    tab_title: r.page_slug === req.params.slug ? "This page" : "Shared components",
+  }));
 
   const counts = new Map();
   for (const r of db.prepare(
@@ -558,32 +640,45 @@ app.get("/api/pages/:slug/content", auth.require_("read"), (req, res) => {
   const lastPublish = db.prepare(
     "SELECT user_name, user_email, fields, published_at FROM publishes WHERE page_slug = ? ORDER BY id DESC LIMIT 1"
   ).get(req.params.slug) || null;
-  tabs.sort((a, b) => (a.key === "_all" ? -1 : b.key === "_all" ? 1 : 0));
+  tabs.sort((a, b) => (a.key === "_shared" ? 1 : b.key === "_shared" ? -1 : 0));
   res.json({ page, tabs, lastPublish });
 });
 
 app.put("/api/pages/:slug/content", auth.require_("edit"), (req, res) => {
   const { changes = {} } = req.body || {};
   const get = db.prepare("SELECT draft_value, tag FROM page_content WHERE page_slug = ? AND field_key = ?");
+  // keys are globally unique, so a field the page does not own is a shared one
+  const owner = (key) =>
+    get.get(req.params.slug, key) ? req.params.slug
+      : (get.get("shared", key) ? "shared" : null);
   const upd = db.prepare(`UPDATE page_content SET draft_value = ?, updated_at = ?, updated_by = ?
                           WHERE page_slug = ? AND field_key = ?`);
   const now = new Date().toISOString();
   let n = 0;
   for (const [key, val] of Object.entries(changes)) {
-    const row = get.get(req.params.slug, key);
-    if (!row) continue;
+    const slug = owner(key);
+    if (!slug) continue;
+    const row = get.get(slug, key);
     const clean = row.tag === "rich" ? sanitizeRich(val) : String(val);
     if (row.draft_value === clean) continue;
-    upd.run(clean, now, req.user.name, req.params.slug, key);
+    upd.run(clean, now, req.user.name, slug, key);
     n++;
   }
   res.json({ saved: n });
 });
 
 app.post("/api/pages/:slug/publish", auth.require_("publish"), (req, res) => {
+  /* Shared copy is edited from the page it appears on, so publishing that page
+     has to carry it. The count is reported separately, because a shared change
+     goes live everywhere and the person clicking Publish should be told. */
+  const pg = db.prepare("SELECT source FROM pages WHERE slug = ?").get(req.params.slug);
+  const alsoShared = pg && pg.source === "instrumented" && req.params.slug !== "shared";
+  const scope = alsoShared ? [req.params.slug, "shared"] : [req.params.slug];
+
   const pending = db.prepare(
-    "SELECT field_key, value, draft_value FROM page_content WHERE page_slug = ? AND value <> draft_value"
-  ).all(req.params.slug);
+    `SELECT page_slug, field_key, value, draft_value FROM page_content
+     WHERE page_slug IN (${scope.map(() => "?").join(",")}) AND value <> draft_value`
+  ).all(...scope);
   if (!pending.length) return res.json({ published: 0 });
 
   const rev = db.prepare(`INSERT INTO revisions
@@ -591,13 +686,14 @@ app.post("/api/pages/:slug/publish", auth.require_("publish"), (req, res) => {
   const pub = db.prepare("UPDATE page_content SET value = draft_value WHERE page_slug = ? AND field_key = ?");
   const now = new Date().toISOString();
   for (const p of pending) {
-    rev.run(req.params.slug, p.field_key, p.value, p.draft_value, req.user.name, now);
-    pub.run(req.params.slug, p.field_key);
+    rev.run(p.page_slug, p.field_key, p.value, p.draft_value, req.user.name, now);
+    pub.run(p.page_slug, p.field_key);
   }
+  const sharedCount = pending.filter((p) => p.page_slug === "shared").length;
   db.prepare(`INSERT INTO publishes (page_slug,user_id,user_name,user_email,fields,published_at)
               VALUES (?,?,?,?,?,?)`)
     .run(req.params.slug, req.user.id, req.user.name, req.user.email, pending.length, now);
-  res.json({ published: pending.length, by: req.user.name, at: now });
+  res.json({ published: pending.length, shared: sharedCount, by: req.user.name, at: now });
 });
 
 app.post("/api/pages/:slug/revert", auth.require_("edit"), (req, res) => {

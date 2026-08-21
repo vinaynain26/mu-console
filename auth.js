@@ -123,7 +123,11 @@ function readCookie(req, name) {
 }
 
 export function currentUser(db, req) {
-  const token = readCookie(req, COOKIE);
+  /* Two ways to present the same session. The cookie serves the studio, which
+     is same-origin. The bearer token serves the inline editor running inside a
+     separately-hosted app, where a SameSite=Lax cookie would never be sent. */
+  const bearer = (req.headers.authorization || "").match(/^Bearer\s+(\S+)$/i);
+  const token = bearer ? bearer[1] : readCookie(req, COOKIE);
   if (!token) return null;
   const row = db.prepare(`
     SELECT u.id, u.email, u.name, u.role, s.expires_at
