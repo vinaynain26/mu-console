@@ -152,7 +152,17 @@ scans), attribute fields carry human labels ("Screen-reader label", not
 "Text"), and a late-adopted field slots in reading order. React #418 was
 reproduced twice today on home — intermittent, consistent with the
 header clock crossing a minute between SSR and hydration; still untraced.
-3. React #418 hydration warning — likely the live clock in the footer, unconfirmed.
+3. ~~React #418 hydration warning~~ **Fixed — and the clock theory was wrong.**
+   `label: __mu(key, "…")` inside a module-level const evaluates once: on the
+   server that is process BOOT, before any request loads content, so SSR
+   rendered original English forever while the client rendered CMS values —
+   every published data-copy edit was a guaranteed mismatch, silently
+   corrected post-hydration (which is also why publish looked "live" while
+   SSR never actually carried it). The plugin now emits getters
+   (`get label() { return __mu(…) }`) so lookups happen at render time on
+   both sides; publish is live in the next SSR response, verified against
+   raw HTML. The Programme Finder countdown also computed from `Date.now()`
+   during render; it now seeds after mount.
 4. No coverage audit has been run, so nobody knows what percentage of visible
    copy is actually editable. This is what would justify calling it complete.
 5. `mu-console` is a public repo holding page content — probably should be private.
