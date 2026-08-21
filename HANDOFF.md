@@ -163,8 +163,17 @@ header clock crossing a minute between SSR and hydration; still untraced.
    both sides; publish is live in the next SSR response, verified against
    raw HTML. The Programme Finder countdown also computed from `Date.now()`
    during render; it now seeds after mount.
-4. No coverage audit has been run, so nobody knows what percentage of visible
-   copy is actually editable. This is what would justify calling it complete.
+4. ~~No coverage audit has been run~~ **Run — and rerunnable.**
+   `node scripts/audit-coverage.mjs` renders a page in a real browser, scrolls
+   it, and checks every visible text node and image against the page's fields
+   (anchors, values, and filename hints). Home page as of 2026-08-22:
+   **82.6% of visible characters editable · 100% of images** (4,862 fields
+   across 37 pages). The uncovered remainder is mostly derivatives — dates
+   formatted from now-editable ISO fields, a computed "Live session" ternary,
+   the live clock — which the audit prints by name. Along the way the plugin
+   grew: card metadata props (month/time/source/duration/format/round/company…),
+   data-level link targets (href/applyHref/route), and ISO date props
+   (deadline/nextDate) are all fields now.
 5. `mu-console` is a public repo holding page content — probably should be private.
 
 ---
