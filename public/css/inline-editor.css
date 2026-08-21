@@ -308,3 +308,57 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #005bd3;outline-offset:-4
   .mu-side{ background:#fff; border-left-color:#000 }
   .mu-side input,.mu-side textarea,.mu-side select{ border-color:#000 }
 }
+
+/* ---- sign-in panel ----
+   A modal task, so it pairs the surface with a dimming scrim and pushes the
+   page back — unlike the sidebar, which is a parallel panel and deliberately
+   has neither. */
+.mu-auth{
+  position:fixed !important; inset:0 !important; z-index:2147483400;
+  display:grid; place-items:center; padding:20px;
+  background:rgba(0,0,0,.34);
+  backdrop-filter:blur(8px) saturate(140%); -webkit-backdrop-filter:blur(8px) saturate(140%);
+  animation:mu-auth-in .26s cubic-bezier(.32,.72,0,1);
+  font:14px/1.5 -apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Inter,Roboto,Arial,sans-serif;
+}
+@keyframes mu-auth-in{ from{opacity:0} to{opacity:1} }
+.mu-auth__card{
+  width:100%; max-width:360px; background:rgba(252,252,253,.92);
+  backdrop-filter:blur(30px) saturate(180%); -webkit-backdrop-filter:blur(30px) saturate(180%);
+  border:1px solid rgba(255,255,255,.6); border-radius:18px; padding:22px;
+  box-shadow:0 24px 64px rgba(0,0,0,.28);
+  color:#1c1c1e;
+  animation:mu-auth-card .34s cubic-bezier(.32,.72,0,1);
+}
+@keyframes mu-auth-card{
+  from{ transform:scale(.965) translateY(6px); opacity:0; filter:blur(4px) }
+  to  { transform:scale(1) translateY(0);      opacity:1; filter:blur(0) }
+}
+.mu-auth__eyebrow{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:rgba(60,60,67,.6)}
+.mu-auth__card h2{margin:4px 0 16px;font-size:19px;font-weight:600;letter-spacing:-.018em;line-height:1.25}
+.mu-auth__lab{display:block;font-size:12px;font-weight:600;color:rgba(60,60,67,.75);margin:12px 0 5px}
+.mu-auth input{
+  width:100%; padding:10px 12px; border:1px solid rgba(60,60,67,.22); border-radius:10px;
+  font:inherit; font-size:15px; background:rgba(255,255,255,.9); color:#1c1c1e;
+}
+.mu-auth input:focus{outline:none;border-color:#0a84ff;box-shadow:0 0 0 3.5px rgba(10,132,255,.18)}
+.mu-auth__err{background:rgba(255,59,48,.12);color:#b3261e;padding:9px 11px;border-radius:9px;font-size:12.5px;margin-top:12px}
+.mu-auth__row{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.mu-auth__row button{
+  border-radius:10px; padding:9px 15px; font:inherit; font-weight:600; font-size:13.5px; cursor:pointer;
+  transition:transform 90ms cubic-bezier(.2,0,0,1), background 140ms ease;
+}
+.mu-auth__row button:active{transform:scale(.97)}
+.mu-auth__cancel{border:1px solid rgba(60,60,67,.2);background:transparent;color:#1c1c1e}
+.mu-auth__cancel:hover{background:rgba(60,60,67,.07)}
+.mu-auth__go{border:0;background:#0a84ff;color:#fff}
+.mu-auth__go:hover{background:#0071e3}
+.mu-auth__go[disabled]{opacity:.5;cursor:default}
+@media (prefers-reduced-motion: reduce){
+  .mu-auth,.mu-auth__card{animation:none}
+  .mu-auth__row button:active{transform:none;opacity:.7}
+}
+@media (prefers-reduced-transparency: reduce){
+  .mu-auth{background:rgba(0,0,0,.6);backdrop-filter:none;-webkit-backdrop-filter:none}
+  .mu-auth__card{background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none}
+}

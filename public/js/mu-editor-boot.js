@@ -47,25 +47,67 @@
     } catch { return null; }
   }
 
-  async function signIn() {
-    var email = window.prompt("CMS email");
-    if (!email) return null;
-    var password = window.prompt("Password for " + email);
-    if (!password) return null;
-    try {
-      var r = await fetch(CMS + "/api/account/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email, password: password }),
+  /* A real sign-in panel rather than window.prompt(). Browsers suppress
+     repeated native prompts, some block them outright, and one appearing over a
+     page with no explanation is easy to dismiss without registering what it
+     was — which is exactly how this looked broken. */
+  function signIn() {
+    return new Promise(function (resolve) {
+      var wrap = document.createElement("div");
+      wrap.className = "mu-auth";
+      wrap.innerHTML =
+        '<div class="mu-auth__card" role="dialog" aria-modal="true" aria-label="Sign in to edit">' +
+          '<div class="mu-auth__eyebrow">Content editor</div>' +
+          "<h2>Sign in to edit this page</h2>" +
+          '<label class="mu-auth__lab" for="mu-auth-email">Email</label>' +
+          '<input id="mu-auth-email" type="email" autocomplete="username" placeholder="you@mastersunion.org">' +
+          '<label class="mu-auth__lab" for="mu-auth-pass">Password</label>' +
+          '<input id="mu-auth-pass" type="password" autocomplete="current-password">' +
+          '<div class="mu-auth__err" hidden></div>' +
+          '<div class="mu-auth__row">' +
+            '<button type="button" class="mu-auth__cancel">Not now</button>' +
+            '<button type="button" class="mu-auth__go">Sign in</button>' +
+          "</div>" +
+        "</div>";
+      document.body.appendChild(wrap);
+
+      var email = wrap.querySelector("#mu-auth-email");
+      var pass = wrap.querySelector("#mu-auth-pass");
+      var err = wrap.querySelector(".mu-auth__err");
+      var go = wrap.querySelector(".mu-auth__go");
+      setTimeout(function () { email.focus(); }, 60);
+
+      function close(user) { wrap.remove(); resolve(user || null); }
+      function fail(msg) {
+        err.textContent = msg; err.hidden = false;
+        go.disabled = false; go.textContent = "Sign in";
+      }
+
+      async function submit() {
+        if (!email.value || !pass.value) return fail("Email and password are both needed.");
+        go.disabled = true; go.textContent = "Signing in…";
+        try {
+          var r = await fetch(CMS + "/api/account/login", {
+            method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email.value, password: pass.value }),
+          });
+          var j = await r.json();
+          if (!r.ok) return fail(j.error || "Could not sign in.");
+          localStorage.setItem(KEY, j.token);
+          close(j.user);
+        } catch (e) {
+          fail("Could not reach the CMS at " + CMS);
+        }
+      }
+
+      go.addEventListener("click", submit);
+      wrap.querySelector(".mu-auth__cancel").addEventListener("click", function () { close(null); });
+      wrap.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); submit(); }
+        if (e.key === "Escape") close(null);
       });
-      var j = await r.json();
-      if (!r.ok) { alert(j.error || "Could not sign in."); return null; }
-      localStorage.setItem(KEY, j.token);
-      return j.user;
-    } catch (e) {
-      alert("Could not reach the CMS at " + CMS);
-      return null;
-    }
+      wrap.addEventListener("click", function (e) { if (e.target === wrap) close(null); });
+    });
   }
 
   (async function () {
@@ -76,6 +118,7 @@
       localStorage.removeItem(KEY);
       // only interrupt someone who actually asked to edit
       if (!asked) return;
+      try { await load(CMS + "/assets/css/inline-editor.css", true); } catch (e) { /* unstyled is still usable */ }
       user = await signIn();
       token = localStorage.getItem(KEY);
       if (!user || !token) return;
