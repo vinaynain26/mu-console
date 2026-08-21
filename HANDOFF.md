@@ -105,11 +105,19 @@ roles, drafts, revisions, AI writer.
 
 **Broken / unfinished, in priority order:**
 
-1. **Section pills collapse to one** on the live page, so the inline sidebar
-   lumps a whole page's fields into one list. The fix in progress: group by the
-   page's own `<section>` elements — what a person sees — rather than by source
-   file. **Start here.**
-2. 500s and a 404 in the browser console, untraced.
+1. ~~Section pills collapse to one~~ **Fixed.** On an app page the editor now
+   regroups fields by the page's own `<section>`/`<nav>`/`<footer>` landmarks:
+   each field is found in the rendered DOM (anchor first, then by matching its
+   value against text/attributes/URLs) and bucketed under the landmark it sits
+   in. Values owned by more than one key are placed by their source file's
+   other fields; fixed floaters go to the landmark beneath them. Home page:
+   15 pills, each named after its section's own heading. Fields not on the
+   page (the folded-in shared bucket) get no pill — the studio still lists
+   them. Also fixed on the way: "Undo all" never reverted anything
+   (`slice.call` on a Map iterator returns `[]`).
+2. 500s and a 404 in the browser console, untraced. (One 404 seen on home:
+   `/__l5e/assets-v1/.../widget-campus-life.jpg` — one of the 13 assets that
+   are 404 on Lovable too.)
 3. React #418 hydration warning — likely the live clock in the footer, unconfirmed.
 4. No coverage audit has been run, so nobody knows what percentage of visible
    copy is actually editable. This is what would justify calling it complete.

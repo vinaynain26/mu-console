@@ -239,7 +239,7 @@
   function revertAll() {
     if (!dirty.size) return;
     if (!confirm("Undo all " + dirty.size + " unsaved change(s) on this page?")) return;
-    Array.prototype.slice.call(dirty.keys()).forEach(revertField);
+    Array.from(dirty.keys()).forEach(revertField);   // a Map iterator has no .length — slice.call gave []
     toast("Changes undone");
   }
 
@@ -339,6 +339,7 @@
         (t.sections || []).forEach(function (sec) {
           var bucket = sectionsById.get(sec.key) || { title: sec.title, fields: [] };
           (sec.fields || []).forEach(function (f) {
+            f.__src = sec.key;      // the source file that carried this string
             meta.set(f.key, f);
             bucket.fields.push(f);
           });
@@ -365,85 +366,278 @@
   function addSectionPills() {
     removeSectionPills();
 
-    /* A page rendered by its own app carries data-c anchors but no data-sec
-       wrappers — there is no template here that knows where a section starts.
-       Anchor each section's pill to the common ancestor of its own fields. */
-    if (!document.querySelector("[data-sec]")) return addPillsByField();
+    /* A template page renders data-sec wrappers, so the server already said
+       where every section starts. An app page carries no such wrappers — and
+       its API sections are SOURCE FILES, not places: one component file holds
+       225 strings spread over the entire page, so its "section" was the page.
+       There, regroup by what a reader actually sees before placing anything. */
+    var served = document.querySelectorAll("[data-sec]:not([data-mu-vsec])");
+    if (!served.length) regroupBySight();
 
-    Array.prototype.forEach.call(document.querySelectorAll("[data-sec]"), function (sec) {
-      var key = sec.dataset.sec;
-      var bucket = sectionsById.get(key);
-      if (!bucket || !bucket.fields.length) return;
-      if (!(sec.offsetParent !== null || sec.getClientRects().length)) return;
-
-      var pill = el("button", "mu-pill");
-      pill.type = "button";
+    function place(host, key, bucket) {
+      if (!host || !bucket) return;
+      if (!(host.offsetParent !== null || host.getClientRects().length)) return;
       var b0 = bucketsFor(key);
       var total = b0 ? b0.all.length : 0;
       if (!total) return;
-      pill.innerHTML = '<span class="mu-pill__i">✎</span> Edit section' +
+
+      var name = bucket.title || "section";
+      if (name.length > 26) name = name.slice(0, 25).replace(/\s+\S*$/, "") + "\u2026";
+      var pill = el("button", "mu-pill");
+      pill.type = "button";
+      pill.innerHTML = '<span class="mu-pill__i">\u270e</span> Edit \u201c' + esc(name) + '\u201d' +
         '<span class="mu-pill__n">' + total + "</span>";
       pill.addEventListener("click", function (e) {
         e.preventDefault(); e.stopPropagation();
         openSidebar(key);
       });
-      if (getComputedStyle(sec).position === "static") sec.style.position = "relative";
-      sec.appendChild(pill);
-      // only sections that actually start under a pinned header need the offset
-      var inset = topInset();
-      if (inset && sec.getBoundingClientRect().top < inset + 40) {
-        pill.style.setProperty("top", (inset + 12) + "px", "important");
-      }
-      pills.push(pill);
-    });
-  }
-  /** Deepest element that contains every one of these nodes. */
-  function commonAncestor(nodes) {
-    if (!nodes.length) return null;
-    var a = nodes[0];
-    for (var i = 1; i < nodes.length; i++) {
-      var b = nodes[i];
-      while (a && !a.contains(b)) a = a.parentElement;
-      if (!a) return null;
-    }
-    return a;
-  }
-
-  function addPillsByField() {
-    sectionsById.forEach(function (bucket, key) {
-      var nodes = [];
-      bucket.fields.forEach(function (f) {
-        var n = document.querySelector('[data-c="' + CSS.escape(f.key) + '"]')
-             || document.querySelector('[data-c-media="' + CSS.escape(f.key) + '"]');
-        if (n) nodes.push(n);
-      });
-      if (!nodes.length) return;
-      var host = commonAncestor(nodes);
-      // walk out of an inline element; a pill inside a heading looks broken
-      while (host && /^(SPAN|A|B|I|EM|STRONG|SMALL|LI|P|H[1-6])$/.test(host.tagName)) host = host.parentElement;
-      if (!host || host === document.body) return;
-
-      var b0 = bucketsFor(key);
-      var total = b0 ? b0.all.length : 0;
-      if (!total) return;
-
-      var pill = el("button", "mu-pill");
-      pill.type = "button";
-      pill.innerHTML = '<span class="mu-pill__i">\u270e</span> Edit section<span class="mu-pill__n">' + total + "</span>";
-      pill.addEventListener("click", function (e) {
-        e.preventDefault(); e.stopPropagation();
-        openSidebar(key);
-      });
       if (getComputedStyle(host).position === "static") host.style.position = "relative";
-      host.setAttribute("data-sec", key);
       host.appendChild(pill);
-      var inset = topInset();
-      if (inset && host.getBoundingClientRect().top < inset + 40) {
-        pill.style.setProperty("top", (inset + 12) + "px", "important");
+      if (/^(HEADER|NAV)$/.test(host.tagName)) {
+        // a bar's own corner holds its CTA — hang the pill just below instead
+        pill.classList.add("mu-pill--bar");
+      } else {
+        // only sections that actually start under a pinned header need the offset
+        var inset = topInset();
+        if (inset && host.getBoundingClientRect().top < inset + 40) {
+          pill.style.setProperty("top", (inset + 12) + "px", "important");
+        }
       }
       pills.push(pill);
+    }
+
+    if (served.length) {
+      // a template may render one section as several wrappers — pin each
+      Array.prototype.forEach.call(served, function (sec) {
+        place(sec, sec.dataset.sec, sectionsById.get(sec.dataset.sec));
+      });
+    } else {
+      sectionsById.forEach(function (bucket, key) { place(bucket.host, key, bucket); });
+    }
+  }
+
+  /* Rebuild sectionsById around the page's own <section>/<nav>/<footer>
+     elements. Each field is found on the page — by its anchor when the build
+     wrapped it, otherwise by matching its value against the rendered text,
+     attributes or URLs — and bucketed under the landmark it sits in. A field
+     that is nowhere on this page gets no pill and no sidebar row: the shared
+     bucket carries every page's components, and offering a programme page's
+     copy on the home page is what made the list unusable. */
+  function regroupBySight() {
+    // entering Edit twice must not stack a second pass on the first
+    Array.prototype.forEach.call(document.querySelectorAll("[data-mu-vsec]"), function (n) {
+      n.removeAttribute("data-sec");
+      n.removeAttribute("data-mu-vsec");
+    });
+
+    var norm = function (s) {
+      return String(s == null ? "" : s)
+        .replace(/<[^>]*>/g, " ")
+        .replace(/&nbsp;|\u00a0/g, " ")
+        .replace(/&amp;/g, "&")
+        .replace(/\s+/g, " ")
+        .trim();
+    };
+    var urlKey = function (u) {
+      u = String(u == null ? "" : u).trim();
+      return u ? u.split(/[?#]/)[0].replace(/^https?:\/\/[^/]+/, "") : "";
+    };
+
+    /* One walk of the document builds every index a field could match on. */
+    var byText = new Map(), byAttr = new Map(), byUrl = new Map();
+    var pushTo = function (map, k, node) {
+      if (!k) return;
+      var a = map.get(k);
+      if (!a) { a = []; map.set(k, a); }
+      a.push(node);
+    };
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT);
+    for (var n = walker.nextNode(); n; n = walker.nextNode()) {
+      if (/^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE)$/.test(n.tagName)) continue;
+      if (n.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-auth")) continue;
+      var raw = n.textContent;
+      if (raw && raw.length <= 600) {
+        var t = norm(raw);
+        if (t && t.length <= 400) pushTo(byText, t, n);
+      }
+      for (var ai = 0; ai < ATTRS.length; ai++) {
+        var av = n.getAttribute(ATTRS[ai]);
+        if (av) pushTo(byAttr, norm(av), n);
+      }
+      for (var ui = 0; ui < URL_ATTRS.length; ui++) {
+        var uv = n.getAttribute(URL_ATTRS[ui]);
+        if (uv) pushTo(byUrl, urlKey(uv), n);
+      }
+      var st = n.getAttribute("style");
+      if (st) {
+        var m = /url\(["']?([^"')]+)/.exec(st);
+        if (m) pushTo(byUrl, urlKey(m[1]), n);
+      }
+    }
+
+    var locate = function (f) {
+      var sel = CSS.escape(f.key);
+      var a = document.querySelector(
+        '[data-c="' + sel + '"], [data-c-media="' + sel + '"], ' +
+        '[data-c-link="' + sel + '"], [data-c-state="' + sel + '"]');
+      if (a) return [a];
+      var v = String(f.value == null ? "" : f.value).trim();
+      if (!v) return null;
+      if (/^(https?:)?\//.test(v) || /\.(png|jpe?g|webp|svg|gif|avif|mp4|webm|mov)([?#]|$)/i.test(v)) {
+        var hit = byUrl.get(urlKey(v));
+        if (hit) return hit;
+      }
+      var t = norm(v);
+      if (!t) return null;
+      var els = byText.get(t) || byAttr.get(t);
+      if (!els) return null;
+      // deepest matches only: a heading's text is also its whole section's text
+      return els.filter(function (c) {
+        return !els.some(function (o) { return o !== c && c.contains(o); });
+      });
+    };
+
+    /* The landmark a node sits in — the nearest section-like ancestor, or the
+       top-level block when the page never wrapped this part in one. A nav
+       inside a header belongs to the header; a small floating control (the
+       fixed play button over the hero) belongs to the landmark before it, not
+       to a pill of its own crammed inside a 40px button. */
+    var hostOf = function (node) {
+      var cur = node, nav = null;
+      while (cur && cur !== document.body) {
+        if (/^(SECTION|HEADER|FOOTER)$/.test(cur.tagName)) return cur;
+        if (cur.tagName === "NAV") nav = cur;    // outermost nav wins
+        var p = cur.parentElement;
+        if (p && (p.tagName === "MAIN" || p === document.body)) {
+          if (nav) return nav;
+          var cs = getComputedStyle(cur);
+          if (cs.position === "fixed") {
+            /* A floating control belongs to whatever it floats over — the
+               rewatch button sits on the header, whatever the tree says. */
+            var r = cur.getBoundingClientRect();
+            var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+            if (cx >= 0 && cy >= 0 && cx <= window.innerWidth && cy <= window.innerHeight) {
+              var under = document.elementsFromPoint(cx, cy);
+              for (var k = 0; k < under.length; k++) {
+                if (/^(SECTION|HEADER|FOOTER|NAV)$/.test(under[k].tagName) &&
+                    under[k] !== cur && !cur.contains(under[k])) return under[k];
+              }
+            }
+          }
+          if (cur.getBoundingClientRect().height < 200 || cs.position === "absolute") {
+            var sib = cur.previousElementSibling;
+            while (sib && !/^(SECTION|HEADER|FOOTER|NAV)$/.test(sib.tagName)) sib = sib.previousElementSibling;
+            if (!sib) {           // a control rendered before its section folds forward
+              sib = cur.nextElementSibling;
+              while (sib && !/^(SECTION|HEADER|FOOTER|NAV)$/.test(sib.tagName)) sib = sib.nextElementSibling;
+            }
+            if (sib) return sib;
+          }
+          return cur;
+        }
+        cur = cur.parentElement;
+      }
+      return null;
+    };
+
+    var titleOf = function (host) {
+      var h = host.querySelector("h1, h2, h3, h4");
+      // innerText, not textContent: stacked <span> lines need the space back
+      var t = h ? norm(h.innerText || h.textContent) : "";
+      if (t) return t.length > 34 ? t.slice(0, 33).replace(/\s+\S*$/, "") + "\u2026" : t;
+      if (host.id) {
+        return host.id.replace(/[-_]+/g, " ")
+          .replace(/^./, function (c) { return c.toUpperCase(); });
+      }
+      return { HEADER: "Header", NAV: "Navigation", FOOTER: "Footer" }[host.tagName] || "Section";
+    };
+
+    /* A value owned by more than one key cannot be placed by matching alone:
+       three keys hold "About" — the nav's, the footer's, the mobile bar's —
+       and each matches all three places. But the keys came from different
+       SOURCE FILES, and a file's unambiguous fields have already shown which
+       part of the page that file renders. So: place the certain fields first,
+       then give each ambiguous one the candidate landmark where its own file
+       already lives. No file-mate there — no pill; the studio still lists it. */
+    var owners = new Map();
+    meta.forEach(function (f) {
+      var t = norm(f.value);
+      if (t) owners.set(t, (owners.get(t) || 0) + 1);
+    });
+
+    var groups = new Map();   // host element -> { host, entries: [{f, node}] }
+    var fileHosts = new Map();  // source file -> Map(host -> placed count)
+    var claim = function (f, node, host) {
+      var g = groups.get(host);
+      if (!g) { g = { host: host, entries: [] }; groups.set(host, g); }
+      g.entries.push({ f: f, node: node });
+      var fh = fileHosts.get(f.__src);
+      if (!fh) { fh = new Map(); fileHosts.set(f.__src, fh); }
+      fh.set(host, (fh.get(host) || 0) + 1);
+    };
+
+    var ambiguous = [];
+    meta.forEach(function (f) {
+      var sel = CSS.escape(f.key);
+      var anchor = document.querySelector(
+        '[data-c="' + sel + '"], [data-c-media="' + sel + '"], ' +
+        '[data-c-link="' + sel + '"], [data-c-state="' + sel + '"]');
+      if (!anchor && (owners.get(norm(f.value)) || 0) > 1) {
+        ambiguous.push(f);
+        return;
+      }
+      var els = locate(f);
+      if (!els || !els.length) return;
+      var seen = [];
+      els.forEach(function (node) {
+        var host = hostOf(node);
+        if (!host || seen.indexOf(host) >= 0) return;
+        seen.push(host);
+        claim(f, node, host);
+      });
+    });
+
+    ambiguous.forEach(function (f) {
+      var els = locate(f);
+      if (!els || !els.length) return;
+      var fh = fileHosts.get(f.__src);
+      if (!fh) return;
+      var bestHost = null, bestNode = null, bestScore = 0;
+      els.forEach(function (node) {
+        var host = hostOf(node);
+        if (!host) return;
+        var score = fh.get(host) || 0;
+        if (score > bestScore) { bestScore = score; bestHost = host; bestNode = node; }
+      });
+      if (bestHost) claim(f, bestNode, bestHost);
+    });
+
+    var before = function (x, y) {
+      return x === y ? 0
+        : (x.compareDocumentPosition(y) & Node.DOCUMENT_POSITION_FOLLOWING) ? -1 : 1;
+    };
+    var hosts = Array.from(groups.keys()).sort(before);
+
+    sectionsById.clear();
+    var used = {};
+    hosts.forEach(function (host, i) {
+      var g = groups.get(host);
+      g.entries.sort(function (x, y) { return before(x.node, y.node); });
+      var key = "v-" + (host.id || host.tagName.toLowerCase() + "-" + i);
+      while (used[key]) key += "b";
+      used[key] = 1;
+      host.setAttribute("data-sec", key);
+      host.setAttribute("data-mu-vsec", "1");
+      var fields = [];
+      g.entries.forEach(function (e) {
+        if (fields.indexOf(e.f) < 0) fields.push(e.f);
+        e.f.section_key = key;    // stylesForBlock reads this to find siblings
+      });
+      sectionsById.set(key, { title: titleOf(host), fields: fields, host: host });
     });
   }
+  var ATTRS = ["aria-label", "alt", "placeholder", "title", "value"];
+  var URL_ATTRS = ["src", "href", "poster"];
 
   function removeSectionPills() {
     pills.forEach(function (p) { p.remove(); });

@@ -362,3 +362,11 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #005bd3;outline-offset:-4
   .mu-auth{background:rgba(0,0,0,.6);backdrop-filter:none;-webkit-backdrop-filter:none}
   .mu-auth__card{background:#fff;backdrop-filter:none;-webkit-backdrop-filter:none}
 }
+
+/* A header or nav keeps its own top-right corner (that is where its CTA
+   lives) — its pill hangs just below the bar, centred. */
+.mu-pill--bar{
+  top:auto !important; right:auto !important;
+  bottom:-40px !important; left:50% !important;
+  transform:translateX(-50%) !important;
+}
