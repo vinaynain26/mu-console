@@ -116,6 +116,14 @@ page with `?edit=1` once, sign in, and the editor persists everywhere after.
 - **The MutationObserver that re-runs the sight pass must mute itself** while
   the pass writes anchors/spans, or it loops forever. And it must never run on
   template pages — their sections are server-sent, not sighted.
+- **"Can't scroll back to the hero" is the export's own intro-lock, not a
+  CMS bug.** `routes/index.tsx` deliberately sealed the hero once the content
+  curtain covered the intro video — wheel-up snapped back, ArrowUp/PageUp/Home
+  were blocked, only "Watch intro" returned. Proven identical with the plugin
+  off. Changed 2026-08-24: an upward gesture at the boundary now RELEASES the
+  lock (`releaseLock()`), so scrolling back up works; the curtain still
+  engages on the way down and re-engages on the next pass. A CMS toggle for
+  this behavior is a Phase 5 candidate.
 
 ## State — as of 2026-08-24 (the total-control upgrade)
 
