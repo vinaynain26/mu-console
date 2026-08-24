@@ -1,0 +1,60 @@
+
+  Coverage — http://localhost:3000/ (fields: 2096)
+
+  text   82.6% of visible characters editable  (417/470 nodes)
+  images 100.0% editable  (136/136)
+
+  uncovered text (first 53):
+   - 24 Aug · 10:47
+   - programs: in School
+   - programs: in College
+   - programs: at Work
+   - programs: For students in Grade 11 & 12 ready to skip the textbook detour and st
+   - programs: 31 Oct 2026
+   - programs: 15 Nov 2026
+   - programs: 01 Dec 2026
+   - programs: Live session
+   - programs: JUL
+   - programs: Live session
+   - programs: JUL
+   - programs: Campus session
+   - programs: JUL
+   - programs: Live session
+   - programs: JUL
+   - programs: Live session
+   - programs: JUL
+   - programs: Campus session
+   - programs: JUL
+   - faculty: actually did it.
+   - faculty: Our faculty is a deliberate 50 / 30 / 20 mix of industry practitioners
+   - faculty: profiles
+   - faculty: profiles
+   - faculty: profiles
+   - masters: Masterclass
+   - career: decisions are made.
+   - career: Students graduate into consulting, product, finance and venture roles 
+   - career: Podcast
+   - career: Recruiter access, live industry projects and year-round career coachin
+   - career: Watch podcast
+   - entrepreneurship: before graduation.
+   - entrepreneurship: Entrepreneurship at Masters' Union isn't a club — it's an operating sy
+   - entrepreneurship: ▲ 24 YoY
+   - entrepreneurship: Film
+   - entrepreneurship: A look inside the studios, capital and mentor rooms that take a studen
+   - entrepreneurship: Play film
+   - partnerships: the world's best schools.
+   - partnerships: Every Masters' Union student spends weeks studying on the campuses of 
+   - campus-radio: Vice President & MD, Google Cloud India
+   - campus-radio: Founder, Reebok
+   - campus-radio: Ex-CEO, NITI Aayog
+   - student-life: Campus Life
+   - student-life: Campus Life
+   - student-life: a working city.
+   - PGP in Tech & Business Management
+   - PGP in Quantitative Finance
+   - UG in Tech & Business Management
+   - Executive Programs
+   - Outclass
+   - Press & Media
+   - Careers at MU
+   - Brochure (PDF)

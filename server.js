@@ -11,6 +11,7 @@
  */
 import express from "express";
 import { engine } from "express-handlebars";
+import crypto from "node:crypto";
 import path from "node:path";
 import fs from "node:fs";
 import { DatabaseSync } from "node:sqlite";
@@ -101,6 +102,14 @@ if (!cols.includes("tab_key")) {
   db.exec("ALTER TABLE page_content ADD COLUMN tab_key TEXT NOT NULL DEFAULT '_all'");
   db.exec("ALTER TABLE page_content ADD COLUMN tab_title TEXT NOT NULL DEFAULT 'Shown on every tab'");
   console.log("  migrated: added tab columns");
+}
+if (!cols.includes("type")) {
+  /* What KIND of value this is — text|rich|media|link|date|number|color|
+     boolean|select|list — as distinct from `tag`, which records where the
+     extractor found it (h2, label, src…) and is display context only.
+     Backfill from tag via scripts/migrate-types.mjs. */
+  db.exec("ALTER TABLE page_content ADD COLUMN type TEXT NOT NULL DEFAULT 'text'");
+  console.log("  migrated: added type column — run scripts/migrate-types.mjs to backfill");
 }
 /* ------------------------------------------------------------------ *
  * seeding, per page
@@ -599,9 +608,9 @@ app.get("/api/pages/:slug/content", auth.require_("read"), (req, res) => {
 
   const rows = db.prepare(`
     SELECT page_slug, field_key, section_key, section_title, section_ord, tab_key, tab_title,
-           label, tag, multiline, ord, value, draft_value, updated_at, updated_by, options
+           label, tag, type, multiline, ord, value, draft_value, updated_at, updated_by, options
     FROM page_content
-    WHERE page_slug IN (${slugs.map(() => "?").join(",")}) AND retired = 0 AND tag <> 'meta'
+    WHERE page_slug IN (${slugs.map(() => "?").join(",")}) AND retired = 0 AND tag <> 'meta' AND type <> 'meta'
     ORDER BY CASE page_slug WHEN ? THEN 0 ELSE 1 END, section_ord, ord
   `).all(...slugs, req.params.slug).map((r) => ({
     ...r,
@@ -632,7 +641,7 @@ app.get("/api/pages/:slug/content", auth.require_("read"), (req, res) => {
     tab.fields++;
     if (r.value !== r.draft_value) { s.changed++; tab.changed++; }
     s.fields.push({
-      key: r.field_key, label: r.label, tag: r.tag, multiline: !!r.multiline,
+      key: r.field_key, label: r.label, tag: r.tag, type: r.type, multiline: !!r.multiline,
       options: r.options ? JSON.parse(r.options) : null,
       value: r.draft_value, published: r.value, dirty: r.value !== r.draft_value,
       updated_at: r.updated_at, updated_by: r.updated_by,
@@ -668,6 +677,129 @@ app.put("/api/pages/:slug/content", auth.require_("edit"), (req, res) => {
     n++;
   }
   res.json({ saved: n });
+});
+
+/* ------------------------------------------------------------------ *
+ * collections
+ *
+ * A list's structure row holds JSON — {"items":[{id},{id,src:"cms"},
+ * {id,hidden:true}]} — that reorders, hides and extends the array the code
+ * ships. Items born here get ordinary field rows under
+ * <listKey>.<itemId>.<prop>, so drafts, publish, revisions and comments all
+ * work on them unchanged. These routes are the first place the CMS creates
+ * rows at runtime; everything they create is draft-only until published.
+ * ------------------------------------------------------------------ */
+const listRow = (slug, key) => {
+  const get = db.prepare(
+    "SELECT * FROM page_content WHERE page_slug = ? AND field_key = ? AND type = 'list'");
+  const own = get.get(slug, key);
+  if (own) return { slug, row: own };
+  const sh = get.get("shared", key);
+  return sh ? { slug: "shared", row: sh } : null;
+};
+const listMeta = (row) => { try { return JSON.parse(row.options || "{}"); } catch { return {}; } };
+const listDraft = (row, meta) => {
+  try {
+    const d = JSON.parse(row.draft_value || "");
+    if (Array.isArray(d.items)) return d.items;
+  } catch { /* unset — fall through to code order */ }
+  return (meta.items || []).map((i) => ({ id: i.id }));
+};
+
+app.put("/api/pages/:slug/lists/:listKey", auth.require_("edit"), (req, res) => {
+  const found = listRow(req.params.slug, req.params.listKey);
+  if (!found) return res.status(404).json({ error: "No such list." });
+  const meta = listMeta(found.row);
+  const items = (req.body || {}).items;
+  if (!Array.isArray(items)) return res.status(400).json({ error: "items[] is required." });
+
+  const codeIds = new Set((meta.items || []).map((i) => i.id));
+  const cmsIds = new Set(
+    db.prepare("SELECT field_key FROM page_content WHERE page_slug = ? AND field_key LIKE ? AND retired = 0")
+      .all(found.slug, req.params.listKey + ".it-%")
+      .map((r) => r.field_key.slice(req.params.listKey.length + 1).split(".")[0]));
+  const clean = [];
+  for (const e of items) {
+    if (!e || typeof e.id !== "string") continue;
+    if (codeIds.has(e.id)) clean.push({ id: e.id, ...(e.hidden ? { hidden: true } : {}) });
+    else if (cmsIds.has(e.id)) clean.push({ id: e.id, src: "cms", ...(e.hidden ? { hidden: true } : {}) });
+    // an id neither side knows is silently dropped — stale editor state
+  }
+  const visible = clean.filter((e) => !e.hidden).length;
+  if (meta.maxItems && visible > meta.maxItems) {
+    return res.status(400).json({ error: `This list holds at most ${meta.maxItems} items.` });
+  }
+  db.prepare("UPDATE page_content SET draft_value = ?, updated_at = ?, updated_by = ? WHERE page_slug = ? AND field_key = ?")
+    .run(JSON.stringify({ items: clean }), new Date().toISOString(), req.user.name,
+      found.slug, req.params.listKey);
+  res.json({ items: clean });
+});
+
+app.post("/api/pages/:slug/lists/:listKey/items", auth.require_("edit"), (req, res) => {
+  const found = listRow(req.params.slug, req.params.listKey);
+  if (!found) return res.status(404).json({ error: "No such list." });
+  const meta = listMeta(found.row);
+  const { copyFrom = null, values = {} } = req.body || {};
+  const id = "it-" + crypto.randomBytes(4).toString("hex").slice(0, 7);
+  const now = new Date().toISOString();
+
+  /* seed values: explicit > copied from an existing item's drafts > empty */
+  const source = copyFrom ? (meta.items || []).find((i) => i.id === copyFrom) : null;
+  const getDraft = db.prepare("SELECT draft_value FROM page_content WHERE page_slug = ? AND field_key = ?");
+  const ins = db.prepare(`INSERT OR REPLACE INTO page_content
+    (page_slug, field_key, section_key, section_title, section_ord, tab_key, tab_title,
+     label, tag, type, multiline, ord, value, draft_value, updated_at, updated_by, retired)
+    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)`);
+  const fields = {};
+  for (const tp of meta.itemTemplate || []) {
+    if (tp.type === "group" || tp.type === "chips" || tp.type === "list") continue;
+    const key = `${req.params.listKey}.${id}.${tp.prop}`;
+    let seed = typeof values[tp.prop] === "string" ? values[tp.prop] : "";
+    if (!seed && source && source.fields && source.fields[tp.prop]) {
+      const src = getDraft.get(found.slug, source.fields[tp.prop])
+        || getDraft.get("shared", source.fields[tp.prop]);
+      if (src) seed = src.draft_value;
+    }
+    if (!seed && source && copyFrom.startsWith("it-")) {
+      const src = getDraft.get(found.slug, `${req.params.listKey}.${copyFrom}.${tp.prop}`);
+      if (src) seed = src.draft_value;
+    }
+    ins.run(found.slug, key, found.row.section_key, found.row.section_title,
+      found.row.section_ord, "_all", "Whole page", tp.prop, tp.prop,
+      tp.type || "text", seed.length > 90 ? 1 : 0, 9000,
+      "", seed, now, req.user.name);
+    fields[tp.prop] = key;
+  }
+
+  const items = listDraft(found.row, meta);
+  items.push({ id, src: "cms" });
+  db.prepare("UPDATE page_content SET draft_value = ?, updated_at = ?, updated_by = ? WHERE page_slug = ? AND field_key = ?")
+    .run(JSON.stringify({ items }), now, req.user.name, found.slug, req.params.listKey);
+  res.json({ id, fields, items });
+});
+
+app.delete("/api/pages/:slug/lists/:listKey/items/:itemId", auth.require_("edit"), (req, res) => {
+  const found = listRow(req.params.slug, req.params.listKey);
+  if (!found) return res.status(404).json({ error: "No such list." });
+  const meta = listMeta(found.row);
+  const { itemId } = req.params;
+  const now = new Date().toISOString();
+  let items = listDraft(found.row, meta);
+
+  if (itemId.startsWith("it-")) {
+    /* born here: retire its rows (wording kept) and drop it from the order */
+    db.prepare("UPDATE page_content SET retired = 1 WHERE page_slug = ? AND field_key LIKE ?")
+      .run(found.slug, `${req.params.listKey}.${itemId}.%`);
+    items = items.filter((e) => e.id !== itemId);
+  } else {
+    /* the code ships this item — it can only be hidden, never deleted */
+    let seen = false;
+    items = items.map((e) => (e.id === itemId ? (seen = true, { ...e, hidden: true }) : e));
+    if (!seen) items.push({ id: itemId, hidden: true });
+  }
+  db.prepare("UPDATE page_content SET draft_value = ?, updated_at = ?, updated_by = ? WHERE page_slug = ? AND field_key = ?")
+    .run(JSON.stringify({ items }), now, req.user.name, found.slug, req.params.listKey);
+  res.json({ items });
 });
 
 app.post("/api/pages/:slug/publish", auth.require_("publish"), (req, res) => {

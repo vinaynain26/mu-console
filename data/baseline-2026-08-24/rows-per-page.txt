@@ -1,0 +1,15 @@
+shared|2069
+pgp-bharat|1804
+placements|289
+about|196
+faculty|175
+immersions|161
+programmes-immersions-pgp-bharat|95
+food-lab|90
+programmes-immersions-bharat-summer-fellowship|90
+programmes-executive-entrepreneurship-and-business-acceleration|87
+how-we-teach|86
+mu-ventures|85
+programmes-pg-sustainability-and-business-management|84
+creator-challenge|80
+programmes-undergraduate-psychology-and-marketing|71

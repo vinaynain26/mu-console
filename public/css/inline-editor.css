@@ -372,3 +372,12 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #005bd3;outline-offset:-4
   bottom:-40px !important; left:50% !important;
   transform:translateX(-50%) !important;
 }
+
+/* ---------------- collections (Items tab) ---------------- */
+.mu-ib {
+  flex: 0 0 auto; border: 1px solid rgba(0,0,0,.16); background: #fff; color: #1a1a1a;
+  border-radius: 6px; padding: 2px 7px; font: inherit; font-size: 12px; line-height: 1.5;
+  cursor: pointer;
+}
+.mu-ib:hover { background: #f2f2ef; }
+.mu-side [data-li] { border-bottom: 1px solid rgba(0,0,0,.07); }

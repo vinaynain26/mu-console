@@ -52,8 +52,10 @@ own source:
 transform matters more than the text one. Values are *wrapped*, never replaced,
 so an imported asset or template string still works as the fallback.
 
-It emits `.mu-cms/manifest.json`: **3,223 fields** — 2,449 data, 589 text, 69
-attributes, 62 link targets, 54 image sources.
+It emits `.mu-cms/manifest.json`: **5,110 fields**, of which 105 are `list`
+entries — whole data arrays an editor can add to, reorder and prune. A list's
+items carry stable content-hashed ids; its structure row in the CMS holds JSON
+that re-shapes the code's array at render time.
 
 **Run time** — `src/mu-cms-runtime.ts` exposes `c(key, fallback)`. The root
 route loader fetches the page's copy plus the `shared` bucket, and it is
@@ -96,85 +98,85 @@ page with `?edit=1` once, sign in, and the editor persists everywhere after.
 - **`.claude/skills/` holds the apple-design skill** the design follows:
   translucent materials, response on pointer-down, critically damped motion,
   the three accessibility signals.
+- **Never SPREAD an instrumented object.** `{ ...chapter }` invokes every
+  CMS getter at module boot and freezes English in — that was React #418
+  *still live* on the dossier after the getter fix. Use `muMerge()` from
+  `mu-cms-runtime`, and `muMapped()` instead of `.map()` at module scope.
+- **A member expression on a loop variable must never be wrapped at the use
+  site.** `src={project.image}` keyed by expression source gave all 10 slides
+  ONE image field. The plugin now wraps such expressions only when they trace
+  to an imported asset; the data was already wrapped at its source.
+- **The router memoises matches.** A root re-render does not reach components
+  that map over a list — structural edits re-mount the tree via a `key` on
+  `<SmoothScroll>` instead. Visitors never trigger it (their store version
+  never changes).
+- **The editor's element-level "one field per node" rule breaks split text.**
+  "FIND" and "YOUR" live in one `<h1>`; pieces share the element, so partial
+  matches must not consume it in the `taken` set.
+- **The MutationObserver that re-runs the sight pass must mute itself** while
+  the pass writes anchors/spans, or it loops forever. And it must never run on
+  template pages — their sections are server-sent, not sighted.
 
-## State
+## State — as of 2026-08-24 (the total-control upgrade)
 
-Working: 40 pages / 4,742 fields in the CMS · edit → publish → live, verified ·
-all animations intact · images 99% on most pages · inline editor with sign-in ·
-roles, drafts, revisions, AI writer.
+The plan and its verification record live in
+`~/.claude/plans/quirky-kindling-puzzle.md`. Baseline artifacts (pre-upgrade
+manifest, DB dumps, SSR captures, audit output) are in
+`data/baseline-2026-08-24/`.
 
-**Broken / unfinished, in priority order:**
+**Working, all verified in a real scrolled browser, each phase A/B'd against a
+`MU_CMS_OFF=1 npm run build` control (chars/sections/height identical):**
 
-1. ~~Section pills collapse to one~~ **Fixed.** On an app page the editor now
-   regroups fields by the page's own `<section>`/`<nav>`/`<footer>` landmarks:
-   each field is found in the rendered DOM (anchor first, then by matching its
-   value against text/attributes/URLs) and bucketed under the landmark it sits
-   in. Values owned by more than one key are placed by their source file's
-   other fields; fixed floaters go to the landmark beneath them. Home page:
-   15 pills, each named after its section's own heading. Fields not on the
-   page (the folded-in shared bucket) get no pill — the studio still lists
-   them. Also fixed on the way: "Undo all" never reverted anything
-   (`slice.call` on a Map iterator returns `[]`).
-2. 500s and a 404 in the browser console, untraced. (One 404 seen on home:
-   `/__l5e/assets-v1/.../widget-campus-life.jpg` — one of the 13 assets that
-   are 404 on Lovable too.)
+- **Correctness** — the dossier's React #418 is actually gone (`withSections`
+  spread was freezing getters at boot; publish now lands in raw SSR HTML,
+  proven with a marker). Each page inlines only its own `__mu_content`
+  (AsyncLocalStorage per request; home revisit is byte-identical). The
+  one-key-for-ten-slide-images bug is fixed; per-slide image fields work.
+- **Coverage — 98.2% of visible characters on home** (was 82.6%): stat values
+  ("₹3.38 Cr", "40%", "500+"), slide ordinals, conditional copy ("Live
+  session"), component props, split headlines, footer link arrays,
+  `@mu-copy v,l` short-key files. ~1,500 head-metadata junk rows suppressed
+  and retired. Fields carry a real `type`
+  (text|rich|media|link|date|number|color|boolean|select|list) —
+  `scripts/migrate-types.mjs` backfilled 2,405 rows; `tag` is display context.
+- **Collections** — the structural leap. The plugin auto-wraps module-level
+  data arrays (105 lists site-wide) in a runtime list Proxy with stable
+  content-hashed item ids; a `type='list'` structure row (JSON) reorders,
+  hides and extends the code's items; CMS-born items get ordinary field rows
+  under `<listKey>.<itemId>.<prop>`, so drafts/publish/revisions work
+  unchanged. Routes: `PUT /api/pages/:slug/lists/:listKey`,
+  `POST .../items` (blank or `copyFrom`), `DELETE .../items/:itemId`
+  (CMS item retires; code item hides). The inline editor grew an **Items**
+  tab: card per item, move/hide/duplicate/delete/add, live on the page as you
+  click (store-version bump re-mounts the tree). Verified: 11th chapter added
+  in the browser → 11 pills live; hide+reorder published → 9 slides in raw
+  SSR; hydration clean throughout; `heal-drift` reports zero false moves.
+  `ChapterPage` reads `/ ${CHAPTERS.length}`.
+- **Visible editability** (the demo-readiness pass): the editor re-runs its
+  sight pass on every DOM change (debounced MutationObserver), so the
+  dossier's slides stay outlined while flipping; split text pieces ("FIND",
+  "YOUR", "Path.") each get their own wrapped anchor; matching is
+  case-insensitive (CSS uppercase vs stored casing). Slide 4 shows 21
+  anchored fields right after flipping to it.
 
-Also since fixed: the plugin skipped plain `.ts` files, so seven data files —
-`chapters.ts` (the whole 10-things dossier), `pgp-tbm-content.ts`,
-`campus-radio.ts`, the faculty lists — were invisible to the CMS. Now
-instrumented (3,223 → 4,041 fields, seeded). The sidebar carries
-`data-lenis-prevent` so scrolling it no longer scrolls the page, and
-data fields whose exact text is found on the page are adopted for live
-click-to-type editing like anchored copy.
+**Not done yet, in order:**
 
-Images: the plugin now wraps media-valued data props (`image: mu01`) with the
-import's filename carried as a hint into the field's label; the editor matches
-that hint against the hashed bundle URL, adopts the rendered `<img>` as a
-media anchor, and the sidebar's Images tab gives live swap with
-clear-to-restore. The dossier's grey rectangle was the Lovable export never
-rendering `project.image` at all — `TenThings.tsx` now renders it (all ten
-`mu-0*.webp` files were sitting unused in `src/assets`). The news cards'
-grey boxes have NO image data in the export — adding CMS image slots there
-is a decision, not a bug fix. One visible string belongs to one field now:
-four chapters sharing the value "₹3.38 Cr" no longer produce four rows.
-Anchors on remounting content (the dossier advances its slide and React
-recreates the img seconds after regroup tagged it) are re-resolved lazily:
-clicking any unanchored image or text matches it against the fields at
-click time, adopts it on the spot, and opens its editor — so content that
-mounts late (chapters 02–10) is editable the moment it is clicked.
-
-Image coverage: media-valued data props reach through member expressions
-too (`img: ftBhupesh.url` on an `.asset.json` import), so the faculty and
-practitioner photos are fields now — 320 media fields, 255 with filename
-hints, 47 of the home page's 58 visible images anchored. The sidebar's All
-tab clusters rows under the section's own sub-headings (the ones a reader
-scans), attribute fields carry human labels ("Screen-reader label", not
-"Text"), and a late-adopted field slots in reading order. React #418 was
-reproduced twice today on home — intermittent, consistent with the
-header clock crossing a minute between SSR and hydration; still untraced.
-3. ~~React #418 hydration warning~~ **Fixed — and the clock theory was wrong.**
-   `label: __mu(key, "…")` inside a module-level const evaluates once: on the
-   server that is process BOOT, before any request loads content, so SSR
-   rendered original English forever while the client rendered CMS values —
-   every published data-copy edit was a guaranteed mismatch, silently
-   corrected post-hydration (which is also why publish looked "live" while
-   SSR never actually carried it). The plugin now emits getters
-   (`get label() { return __mu(…) }`) so lookups happen at render time on
-   both sides; publish is live in the next SSR response, verified against
-   raw HTML. The Programme Finder countdown also computed from `Date.now()`
-   during render; it now seeds after mount.
-4. ~~No coverage audit has been run~~ **Run — and rerunnable.**
-   `node scripts/audit-coverage.mjs` renders a page in a real browser, scrolls
-   it, and checks every visible text node and image against the page's fields
-   (anchors, values, and filename hints). Home page as of 2026-08-22:
-   **82.6% of visible characters editable · 100% of images** (4,862 fields
-   across 37 pages). The uncovered remainder is mostly derivatives — dates
-   formatted from now-editable ISO fields, a computed "Live session" ternary,
-   the live clock — which the audit prints by name. Along the way the plugin
-   grew: card metadata props (month/time/source/duration/format/round/company…),
-   data-level link targets (href/applyHref/route), and ISO date props
-   (deadline/nextDate) are all fields now.
-5. `mu-console` is a public repo holding page content — probably should be private.
+1. **Phase 4 remainder** — type-aware sidebar controls (color picker, number
+   slider, toggles, date), image upload + asset library (URL-paste only
+   today), blank-vs-unset (`explicit_blank` column; editors still cannot
+   blank text), friendly shared-scope naming (`section-map.json`), sidebar
+   de-clutter.
+2. **Phase 5** — style tokens (revive the dead per-slide `bg`/`ink` colour
+   system), animation tunables (hoist per-section `MOTION` consts; `n()`/`b()`
+   runtime gates; editor reload-on-save), section visibility booleans.
+3. **Phase 6** — audit extended to lists + report artifact, heal-drift learns
+   structure rows, hydration battery on a fully customised home, editor docs.
+4. Logo walls: images audit reads 66.2% because their old "coverage" was one
+   shared key per wall (fake). Real per-logo fields need list treatment of
+   `logos: AssetJson[]` arrays.
+5. CMS-born items' child lists (stats/chips) have runtime support but no
+   editor UI yet.
+6. `mu-console` is a public repo holding page content — should be private.
 
 ---
 
@@ -195,13 +197,18 @@ header clock crossing a minute between SSR and hydration; still untraced.
 >
 > The approach is settled and works: the app stays as it is, and a Vite plugin
 > instruments its source at build time so every string comes from the CMS with
-> the original as fallback. 3,223 fields instrumented, edit→publish→live proven,
-> animations verified untouched by A/B test.
+> the original as fallback. 5,110 fields including 105 editable collections
+> (add/remove/reorder/hide items from the CMS), 98.2% of home's visible
+> characters editable, edit→publish→live proven in raw SSR, animations verified
+> untouched by A/B test at every phase.
 >
-> Focus on the **home page only** for now — it carries the most animation.
-> Start with item 1 in the "Broken / unfinished" list: the inline editor's
-> section pills collapse into one, so the sidebar is unusable.
+> The full plan and its verification record are in
+> `~/.claude/plans/quirky-kindling-puzzle.md` (phases 0–3 and 4a done).
+> Continue with the "Not done yet" list in HANDOFF's State section — the
+> Phase 4 remainder first: type-aware sidebar controls, image upload + asset
+> library, blank-vs-unset, sidebar de-clutter.
 >
 > Verify by running things in a real browser (puppeteer, scrolled) rather than
 > curl — much of this site renders after hydration. When something looks broken,
-> A/B it with the plugin disabled before assuming the CMS caused it.
+> A/B it with `MU_CMS_OFF=1` before assuming the CMS caused it. Never spread an
+> instrumented object; never wrap a loop variable's member expression.

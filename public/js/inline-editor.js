@@ -218,6 +218,9 @@
       }
     }
     if (!opts.fromSidebar) syncSidebarInput(key, value);
+    /* keep the app's own store true (silently — the DOM is already patched),
+       so a structural re-render doesn't roll this edit back */
+    if (window.__MU_RUNTIME__) window.__MU_RUNTIME__.applyLocal(key, value, true);
     markNode(key);
     refreshCount();
   }
@@ -329,10 +332,48 @@
     if (m === "arrange") enterArrange(); else exitArrange();
     if (m === "edit") {
       loadComments();
-      loadMeta().then(addSectionPills);
+      loadMeta().then(function () { addSectionPills(); watchDom(); });
     } else {
       removeSectionPills();
+      unwatchDom();
     }
+  }
+
+  /* ---------------- continuous adoption ----------------
+     The dossier remounts its slide on every advance, and React re-renders
+     replace nodes the sight pass had anchored — so anything adopted there
+     stopped LOOKING editable moments later. Watch the DOM and re-run the
+     pass, so what is editable stays visibly editable while flipping through
+     slides, opening accordions, or after the editor itself re-renders a list. */
+  var domObs = null, readoptTimer = null, obsMuted = false;
+  function watchDom() {
+    if (domObs) return;
+    domObs = new MutationObserver(function (muts) {
+      if (obsMuted || mode !== "edit" || live) return;
+      var relevant = false;
+      for (var i = 0; i < muts.length && !relevant; i++) {
+        var tgt = muts[i].target;
+        if (tgt && tgt.nodeType !== 1) tgt = tgt.parentElement;
+        if (!tgt || !tgt.closest) continue;
+        if (tgt.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-auth")) continue;
+        relevant = true;
+      }
+      if (!relevant) return;
+      clearTimeout(readoptTimer);
+      readoptTimer = setTimeout(function () {
+        if (mode !== "edit" || live || !meta.size) return;
+        // only pages the sight pass grouped — a template page's server-sent
+        // sections must never be re-drawn by sight
+        if (!document.querySelector("[data-mu-vsec]")) return;
+        obsMuted = true;   // our own attribute/span writes must not re-trigger the pass
+        try { regroupBySight(); } finally { setTimeout(function () { obsMuted = false; }, 0); }
+      }, 350);
+    });
+    domObs.observe(document.body, { childList: true, subtree: true });
+  }
+  function unwatchDom() {
+    if (domObs) { domObs.disconnect(); domObs = null; }
+    clearTimeout(readoptTimer);
   }
 
   /* ---------------- data ---------------- */
@@ -444,6 +485,12 @@
       n.removeAttribute("data-c-media");
       n.removeAttribute("data-mu-adopted");
     });
+    /* spans this editor wrapped around split text ("FIND YOUR" beside an
+       italic "Path.") dissolve back into plain text before re-matching */
+    Array.prototype.forEach.call(document.querySelectorAll("[data-mu-wrapped]"), function (sp) {
+      while (sp.firstChild) sp.parentNode.insertBefore(sp.firstChild, sp);
+      sp.remove();
+    });
 
     var norm = function (s) {
       return String(s == null ? "" : s)
@@ -458,7 +505,10 @@
       return u ? u.split(/[?#]/)[0].replace(/^https?:\/\/[^/]+/, "") : "";
     };
 
-    /* One walk of the document builds every index a field could match on. */
+    /* One walk of the document builds every index a field could match on.
+       Keys are lowercased: the page often renders uppercase via CSS
+       (text-transform), and "FIND YOUR" must still find "Find your". */
+    var lc = function (s) { return norm(s).toLowerCase(); };
     var byText = new Map(), byAttr = new Map(), byUrl = new Map();
     var pushTo = function (map, k, node) {
       if (!k) return;
@@ -472,12 +522,20 @@
       if (n.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-auth")) continue;
       var raw = n.textContent;
       if (raw && raw.length <= 600) {
-        var t = norm(raw);
+        var t = lc(raw);
         if (t && t.length <= 400) pushTo(byText, t, n);
+        /* a split headline — "FIND YOUR" beside an italic "Path." — never
+           equals its element's whole text; index the pieces too */
+        for (var ci = 0; ci < n.childNodes.length; ci++) {
+          var cn = n.childNodes[ci];
+          if (cn.nodeType !== 3) continue;
+          var pt = lc(cn.nodeValue);
+          if (pt && pt.length >= 2 && pt !== t) pushTo(byText, pt, n);
+        }
       }
       for (var ai = 0; ai < ATTRS.length; ai++) {
         var av = n.getAttribute(ATTRS[ai]);
-        if (av) pushTo(byAttr, norm(av), n);
+        if (av) pushTo(byAttr, lc(av), n);
       }
       for (var ui = 0; ui < URL_ATTRS.length; ui++) {
         var uv = n.getAttribute(URL_ATTRS[ui]);
@@ -514,7 +572,7 @@
       /* An empty image SLOT has no picture to find — its label is the copy it
          sits beside (the news card's headline), so place it by that. */
       if (!v && f.tag === "media" && (f.label || "").length >= 12) {
-        var near = byText.get(norm(f.label.replace(/\u2026$/, "")));
+        var near = byText.get(lc(f.label.replace(/\u2026$/, "")));
         if (near) return near;
       }
       if (!v) return null;
@@ -522,7 +580,7 @@
         var hit = byUrl.get(urlKey(v));
         if (hit) return hit;
       }
-      var t = norm(v);
+      var t = lc(v);
       if (!t) return null;
       var els = byText.get(t) || byAttr.get(t);
       if (!els) return null;
@@ -596,7 +654,7 @@
        already lives. No file-mate there — no pill; the studio still lists it. */
     var owners = new Map();
     meta.forEach(function (f) {
-      var t = norm(f.value);
+      var t = lc(f.value);
       if (t) owners.set(t, (owners.get(t) || 0) + 1);
     });
 
@@ -626,12 +684,29 @@
         return;
       }
       if (!node.hasAttribute("data-c") && !node.hasAttribute("data-c-media") &&
-          node.childElementCount === 0 && f.tag !== "rich" &&
+          f.tag !== "rich" &&
           String(f.value).trim() &&
-          String(f.value).indexOf("<") < 0 &&
-          norm(node.textContent) === norm(f.value)) {
-        node.setAttribute("data-c", f.key);
-        node.setAttribute("data-mu-adopted", "1");
+          String(f.value).indexOf("<") < 0) {
+        if (node.childElementCount === 0 && lc(node.textContent) === lc(f.value)) {
+          node.setAttribute("data-c", f.key);
+          node.setAttribute("data-mu-adopted", "1");
+        } else {
+          /* the value is one PIECE of this element — "FIND YOUR" next to an
+             italic "Path." — so give that text node a span of its own to
+             carry the anchor. Dissolved on every re-pass; if React re-renders
+             the node away, the next pass simply wraps it again. */
+          for (var wi = 0; wi < node.childNodes.length; wi++) {
+            var wtn = node.childNodes[wi];
+            if (wtn.nodeType !== 3 || lc(wtn.nodeValue) !== lc(f.value)) continue;
+            var wsp = document.createElement("span");
+            wsp.setAttribute("data-c", f.key);
+            wsp.setAttribute("data-mu-adopted", "1");
+            wsp.setAttribute("data-mu-wrapped", "1");
+            node.insertBefore(wsp, wtn);
+            wsp.appendChild(wtn);
+            break;
+          }
+        }
       }
     };
 
@@ -642,7 +717,7 @@
       var anchor = document.querySelector(
         '[data-c="' + sel + '"], [data-c-media="' + sel + '"], ' +
         '[data-c-link="' + sel + '"], [data-c-state="' + sel + '"]');
-      if (!anchor && (owners.get(norm(f.value)) || 0) > 1) {
+      if (!anchor && (owners.get(lc(f.value)) || 0) > 1) {
         ambiguous.push(f);
         return;
       }
@@ -651,8 +726,11 @@
       var seen = [];
       els.forEach(function (node) {
         // media placed by a nearby label shares that node with the label's
-        // own field — placement is not ownership, so it never takes the node
-        var owns = f.tag !== "media";
+        // own field — placement is not ownership, so it never takes the node.
+        // A PIECE of an element ("FIND" and "YOUR" in one heading) shares the
+        // element with its sibling pieces, so it never takes it either.
+        var partial = f.tag !== "media" && lc(node.textContent) !== lc(f.value);
+        var owns = f.tag !== "media" && !partial;
         if (owns && taken.has(node)) return;
         var host = hostOf(node);
         if (!host || seen.indexOf(host) >= 0) return;
@@ -668,14 +746,19 @@
       var fh = fileHosts.get(f.__src);
       if (!fh) return;
       var bestHost = null, bestNode = null, bestScore = 0;
+      var partial = f.tag !== "media";
       els.forEach(function (node) {
-        if (taken.has(node)) return;
+        var whole = !partial || lc(node.textContent) === lc(f.value);
+        if (whole && taken.has(node)) return;
         var host = hostOf(node);
         if (!host) return;
         var score = fh.get(host) || 0;
         if (score > bestScore) { bestScore = score; bestHost = host; bestNode = node; }
       });
-      if (bestHost) { taken.add(bestNode); claim(f, bestNode, bestHost); }
+      if (bestHost) {
+        if (lc(bestNode.textContent) === lc(f.value)) taken.add(bestNode);
+        claim(f, bestNode, bestHost);
+      }
     });
 
     var before = function (x, y) {
@@ -700,6 +783,25 @@
         e.f.section_key = key;    // stylesForBlock reads this to find siblings
       });
       sectionsById.set(key, { title: titleOf(host), fields: fields, host: host });
+    });
+
+    /* a list's structure row has no DOM presence of its own — file it with
+       the section where its items' fields landed, so the Items tab shows up
+       when that part of the page is opened */
+    meta.forEach(function (f) {
+      if (f.type !== "list") return;
+      var prefix = f.key.split(".list:")[0] + ".";
+      var best = null, bestN = 0;
+      sectionsById.forEach(function (bkt, k) {
+        var n = 0;
+        bkt.fields.forEach(function (x) { if (x.key.indexOf(prefix) === 0) n++; });
+        if (n > bestN) { bestN = n; best = k; }
+      });
+      if (best) {
+        var bkt = sectionsById.get(best);
+        if (bkt.fields.indexOf(f) < 0) bkt.fields.push(f);
+        f.section_key = best;
+      }
     });
   }
   var ATTRS = ["aria-label", "alt", "placeholder", "title", "value"];
@@ -777,8 +879,13 @@
       (g.icons || []).forEach(function (ic) { consumed[ic.key] = 1; });
     });
 
+    /* lists: the structure rows for this section, each carrying its code
+       items in options and any CMS-born items as sibling field rows */
+    var lists = fields.filter(function (f) { return f.type === "list"; });
+
     var all = [];
     fields.forEach(function (f) {
+      if (f.type === "list") return;                             // shown on the Items tab
       if (f.tag === "image" && /@poster$/.test(f.key)) return;   // shown with its media
       if (consumed[f.key]) {
         // emit the button card at the position of its FIRST field
@@ -799,6 +906,7 @@
       title: bucket.title,
       all: all,
       buttons: buttons,
+      lists: lists,
       images: fields.filter(function (f) {
         if (f.tag !== "media") return false;
         var n = document.querySelector('[data-c-media="' + CSS.escape(f.key) + '"]');
@@ -833,8 +941,10 @@
       var f = meta.get(focusKey);
       if (f) sideTab = "all";
     }
-    if (!b[sideTab] || !b[sideTab].length) {
-      sideTab = ["all", "buttons", "images"].filter(function (t) { return b[t].length; })[0] || "all";
+    var tabHas = sideTab === "items" ? b.lists.length : (b[sideTab] && b[sideTab].length);
+    if (!tabHas) {
+      sideTab = ["all", "buttons", "images"].filter(function (t) { return b[t].length; })[0] ||
+        (b.lists.length ? "items" : "all");
     }
 
     side.innerHTML =
@@ -849,6 +959,9 @@
         tabBtn("all", "All", b.all.length) +
         tabBtn("buttons", "Buttons", b.buttons.length) +
         tabBtn("images", "Images", b.images.length) +
+        (b.lists.length ? tabBtn("items", "Items", b.lists.reduce(function (n, f) {
+          return n + listItemsOf(f).length;
+        }, 0)) : "") +
       "</div>" +
       '<div class="mu-side__body" id="mu-side-body"></div>';
 
@@ -923,13 +1036,16 @@
       }
     } else if (sideTab === "buttons") {
       html = b.buttons.length ? b.buttons.map(buttonRow).join("") : empty("No buttons or links in this section.");
+    } else if (sideTab === "items") {
+      html = b.lists.length ? b.lists.map(listPanel).join("") : empty("No lists in this section.");
     } else {
       html = b.images.length ? b.images.map(mediaRow).join("") : empty("No images in this section.");
     }
     /* Tabs fix most of the scrolling, but a few sections genuinely hold dozens
        of fields. Offer a filter there rather than making everyone scroll. */
     var count = sideTab === "all" ? b.all.length
-              : sideTab === "buttons" ? b.buttons.length : b.images.length;
+              : sideTab === "buttons" ? b.buttons.length
+              : sideTab === "items" ? b.lists.length : b.images.length;
     body.innerHTML = (count > 8
       ? '<input type="search" class="mu-filter" placeholder="Filter ' + count + ' items…" data-filter>'
       : "") + '<div data-list>' + html + "</div>";
@@ -948,6 +1064,7 @@
       });
     }
     wireSidebar();
+    wireLists();
     if (focusKey) {
       var input = side.querySelector('[data-f="' + CSS.escape(focusKey) + '"]');
       if (input) { input.focus(); input.scrollIntoView({ block: "center" }); }
@@ -958,6 +1075,185 @@
     return '<div class="mu-grp"><div class="mu-grp__h">' + esc(title) + "</div>" + inner + "</div>";
   }
   function empty(msg) { return '<div class="mu-empty">' + esc(msg) + "</div>"; }
+
+  /* ---------------- collections ----------------
+     A list field's options carry the code's items; CMS-born items are sibling
+     rows keyed <listKey>.<itemId>.<prop>; the field's draft value is the
+     structure JSON. This merges the three into what the page will render. */
+  function cmsItemsOf(listKey) {
+    var byId = {};
+    meta.forEach(function (g, k) {
+      if (k.indexOf(listKey + ".it-") !== 0) return;
+      var rest = k.slice(listKey.length + 1);
+      var id = rest.split(".")[0];
+      var prop = rest.slice(id.length + 1);
+      if (!prop) return;
+      (byId[id] = byId[id] || {})[prop] = g;
+    });
+    return byId;
+  }
+  function listItemsOf(f) {
+    var opts = f.options || {};
+    var code = new Map();
+    (opts.items || []).forEach(function (i) { code.set(i.id, i); });
+    var cms = cmsItemsOf(f.key);
+    var struct = null;
+    try {
+      var parsed = JSON.parse(valueOf(f.key) || "");
+      if (parsed && Object.prototype.toString.call(parsed.items) === "[object Array]") struct = parsed.items;
+    } catch (e) { /* unset — code order */ }
+
+    var out = [], placed = {};
+    var push = function (id, hidden, isCms) {
+      var label;
+      if (isCms) {
+        var fs = cms[id] || {};
+        var lf = fs.headline || fs.title || fs.name || fs.label || fs.heading;
+        label = (lf && valueOf(lf.key)) || "New item";
+        out.push({ id: id, hidden: !!hidden, cms: true, label: label, fields: fs });
+      } else {
+        var ci = code.get(id) || {};
+        out.push({ id: id, hidden: !!hidden, cms: false, label: ci.label || id, fields: ci.fields || {} });
+      }
+    };
+    if (struct) {
+      struct.forEach(function (e) {
+        if (!e || typeof e.id !== "string" || placed[e.id]) return;
+        placed[e.id] = 1;
+        if (e.src === "cms") { if (cms[e.id]) push(e.id, e.hidden, true); }
+        else if (code.has(e.id)) push(e.id, e.hidden, false);
+      });
+      code.forEach(function (_, id) { if (!placed[id]) { placed[id] = 1; push(id, false, false); } });
+      Object.keys(cms).forEach(function (id) { if (!placed[id]) push(id, false, true); });
+    } else {
+      code.forEach(function (_, id) { push(id, false, false); });
+      Object.keys(cms).forEach(function (id) { push(id, false, true); });
+    }
+    return out;
+  }
+
+  function listPanel(f) {
+    var items = listItemsOf(f);
+    var name = (f.key.split("list:")[1] || "Items").replace(/[_-]+/g, " ").toLowerCase()
+      .replace(/^raw /, "").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+    var rows = items.map(function (it, i) {
+      return '<div class="mu-card" data-li="' + esc(it.id) + '" data-lk="' + esc(f.key) + '">' +
+        '<div style="display:flex;align-items:center;gap:6px;padding:2px 0;">' +
+          '<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;' +
+            (it.hidden ? "opacity:.45;text-decoration:line-through;" : "") + '">' +
+            (i + 1) + ". " + esc(it.label) +
+            (it.cms ? ' <em style="opacity:.55;font-style:normal;font-size:11px;">— added here</em>' : "") +
+          "</span>" +
+          '<button type="button" class="mu-ib" data-lact="up" title="Move up">↑</button>' +
+          '<button type="button" class="mu-ib" data-lact="down" title="Move down">↓</button>' +
+          '<button type="button" class="mu-ib" data-lact="hide" title="' + (it.hidden ? "Show" : "Hide") + '">' +
+            (it.hidden ? "🚫" : "👁") + "</button>" +
+          '<button type="button" class="mu-ib" data-lact="dup" title="Duplicate">⧉</button>' +
+          (it.cms ? '<button type="button" class="mu-ib" data-lact="del" title="Delete">✕</button>' : "") +
+        "</div></div>";
+    }).join("");
+    return section(name + " · " + items.filter(function (x) { return !x.hidden; }).length + " shown",
+      rows +
+      '<button type="button" class="mu-ib" data-ladd="' + esc(f.key) + '" style="margin:8px 0;padding:6px 12px;">＋ Add item</button>' +
+      '<div class="mu-empty" style="padding:4px 0 0;font-size:11px;">Order and visibility save to the draft straight away. ' +
+      "The code's own items can be hidden, never deleted; items added here edit like any other copy — find them on the All tab.</div>");
+  }
+
+  async function saveStructure(f, items) {
+    var payload = items.map(function (x) {
+      var e = { id: x.id };
+      if (x.cms) e.src = "cms";
+      if (x.hidden) e.hidden = true;
+      return e;
+    });
+    var out = await api("/api/pages/" + SLUG + "/lists/" + encodeURIComponent(f.key),
+      { method: "PUT", body: JSON.stringify({ items: payload }) });
+    var json = JSON.stringify({ items: out.items });
+    f.value = json;
+    if (window.__MU_RUNTIME__) window.__MU_RUNTIME__.applyLocal(f.key, json, false);
+    var bb = bucketsFor(activeSection);
+    if (bb) renderTab(bb);
+  }
+
+  function wireLists() {
+    side.querySelectorAll("[data-lact]").forEach(function (btn) {
+      btn.addEventListener("click", async function () {
+        var card = btn.closest("[data-li]");
+        var listKey = card.getAttribute("data-lk"), id = card.getAttribute("data-li");
+        var act = btn.getAttribute("data-lact");
+        var f = meta.get(listKey);
+        if (!f) return;
+        var items = listItemsOf(f);
+        var idx = -1;
+        items.forEach(function (x, i) { if (x.id === id) idx = i; });
+        if (idx < 0) return;
+        try {
+          if (act === "up" || act === "down") {
+            var j = act === "up" ? idx - 1 : idx + 1;
+            if (j < 0 || j >= items.length) return;
+            var tmp = items[idx]; items[idx] = items[j]; items[j] = tmp;
+            await saveStructure(f, items);
+          } else if (act === "hide") {
+            items[idx].hidden = !items[idx].hidden;
+            await saveStructure(f, items);
+          } else if (act === "dup") {
+            var out = await api("/api/pages/" + SLUG + "/lists/" + encodeURIComponent(listKey) + "/items",
+              { method: "POST", body: JSON.stringify({ copyFrom: id }) });
+            adoptCmsItem(f, out, items[idx]);
+            var again = listItemsOf(f);
+            var ni = -1;
+            again.forEach(function (x, i) { if (x.id === out.id) ni = i; });
+            if (ni >= 0) { var moved = again.splice(ni, 1)[0]; again.splice(idx + 1, 0, moved); }
+            await saveStructure(f, again);
+            toast("Item duplicated — its copy is on the All tab");
+          } else if (act === "del") {
+            if (!window.confirm("Delete this item? Its wording is kept in the CMS history.")) return;
+            await api("/api/pages/" + SLUG + "/lists/" + encodeURIComponent(listKey) + "/items/" + encodeURIComponent(id),
+              { method: "DELETE" });
+            var gone = [];
+            meta.forEach(function (_, k) { if (k.indexOf(listKey + "." + id + ".") === 0) gone.push(k); });
+            gone.forEach(function (k) { meta.delete(k); dirty.delete(k); });
+            await saveStructure(f, items.filter(function (x) { return x.id !== id; }));
+          }
+        } catch (e) { toast(e.message); }
+      });
+    });
+    side.querySelectorAll("[data-ladd]").forEach(function (btn) {
+      btn.addEventListener("click", async function () {
+        var listKey = btn.getAttribute("data-ladd");
+        var f = meta.get(listKey);
+        if (!f) return;
+        try {
+          var out = await api("/api/pages/" + SLUG + "/lists/" + encodeURIComponent(listKey) + "/items",
+            { method: "POST", body: JSON.stringify({}) });
+          adoptCmsItem(f, out, null);
+          await saveStructure(f, listItemsOf(f));
+          toast("Item added — fill its text on the All tab");
+        } catch (e) { toast(e.message); }
+      });
+    });
+  }
+
+  /* the server seeded the new item's rows; mirror them locally so the item is
+     editable without a reload — copying the source item's drafts when it was
+     a duplicate, exactly as the server did */
+  function adoptCmsItem(f, out, source) {
+    Object.keys(out.fields || {}).forEach(function (prop) {
+      var k = out.fields[prop];
+      var val = "";
+      if (source) {
+        var sf = source.fields && source.fields[prop];
+        var sk = sf && (sf.key || sf);
+        if (typeof sk === "string") val = valueOf(sk);
+      }
+      meta.set(k, { key: k, label: prop, tag: prop, type: "text", multiline: val.length > 90,
+        options: null, value: val, published: "", dirty: false,
+        section_key: f.section_key, __cmsItem: true });
+      var bucket = sectionsById.get(f.section_key);
+      if (bucket) bucket.fields.push(meta.get(k));
+      if (window.__MU_RUNTIME__) window.__MU_RUNTIME__.applyLocal(k, val, true);
+    });
+  }
 
   /** A button is its label, its destination and its state — shown together. */
   function buttonGroups(fields) {
@@ -1333,32 +1629,54 @@
       return { kind: "media", key: found.key, sec: bucketFor(mediaEl, found), node: mediaEl };
     }
 
-    // text: the clicked element, or a close ancestor, holds exactly one field's value
+    /* text: the clicked element (or a close ancestor) holds a field's value —
+       as its whole text, or as one text node beside styled siblings. Compared
+       lowercased: the page often renders uppercase via CSS. */
+    var lcT = function (s) { return normText(s).toLowerCase(); };
     var el = target, depth = 0, hit = null;
     while (el && el !== document.body && depth < 4 && !hit) {
       if (!el.closest("[data-c]")) {
-        var t = normText(el.textContent);
-        if (t) {
+        var whole = lcT(el.textContent);
+        var parts = [];
+        for (var pi = 0; pi < el.childNodes.length; pi++) {
+          var ptn = el.childNodes[pi];
+          if (ptn.nodeType === 3) {
+            var pv = lcT(ptn.nodeValue);
+            if (pv && pv.length >= 2 && pv !== whole) parts.push({ t: pv, tn: ptn });
+          }
+        }
+        if (whole) {
           meta.forEach(function (f) {
-            if (hit || f.tag === "rich" || f.tag === "media") return;
+            if (hit || f.tag === "rich" || f.tag === "media" || f.type === "list") return;
             var v = String(f.value == null ? "" : f.value);
             if (!v.trim() || v.indexOf("<") >= 0) return;
-            if (normText(v) !== t) return;
             if (document.querySelector('[data-c="' + CSS.escape(f.key) + '"]')) return;
-            hit = { f: f, el: el };
+            var lv = lcT(v);
+            if (lv === whole) { hit = { f: f, el: el, tn: null }; return; }
+            for (var qi = 0; qi < parts.length; qi++) {
+              if (parts[qi].t === lv) { hit = { f: f, el: el, tn: parts[qi].tn }; return; }
+            }
           });
         }
       }
       el = el.parentElement; depth++;
     }
     if (!hit) return null;
-    var adopted = false;
-    if (hit.el.childElementCount === 0) {
+    var adopted = false, node2 = hit.el;
+    if (hit.tn) {
+      var sp2 = document.createElement("span");
+      sp2.setAttribute("data-c", hit.f.key);
+      sp2.setAttribute("data-mu-adopted", "1");
+      sp2.setAttribute("data-mu-wrapped", "1");
+      hit.el.insertBefore(sp2, hit.tn);
+      sp2.appendChild(hit.tn);
+      node2 = sp2; adopted = true;
+    } else if (hit.el.childElementCount === 0) {
       hit.el.setAttribute("data-c", hit.f.key);
       hit.el.setAttribute("data-mu-adopted", "1");
       adopted = true;
     }
-    return { kind: "text", key: hit.f.key, sec: bucketFor(hit.el, hit.f), node: hit.el, adopted: adopted };
+    return { kind: "text", key: hit.f.key, sec: bucketFor(node2, hit.f), node: node2, adopted: adopted };
   }
 
   /* Nothing on the page navigates while editing. Before this, only [data-c]
