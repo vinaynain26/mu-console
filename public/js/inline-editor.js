@@ -310,12 +310,6 @@
 
     bar.appendChild(el("span", "mu-role", esc(BOOT.user.role)));
 
-    var help = el("button", "mu-btn mu-help", "?");
-    help.title = "How do I edit this site?";
-    help.setAttribute("aria-label", "Open the editing guide");
-    help.addEventListener("click", function () { startTour(true); });
-    bar.appendChild(help);
-
     document.body.appendChild(bar);
     refreshCount();
   }
@@ -326,161 +320,6 @@
     if (btnSave) btnSave.disabled = !n;
     if (btnUndo) btnUndo.disabled = !n;
   }
-
-  /* ---------------- guided tour ----------------
-     Eight spotlit steps for someone who has never seen a CMS. Plays itself
-     on the first Edit session, replays from the toolbar's ? button, and is
-     honest about the one thing that confuses everyone: an element without
-     a dashed outline is usually STILL editable. */
-  var tourEls = null, tourStep = 0, tourReposition = null;
-
-  function tourSteps() {
-    return [
-      { at: function () { return bar; },
-        t: "This edits your real website",
-        b: "Everything you change stays a private draft until you press Publish. Explore freely — you cannot break the live site by looking around or typing." },
-      { at: function () { return bar && bar.querySelector(".mu-seg"); },
-        t: "Your three modes",
-        b: "Browse is the normal site, exactly as visitors see it. Edit lets you change things. Publish, at the end, puts your drafts live." },
-      { at: function () {
-          var best = null;
-          Array.prototype.some.call(document.querySelectorAll("[data-c]"), function (n) {
-            var r = n.getBoundingClientRect();
-            if (r.height > 8 && r.top > 70 && r.bottom < window.innerHeight - 120) { best = n; return true; }
-            return false;
-          });
-          return best || document.querySelector("[data-c]");
-        },
-        prep: function () { if (mode !== "edit") setMode("edit"); },
-        t: "Click text. Type. That’s it.",
-        b: "Anything with a dashed outline is editable right on the page — click it and type. Every keystroke lands in your draft." },
-      { at: function () { return document.querySelector("[data-c]") || bar; },
-        t: "No outline? Probably still editable.",
-        b: "Some text earns its outline only after the page settles — or the moment you click it. If you can read it, try clicking it. And everything, outlined or not, is listed in its section’s panel — next step." },
-      { at: function () {
-          var best = null;
-          pills.some(function (pl) {
-            var r = pl.getBoundingClientRect();
-            if (r.height > 5 && r.top > 0 && r.bottom < window.innerHeight) { best = pl; return true; }
-            return false;
-          });
-          if (!best && pills.length) { pills[0].scrollIntoView({ block: "center" }); best = pills[0]; }
-          return best;
-        },
-        t: "Every section has its own Edit button",
-        b: "It opens that section’s panel: all of its text, pictures and items — including the fiddly bits that are hard to click on the page." },
-      { at: function () {
-          if (!side) {
-            var pl = pills.filter(function (x) { return x.isConnected; })[0];
-            if (pl) pl.click();
-          }
-          return side;
-        },
-        t: "The section panel",
-        b: "Content holds the words — hover a row to light up what it edits, click its name to fly to it. Images swaps pictures. Items adds, reorders or hides slides and cards." },
-      { at: function () {
-          return (side && side.querySelector("[data-aitoggle]")) || side || bar;
-        },
-        t: "✦ AI, in your brand’s voice",
-        b: "Every text field has an ✦ AI button. Tell it what you want — “shorter”, “punchier”, “more formal” — and pick the suggestion you like. It only ever writes drafts." },
-      { at: function () { return btnPub || bar; },
-        t: "Draft today. Live when YOU say.",
-        b: "Save draft keeps your work private. Publish makes this page’s drafts live for everyone. Reopen this guide any time with the ? button." },
-    ];
-  }
-
-  function startTour(force) {
-    if (tourEls) endTour();
-    if (!force) {
-      try { if (localStorage.getItem("mu.tour.v1") === "1") return; } catch (e) { /* fine */ }
-    }
-    var spot = el("div", "mu-tour-spot");
-    var card = el("div", "mu-tour-card");
-    document.body.appendChild(spot);
-    document.body.appendChild(card);
-    tourEls = { spot: spot, card: card };
-    tourStep = 0;
-    tourReposition = function () { placeTour(); };
-    window.addEventListener("scroll", tourReposition, true);
-    window.addEventListener("resize", tourReposition);
-    renderTour();
-  }
-
-  function endTour() {
-    if (!tourEls) return;
-    tourEls.spot.remove(); tourEls.card.remove();
-    window.removeEventListener("scroll", tourReposition, true);
-    window.removeEventListener("resize", tourReposition);
-    tourEls = null;
-    try { localStorage.setItem("mu.tour.v1", "1"); } catch (e) { /* fine */ }
-  }
-
-  function placeTour() {
-    if (!tourEls) return;
-    var st = tourSteps()[tourStep];
-    var target = st && st.at();
-    if (!target || !target.isConnected) return;
-    var r = target.getBoundingClientRect();
-    var pad = 8;
-    var sp = tourEls.spot.style;
-    sp.left = (r.left - pad) + "px";
-    sp.top = (r.top - pad) + "px";
-    sp.width = (r.width + pad * 2) + "px";
-    sp.height = (r.height + pad * 2) + "px";
-    var card = tourEls.card;
-    var ch = card.offsetHeight || 180, cw = card.offsetWidth || 340;
-    var below = r.bottom + pad + 14;
-    var top = below + ch < window.innerHeight - 12 ? below : Math.max(12, r.top - pad - 14 - ch);
-    var left = Math.max(12, Math.min(r.left, window.innerWidth - cw - 12));
-    card.style.top = top + "px";
-    card.style.left = left + "px";
-  }
-
-  function renderTour() {
-    if (!tourEls) return;
-    var steps = tourSteps();
-    var st = steps[tourStep];
-    if (!st) return endTour();
-    if (st.prep) { try { st.prep(); } catch (e) { /* keep touring */ } }
-    var target = st.at();
-    if (!target) {                       // nothing to point at: skip forward
-      tourStep++;
-      return tourStep < steps.length ? renderTour() : endTour();
-    }
-    if (target !== bar && target.scrollIntoView) {
-      var r0 = target.getBoundingClientRect();
-      if (r0.top < 60 || r0.bottom > window.innerHeight - 60) {
-        target.scrollIntoView({ block: "center" });
-      }
-    }
-    var card = tourEls.card;
-    card.innerHTML =
-      '<div class="mu-tour-step">' + (tourStep + 1) + " of " + steps.length + "</div>" +
-      '<div class="mu-tour-t">' + esc(st.t) + "</div>" +
-      '<div class="mu-tour-b">' + esc(st.b) + "</div>" +
-      '<div class="mu-tour-row">' +
-        '<button type="button" class="mu-tour-skip">Skip</button>' +
-        '<span class="mu-tour-dots">' + steps.map(function (_, i) {
-          return '<i class="' + (i === tourStep ? "on" : "") + '"></i>';
-        }).join("") + "</span>" +
-        (tourStep > 0 ? '<button type="button" class="mu-tour-back">Back</button>' : "") +
-        '<button type="button" class="mu-tour-next">' +
-          (tourStep === steps.length - 1 ? "Start editing" : "Next") + "</button>" +
-      "</div>";
-    card.querySelector(".mu-tour-skip").addEventListener("click", endTour);
-    card.querySelector(".mu-tour-next").addEventListener("click", function () {
-      tourStep++;
-      tourStep < steps.length ? renderTour() : endTour();
-    });
-    var back = card.querySelector(".mu-tour-back");
-    if (back) back.addEventListener("click", function () { tourStep--; renderTour(); });
-    setTimeout(placeTour, 60);   // after scroll settles enough to measure
-    setTimeout(placeTour, 400);
-  }
-
-  document.addEventListener("keydown", function (e) {
-    if (tourEls && e.key === "Escape") endTour();
-  });
 
   /* ---------------- modes ---------------- */
   function setMode(m) {
@@ -494,12 +333,7 @@
     if (m === "arrange") enterArrange(); else exitArrange();
     if (m === "edit") {
       loadComments();
-      loadMeta().then(function () {
-        addSectionPills(); watchDom();
-        var seen = false;
-        try { seen = localStorage.getItem("mu.tour.v1") === "1"; } catch (e) { /* private mode */ }
-        if (!seen) setTimeout(function () { startTour(false); }, 900);
-      });
+      loadMeta().then(function () { addSectionPills(); watchDom(); });
     } else {
       removeSectionPills();
       unwatchDom();
@@ -522,7 +356,7 @@
         var tgt = muts[i].target;
         if (tgt && tgt.nodeType !== 1) tgt = tgt.parentElement;
         if (!tgt || !tgt.closest) continue;
-        if (tgt.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-auth, .mu-tour-card")) continue;
+        if (tgt.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-auth")) continue;
         relevant = true;
       }
       if (!relevant) return;
@@ -700,7 +534,7 @@
     var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT);
     for (var n = walker.nextNode(); n; n = walker.nextNode()) {
       if (/^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE)$/.test(n.tagName)) continue;
-      if (n.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-auth, .mu-tour-card")) continue;
+      if (n.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-auth")) continue;
       var raw = n.textContent;
       if (raw && raw.length <= 600) {
         var t = lc(raw);
@@ -1124,7 +958,7 @@
     };
   }
 
-  function openSidebar(sectionKey, focusKey) {
+  function openSidebar(sectionKey, focusKey, doFocus) {
     var b = bucketsFor(sectionKey);
     if (!b) return;
     activeSection = sectionKey;
@@ -1145,10 +979,16 @@
       document.body.classList.add("mu-side-open");
     }
 
-    // land on a tab that actually has something in it
+    // land on the tab that holds what was clicked: an image lands on
+    // Images, everything else on Content
     if (focusKey) {
       var f = meta.get(focusKey);
-      if (f) sideTab = "all";
+      if (f) {
+        var wantsImages = f.tag === "media" && b.images.some(function (x) {
+          return x.key === focusKey.replace(/@poster$/, "");
+        });
+        sideTab = wantsImages ? "images" : "all";
+      }
     }
     var tabHas = sideTab === "items" ? b.lists.length
       : sideTab === "all" ? (b.all.length + b.details.length)
@@ -1189,7 +1029,7 @@
         renderTab(b);
       });
     });
-    renderTab(b, focusKey);
+    renderTab(b, focusKey, doFocus);
   }
 
   function tabBtn(key, label, n) {
@@ -1198,7 +1038,7 @@
       '<span class="mu-tab__n">' + n + "</span></button>";
   }
 
-  function renderTab(b, focusKey) {
+  function renderTab(b, focusKey, doFocus) {
     side.querySelectorAll("[data-tab]").forEach(function (t) {
       t.classList.toggle("on", t.dataset.tab === sideTab);
     });
@@ -1237,17 +1077,6 @@
         html = empty("Nothing editable in this section.");
       } else {
         html = "";
-        /* a one-time orientation card — dismissed once, remembered forever */
-        var tipOff = false;
-        try { tipOff = localStorage.getItem("mu.tip.v1") === "1"; } catch (e) { /* private mode */ }
-        if (!tipOff) {
-          html += '<div class="mu-tip" data-tip>' +
-            '<div class="mu-tip__t">Two ways to edit</div>' +
-            "Click any outlined text on the page to type straight into it — or edit here. " +
-            "Hover a field below to see where it lives on the page." +
-            '<button type="button" class="mu-tip__x" data-tipx aria-label="Dismiss">Got it</button>' +
-          "</div>";
-        }
         var cur = "__start";
         b.all.forEach(function (item) {
           var cl = clusterOf(nodeOf(item));
@@ -1309,20 +1138,54 @@
         });
       });
     }
-    var tipx = body.querySelector("[data-tipx]");
-    if (tipx) {
-      tipx.addEventListener("click", function () {
-        try { localStorage.setItem("mu.tip.v1", "1"); } catch (e) { /* private mode */ }
-        var t = body.querySelector("[data-tip]");
-        if (t) t.remove();
-      });
-    }
     wireSidebar();
     wireLists();
-    if (focusKey) {
-      var input = side.querySelector('[data-f="' + CSS.escape(focusKey) + '"]');
-      if (input) { input.focus(); input.scrollIntoView({ block: "center" }); }
+    if (focusKey) revealRow(focusKey, doFocus);
+  }
+
+  /* The drawer answers every click: the clicked thing's row scrolls to the
+     centre and pulses. Focus moves into the drawer only for things you don't
+     type on the page (images, links, states) — a text click keeps the cursor
+     on the page and the drawer just mirrors. */
+  function revealRow(key, doFocus) {
+    if (!side) return;
+    var input = side.querySelector('[data-f="' + CSS.escape(key) + '"]') ||
+                side.querySelector('[data-rich="' + CSS.escape(key) + '"]');
+    var row = side.querySelector('[data-row="' + CSS.escape(key) + '"]') ||
+              (input && input.closest(".mu-row, .mu-card, .mu-item"));
+    var target = row || input;
+    if (!target) return false;
+    target.scrollIntoView({ block: "center" });
+    (row || target).classList.remove("mu-row-flash");
+    void (row || target).offsetWidth;              // restart the pulse
+    (row || target).classList.add("mu-row-flash");
+    setTimeout(function () { (row || target).classList.remove("mu-row-flash"); }, 1700);
+    if (doFocus && input && input.focus) { input.focus(); if (input.select) input.select(); }
+    return true;
+  }
+
+  /* One door for every page click: same section, other section, any tab —
+     the drawer lands on the clicked thing immediately. */
+  function revealInDrawer(key, doFocus, node) {
+    var f = meta.get(key) || meta.get(key.replace(/@poster$/, ""));
+    var sec = null;
+    if (node && node.closest) {
+      var host = node.closest("[data-sec]");
+      if (host && sectionsById.has(host.dataset.sec)) sec = host.dataset.sec;
     }
+    if (!sec && f && f.section_key && sectionsById.has(f.section_key)) sec = f.section_key;
+    if (!sec) return;
+    if (!side || activeSection !== sec) { openSidebar(sec, key, doFocus); return; }
+    var bx = bucketsFor(sec);
+    if (!bx) return;
+    var wantsImages = f && f.tag === "media" && bx.images.some(function (x) {
+      return x.key === key.replace(/@poster$/, "");
+    });
+    var wantTab = wantsImages ? "images" : sideTab;
+    if (!wantsImages && !side.querySelector('[data-f="' + CSS.escape(key) + '"]') &&
+        !side.querySelector('[data-rich="' + CSS.escape(key) + '"]')) wantTab = "all";
+    if (wantTab !== sideTab) { sideTab = wantTab; renderTab(bx, key, doFocus); return; }
+    if (!revealRow(key, doFocus)) renderTab(bx, key, doFocus);
   }
 
   function section(title, inner) {
@@ -2006,49 +1869,90 @@
     return { kind: "text", key: hit.f.key, sec: bucketFor(node2, hit.f), node: node2, adopted: adopted };
   }
 
+  var lastNoFieldToast = 0;
+
   /* Nothing on the page navigates while editing. Before this, only [data-c]
      clicks were swallowed, so hitting a button's padding followed the link and
      threw away unsaved work. */
   document.addEventListener("click", function (e) {
     if (mode !== "edit" && mode !== "arrange") return;
     if (!e.target.closest) return;
-    if (e.target.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-grip, .mu-tour-card")) return;
+    if (e.target.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-grip")) return;
 
     var link = e.target.closest("a[href]");
     if (link) { e.preventDefault(); e.stopPropagation(); }
     if (mode !== "edit") return;
 
-    var node = e.target.closest("[data-c]");
+    /* Layered designs put decorative DIVs OVER the copy (the dossier's intro
+       sits under an absolutely-positioned layer) — the pointer hits the
+       overlay and the heading underneath never gets the click. When the
+       direct hit is not editable, look THROUGH the stack at this point for
+       the topmost thing that is. */
+    var hit = e.target;
+    if (!hit.closest("[data-c], [data-c-media], [data-c-link], [data-c-state]") &&
+        document.elementsFromPoint) {
+      var stack = document.elementsFromPoint(e.clientX, e.clientY) || [];
+      for (var si = 0; si < stack.length; si++) {
+        if (!stack[si].closest) continue;
+        if (stack[si].closest(".mu-side, .mu-bar, .mu-pill, .mu-toast")) continue;
+        if (stack[si].closest("[data-c], [data-c-media], [data-c-link], [data-c-state]")) {
+          hit = stack[si];
+          break;
+        }
+      }
+    }
+
+    var node = hit.closest("[data-c]");
     if (node) {
       e.preventDefault(); e.stopPropagation();
       beginTyping(node);
-      var secEl = node.closest("[data-sec]");
-      if (secEl && sectionsById.has(secEl.dataset.sec)) {
-        if (activeSection !== secEl.dataset.sec) openSidebar(secEl.dataset.sec, node.dataset.c);
-        else syncSidebarInput(node.dataset.c, node.hasAttribute("data-c-rich") ? node.innerHTML : node.textContent);
-      }
+      syncSidebarInput(node.dataset.c, node.hasAttribute("data-c-rich") ? node.innerHTML : node.textContent);
+      revealInDrawer(node.dataset.c, false, node);   // page keeps the cursor
       return;
     }
-    var media = e.target.closest("[data-c-media]");
+    var media = hit.closest("[data-c-media]");
     if (media) {
       e.preventDefault(); e.stopPropagation();
-      var ms = media.closest("[data-sec]");
-      if (ms && sectionsById.has(ms.dataset.sec)) openSidebar(ms.dataset.sec, media.dataset.cMedia);
+      revealInDrawer(media.dataset.cMedia, true, media);
+      return;
+    }
+    var linkHost = hit.closest("[data-c-link]");
+    if (linkHost) {
+      e.preventDefault(); e.stopPropagation();
+      revealInDrawer(linkHost.dataset.cLink, true, linkHost);
+      return;
+    }
+    var stateHost = hit.closest("[data-c-state]");
+    if (stateHost) {
+      e.preventDefault(); e.stopPropagation();
+      revealInDrawer(stateHost.dataset.cState, true, stateHost);
       return;
     }
 
-    var ad = lazyAdopt(e.target);
+    var ad = lazyAdopt(hit) || (hit !== e.target ? lazyAdopt(e.target) : null);
     if (ad) {
       e.preventDefault(); e.stopPropagation();
       if (ad.kind === "text" && ad.adopted) beginTyping(ad.node);
-      if (ad.sec) openSidebar(ad.sec, ad.key);
+      revealInDrawer(ad.key, ad.kind === "media", ad.node);
+      return;
+    }
+
+    /* Nothing editable behind this click — say so, or the user thinks the
+       CMS broke. Only for things that LOOK like content, and not more than
+       once every few seconds. */
+    var t = e.target;
+    var looksLikeContent = (t.closest && t.closest("img, video")) ||
+      (t.textContent && t.textContent.trim().length >= 3);
+    if (looksLikeContent && Date.now() - lastNoFieldToast > 3000) {
+      lastNoFieldToast = Date.now();
+      toast("This text is computed by the site — it can’t be edited here.", 2600);
     }
   }, true);
 
   ["mousedown", "touchstart", "pointerdown"].forEach(function (evt) {
     document.addEventListener(evt, function (e) {
       if (mode !== "edit" || !e.target.closest) return;
-      if (e.target.closest(".mu-bar, .mu-side, .mu-pill, .mu-tour-card")) return;
+      if (e.target.closest(".mu-bar, .mu-side, .mu-pill")) return;
       if (e.target.closest("[data-c], a[href]")) e.stopPropagation();
     }, true);
   });
