@@ -153,9 +153,13 @@ export const require_ = (action) => (req, res, next) => {
   next();
 };
 
+/* Behind TLS the cookie must never travel in the clear. Any deployed host
+   sets SECURE_COOKIES=1; local http development leaves it off. */
+const SECURE = process.env.SECURE_COOKIES ? "; Secure" : "";
+
 export const setSessionCookie = (res, token, expires) =>
   res.setHeader("Set-Cookie",
-    `${COOKIE}=${token}; HttpOnly; SameSite=Lax; Path=/; Expires=${expires.toUTCString()}`);
+    `${COOKIE}=${token}; HttpOnly; SameSite=Lax; Path=/; Expires=${expires.toUTCString()}${SECURE}`);
 
 export const clearSessionCookie = (res) =>
-  res.setHeader("Set-Cookie", `${COOKIE}=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0`);
+  res.setHeader("Set-Cookie", `${COOKIE}=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0${SECURE}`);

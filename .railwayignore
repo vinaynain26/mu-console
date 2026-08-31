@@ -3,6 +3,5 @@ node_modules/
 data/content.db
 *.bak
 *.log
-content.snapshot.db
-voice-guide.snapshot.md
 demo/
+.git/

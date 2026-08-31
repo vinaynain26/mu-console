@@ -186,6 +186,38 @@ manifest, DB dumps, SSR captures, audit output) are in
    editor UI yet.
 6. `mu-console` is a public repo holding page content — should be private.
 
+## Deployed — 2026-08-29
+
+Everything public runs through ONE domain (the app's), because Indian ISPs
+DNS-block `*.up.railway.app` wholesale:
+
+| | |
+|---|---|
+| Site | https://masters-union-hero-launch.vercel.app (Vercel, `vercel deploy --prod --archive=tgz`) |
+| Editing | same URL + `?edit=1`, or any studio "Edit on page ↗" link |
+| Studio | https://masters-union-hero-launch.vercel.app/console |
+| CMS origin | https://mu-console-production.up.railway.app (Railway, volume at /app/data) |
+| Accounts | all four seeded users share a rotated strong password (NOT `mastersunion`) — in the team vault, or reset via `ADMIN_PASSWORD` on Railway |
+
+`vercel.json` rewrites `/api /console /console-ui /page /assets /mu-assets`
+to Railway; the browser never sees the Railway domain. `content.snapshot.db`
++ `voice-guide.snapshot.md` (gitignored, shipped by `.railwayignore`) restore
+a fresh volume on first boot — never overwriting an existing database.
+
+**Deployment traps already paid for:**
+- The app's platform stamps `/assets/*` with `max-age=31536000, immutable`
+  at the routing layer — it owns that path for hashed bundles. The editor's
+  js/css served under it got cache-poisoned for a year. The editor now lives
+  under `/mu-assets/*`, which no framework claims.
+- The router strips `?edit=1` during hydration; on slow machines it won the
+  race against the boot script. The boot script now reads the NAVIGATION
+  ENTRY (`performance.getEntriesByType("navigation")`) — the URL the document
+  was requested with, which no router rewrite can touch.
+- The hero film shipped as 221MB of 4K; Vercel caps static files at 100MB.
+  It is re-encoded to 1080p (~63MB); the original is `campusFilm.orig.mp4`
+  at the site root, gitignored.
+- Bulk uploads to Vercel abort on this network — always `--archive=tgz`.
+
 ---
 
 ## Prompt for a new session

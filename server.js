@@ -39,7 +39,26 @@ const MU_PAUSE = "https://images.mastersunion.link/uploads/27062025/v1/MainButto
 
 /* ------------------------------------------------------------------ *
  * database
+ *
+ * On a fresh host (a deploy with an empty volume mounted at data/), restore
+ * the shipped snapshot so the site arrives with its content instead of an
+ * empty studio. Never overwrites an existing database.
  * ------------------------------------------------------------------ */
+{
+  const restore = [
+    ["content.snapshot.db", "data/content.db"],
+    ["voice-guide.snapshot.md", "data/voice-guide.md"],
+  ];
+  for (const [from, to] of restore) {
+    const live = path.join(ROOT, to);
+    const snap = path.join(ROOT, from);
+    if (!fs.existsSync(live) && fs.existsSync(snap)) {
+      fs.mkdirSync(path.dirname(live), { recursive: true });
+      fs.copyFileSync(snap, live);
+      console.log("  restored " + to + " from " + from);
+    }
+  }
+}
 const db = new DatabaseSync(path.join(ROOT, "data/content.db"));
 
 db.exec(`
@@ -293,6 +312,12 @@ app.set("view engine", "hbs");
 app.set("views", path.join(ROOT, "views"));
 
 app.use("/assets", express.static(path.join(ROOT, "public")));
+/* Same files, second name: when the CMS is proxied through the app's domain,
+   the app's build platform stamps /assets/* with a year of immutable caching
+   (that's ITS hashed-bundle directory) — which would freeze the editor's own
+   js/css on the first version a browser ever saw. /mu-assets is a path no
+   framework claims, so these files revalidate like normal. */
+app.use("/mu-assets", express.static(path.join(ROOT, "public")));
 app.use("/console-ui", express.static(path.join(ROOT, "admin")));
 app.use(express.json({ limit: "2mb" }));
 
@@ -314,7 +339,17 @@ app.use(auth.attachUser(db));
 /* ------------------------------------------------------------------ *
  * account API
  * ------------------------------------------------------------------ */
+const loginTries = new Map();   // ip -> { n, t }
 app.post("/api/account/login", (req, res) => {
+  /* a password guesser gets ten tries, then a cold quarter hour — in memory,
+     per address, which is plenty for a single-process deployment */
+  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress || "?";
+  const now = Date.now();
+  const slot = loginTries.get(ip) || { n: 0, t: now };
+  if (now - slot.t > 15 * 60e3) { slot.n = 0; slot.t = now; }
+  if (slot.n >= 10) return res.status(429).json({ error: "Too many attempts. Try again in a few minutes." });
+  slot.n++; loginTries.set(ip, slot);
+
   const { email = "", password = "" } = req.body || {};
   const row = db.prepare("SELECT * FROM users WHERE email = ?").get(String(email).trim().toLowerCase());
   // Same message either way — never reveal which half was wrong.
@@ -443,7 +478,9 @@ app.get("/page/:slug", (req, res, next) => {
     const path0 = page.slug === "mu-home" ? "/"
       : page.slug === "shared" ? "/"
         : "/" + page.slug.replace(/-/g, "/");
-    return res.redirect(base + path0);
+    /* whoever follows this link came from the studio — arm the on-page
+       editor so they land ready to work, not wondering where Edit went */
+    return res.redirect(base + path0 + "?edit=1");
   }
   const draft = req.query.preview === "1";
   const tab = String(req.query.tab || "highlight");
@@ -907,7 +944,13 @@ function ceilingFor(slug, tag) {
 }
 
 function loadField(slug, key) {
-  const f = db.prepare("SELECT * FROM page_content WHERE page_slug = ? AND field_key = ?").get(slug, key);
+  let f = db.prepare("SELECT * FROM page_content WHERE page_slug = ? AND field_key = ?").get(slug, key);
+  /* the inline editor asks from the page it is ON, but shared components'
+     copy lives in the shared bucket — same fallback the draft writer uses */
+  if (!f && slug !== "shared") {
+    f = db.prepare("SELECT * FROM page_content WHERE page_slug = 'shared' AND field_key = ?").get(key);
+    if (f) slug = "shared";
+  }
   if (!f) return null;
   const siblings = db.prepare(
     `SELECT tag, draft_value AS value FROM page_content

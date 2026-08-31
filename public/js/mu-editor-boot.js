@@ -17,8 +17,19 @@
 
   /* Once someone has signed in, the editor should simply be there — having to
      remember ?edit=1 on every page is not an editing experience. A visitor with
-     no stored session still gets nothing but this file. */
-  var asked = /[?&]edit=1\b/.test(location.search);
+     no stored session still gets nothing but this file.
+
+     The address bar is NOT a reliable witness: the app's router rewrites the
+     URL during hydration and can strip ?edit=1 before this script runs — a
+     race this script lost on slower machines. The navigation entry keeps the
+     URL the document was actually REQUESTED with, which no router rewrite can
+     touch. */
+  var navUrl = "";
+  try {
+    var pe = performance.getEntriesByType("navigation");
+    navUrl = (pe && pe[0] && pe[0].name) || "";
+  } catch (e) { /* ancient browser: the address bar will have to do */ }
+  var asked = /[?&]edit=1\b/.test(location.search) || /[?&]edit=1\b/.test(navUrl);
   var signedIn = !!localStorage.getItem(KEY);
   if (!asked && !signedIn) return;
 
@@ -118,7 +129,7 @@
       localStorage.removeItem(KEY);
       // only interrupt someone who actually asked to edit
       if (!asked) return;
-      try { await load(CMS + "/assets/css/inline-editor.css", true); } catch (e) { /* unstyled is still usable */ }
+      try { await load(CMS + "/mu-assets/css/inline-editor.css", true); } catch (e) { /* unstyled is still usable */ }
       user = await signIn();
       token = localStorage.getItem(KEY);
       if (!user || !token) return;
@@ -148,8 +159,8 @@
     };
 
     try {
-      await load(CMS + "/assets/css/inline-editor.css", true);
-      await load(CMS + "/assets/js/inline-editor.js", false);
+      await load(CMS + "/mu-assets/css/inline-editor.css", true);
+      await load(CMS + "/mu-assets/js/inline-editor.js", false);
     } catch (e) {
       console.error("[mu-cms] " + e.message);
     }
