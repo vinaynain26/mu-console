@@ -309,6 +309,13 @@
     bar.appendChild(studio);
 
     bar.appendChild(el("span", "mu-role", esc(BOOT.user.role)));
+
+    var help = el("button", "mu-btn mu-help", "?");
+    help.title = "How do I edit this site?";
+    help.setAttribute("aria-label", "Open the editing guide");
+    help.addEventListener("click", function () { startTour(true); });
+    bar.appendChild(help);
+
     document.body.appendChild(bar);
     refreshCount();
   }
@@ -319,6 +326,161 @@
     if (btnSave) btnSave.disabled = !n;
     if (btnUndo) btnUndo.disabled = !n;
   }
+
+  /* ---------------- guided tour ----------------
+     Eight spotlit steps for someone who has never seen a CMS. Plays itself
+     on the first Edit session, replays from the toolbar's ? button, and is
+     honest about the one thing that confuses everyone: an element without
+     a dashed outline is usually STILL editable. */
+  var tourEls = null, tourStep = 0, tourReposition = null;
+
+  function tourSteps() {
+    return [
+      { at: function () { return bar; },
+        t: "This edits your real website",
+        b: "Everything you change stays a private draft until you press Publish. Explore freely — you cannot break the live site by looking around or typing." },
+      { at: function () { return bar && bar.querySelector(".mu-seg"); },
+        t: "Your three modes",
+        b: "Browse is the normal site, exactly as visitors see it. Edit lets you change things. Publish, at the end, puts your drafts live." },
+      { at: function () {
+          var best = null;
+          Array.prototype.some.call(document.querySelectorAll("[data-c]"), function (n) {
+            var r = n.getBoundingClientRect();
+            if (r.height > 8 && r.top > 70 && r.bottom < window.innerHeight - 120) { best = n; return true; }
+            return false;
+          });
+          return best || document.querySelector("[data-c]");
+        },
+        prep: function () { if (mode !== "edit") setMode("edit"); },
+        t: "Click text. Type. That’s it.",
+        b: "Anything with a dashed outline is editable right on the page — click it and type. Every keystroke lands in your draft." },
+      { at: function () { return document.querySelector("[data-c]") || bar; },
+        t: "No outline? Probably still editable.",
+        b: "Some text earns its outline only after the page settles — or the moment you click it. If you can read it, try clicking it. And everything, outlined or not, is listed in its section’s panel — next step." },
+      { at: function () {
+          var best = null;
+          pills.some(function (pl) {
+            var r = pl.getBoundingClientRect();
+            if (r.height > 5 && r.top > 0 && r.bottom < window.innerHeight) { best = pl; return true; }
+            return false;
+          });
+          if (!best && pills.length) { pills[0].scrollIntoView({ block: "center" }); best = pills[0]; }
+          return best;
+        },
+        t: "Every section has its own Edit button",
+        b: "It opens that section’s panel: all of its text, pictures and items — including the fiddly bits that are hard to click on the page." },
+      { at: function () {
+          if (!side) {
+            var pl = pills.filter(function (x) { return x.isConnected; })[0];
+            if (pl) pl.click();
+          }
+          return side;
+        },
+        t: "The section panel",
+        b: "Content holds the words — hover a row to light up what it edits, click its name to fly to it. Images swaps pictures. Items adds, reorders or hides slides and cards." },
+      { at: function () {
+          return (side && side.querySelector("[data-aitoggle]")) || side || bar;
+        },
+        t: "✦ AI, in your brand’s voice",
+        b: "Every text field has an ✦ AI button. Tell it what you want — “shorter”, “punchier”, “more formal” — and pick the suggestion you like. It only ever writes drafts." },
+      { at: function () { return btnPub || bar; },
+        t: "Draft today. Live when YOU say.",
+        b: "Save draft keeps your work private. Publish makes this page’s drafts live for everyone. Reopen this guide any time with the ? button." },
+    ];
+  }
+
+  function startTour(force) {
+    if (tourEls) endTour();
+    if (!force) {
+      try { if (localStorage.getItem("mu.tour.v1") === "1") return; } catch (e) { /* fine */ }
+    }
+    var spot = el("div", "mu-tour-spot");
+    var card = el("div", "mu-tour-card");
+    document.body.appendChild(spot);
+    document.body.appendChild(card);
+    tourEls = { spot: spot, card: card };
+    tourStep = 0;
+    tourReposition = function () { placeTour(); };
+    window.addEventListener("scroll", tourReposition, true);
+    window.addEventListener("resize", tourReposition);
+    renderTour();
+  }
+
+  function endTour() {
+    if (!tourEls) return;
+    tourEls.spot.remove(); tourEls.card.remove();
+    window.removeEventListener("scroll", tourReposition, true);
+    window.removeEventListener("resize", tourReposition);
+    tourEls = null;
+    try { localStorage.setItem("mu.tour.v1", "1"); } catch (e) { /* fine */ }
+  }
+
+  function placeTour() {
+    if (!tourEls) return;
+    var st = tourSteps()[tourStep];
+    var target = st && st.at();
+    if (!target || !target.isConnected) return;
+    var r = target.getBoundingClientRect();
+    var pad = 8;
+    var sp = tourEls.spot.style;
+    sp.left = (r.left - pad) + "px";
+    sp.top = (r.top - pad) + "px";
+    sp.width = (r.width + pad * 2) + "px";
+    sp.height = (r.height + pad * 2) + "px";
+    var card = tourEls.card;
+    var ch = card.offsetHeight || 180, cw = card.offsetWidth || 340;
+    var below = r.bottom + pad + 14;
+    var top = below + ch < window.innerHeight - 12 ? below : Math.max(12, r.top - pad - 14 - ch);
+    var left = Math.max(12, Math.min(r.left, window.innerWidth - cw - 12));
+    card.style.top = top + "px";
+    card.style.left = left + "px";
+  }
+
+  function renderTour() {
+    if (!tourEls) return;
+    var steps = tourSteps();
+    var st = steps[tourStep];
+    if (!st) return endTour();
+    if (st.prep) { try { st.prep(); } catch (e) { /* keep touring */ } }
+    var target = st.at();
+    if (!target) {                       // nothing to point at: skip forward
+      tourStep++;
+      return tourStep < steps.length ? renderTour() : endTour();
+    }
+    if (target !== bar && target.scrollIntoView) {
+      var r0 = target.getBoundingClientRect();
+      if (r0.top < 60 || r0.bottom > window.innerHeight - 60) {
+        target.scrollIntoView({ block: "center" });
+      }
+    }
+    var card = tourEls.card;
+    card.innerHTML =
+      '<div class="mu-tour-step">' + (tourStep + 1) + " of " + steps.length + "</div>" +
+      '<div class="mu-tour-t">' + esc(st.t) + "</div>" +
+      '<div class="mu-tour-b">' + esc(st.b) + "</div>" +
+      '<div class="mu-tour-row">' +
+        '<button type="button" class="mu-tour-skip">Skip</button>' +
+        '<span class="mu-tour-dots">' + steps.map(function (_, i) {
+          return '<i class="' + (i === tourStep ? "on" : "") + '"></i>';
+        }).join("") + "</span>" +
+        (tourStep > 0 ? '<button type="button" class="mu-tour-back">Back</button>' : "") +
+        '<button type="button" class="mu-tour-next">' +
+          (tourStep === steps.length - 1 ? "Start editing" : "Next") + "</button>" +
+      "</div>";
+    card.querySelector(".mu-tour-skip").addEventListener("click", endTour);
+    card.querySelector(".mu-tour-next").addEventListener("click", function () {
+      tourStep++;
+      tourStep < steps.length ? renderTour() : endTour();
+    });
+    var back = card.querySelector(".mu-tour-back");
+    if (back) back.addEventListener("click", function () { tourStep--; renderTour(); });
+    setTimeout(placeTour, 60);   // after scroll settles enough to measure
+    setTimeout(placeTour, 400);
+  }
+
+  document.addEventListener("keydown", function (e) {
+    if (tourEls && e.key === "Escape") endTour();
+  });
 
   /* ---------------- modes ---------------- */
   function setMode(m) {
@@ -332,7 +494,12 @@
     if (m === "arrange") enterArrange(); else exitArrange();
     if (m === "edit") {
       loadComments();
-      loadMeta().then(function () { addSectionPills(); watchDom(); });
+      loadMeta().then(function () {
+        addSectionPills(); watchDom();
+        var seen = false;
+        try { seen = localStorage.getItem("mu.tour.v1") === "1"; } catch (e) { /* private mode */ }
+        if (!seen) setTimeout(function () { startTour(false); }, 900);
+      });
     } else {
       removeSectionPills();
       unwatchDom();
@@ -355,7 +522,7 @@
         var tgt = muts[i].target;
         if (tgt && tgt.nodeType !== 1) tgt = tgt.parentElement;
         if (!tgt || !tgt.closest) continue;
-        if (tgt.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-auth")) continue;
+        if (tgt.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-auth, .mu-tour-card")) continue;
         relevant = true;
       }
       if (!relevant) return;
@@ -533,7 +700,7 @@
     var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT);
     for (var n = walker.nextNode(); n; n = walker.nextNode()) {
       if (/^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE)$/.test(n.tagName)) continue;
-      if (n.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-auth")) continue;
+      if (n.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-auth, .mu-tour-card")) continue;
       var raw = n.textContent;
       if (raw && raw.length <= 600) {
         var t = lc(raw);
@@ -1845,7 +2012,7 @@
   document.addEventListener("click", function (e) {
     if (mode !== "edit" && mode !== "arrange") return;
     if (!e.target.closest) return;
-    if (e.target.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-grip")) return;
+    if (e.target.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-grip, .mu-tour-card")) return;
 
     var link = e.target.closest("a[href]");
     if (link) { e.preventDefault(); e.stopPropagation(); }
@@ -1881,7 +2048,7 @@
   ["mousedown", "touchstart", "pointerdown"].forEach(function (evt) {
     document.addEventListener(evt, function (e) {
       if (mode !== "edit" || !e.target.closest) return;
-      if (e.target.closest(".mu-bar, .mu-side, .mu-pill")) return;
+      if (e.target.closest(".mu-bar, .mu-side, .mu-pill, .mu-tour-card")) return;
       if (e.target.closest("[data-c], a[href]")) e.stopPropagation();
     }, true);
   });
