@@ -373,11 +373,97 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #005bd3;outline-offset:-4
   transform:translateX(-50%) !important;
 }
 
-/* ---------------- collections (Items tab) ---------------- */
-.mu-ib {
-  flex: 0 0 auto; border: 1px solid rgba(0,0,0,.16); background: #fff; color: #1a1a1a;
-  border-radius: 6px; padding: 2px 7px; font: inherit; font-size: 12px; line-height: 1.5;
-  cursor: pointer;
+/* A full-screen section's corners belong to the page's own fixed controls —
+   its pill holds the middle of the right edge instead. */
+.mu-pill--tall{
+  top:50% !important;
+  transform:translateY(-50%) !important;
 }
-.mu-ib:hover { background: #f2f2ef; }
-.mu-side [data-li] { border-bottom: 1px solid rgba(0,0,0,.07); }
+
+/* ---------------- the map between a row and the page ---------------- */
+/* hovering a row lights up the thing it edits; the label is the way there */
+.mu-side .mu-row[data-row]{border-radius:10px;padding:8px 9px;margin:0 -9px 7px}
+.mu-side .mu-row[data-row]:hover{background:rgba(0,91,211,.05)}
+.mu-side .mu-card[data-row]:hover{border-color:#9ec6ff}
+.mu-locate{cursor:pointer}
+.mu-locate:hover{color:#005bd3;text-decoration:underline;text-underline-offset:2px}
+.mu-here{outline:3px solid #005bd3 !important;outline-offset:3px;border-radius:2px}
+
+/* ---------------- orientation & reassurance ---------------- */
+.mu-tip{
+  position:relative;background:#f3f8ff;border:1px solid #cfe3ff;border-radius:10px;
+  padding:11px 12px 12px;margin-bottom:14px;font-size:12.5px;line-height:1.5;color:#0b3a75;
+}
+.mu-tip__t{font-weight:700;margin-bottom:2px;color:#00366d}
+.mu-tip__x{
+  display:block;margin-top:8px;border:1px solid #9ec6ff;background:#fff;color:#005bd3;
+  border-radius:7px;padding:4px 10px;font:inherit;font-weight:600;font-size:12px;cursor:pointer;
+}
+.mu-tip__x:hover{background:#eaf3ff}
+.mu-side__foot{
+  flex:none;padding:9px 14px;border-top:1px solid #e3e3e3;background:#fafbfb;
+  font-size:11.5px;line-height:1.45;color:#616161;
+}
+.mu-side__foot b{color:#303030}
+
+/* ---------------- the deeper level: details & accessibility ---------------- */
+.mu-adv{margin:16px -9px 4px;border-top:1px solid rgba(0,0,0,.07);padding:10px 9px 0}
+.mu-adv summary{
+  display:flex;align-items:center;gap:7px;cursor:pointer;list-style:none;
+  font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#8a8a8a;
+  padding:2px 0 8px;
+}
+.mu-adv summary::-webkit-details-marker{display:none}
+.mu-adv summary::before{content:"▸";font-size:10px;transition:transform .14s}
+.mu-adv[open] summary::before{transform:rotate(90deg)}
+.mu-adv summary:hover{color:#303030}
+
+/* ---------------- collections (Items tab) ---------------- */
+.mu-item{
+  border:1px solid #e3e3e3;border-radius:10px;background:#fff;
+  padding:10px 12px;margin-bottom:8px;
+}
+.mu-item.is-hidden{background:#fafbfb}
+.mu-item.is-hidden .mu-item__t{color:#8a8a8a}
+.mu-item__row{display:flex;align-items:center;gap:9px;min-width:0}
+.mu-item__n{
+  flex:none;width:22px;height:22px;display:grid;place-items:center;
+  background:#f1f2f4;border-radius:6px;font-size:11px;font-weight:700;color:#616161;
+}
+.mu-item__t{
+  flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  font-size:13.5px;font-weight:600;color:#1c1c1e;
+}
+.mu-item__t[data-goto]{cursor:pointer}
+.mu-item__t[data-goto]:hover{color:#005bd3}
+.mu-item__badge{
+  font-style:normal;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;
+  background:#f1f2f4;color:#616161;border-radius:20px;padding:2px 7px;vertical-align:1px;
+}
+.mu-item__badge--new{background:#e5f4e9;color:#1a7a36}
+/* actions appear when the card is engaged — the list stays calm otherwise.
+   (the containment sweep kills transitions on children; restored here) */
+.mu-item__acts{
+  display:flex;flex-wrap:wrap;gap:5px;margin-top:0;max-height:0;overflow:hidden;opacity:0;
+  transition:max-height .18s ease, opacity .14s ease, margin-top .18s ease !important;
+}
+.mu-item:hover .mu-item__acts,.mu-item:focus-within .mu-item__acts{max-height:60px;opacity:1;margin-top:9px}
+@media (prefers-reduced-motion: reduce){ .mu-item__acts{transition:opacity .14s ease !important} }
+.mu-ib{
+  flex:0 0 auto;border:1px solid #d4d7da;background:#fff;color:#303030;
+  border-radius:7px;padding:5px 10px;font:inherit;font-weight:600;font-size:12px;line-height:1;
+  cursor:pointer;
+}
+.mu-ib:hover{background:#f1f2f4;border-color:#b9bdc1}
+.mu-ib--danger{color:#8e1f0b}
+.mu-ib--danger:hover{background:#ffd6d6;border-color:#e0201a}
+.mu-add{
+  display:block;width:100%;margin:4px 0 8px;padding:10px;
+  border:1.5px dashed #b9bdc1;background:transparent;border-radius:10px;
+  font:inherit;font-weight:650;font-size:13px;color:#303030;cursor:pointer;
+}
+.mu-add:hover{border-color:#005bd3;color:#005bd3;background:rgba(0,91,211,.04)}
+@media (prefers-reduced-motion: reduce){
+  .mu-item__acts{transition:none}
+  .mu-adv summary::before{transition:none}
+}

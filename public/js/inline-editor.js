@@ -366,7 +366,17 @@
         // sections must never be re-drawn by sight
         if (!document.querySelector("[data-mu-vsec]")) return;
         obsMuted = true;   // our own attribute/span writes must not re-trigger the pass
-        try { regroupBySight(); } finally { setTimeout(function () { obsMuted = false; }, 0); }
+        try {
+          /* a React re-render that replaced a section's children takes the
+             injected pill with it — if any grouped section lost its pill,
+             re-place them all (addSectionPills runs the sight pass itself) */
+          var orphaned = false;
+          sectionsById.forEach(function (b) {
+            if (b.host && b.host.isConnected && !b.host.querySelector(".mu-pill")) orphaned = true;
+          });
+          if (orphaned) addSectionPills();
+          else regroupBySight();
+        } finally { setTimeout(function () { obsMuted = false; }, 0); }
       }, 350);
     });
     domObs.observe(document.body, { childList: true, subtree: true });
@@ -429,8 +439,8 @@
       if (!host || !bucket) return;
       if (!(host.offsetParent !== null || host.getClientRects().length)) return;
       var b0 = bucketsFor(key);
-      var total = b0 ? b0.all.length : 0;
-      if (!total) return;
+      var total = b0 ? b0.all.length + b0.details.length : 0;
+      if (!total && !(b0 && b0.lists.length)) return;
 
       var name = bucket.title || "section";
       if (name.length > 26) name = name.slice(0, 25).replace(/\s+\S*$/, "") + "\u2026";
@@ -447,6 +457,10 @@
       if (/^(HEADER|NAV)$/.test(host.tagName)) {
         // a bar's own corner holds its CTA — hang the pill just below instead
         pill.classList.add("mu-pill--bar");
+      } else if (host.getBoundingClientRect().height > window.innerHeight * 0.85) {
+        // a full-screen section's corners belong to the page's own fixed
+        // controls (Watch intro, arrows) — hold the right edge instead
+        pill.classList.add("mu-pill--tall");
       } else {
         // only sections that actually start under a pinned header need the offset
         var inset = topInset();
@@ -771,7 +785,17 @@
     var used = {};
     hosts.forEach(function (host, i) {
       var g = groups.get(host);
-      g.entries.sort(function (x, y) { return before(x.node, y.node); });
+      /* READING order, not DOM order: a two-column slide interleaves its
+         columns in the source, but a person scans top-to-bottom then
+         left-to-right — so should the sidebar. Rows within ~40px count as
+         one line; document order breaks the remaining ties. */
+      g.entries.sort(function (x, y) {
+        var a = x.node.getBoundingClientRect(), b = y.node.getBoundingClientRect();
+        var band = Math.round(a.top / 40) - Math.round(b.top / 40);
+        if (band) return band;
+        if (Math.abs(a.left - b.left) > 4) return a.left - b.left;
+        return before(x.node, y.node);
+      });
       var key = "v-" + (host.id || host.tagName.toLowerCase() + "-" + i);
       while (used[key]) key += "b";
       used[key] = 1;
@@ -831,8 +855,20 @@
     stat: "Stat", eyebrow: "Eyebrow", heading: "Heading", body: "Paragraph",
     proof: "Proof point", chips: "Chip", cta: "Button text", description: "Description",
     tagline: "Tagline", note: "Note", blurb: "Blurb", summary2: "Summary",
+    value: "Stat", statLabel: "Stat label", n: "Number", delta: "Change indicator",
+    pct: "Percentage", l: "Stat label", v: "Stat value", lede: "Intro paragraph",
+    titleItalic: "Heading (italic part)", designation: "Title & company",
+    chapter: "Tag", links: "Footer link", subtitle: "Subtitle", subheading: "Subheading",
+    month: "Month", day: "Day", time: "Time", source: "Source", duration: "Duration",
+    deadline: "Deadline", nextDate: "Date", location: "Location", company: "Company",
+    action: "Button text", kicker: "Kicker", question: "Question", answer: "Answer",
   };
-  var friendly = function (tag) { return FRIENDLY[tag] || "Text"; };
+  var friendly = function (tag) {
+    if (FRIENDLY[tag]) return FRIENDLY[tag];
+    // an unknown prop name still reads better spelled out than as "Text"
+    var t = String(tag || "").replace(/[-_]+/g, " ").replace(/([a-z])([A-Z])/g, "$1 $2");
+    return t ? t.charAt(0).toUpperCase() + t.slice(1).toLowerCase() : "Text";
+  };
 
   /* A fixed or sticky header would sit over a pill placed at the very top of the
      page, so measure whatever is pinned up there and start below it. */
@@ -883,10 +919,15 @@
        items in options and any CMS-born items as sibling field rows */
     var lists = fields.filter(function (f) { return f.type === "list"; });
 
-    var all = [];
+    /* Screen-reader labels and placeholders matter, but they are one level
+       deeper than the copy an editor came for — folded away, not mixed in. */
+    var DETAIL_TAGS = { "aria-label": 1, placeholder: 1, alt: 1 };
+
+    var all = [], details = [];
     fields.forEach(function (f) {
       if (f.type === "list") return;                             // shown on the Items tab
       if (f.tag === "image" && /@poster$/.test(f.key)) return;   // shown with its media
+      if (DETAIL_TAGS[f.tag] && !consumed[f.key]) { details.push(f); return; }
       if (consumed[f.key]) {
         // emit the button card at the position of its FIRST field
         var g = buttons.filter(function (x) {
@@ -905,6 +946,7 @@
     return {
       title: bucket.title,
       all: all,
+      details: details,
       buttons: buttons,
       lists: lists,
       images: fields.filter(function (f) {
@@ -941,29 +983,36 @@
       var f = meta.get(focusKey);
       if (f) sideTab = "all";
     }
-    var tabHas = sideTab === "items" ? b.lists.length : (b[sideTab] && b[sideTab].length);
+    var tabHas = sideTab === "items" ? b.lists.length
+      : sideTab === "all" ? (b.all.length + b.details.length)
+      : (b[sideTab] && b[sideTab].length);
     if (!tabHas) {
-      sideTab = ["all", "buttons", "images"].filter(function (t) { return b[t].length; })[0] ||
-        (b.lists.length ? "items" : "all");
+      sideTab = (b.all.length + b.details.length) ? "all"
+        : ["buttons", "images"].filter(function (t) { return b[t].length; })[0] ||
+          (b.lists.length ? "items" : "all");
     }
+
+    /* only tabs that hold something — a greyed-out tab is a question a
+       non-developer cannot answer */
+    var tabsHtml =
+      (b.all.length || b.details.length ? tabBtn("all", "Content", b.all.length + b.details.length) : "") +
+      (b.buttons.length ? tabBtn("buttons", "Buttons", b.buttons.length) : "") +
+      (b.images.length ? tabBtn("images", "Images", b.images.length) : "") +
+      (b.lists.length ? tabBtn("items", "Items", b.lists.reduce(function (n, f) {
+        return n + listItemsOf(f).length;
+      }, 0)) : "");
 
     side.innerHTML =
       '<div class="mu-side__head">' +
         '<div class="mu-side__title">' +
-          '<div class="mu-side__eyebrow">Editing section</div>' +
+          '<div class="mu-side__eyebrow">You’re editing</div>' +
           '<div class="mu-side__h">' + esc(b.title) + "</div>" +
         "</div>" +
         '<button class="mu-side__x" type="button" title="Close (Esc)" aria-label="Close">✕</button>' +
       "</div>" +
-      '<div class="mu-tabs">' +
-        tabBtn("all", "All", b.all.length) +
-        tabBtn("buttons", "Buttons", b.buttons.length) +
-        tabBtn("images", "Images", b.images.length) +
-        (b.lists.length ? tabBtn("items", "Items", b.lists.reduce(function (n, f) {
-          return n + listItemsOf(f).length;
-        }, 0)) : "") +
-      "</div>" +
-      '<div class="mu-side__body" id="mu-side-body"></div>';
+      '<div class="mu-tabs">' + tabsHtml + "</div>" +
+      '<div class="mu-side__body" id="mu-side-body"></div>' +
+      '<div class="mu-side__foot">Everything here is a <b>draft</b> — nothing changes on the live site until you press Publish.</div>';
 
     side.querySelector(".mu-side__x").addEventListener("click", closeSidebar);
     side.querySelectorAll("[data-tab]").forEach(function (t) {
@@ -1017,10 +1066,21 @@
         }
         return last;
       };
-      if (!b.all.length) {
+      if (!b.all.length && !b.details.length) {
         html = empty("Nothing editable in this section.");
       } else {
         html = "";
+        /* a one-time orientation card — dismissed once, remembered forever */
+        var tipOff = false;
+        try { tipOff = localStorage.getItem("mu.tip.v1") === "1"; } catch (e) { /* private mode */ }
+        if (!tipOff) {
+          html += '<div class="mu-tip" data-tip>' +
+            '<div class="mu-tip__t">Two ways to edit</div>' +
+            "Click any outlined text on the page to type straight into it — or edit here. " +
+            "Hover a field below to see where it lives on the page." +
+            '<button type="button" class="mu-tip__x" data-tipx aria-label="Dismiss">Got it</button>' +
+          "</div>";
+        }
         var cur = "__start";
         b.all.forEach(function (item) {
           var cl = clusterOf(nodeOf(item));
@@ -1033,6 +1093,13 @@
           else if (item.kind === "media") html += mediaRow(item.field);
           else html += textRow(item.field);
         });
+        /* the deeper level: screen-reader labels, placeholders, image
+           descriptions — present, labelled, out of the way */
+        if (b.details.length) {
+          html += '<details class="mu-adv" data-adv><summary>Details &amp; accessibility' +
+            '<span class="mu-tab__n">' + b.details.length + "</span></summary>" +
+            b.details.map(textRow).join("") + "</details>";
+        }
       }
     } else if (sideTab === "buttons") {
       html = b.buttons.length ? b.buttons.map(buttonRow).join("") : empty("No buttons or links in this section.");
@@ -1042,12 +1109,12 @@
       html = b.images.length ? b.images.map(mediaRow).join("") : empty("No images in this section.");
     }
     /* Tabs fix most of the scrolling, but a few sections genuinely hold dozens
-       of fields. Offer a filter there rather than making everyone scroll. */
-    var count = sideTab === "all" ? b.all.length
+       of fields. Offer a search there rather than making everyone scroll. */
+    var count = sideTab === "all" ? b.all.length + b.details.length
               : sideTab === "buttons" ? b.buttons.length
               : sideTab === "items" ? b.lists.length : b.images.length;
-    body.innerHTML = (count > 8
-      ? '<input type="search" class="mu-filter" placeholder="Filter ' + count + ' items…" data-filter>'
+    body.innerHTML = (count > 5
+      ? '<input type="search" class="mu-filter" placeholder="Search this section…" data-filter>'
       : "") + '<div data-list>' + html + "</div>";
     body.scrollTop = 0;
 
@@ -1055,12 +1122,32 @@
     if (filter) {
       filter.addEventListener("input", function () {
         var q = filter.value.trim().toLowerCase();
+        var adv = body.querySelector("[data-adv]");
+        if (adv && q) adv.open = true;   // a search must be able to find the folded rows
         body.querySelectorAll("[data-row], .mu-card").forEach(function (row) {
           if (!q) { row.style.display = ""; return; }
           var input = row.querySelector("[data-f]");
           var text = ((input && input.value) || "") + " " + row.textContent;
           row.style.display = text.toLowerCase().indexOf(q) >= 0 ? "" : "none";
         });
+        // cluster headings with nothing visible under them just add noise
+        body.querySelectorAll("[data-list] > .mu-grp__h").forEach(function (h) {
+          var n = h.nextElementSibling, any = false;
+          while (n && !n.classList.contains("mu-grp__h")) {
+            if ((n.hasAttribute("data-row") || n.classList.contains("mu-card")) &&
+                n.style.display !== "none") { any = true; break; }
+            n = n.nextElementSibling;
+          }
+          h.style.display = !q || any ? "" : "none";
+        });
+      });
+    }
+    var tipx = body.querySelector("[data-tipx]");
+    if (tipx) {
+      tipx.addEventListener("click", function () {
+        try { localStorage.setItem("mu.tip.v1", "1"); } catch (e) { /* private mode */ }
+        var t = body.querySelector("[data-tip]");
+        if (t) t.remove();
       });
     }
     wireSidebar();
@@ -1132,31 +1219,52 @@
     return out;
   }
 
+  /* the field to jump to when someone clicks an item's name */
+  function itemGotoKey(it) {
+    var order = ["headline", "title", "name", "label", "heading"];
+    for (var i = 0; i < order.length; i++) {
+      var v = it.fields && it.fields[order[i]];
+      if (v) return typeof v === "string" ? v : v.key;
+    }
+    for (var p in it.fields) {
+      var w = it.fields[p];
+      return typeof w === "string" ? w : w.key;
+    }
+    return null;
+  }
+
   function listPanel(f) {
     var items = listItemsOf(f);
     var name = (f.key.split("list:")[1] || "Items").replace(/[_-]+/g, " ").toLowerCase()
       .replace(/^raw /, "").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+    var shown = items.filter(function (x) { return !x.hidden; }).length;
     var rows = items.map(function (it, i) {
-      return '<div class="mu-card" data-li="' + esc(it.id) + '" data-lk="' + esc(f.key) + '">' +
-        '<div style="display:flex;align-items:center;gap:6px;padding:2px 0;">' +
-          '<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;' +
-            (it.hidden ? "opacity:.45;text-decoration:line-through;" : "") + '">' +
-            (i + 1) + ". " + esc(it.label) +
-            (it.cms ? ' <em style="opacity:.55;font-style:normal;font-size:11px;">— added here</em>' : "") +
+      var goto_ = itemGotoKey(it);
+      return '<div class="mu-item' + (it.hidden ? " is-hidden" : "") + '" data-li="' + esc(it.id) + '" data-lk="' + esc(f.key) + '">' +
+        '<div class="mu-item__row">' +
+          '<span class="mu-item__n">' + (i + 1) + "</span>" +
+          '<span class="mu-item__t"' + (goto_ ? ' data-goto="' + esc(goto_) + '" title="Edit this item’s text"' : "") + ">" +
+            esc(it.label) +
+            (it.hidden ? ' <em class="mu-item__badge">hidden</em>' : "") +
+            (it.cms ? ' <em class="mu-item__badge mu-item__badge--new">added here</em>' : "") +
           "</span>" +
+        "</div>" +
+        '<div class="mu-item__acts">' +
           '<button type="button" class="mu-ib" data-lact="up" title="Move up">↑</button>' +
           '<button type="button" class="mu-ib" data-lact="down" title="Move down">↓</button>' +
-          '<button type="button" class="mu-ib" data-lact="hide" title="' + (it.hidden ? "Show" : "Hide") + '">' +
-            (it.hidden ? "🚫" : "👁") + "</button>" +
-          '<button type="button" class="mu-ib" data-lact="dup" title="Duplicate">⧉</button>' +
-          (it.cms ? '<button type="button" class="mu-ib" data-lact="del" title="Delete">✕</button>' : "") +
-        "</div></div>";
+          '<button type="button" class="mu-ib" data-lact="hide">' + (it.hidden ? "Show" : "Hide") + "</button>" +
+          '<button type="button" class="mu-ib" data-lact="dup">Duplicate</button>' +
+          (it.cms ? '<button type="button" class="mu-ib mu-ib--danger" data-lact="del">Delete</button>' : "") +
+          (goto_ ? '<button type="button" class="mu-ib" data-goto="' + esc(goto_) + '">Edit text →</button>' : "") +
+        "</div>" +
+      "</div>";
     }).join("");
-    return section(name + " · " + items.filter(function (x) { return !x.hidden; }).length + " shown",
+    return section(name + " — " + shown + " on the page",
       rows +
-      '<button type="button" class="mu-ib" data-ladd="' + esc(f.key) + '" style="margin:8px 0;padding:6px 12px;">＋ Add item</button>' +
-      '<div class="mu-empty" style="padding:4px 0 0;font-size:11px;">Order and visibility save to the draft straight away. ' +
-      "The code's own items can be hidden, never deleted; items added here edit like any other copy — find them on the All tab.</div>");
+      '<button type="button" class="mu-add" data-ladd="' + esc(f.key) + '">＋ Add ' +
+        esc(name.replace(/s$/i, "").toLowerCase() || "item") + "</button>" +
+      '<div class="mu-hint">Reordering and hiding save to your draft immediately. ' +
+      "Built-in items can be hidden, never deleted. Click an item’s name to edit its text.</div>");
   }
 
   async function saveStructure(f, items) {
@@ -1205,7 +1313,7 @@
             again.forEach(function (x, i) { if (x.id === out.id) ni = i; });
             if (ni >= 0) { var moved = again.splice(ni, 1)[0]; again.splice(idx + 1, 0, moved); }
             await saveStructure(f, again);
-            toast("Item duplicated — its copy is on the All tab");
+            toast("Duplicated — click its name to edit the copy");
           } else if (act === "del") {
             if (!window.confirm("Delete this item? Its wording is kept in the CMS history.")) return;
             await api("/api/pages/" + SLUG + "/lists/" + encodeURIComponent(listKey) + "/items/" + encodeURIComponent(id),
@@ -1228,8 +1336,25 @@
             { method: "POST", body: JSON.stringify({}) });
           adoptCmsItem(f, out, null);
           await saveStructure(f, listItemsOf(f));
-          toast("Item added — fill its text on the All tab");
+          toast("Added — now give it some text");
+          /* take them straight to the new item's first empty field */
+          var firstKey = out.fields && (out.fields.headline || out.fields.title ||
+            out.fields.name || out.fields.label || out.fields[Object.keys(out.fields)[0]]);
+          if (firstKey) {
+            sideTab = "all";
+            var bb = bucketsFor(activeSection);
+            if (bb) renderTab(bb, firstKey);
+          }
         } catch (e) { toast(e.message); }
+      });
+    });
+    /* an item's name (or its "Edit text" button) jumps to its copy */
+    side.querySelectorAll("[data-goto]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        var key = el.getAttribute("data-goto");
+        sideTab = "all";
+        var bb = bucketsFor(activeSection);
+        if (bb) renderTab(bb, key);
       });
     });
   }
@@ -1390,7 +1515,42 @@
       "</div>";
   }
 
+  function nodeForKey(key) {
+    var sel = CSS.escape(key.replace(/@poster$/, ""));
+    return document.querySelector(
+      '[data-c="' + sel + '"], [data-c-media="' + sel + '"], ' +
+      'a[data-c-link="' + sel + '"], [data-c-state="' + sel + '"]');
+  }
+
   function wireSidebar() {
+    /* the map between a row and the thing it edits: hovering the row lights
+       the element up on the page; clicking the row's label glides to it */
+    side.querySelectorAll("[data-row]").forEach(function (row) {
+      var key = row.getAttribute("data-row");
+      row.addEventListener("mouseenter", function () {
+        var n = nodeForKey(key);
+        if (n) n.classList.add("mu-here");
+      });
+      row.addEventListener("mouseleave", function () {
+        var n = nodeForKey(key);
+        if (n) n.classList.remove("mu-here");
+      });
+      var lab = row.querySelector(".mu-lab > span:first-child");
+      if (lab) {
+        lab.classList.add("mu-locate");
+        lab.title = "Show me where this is on the page";
+        lab.addEventListener("click", function () {
+          var n = nodeForKey(key);
+          if (!n) return;
+          var y = window.scrollY + n.getBoundingClientRect().top - window.innerHeight / 3;
+          var lenis = window.__lenis;
+          if (lenis && lenis.scrollTo) lenis.scrollTo(Math.max(0, y), { duration: 0.9 });
+          else window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+          n.classList.add("mu-spot");
+          setTimeout(function () { n.classList.remove("mu-spot"); }, 1500);
+        });
+      }
+    });
     side.querySelectorAll("[data-f]").forEach(function (input) {
       var ev = input.tagName === "SELECT" ? "change" : "input";
       input.addEventListener(ev, function () {
@@ -1519,7 +1679,7 @@
   async function runAI(kind, key, btn) {
     var out = side.querySelector('[data-out="' + CSS.escape(key) + '"]');
     var ins = side.querySelector('[data-ins="' + CSS.escape(key) + '"]');
-    out.innerHTML = '<div class="mu-hint"><span class="mu-spin"></span> Claude is writing…</div>';
+    out.innerHTML = '<div class="mu-hint"><span class="mu-spin"></span> Writing in the house voice…</div>';
     btn.disabled = true;
     try {
       var r = await api("/api/pages/" + SLUG + "/ai/" + kind, {
