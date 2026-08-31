@@ -1836,6 +1836,25 @@
       return { kind: "media", key: found.key, sec: bucketFor(mediaEl, found), node: mediaEl };
     }
 
+    /* an empty image slot renders as a bare placeholder box — no <img>, no
+       anchor. Its field's label is the card's own headline, so walk up a few
+       levels and match that label against the surrounding card's text. */
+    var el0 = target, d0 = 0;
+    while (el0 && el0 !== document.body && d0 < 4) {
+      var boxText = normText(el0.textContent).toLowerCase();
+      var r0 = el0.getBoundingClientRect ? el0.getBoundingClientRect() : null;
+      if (boxText.length >= 12 && r0 && r0.height < 700) {
+        var slot = null;
+        meta.forEach(function (f) {
+          if (slot || f.tag !== "media" || (f.value || "").trim()) return;
+          var lab = normText(String(f.label || "").replace(/\u2026$/, "")).toLowerCase();
+          if (lab.length >= 12 && boxText.indexOf(lab) >= 0) slot = f;
+        });
+        if (slot) return { kind: "media", key: slot.key, sec: bucketFor(el0, slot), node: el0 };
+      }
+      el0 = el0.parentElement; d0++;
+    }
+
     /* text: the clicked element (or a close ancestor) holds a field's value —
        as its whole text, or as one text node beside styled siblings. Compared
        lowercased: the page often renders uppercase via CSS. */
@@ -1908,10 +1927,15 @@
     var hit = e.target;
     if (!hit.closest("[data-c], [data-c-media], [data-c-link], [data-c-state]") &&
         document.elementsFromPoint) {
+      /* stay inside the section that was clicked: the sticky hero sits BEHIND
+         the whole page, and without this guard it wins every click that lands
+         on an empty patch of any other section */
+      var secHost = e.target.closest("[data-sec]");
       var stack = document.elementsFromPoint(e.clientX, e.clientY) || [];
       for (var si = 0; si < stack.length; si++) {
         if (!stack[si].closest) continue;
         if (stack[si].closest(".mu-side, .mu-bar, .mu-pill, .mu-toast")) continue;
+        if (secHost && !secHost.contains(stack[si])) continue;
         if (stack[si].closest("[data-c], [data-c-media], [data-c-link], [data-c-state]")) {
           hit = stack[si];
           break;
