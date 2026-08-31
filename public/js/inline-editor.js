@@ -1141,26 +1141,42 @@
     wireSidebar();
     wireLists();
     if (focusKey) revealRow(focusKey, doFocus);
+    else if (activeFieldKey) markActiveRow(activeFieldKey);
   }
 
   /* The drawer answers every click: the clicked thing's row scrolls to the
      centre and pulses. Focus moves into the drawer only for things you don't
      type on the page (images, links, states) — a text click keeps the cursor
      on the page and the drawer just mirrors. */
-  function revealRow(key, doFocus) {
-    if (!side) return;
+  var activeFieldKey = null;
+
+  /* the row being edited keeps a solid ring — like the element on the page —
+     until another field is chosen; the pulse only announces the arrival */
+  function markActiveRow(key) {
+    if (!side) return null;
+    Array.prototype.forEach.call(side.querySelectorAll(".mu-row-active"), function (n) {
+      n.classList.remove("mu-row-active");
+    });
+    activeFieldKey = key;
     var input = side.querySelector('[data-f="' + CSS.escape(key) + '"]') ||
                 side.querySelector('[data-rich="' + CSS.escape(key) + '"]');
     var row = side.querySelector('[data-row="' + CSS.escape(key) + '"]') ||
               (input && input.closest(".mu-row, .mu-card, .mu-item"));
     var target = row || input;
-    if (!target) return false;
-    target.scrollIntoView({ block: "center" });
-    (row || target).classList.remove("mu-row-flash");
-    void (row || target).offsetWidth;              // restart the pulse
-    (row || target).classList.add("mu-row-flash");
-    setTimeout(function () { (row || target).classList.remove("mu-row-flash"); }, 1700);
-    if (doFocus && input && input.focus) { input.focus(); if (input.select) input.select(); }
+    if (target) target.classList.add("mu-row-active");
+    return { row: target, input: input };
+  }
+
+  function revealRow(key, doFocus) {
+    if (!side) return;
+    var m = markActiveRow(key);
+    if (!m || !m.row) return false;
+    m.row.scrollIntoView({ block: "center" });
+    m.row.classList.remove("mu-row-flash");
+    void m.row.offsetWidth;              // restart the pulse
+    m.row.classList.add("mu-row-flash");
+    setTimeout(function () { m.row.classList.remove("mu-row-flash"); }, 1700);
+    if (doFocus && m.input && m.input.focus) { m.input.focus(); if (m.input.select) m.input.select(); }
     return true;
   }
 
@@ -1590,6 +1606,7 @@
         if (media) media.style.display = isVideo(input.value) ? "" : "none";
       });
       input.addEventListener("focus", function () {
+        markActiveRow(input.dataset.f);
         var n = document.querySelector('[data-c="' + CSS.escape(input.dataset.f) + '"]') ||
                 document.querySelector('[data-c-media="' + CSS.escape(input.dataset.f) + '"]');
         if (n) {

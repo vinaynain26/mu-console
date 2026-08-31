@@ -467,3 +467,10 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #005bd3;outline-offset:-4
 @media (prefers-reduced-motion: reduce){
   .mu-row-flash{ animation:none; background:rgba(0,91,211,.10); border-radius:10px }
 }
+
+/* the field being edited stays ringed until another is chosen */
+.mu-row-active{
+  box-shadow:0 0 0 2px #005bd3 inset;
+  background:rgba(0,91,211,.05);
+  border-radius:10px;
+}
