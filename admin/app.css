@@ -321,10 +321,30 @@ select{appearance:none}
   transition:box-shadow var(--dur-fast) var(--ease), transform var(--dur) var(--ease);
 }
 .pcard:hover .pthumb{box-shadow:inset 0 0 0 1px rgba(255,255,255,.28), var(--vignette); transform:translateY(-2px)}
-.pmono{
-  font-family:var(--font-display); font-size:27px; font-weight:700; letter-spacing:-.01em;
-  color:var(--ink-3); user-select:none;
+/* the tile is a little cover: the page name typeset the MU way —
+   grotesque first word, serif italic rest, gradient brush underline */
+.pcover{
+  position:absolute; inset:0; display:flex; flex-direction:column;
+  justify-content:flex-end; align-items:flex-start; gap:9px;
+  padding:16px 48px 16px 18px; pointer-events:none;
 }
+.pcover__t{
+  font-family:var(--font-display); font-size:23px; font-weight:700;
+  letter-spacing:-.02em; line-height:1.06; color:var(--ink); text-wrap:balance;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+}
+.pcover__t.small{font-size:18.5px}
+.pcover__t em{
+  font-family:var(--font-serif); font-style:italic; font-weight:400;
+  font-size:1.1em; letter-spacing:0;
+}
+.pcover__u{
+  width:96px; height:5px; flex:none; background:var(--mu-gradient);
+  -webkit-mask:url('/console-ui/assets/underline-1.svg') no-repeat 0 50% / 100% auto;
+  mask:url('/console-ui/assets/underline-1.svg') no-repeat 0 50% / 100% auto;
+  transition:width var(--dur) var(--ease);
+}
+.pcard:hover .pcover__u{width:132px}
 .pchip{
   position:absolute; left:10px; top:10px; z-index:2;
   font-size:10px; font-weight:700; letter-spacing:.02em; color:var(--ink-2);
@@ -341,16 +361,12 @@ select{appearance:none}
 }
 .pcard:hover .pview,.pview:focus-visible{opacity:1; translate:0 0}
 .pview:hover{background:#FFF; color:#000}
-.pbody{padding:10px 2px 0; display:flex; align-items:baseline; gap:8px}
-.pbody .grow{flex:1; min-width:0}
-.pname{
-  display:block; font-size:13.5px; font-weight:700; line-height:1.3;
-  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-decoration:none;
-}
+.pbody{padding:9px 4px 0}
 /* stretched link: the whole card clicks through to Edit */
-.pname::after{content:''; position:absolute; inset:0; border-radius:var(--r-lg)}
-.pname:focus-visible::after{outline:2px solid var(--focus); outline-offset:2px}
-.pmeta{color:var(--ink-3); font-size:12px; margin-top:3px; display:flex; align-items:center; gap:6px; white-space:nowrap; overflow:hidden}
+.plink{position:absolute; inset:0; border-radius:var(--r-lg); z-index:1}
+.plink:focus-visible{outline:2px solid var(--focus); outline-offset:2px}
+.pview{z-index:2}
+.pmeta{color:var(--ink-3); font-size:12px; display:flex; align-items:center; gap:6px; white-space:nowrap; overflow:hidden}
 .pmeta .dot{width:6px;height:6px}
 .pmeta .ok{color:var(--ok-ink)}
 .pmeta .warn{color:var(--warn-ink)}
