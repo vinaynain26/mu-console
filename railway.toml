@@ -1,0 +1,3 @@
+[deploy]
+sleepApplication = false
+restartPolicyType = "ON_FAILURE"

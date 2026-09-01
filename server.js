@@ -10,6 +10,7 @@
  * The template is untouched apart from hardcoded text becoming {{{c "key"}}}.
  */
 import express from "express";
+import compression from "compression";
 import { engine } from "express-handlebars";
 import crypto from "node:crypto";
 import path from "node:path";
@@ -320,6 +321,9 @@ app.use("/assets", express.static(path.join(ROOT, "public")));
 app.use("/mu-assets", express.static(path.join(ROOT, "public")));
 app.use("/console-ui", express.static(path.join(ROOT, "admin")));
 app.use(express.json({ limit: "2mb" }));
+/* a home page's field payload is megabyte-class JSON; on a phone in the
+   real world, uncompressed is the difference between instant and broken */
+app.use(compression());
 
 /* The inline editor runs inside the instrumented app, on a different origin.
    Credentials travel as a bearer token rather than a cookie, so the wildcard

@@ -362,8 +362,13 @@
       }
       if (!relevant) return;
       clearTimeout(readoptTimer);
-      readoptTimer = setTimeout(function () {
+      var runPass = function () {
         if (mode !== "edit" || live || !meta.size) return;
+        if (Date.now() - lastScrollTs < 350) {   // the page is still moving — come back later
+          clearTimeout(readoptTimer);
+          readoptTimer = setTimeout(runPass, 400);
+          return;
+        }
         // only pages the sight pass grouped — a template page's server-sent
         // sections must never be re-drawn by sight
         if (!document.querySelector("[data-mu-vsec]")) return;
@@ -379,7 +384,8 @@
           if (orphaned) addSectionPills();
           else regroupBySight();
         } finally { setTimeout(function () { obsMuted = false; }, 0); }
-      }, 350);
+      };
+      readoptTimer = setTimeout(runPass, 350);
     });
     domObs.observe(document.body, { childList: true, subtree: true });
   }
@@ -387,6 +393,11 @@
      it steps aside — the next click on anything brings it back, opened to
      wherever you are now. Never fires while typing, and never while your
      cursor is working inside the drawer itself. */
+  function snapMargin() {
+    document.body.style.transition = "none";
+    setTimeout(function () { document.body.style.transition = ""; }, 80);
+  }
+  var lastScrollTs = 0;
   var scrollAway = null, scrollAwayPending = false;
   function watchScrollAway() {
     if (scrollAway) return;
@@ -394,6 +405,7 @@
       /* the drawer scrolling ITSELF is not the page moving on */
       if (e && e.target && e.target.nodeType === 1 && e.target.closest &&
           e.target.closest(".mu-side")) return;
+      lastScrollTs = Date.now();
       if (scrollAwayPending) return;
       scrollAwayPending = true;
       requestAnimationFrame(function () {
@@ -402,7 +414,7 @@
         var host = document.querySelector('[data-sec="' + CSS.escape(activeSection) + '"]');
         if (!host || !host.isConnected) return;
         var r = host.getBoundingClientRect();
-        if (r.bottom < 60 || r.top > window.innerHeight - 60) { stopTyping(); closeSidebar(); return; }
+        if (r.bottom < 60 || r.top > window.innerHeight - 60) { stopTyping(); snapMargin(); closeSidebar(); return; }
         /* What you are READING is whatever owns the middle of the screen —
            a sliver of the old section clipping the top edge does not count,
            and a sticky hero that never scrolls away but sits covered does
@@ -412,7 +424,7 @@
         var hit = document.elementFromPoint(Math.max(60, cw / 2), window.innerHeight / 2);
         if (!hit || hit.closest(".mu-side, .mu-bar, .mu-pill, .mu-toast")) return;
         var hitSec = hit.closest("[data-sec]");
-        if (hitSec && hitSec !== host && !host.contains(hitSec) && !hitSec.contains(host)) { stopTyping(); closeSidebar(); }
+        if (hitSec && hitSec !== host && !host.contains(hitSec) && !hitSec.contains(host)) { stopTyping(); snapMargin(); closeSidebar(); }
       });
     };
     window.addEventListener("scroll", scrollAway, { passive: true, capture: true });
@@ -1023,6 +1035,8 @@
       var leaving = document.querySelector(".mu-side--out");
       if (leaving) leaving.remove();   // a reopen mid-exit clears the departing sheet
       side = el("div", "mu-side");
+      side.classList.add("mu-side--gliding");   // solid while moving: blur is not animatable cheaply
+      setTimeout(function () { if (side) side.classList.remove("mu-side--gliding"); }, 400);
       /* The site scrolls through Lenis, which takes the wheel everywhere and
          would scroll the PAGE under a scrolling sidebar. Lenis honours this
          attribute on anything in the event's path. */
