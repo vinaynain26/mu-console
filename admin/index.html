@@ -13,7 +13,8 @@
       </div>
     </div>
     <div id="ai"></div>
-    <div class="card"><div id="list"><div class="empty">Loading pages…</div></div></div>
+    <input type="search" id="q" class="psearch" placeholder="Search pages…" autocomplete="off">
+    <div class="pgrid" id="list"><div class="empty">Loading pages…</div></div>
   </main>
 </div>
 <script type="module">
@@ -33,20 +34,43 @@ try {
      live link. Nested anchors are invalid HTML, so the browser silently dropped
      the inner one and the row rendered with no visible button at all —
      clickable, but with nothing to tell you so. Explicit buttons instead. */
-  $('list').innerHTML = pages.length ? pages.map(p => `
-    <div class="rrow">
-      <div style="flex:1;min-width:0">
+  const card = p => `
+    <div class="pcard" data-name="${esc(p.title.toLowerCase())}">
+      <div class="pcard__top">
         <h3>${esc(p.title)}</h3>
-        <div class="meta">${p.fields} fields &middot; ${p.sections} sections &middot;
-          last published ${p.last_publisher ? esc(p.last_publisher) + ' ' + ago(p.last_published) : 'never'}</div>
+        <div class="pcard__badges">
+          ${p.source === 'instrumented' ? '<span class="badge" title="Rendered by its own app">app</span>' : ''}
+          ${p.unpublished > 0
+            ? `<span class="badge warn"><span class="dot"></span>${p.unpublished}</span>`
+            : `<span class="badge ok">Published</span>`}
+        </div>
       </div>
-      ${p.source === 'instrumented' ? '<span class="badge info" title="Rendered by its own app">app</span>' : ''}
-      ${p.unpublished > 0
-        ? `<span class="badge warn"><span class="dot"></span>${p.unpublished} unpublished</span>`
-        : `<span class="badge ok">Published</span>`}
-      <a class="btn primary" href="/console/page/${esc(p.slug)}">Edit</a>
-      <a class="btn" href="/page/${esc(p.slug)}" target="_blank" rel="noopener">View &#8599;</a>
-    </div>`).join('') : '<div class="empty">No pages yet.</div>';
+      <div class="meta">${p.fields} fields &middot; ${p.sections} sections<br>
+        last published ${p.last_publisher ? esc(p.last_publisher) + ' ' + ago(p.last_published) : 'never'}</div>
+      <div class="pcard__acts">
+        <a class="btn primary" href="/console/page/${esc(p.slug)}">Edit</a>
+        <a class="btn" href="/page/${esc(p.slug)}" target="_blank" rel="noopener">View &#8599;</a>
+      </div>
+    </div>`;
+  $('list').innerHTML = pages.length ? pages.map(card).join('') : '<div class="empty">No pages yet.</div>';
+
+  const q = $('q');
+  q.addEventListener('input', () => {
+    const needle = q.value.trim().toLowerCase();
+    let shown = 0;
+    for (const el of document.querySelectorAll('.pcard')) {
+      const hit = !needle || el.dataset.name.includes(needle);
+      el.style.display = hit ? '' : 'none';
+      if (hit) shown++;
+    }
+    let none = document.getElementById('noneMatch');
+    if (!shown && !none) {
+      none = Object.assign(document.createElement('div'), { id: 'noneMatch', className: 'empty' });
+      none.textContent = 'No pages match.';
+      $('list').appendChild(none);
+    } else if (shown && none) none.remove();
+  });
+  q.focus();
 } catch (e) {
   $('list').innerHTML = '<div class="empty">Could not load pages: ' + esc(e.message) + '</div>';
 }
