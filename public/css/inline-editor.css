@@ -24,7 +24,7 @@
 .mu-side *, .mu-bar *, .mu-pill *{ letter-spacing:normal; text-transform:none }
 
 /* ---- one type system, one accent ---- *
- * Geist everywhere. White surfaces, #2563EB for everything active.
+ * Geist everywhere. White surfaces, #0055FF for everything active.
  * Radii: 8 / 12 / 16. Borders: #E7EAEE. Text: #101828 / #667085. */
 
 .mu-side, .mu-bar, .mu-pill, .mu-toast, .mu-auth{
@@ -34,7 +34,7 @@
 /* every control gets a real keyboard ring — never the browser default */
 .mu-side :focus,.mu-bar :focus,.mu-pill:focus,.mu-auth :focus{ outline:none }
 .mu-side :focus-visible,.mu-bar :focus-visible,.mu-pill:focus-visible,.mu-auth :focus-visible{
-  outline:2px solid #2563EB; outline-offset:2px;
+  outline:2px solid #0055FF; outline-offset:2px;
 }
 
 /* ---- toolbar ---- */
@@ -92,37 +92,35 @@ body.mu-side-open .mu-bar{ left:calc(50% - 202px) !important }
   display:inline-flex; align-items:center; gap:7px;
   font-family:inherit;font-size:12px;font-weight:600;line-height:1;
   padding:9px 14px; border-radius:99px; border:0; cursor:pointer;
-  background:#2563EB; color:#fff;
-  box-shadow:0 6px 20px rgba(37,99,235,.35);
+  background:#0055FF; color:#fff;
+  box-shadow:0 6px 20px rgba(0,85,255,.4);
   opacity:0; pointer-events:none; transition:opacity .16s, transform .16s;
 }
 body.mu-editing .mu-pill{ opacity:.96; pointer-events:auto }
 body.mu-editing .mu-pill:hover{ opacity:1; transform:translateY(-1px) }
 .mu-pill__i{font-size:12px}
 .mu-pill__n{background:rgba(255,255,255,.25);color:#fff;border-radius:99px;padding:3px 7px;font-size:10.5px;font-weight:700}
-body.mu-editing [data-sec]{ outline:1px dashed rgba(37,99,235,.28); outline-offset:-3px }
-body.mu-editing [data-sec].mu-sec-active{ outline:2px solid #2563EB; outline-offset:-3px }
+body.mu-editing [data-sec]{ outline:1px dashed rgba(0,85,255,.35); outline-offset:-3px }
+body.mu-editing [data-sec].mu-sec-active{ outline:2px solid #0055FF; outline-offset:-3px }
 
 /* on-page affordances */
-body.mu-editing [data-c]{ outline:1px dashed rgba(37,99,235,.4); outline-offset:3px; cursor:text }
-body.mu-editing [data-c]:hover{ outline:2px solid #2563EB; background:rgba(37,99,235,.06) }
-body.mu-editing [data-c-media]{ outline:1px dashed rgba(37,99,235,.4); outline-offset:3px; cursor:pointer }
-[data-c].mu-live{ outline:2px solid #2563EB !important; background:rgba(37,99,235,.08); border-radius:2px }
+body.mu-editing [data-c]{ outline:1px dashed rgba(0,85,255,.45); outline-offset:3px; cursor:text }
+body.mu-editing [data-c]:hover{ outline:2px solid #0055FF; background:rgba(0,85,255,.08) }
+body.mu-editing [data-c-media]{ outline:1px dashed rgba(0,85,255,.45); outline-offset:3px; cursor:pointer }
+[data-c].mu-live{ outline:2px solid #0055FF !important; background:rgba(0,85,255,.1); border-radius:2px }
 .mu-dirty{ outline:2px solid #F79009 !important; background:rgba(247,144,9,.08) }
 .mu-spot{ animation:mu-spot 1.4s ease }
-@keyframes mu-spot{ 0%,100%{box-shadow:none} 30%{box-shadow:0 0 0 4px rgba(37,99,235,.35)} }
-.mu-here{ outline:2.5px solid #2563EB !important; outline-offset:3px; border-radius:2px }
+@keyframes mu-spot{ 0%,100%{box-shadow:none} 30%{box-shadow:0 0 0 4px rgba(0,85,255,.4)} }
+.mu-here{ outline:2.5px solid #0055FF !important; outline-offset:3px; border-radius:2px }
 
 /* ---- drawer ---- */
 .mu-side{
   width:400px; max-width:94vw; z-index:2147483050;
-  background:rgba(255,255,255,.78);
-  backdrop-filter:blur(36px) saturate(180%);
-  -webkit-backdrop-filter:blur(36px) saturate(180%);
-  color:#101828; border-left:1px solid rgba(16,24,40,.08);
-  box-shadow:-24px 0 60px rgba(16,24,40,.1), inset 1px 0 0 rgba(255,255,255,.7);
+  background:#161616;
+  color:#F5F5F5; border-left:1px solid rgba(255,255,255,.1);
+  box-shadow:-28px 0 70px rgba(0,0,0,.45);
   display:flex; flex-direction:column;
-  font-size:14px; line-height:1.55;
+  font-size:13.5px; line-height:1.55;
 }
 /* a sheet: full travel along its own edge, critically damped, in and out
    on the same path with mirrored easing */
@@ -142,8 +140,8 @@ body.mu-side-open{ margin-right:400px; transition:margin-right .34s cubic-bezier
 @media (max-width:900px){ body.mu-side-open{ margin-right:0 } }
 
 .mu-side__head{
-  flex:none; display:flex; align-items:center; gap:12px; padding:20px 22px 16px;
-  border-bottom:1px solid #F2F4F7;
+  flex:none; display:flex; align-items:center; gap:12px; padding:20px 20px 15px;
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
 .mu-side__title{min-width:0;flex:1}
 .mu-side__eyebrow{
@@ -151,65 +149,66 @@ body.mu-side-open{ margin-right:400px; transition:margin-right .34s cubic-bezier
   padding-bottom:6px;
 }
 .mu-side__h{
-  margin:0;font-size:18px;font-weight:600;line-height:1.3;letter-spacing:-.02em;color:#101828;
+  margin:0;font-size:17px;font-weight:600;line-height:1.3;letter-spacing:-.02em;color:#F5F5F5;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .mu-side__x{
-  flex:none;width:32px;height:32px;border:1px solid #E7EAEE;background:#fff;border-radius:99px;
-  font-size:13px;line-height:1;cursor:pointer;color:#667085;
+  flex:none;width:30px;height:30px;border:0;background:rgba(255,255,255,.07);border-radius:99px;
+  font-size:12px;line-height:1;cursor:pointer;color:#999;
 }
-.mu-side__x:hover{color:#101828;border-color:#D0D5DD;background:#FAFBFC}
+.mu-side__x:hover{color:#fff;background:rgba(255,255,255,.14)}
 
-.mu-tabs{flex:none;display:flex;gap:4px;padding:12px 22px;border-bottom:1px solid rgba(16,24,40,.06);background:rgba(255,255,255,.4)}
+.mu-tabs{flex:none;display:flex;gap:4px;padding:11px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
 .mu-tab{
   flex:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;
-  border:1px solid transparent;background:transparent;border-radius:99px;padding:7px 14px;
-  font-family:inherit;font-size:12.5px;font-weight:600;line-height:1;color:#667085;cursor:pointer;
+  border:0;background:transparent;border-radius:8px;padding:7px 13px;
+  font-family:inherit;font-size:12px;font-weight:600;line-height:1;color:#999;cursor:pointer;
 }
-.mu-tab:hover:not([disabled]):not(.on){color:#101828;background:#F2F4F7}
-.mu-tab.on{background:#101828;border-color:#101828;color:#fff}
+.mu-tab:hover:not([disabled]):not(.on){color:#F5F5F5;background:rgba(255,255,255,.07)}
+.mu-tab.on{background:#0055FF;color:#fff}
 .mu-tab[disabled]{opacity:.4;cursor:default}
 .mu-tab__n{font-size:11px;font-weight:700;color:inherit;opacity:.65}
 
-.mu-side__body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:20px 22px 110px}
+.mu-side__body{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:18px 20px 110px}
 
 .mu-row{margin-bottom:16px}
 .mu-lab{
   display:flex;align-items:center;gap:8px;
   font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
-  color:#98A2B3;margin-bottom:7px;line-height:1.4;
+  color:#8A8A8A;margin-bottom:7px;line-height:1.4;
 }
 .mu-lab > span:first-child{flex:1;min-width:0}
-.mu-note{background:#F2F4F7;color:#475467;border-radius:99px;padding:2px 8px;font-size:10.5px;font-weight:700;flex:none}
+.mu-note{background:rgba(255,255,255,.08);color:#999;border-radius:99px;padding:2px 8px;font-size:10.5px;font-weight:700;flex:none}
 .mu-aibtn{
-  flex:none;border:1px solid #E7EAEE;background:#fff;border-radius:99px;padding:4px 10px;
-  font-family:inherit;font-size:11px;font-weight:600;line-height:1.3;color:#475467;cursor:pointer;
+  flex:none;border:0;background:rgba(255,255,255,.07);border-radius:99px;padding:5px 10px;
+  font-family:inherit;font-size:10.5px;font-weight:600;line-height:1.3;color:#6D9BFF;cursor:pointer;
 }
-.mu-aibtn:hover{border-color:#98A2B3;color:#101828}
-.mu-aibtn.on{background:#101828;border-color:#101828;color:#fff}
+.mu-aibtn:hover{background:rgba(0,85,255,.22);color:#9DBCFF}
+.mu-aibtn.on{background:#0055FF;color:#fff}
 
 .mu-side input[type=text],.mu-side input[type=search],.mu-side textarea,.mu-side select{
-  width:100%;padding:10px 13px;border:1px solid #D8DDE4;border-radius:10px;
-  font:inherit;font-size:13.5px;background:#fff;color:#101828;
+  width:100%;padding:10px 12px;border:1px solid transparent;border-radius:9px;
+  font:inherit;font-size:13px;background:rgba(255,255,255,.07);color:#F5F5F5;
 }
+.mu-side input::placeholder,.mu-side textarea::placeholder{color:#666}
 .mu-side textarea{min-height:80px;resize:vertical;line-height:1.6}
-.mu-side .mu-mono{font-family:inherit;font-size:12.5px;color:#475467}
+.mu-side .mu-mono{font-family:inherit;font-size:12px;color:#BBB}
 .mu-side input:focus,.mu-side textarea:focus,.mu-side select:focus{
-  outline:none;border-color:#2563EB;box-shadow:0 0 0 3px rgba(37,99,235,.14);
+  outline:none;border-color:#0055FF;background:#1D1D1D;box-shadow:0 0 0 3px rgba(0,85,255,.28);
 }
-.mu-hint{font-size:12px;color:#98A2B3;margin:6px 0 0;line-height:1.5}
-.mu-empty{font-size:13px;color:#98A2B3;margin:26px 0;text-align:center}
+.mu-hint{font-size:11.5px;color:#777;margin:6px 0 0;line-height:1.5}
+.mu-empty{font-size:12.5px;color:#777;margin:26px 0;text-align:center}
 
-.mu-card{border:1px solid #EEF0F3;border-radius:12px;padding:16px;margin-bottom:12px;background:#fff}
-.mu-card__h{font-size:14px;font-weight:600;margin-bottom:11px;color:#101828;letter-spacing:-.01em}
+.mu-card{border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:15px;margin-bottom:11px;background:#1B1B1B}
+.mu-card__h{font-size:13.5px;font-weight:600;margin-bottom:11px;color:#F5F5F5;letter-spacing:-.01em}
 .mu-card .mu-lab{margin-top:12px}
 .mu-card .mu-lab:first-of-type{margin-top:0}
 
 .mu-media-row{display:flex;gap:13px;align-items:flex-start}
 .mu-thumb{
-  width:82px;height:60px;flex:none;border-radius:10px;overflow:hidden;background:#F2F4F7;
-  border:1px solid #EAECF0;display:grid;place-items:center;
-  font-size:10px;font-weight:600;color:#98A2B3;
+  width:82px;height:60px;flex:none;border-radius:9px;overflow:hidden;background:rgba(255,255,255,.06);
+  display:grid;place-items:center;
+  font-size:10px;font-weight:600;color:#777;
 }
 .mu-thumb img,.mu-thumb video{width:100%;height:100%;object-fit:cover;display:block}
 .mu-media-fields{flex:1;min-width:0}
@@ -218,16 +217,16 @@ body.mu-side-open{ margin-right:400px; transition:margin-right .34s cubic-bezier
 .mu-ai[hidden]{display:none}
 .mu-ai__ins{flex:1;min-width:130px}
 .mu-mini{
-  border:1px solid #E7EAEE;background:#fff;border-radius:9px;padding:8px 12px;
-  font:inherit;font-size:12px;font-weight:600;line-height:1;cursor:pointer;white-space:nowrap;color:#344054;
+  border:0;background:rgba(255,255,255,.08);border-radius:8px;padding:8px 12px;
+  font:inherit;font-size:11.5px;font-weight:600;line-height:1;cursor:pointer;white-space:nowrap;color:#F5F5F5;
 }
-.mu-mini:hover{border-color:#98A2B3;color:#101828;background:#F9FAFB}
+.mu-mini:hover{background:rgba(255,255,255,.14)}
 .mu-mini[disabled]{opacity:.45;cursor:not-allowed}
 .mu-out{margin-top:8px}
-.mu-opt{border:1px solid #EAECF0;border-radius:12px;padding:11px 13px;margin-top:8px;cursor:pointer;background:#fff;font-size:13px;line-height:1.55}
-.mu-opt:hover{border-color:#98A2B3;background:#F9FAFB}
-.mu-opt__a{font-size:10.5px;font-weight:700;color:#475467;margin-bottom:4px;letter-spacing:.02em}
-.mu-err{background:#FEF0EF;color:#B42318;padding:10px 13px;border-radius:10px;font-size:12.5px;margin-top:8px}
+.mu-opt{border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:11px 13px;margin-top:8px;cursor:pointer;background:#1B1B1B;font-size:12.5px;line-height:1.55}
+.mu-opt:hover{border-color:#0055FF;background:rgba(0,85,255,.1)}
+.mu-opt__a{font-size:10px;font-weight:700;color:#6D9BFF;margin-bottom:4px;letter-spacing:.02em}
+.mu-err{background:rgba(255,69,58,.14);color:#FF6B61;padding:10px 13px;border-radius:10px;font-size:12.5px;margin-top:8px}
 
 /* ---- arrange ---- */
 body.mu-arranging [data-sec]{outline:2px dashed #98A2B3;outline-offset:-4px;position:relative}
@@ -237,10 +236,10 @@ body.mu-arranging [data-sec]::before{
   padding:7px 12px;border-radius:99px;
 }
 body.mu-arranging [data-sec].mu-drag{opacity:.4}
-body.mu-arranging [data-sec].mu-over{outline:3px solid #2563EB;outline-offset:-4px}
+body.mu-arranging [data-sec].mu-over{outline:3px solid #0055FF;outline-offset:-4px}
 .mu-grip{
   position:absolute;z-index:2147482001;top:10px;right:10px;cursor:grab;
-  background:#2563EB;color:#fff;border:0;border-radius:99px;padding:8px 13px;
+  background:#0055FF;color:#fff;border:0;border-radius:99px;padding:8px 13px;
   font-family:Geist,-apple-system,sans-serif;font-size:11px;font-weight:600;
 }
 .mu-grip:active{cursor:grabbing}
@@ -257,49 +256,50 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #2563EB;outline-offset:-4
 @keyframes mu-sp{to{transform:rotate(360deg)}}
 
 .mu-filter{
-  width:100%; padding:10px 13px; margin-bottom:16px;
-  border:1px solid #E7EAEE; border-radius:10px; font:inherit; font-size:13px;
-  background:#FAFBFC;
+  width:100%; padding:10px 12px; margin-bottom:15px;
+  border:1px solid transparent; border-radius:9px; font:inherit; font-size:12.5px;
+  background:rgba(255,255,255,.07); color:#F5F5F5;
 }
-.mu-filter:focus{outline:none;border-color:#2563EB;box-shadow:0 0 0 3px rgba(37,99,235,.14);background:#fff}
+.mu-filter::placeholder{color:#666}
+.mu-filter:focus{outline:none;border-color:#0055FF;box-shadow:0 0 0 3px rgba(0,85,255,.28);background:#1D1D1D}
 
 .mu-side{ animation:mu-slide .34s cubic-bezier(.32,.72,0,1) !important }
 .mu-grp__h{
-  font-size:10.5px;font-weight:600;color:#98A2B3;margin-bottom:12px;letter-spacing:.08em;text-transform:uppercase;
+  font-size:10.5px;font-weight:600;color:#777;margin-bottom:12px;letter-spacing:.08em;text-transform:uppercase;
 }
-[data-list] > .mu-grp__h{margin:24px 2px 10px;padding-top:16px;border-top:1px solid #F2F4F7}
+[data-list] > .mu-grp__h{margin:24px 2px 10px;padding-top:16px;border-top:1px solid rgba(255,255,255,.07)}
 [data-list] > .mu-grp__h:first-child{margin-top:4px;padding-top:0;border-top:0}
 
 /* rich text */
-.mu-rt{border:1px solid #D8DDE4;border-radius:10px;overflow:hidden;background:#fff}
-.mu-rt__bar{display:flex;flex-wrap:wrap;gap:4px;padding:6px;border-bottom:1px solid #F2F4F7;background:#FAFBFC;align-items:center}
+.mu-rt{border:1px solid rgba(255,255,255,.1);border-radius:9px;overflow:hidden;background:#1B1B1B}
+.mu-rt__bar{display:flex;flex-wrap:wrap;gap:4px;padding:6px;border-bottom:1px solid rgba(255,255,255,.08);background:#181818;align-items:center}
 .mu-rt__bar button{
   flex:0 0 auto; height:26px; padding:0 10px; border:1px solid transparent;
-  background:#fff; border-radius:7px; font-family:inherit;font-weight:600;font-size:11.5px;line-height:1; color:#344054;
+  background:transparent; border-radius:6px; font-family:inherit;font-weight:600;font-size:11px;line-height:1; color:#CCC;
   cursor:pointer; white-space:nowrap;
 }
-.mu-rt__bar button:hover{border-color:#E7EAEE}
+.mu-rt__bar button:hover{background:rgba(255,255,255,.08)}
 .mu-rt__box{
   padding:11px 13px;min-height:68px;max-height:320px;overflow-y:auto;
-  font-size:14px;line-height:1.6;color:#101828;outline:none;word-break:break-word;
+  font-size:13.5px;line-height:1.6;color:#F0F0F0;outline:none;word-break:break-word;
 }
-.mu-rt__bar button.on{background:#2563EB;color:#fff}
+.mu-rt__bar button.on{background:#0055FF;color:#fff}
 .mu-rt__bar button.on b,.mu-rt__bar button.on i{color:#fff}
-.mu-rt__box:focus{box-shadow:inset 0 0 0 2px #2563EB}
+.mu-rt__box:focus{box-shadow:inset 0 0 0 2px #0055FF}
 .mu-rt__box b,.mu-rt__box strong{font-weight:700}
 .mu-rt__box br{content:""}
 .mu-rt__gap{flex:1 0 auto;min-width:4px}
 .mu-rt__box .fr-TitleItalic,.mu-rt__box .fr-HeadingItalic{font-style:italic}
 .mu-rt__box .font-semibold{font-weight:700}
-.mu-rt__box .textHighlight{background:#FEF0C7;border-radius:2px}
+.mu-rt__box .textHighlight{background:rgba(255,214,10,.35);border-radius:2px}
 
 /* undo — offered once a field has changed */
 .mu-revert{
-  flex:none;border:1px solid #E7EAEE;background:#fff;border-radius:99px;padding:4px 10px;
-  font-family:inherit;font-size:11px;font-weight:600;color:#B42318;cursor:pointer;display:none;line-height:1.3;
+  flex:none;border:0;background:rgba(255,255,255,.07);border-radius:99px;padding:5px 10px;
+  font-family:inherit;font-size:10.5px;font-weight:600;color:#FF8A80;cursor:pointer;display:none;line-height:1.3;
 }
 .mu-row.is-dirty .mu-revert,.mu-card.is-dirty .mu-revert{display:inline-block}
-.mu-revert:hover{background:#FEF0EF;border-color:#F4B6B0}
+.mu-revert:hover{background:rgba(255,69,58,.2)}
 
 /* ---- accessibility ---- */
 @media (prefers-reduced-motion: reduce){
@@ -353,7 +353,7 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #2563EB;outline-offset:-4
   width:100%; padding:11px 13px; border:1px solid #D8DDE4; border-radius:10px;
   font:inherit; font-size:14px; background:#fff; color:#101828;
 }
-.mu-auth input:focus{outline:none;border-color:#2563EB;box-shadow:0 0 0 3px rgba(37,99,235,.14)}
+.mu-auth input:focus{outline:none;border-color:#0055FF;box-shadow:0 0 0 3px rgba(37,99,235,.14)}
 .mu-auth__err{background:#FEF0EF;color:#B42318;padding:10px 13px;border-radius:10px;font-size:12.5px;margin-top:14px}
 .mu-auth__row{display:flex;gap:10px;justify-content:flex-end;margin-top:22px}
 .mu-auth__row button{
@@ -363,7 +363,7 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #2563EB;outline-offset:-4
 .mu-auth__row button:active{transform:scale(.97)}
 .mu-auth__cancel{border:1px solid #E7EAEE;background:#fff;color:#344054}
 .mu-auth__cancel:hover{background:#FAFBFC}
-.mu-auth__go{border:0;background:#2563EB;color:#fff}
+.mu-auth__go{border:0;background:#0055FF;color:#fff}
 .mu-auth__go:hover{background:#1D4ED8}
 .mu-auth__go[disabled]{opacity:.5;cursor:default}
 @media (prefers-reduced-motion: reduce){
@@ -383,88 +383,87 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #2563EB;outline-offset:-4
 
 /* ---- the map between a row and the page ---- */
 .mu-side .mu-row[data-row]{border-radius:12px;padding:11px 12px;margin:0 -12px 8px}
-.mu-side .mu-row[data-row]:hover{background:#F8FAFC}
-.mu-side .mu-card[data-row]:hover{border-color:#C4CAD3}
+.mu-side .mu-row[data-row]:hover{background:rgba(255,255,255,.04)}
+.mu-side .mu-card[data-row]:hover{border-color:rgba(255,255,255,.22)}
 .mu-locate{cursor:pointer}
-.mu-locate:hover{color:#101828;text-decoration:underline;text-underline-offset:3px}
+.mu-locate:hover{color:#F5F5F5;text-decoration:underline;text-underline-offset:3px}
 
 /* ---- reassurance ---- */
 .mu-side__foot{
-  flex:none;padding:12px 22px;border-top:1px solid rgba(16,24,40,.06);background:rgba(255,255,255,.55);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  font-size:11.5px;line-height:1.6;color:#98A2B3;
+  flex:none;padding:12px 20px;border-top:1px solid rgba(255,255,255,.08);background:#141414;
+  font-size:11px;line-height:1.6;color:#777;
 }
-.mu-side__foot b{color:#475467;font-weight:600}
+.mu-side__foot b{color:#CCC;font-weight:600}
 
 /* ---- details & accessibility fold ---- */
-.mu-adv{margin:22px -12px 6px;border-top:1px solid #F2F4F7;padding:12px 12px 0}
+.mu-adv{margin:22px -12px 6px;border-top:1px solid rgba(255,255,255,.07);padding:12px 12px 0}
 .mu-adv summary{
   display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none;
-  font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#98A2B3;
+  font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#777;
   padding:2px 0 10px;
 }
 .mu-adv summary::-webkit-details-marker{display:none}
 .mu-adv summary::before{content:"▸";font-size:10px;transition:transform .14s}
 .mu-adv[open] summary::before{transform:rotate(90deg)}
-.mu-adv summary:hover{color:#344054}
+.mu-adv summary:hover{color:#F5F5F5}
 
 /* ---- collections (Items tab) ---- */
 .mu-item{
-  border:1px solid #EEF0F3;border-radius:12px;background:#fff;
-  padding:13px 15px;margin-bottom:9px;
+  border:1px solid rgba(255,255,255,.08);border-radius:11px;background:#1B1B1B;
+  padding:12px 14px;margin-bottom:8px;
 }
 .mu-item{transition:border-color .14s ease, box-shadow .18s ease, transform .18s cubic-bezier(.32,.72,0,1) !important}
-.mu-item:hover{border-color:#C4CAD3;box-shadow:0 4px 14px rgba(16,24,40,.08);transform:translateY(-1px)}
-.mu-item.is-hidden{background:#FAFBFC;box-shadow:none;border-style:dashed}
-.mu-item.is-hidden .mu-item__t{color:#98A2B3}
+.mu-item:hover{border-color:rgba(255,255,255,.2);box-shadow:0 6px 18px rgba(0,0,0,.35);transform:translateY(-1px)}
+.mu-item.is-hidden{background:transparent;box-shadow:none;border-style:dashed}
+.mu-item.is-hidden .mu-item__t{color:#777}
 .mu-item__row{display:flex;align-items:center;gap:11px;min-width:0}
 .mu-item__n{
   flex:none;width:24px;height:24px;display:grid;place-items:center;
-  background:#F2F4F7;border-radius:99px;
-  font-size:11px;font-weight:700;color:#667085;
+  background:rgba(255,255,255,.08);border-radius:99px;
+  font-size:10.5px;font-weight:700;color:#999;
 }
 .mu-item__t{
   flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-  font-size:13.5px;font-weight:600;color:#101828;letter-spacing:-.005em;
+  font-size:13px;font-weight:600;color:#F5F5F5;letter-spacing:-.005em;
 }
 .mu-item__t[data-goto]{cursor:pointer}
 .mu-item__t[data-goto]:hover{text-decoration:underline;text-underline-offset:3px}
 .mu-item__badge{
-  font-size:10px;font-weight:600;font-style:normal;
-  border:1px solid #EAECF0;color:#667085;background:#FAFBFC;border-radius:99px;padding:2px 8px;vertical-align:1px;
+  font-size:9.5px;font-weight:600;font-style:normal;border:0;
+  color:#999;background:rgba(255,255,255,.08);border-radius:99px;padding:3px 8px;vertical-align:1px;
 }
-.mu-item__badge--new{border-color:#EAECF0;background:#F2F4F7;color:#344054}
+.mu-item__badge--new{background:rgba(0,85,255,.2);color:#6D9BFF}
 .mu-item__acts{display:none;flex-wrap:wrap;gap:6px;margin-top:11px}
 .mu-item:hover .mu-item__acts,.mu-item:focus-within .mu-item__acts{display:flex;animation:mu-rise .22s cubic-bezier(.32,.72,0,1)}
 @keyframes mu-rise{ from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
 .mu-ib{
-  flex:0 0 auto;border:1px solid #E7EAEE;background:#fff;color:#344054;
-  border-radius:99px;padding:6px 12px;font-family:inherit;font-size:11.5px;font-weight:600;line-height:1.3;cursor:pointer;
+  flex:0 0 auto;border:0;background:rgba(255,255,255,.08);color:#F5F5F5;
+  border-radius:99px;padding:7px 12px;font-family:inherit;font-size:11px;font-weight:600;line-height:1.3;cursor:pointer;
 }
-.mu-ib:hover{border-color:#98A2B3;color:#101828;background:#F9FAFB}
-.mu-ib--danger{color:#B42318}
-.mu-ib--danger:hover{background:#FEF0EF;border-color:#F4B6B0;color:#B42318}
+.mu-ib:hover{background:rgba(255,255,255,.15)}
+.mu-ib--danger{color:#FF8A80}
+.mu-ib--danger:hover{background:rgba(255,69,58,.2)}
 .mu-add{
   display:block;width:100%;margin:6px 0 10px;padding:12px;
-  border:1.5px dashed #D0D5DD;background:transparent;border-radius:12px;
-  font:inherit;font-size:12.5px;font-weight:600;color:#475467;cursor:pointer;
+  border:1.5px dashed rgba(255,255,255,.2);background:transparent;border-radius:11px;
+  font:inherit;font-size:12px;font-weight:600;color:#999;cursor:pointer;
 }
-.mu-add:hover{border-color:#101828;color:#101828;background:#F9FAFB}
+.mu-add:hover{border-color:#0055FF;color:#6D9BFF;background:rgba(0,85,255,.08)}
 
 /* the drawer answers a page click: arrival pulse */
 .mu-row-flash{ animation: mu-rowflash 1.6s ease }
 @keyframes mu-rowflash{
-  0%{ background:#EFF4FF; box-shadow:0 0 0 2px rgba(37,99,235,.5) inset; border-radius:12px }
+  0%{ background:rgba(0,85,255,.14); box-shadow:0 0 0 2px rgba(0,85,255,.55) inset; border-radius:12px }
   100%{ background:transparent; box-shadow:none }
 }
 @media (prefers-reduced-motion: reduce){
-  .mu-row-flash{ animation:none; background:#EFF4FF; border-radius:12px }
+  .mu-row-flash{ animation:none; background:rgba(0,85,255,.14); border-radius:12px }
 }
 
 /* the field being edited keeps its ring until another is chosen */
 .mu-row-active{
-  box-shadow:0 0 0 2px #2563EB inset;
-  background:#fff;
+  box-shadow:0 0 0 2px #0055FF inset;
+  background:#1B1B1B;
   border-radius:12px;
 }
 
@@ -481,7 +480,5 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #2563EB;outline-offset:-4
 /* while a sheet travels it is a plain layer — transform and opacity only;
    live backdrop blur cannot be animated cheaply */
 .mu-side--gliding,.mu-side--out{
-  backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
-  background:#FBFBFC !important;
   will-change:transform;
 }
