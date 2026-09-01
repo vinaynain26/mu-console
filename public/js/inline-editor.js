@@ -333,10 +333,11 @@
     if (m === "arrange") enterArrange(); else exitArrange();
     if (m === "edit") {
       loadComments();
-      loadMeta().then(function () { addSectionPills(); watchDom(); });
+      loadMeta().then(function () { addSectionPills(); watchDom(); watchScrollAway(); });
     } else {
       removeSectionPills();
       unwatchDom();
+      unwatchScrollAway();
     }
   }
 
@@ -382,6 +383,41 @@
     });
     domObs.observe(document.body, { childList: true, subtree: true });
   }
+  /* The drawer follows the reader. Scroll its section fully out of view and
+     it steps aside — the next click on anything brings it back, opened to
+     wherever you are now. Never fires while typing, and never while your
+     cursor is working inside the drawer itself. */
+  var scrollAway = null, scrollAwayPending = false;
+  function watchScrollAway() {
+    if (scrollAway) return;
+    scrollAway = function () {
+      if (scrollAwayPending) return;
+      scrollAwayPending = true;
+      requestAnimationFrame(function () {
+        scrollAwayPending = false;
+        if (!side || !activeSection || mode !== "edit" || live) return;
+        if (side.contains(document.activeElement)) return;
+        var host = document.querySelector('[data-sec="' + CSS.escape(activeSection) + '"]');
+        if (!host || !host.isConnected) return;
+        var r = host.getBoundingClientRect();
+        if (r.bottom < 60 || r.top > window.innerHeight - 60) { closeSidebar(); return; }
+        /* a sticky hero never leaves the viewport — it gets COVERED. Probe a
+           point inside its on-screen band: if some other section owns that
+           point now, the reader has moved on. */
+        var px = Math.min(Math.max(r.left + 40, 40), window.innerWidth - 440);
+        var py = Math.min(Math.max((Math.max(r.top, 0) + Math.min(r.bottom, window.innerHeight)) / 2, 80), window.innerHeight - 120);
+        var hit = document.elementFromPoint(px, py);
+        if (!hit || hit.closest(".mu-side, .mu-bar, .mu-pill, .mu-toast")) return;
+        var hitSec = hit.closest("[data-sec]");
+        if (hitSec && hitSec !== host && !host.contains(hitSec) && !hitSec.contains(host)) closeSidebar();
+      });
+    };
+    window.addEventListener("scroll", scrollAway, { passive: true, capture: true });
+  }
+  function unwatchScrollAway() {
+    if (scrollAway) { window.removeEventListener("scroll", scrollAway, true); scrollAway = null; }
+  }
+
   function unwatchDom() {
     if (domObs) { domObs.disconnect(); domObs = null; }
     clearTimeout(readoptTimer);
