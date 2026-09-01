@@ -13,14 +13,22 @@
       </div>
     </div>
     <div id="ai"></div>
-    <input type="search" id="q" class="psearch" placeholder="Search pages…" autocomplete="off">
+    <div class="toolbar">
+      <label class="search">
+        <span id="qicon"></span>
+        <input type="search" id="q" placeholder="Search pages…" autocomplete="off">
+        <kbd>/</kbd>
+      </label>
+      <span class="count" id="count"></span>
+    </div>
     <div class="pgrid" id="list"><div class="empty">Loading pages…</div></div>
   </main>
 </div>
 <script type="module">
-import { chrome, api, esc, ago, $ } from '/console-ui/shell.js';
+import { chrome, api, esc, ago, icon, $ } from '/console-ui/shell.js';
 
 const acct = await chrome('pages');
+$('qicon').outerHTML = icon('search');
 
 if (!acct.ai) {
   $('ai').innerHTML = `<div class="banner warn">
@@ -28,33 +36,41 @@ if (!acct.ai) {
     to enable rewriting, variants and section passes.</div>`;
 }
 
+/* a stable, subtle tint per page so the tile grid doesn't read as one gray slab */
+const hue = (s) => { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
+const mono = (t) => t.trim().split(/[\s_-]+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase();
+
 try {
   const pages = await api('/api/pages');
-  /* This row used to be one big <a> with another <a> nested inside it for the
-     live link. Nested anchors are invalid HTML, so the browser silently dropped
-     the inner one and the row rendered with no visible button at all —
-     clickable, but with nothing to tell you so. Explicit buttons instead. */
+  /* The tile is a stretched link to Edit (no nested anchors — the browser
+     deletes those); View lives above it as its own small anchor. */
   const card = p => `
     <div class="pcard" data-name="${esc(p.title.toLowerCase())}">
-      <div class="pcard__top">
-        <h3>${esc(p.title)}</h3>
-        <div class="pcard__badges">
-          ${p.source === 'instrumented' ? '<span class="badge" title="Rendered by its own app">app</span>' : ''}
-          ${p.unpublished > 0
-            ? `<span class="badge warn"><span class="dot"></span>${p.unpublished}</span>`
-            : `<span class="badge ok">Published</span>`}
-        </div>
+      <div class="pthumb" style="--tint:hsla(${hue(p.title)},70%,60%,.08)">
+        ${p.source === 'instrumented' ? '<span class="pchip" title="Rendered by its own app">App</span>' : ''}
+        <span class="pmono">${esc(mono(p.title))}</span>
+        <a class="pview" href="/page/${esc(p.slug)}" target="_blank" rel="noopener"
+           title="View live page" aria-label="View ${esc(p.title)} live">${icon('open', 14)}</a>
       </div>
-      <div class="meta">${p.fields} fields &middot; ${p.sections} sections<br>
-        last published ${p.last_publisher ? esc(p.last_publisher) + ' ' + ago(p.last_published) : 'never'}</div>
-      <div class="pcard__acts">
-        <a class="btn primary" href="/console/page/${esc(p.slug)}">Edit</a>
-        <a class="btn" href="/page/${esc(p.slug)}" target="_blank" rel="noopener">View &#8599;</a>
+      <div class="pbody">
+        <div class="grow">
+          <a class="pname" href="/console/page/${esc(p.slug)}">${esc(p.title)}</a>
+          <div class="pmeta">
+            ${p.unpublished > 0
+              ? `<span class="dot warn"></span><span class="warn">${p.unpublished} draft${p.unpublished === 1 ? '' : 's'}</span>`
+              : `<span class="dot ok"></span><span class="ok">Live</span>`}
+            <span>·</span><span>${p.fields} fields</span>
+            <span>·</span><span title="last published">${p.last_publisher ? esc(p.last_publisher) + ' ' + ago(p.last_published) : 'never published'}</span>
+          </div>
+        </div>
       </div>
     </div>`;
   $('list').innerHTML = pages.length ? pages.map(card).join('') : '<div class="empty">No pages yet.</div>';
 
   const q = $('q');
+  const count = (n) => { $('count').textContent = n === pages.length ? `${n} page${n === 1 ? '' : 's'}` : `${n} of ${pages.length}`; };
+  count(pages.length);
+
   q.addEventListener('input', () => {
     const needle = q.value.trim().toLowerCase();
     let shown = 0;
@@ -63,12 +79,16 @@ try {
       el.style.display = hit ? '' : 'none';
       if (hit) shown++;
     }
+    count(shown);
     let none = document.getElementById('noneMatch');
     if (!shown && !none) {
       none = Object.assign(document.createElement('div'), { id: 'noneMatch', className: 'empty' });
       none.textContent = 'No pages match.';
       $('list').appendChild(none);
     } else if (shown && none) none.remove();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && document.activeElement !== q) { e.preventDefault(); q.focus(); }
   });
   q.focus();
 } catch (e) {

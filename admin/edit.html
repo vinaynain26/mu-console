@@ -3,48 +3,84 @@
 <title>Edit page · MU Console</title>
 <link rel="stylesheet" href="/console-ui/app.css">
 <style>
-  .tabbar{display:flex;gap:3px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:18px}
-  .tabbtn{border:0;background:none;padding:9px 13px;font:inherit;font-weight:600;font-size:13.5px;
-    color:var(--ink-sub);border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;border-radius:0}
-  .tabbtn:hover{color:var(--ink)}
-  .tabbtn.on{color:var(--ink);border-bottom-color:var(--brand)}
-  .tabbtn .n{font-weight:450;opacity:.65;font-size:12px;margin-left:5px}
-  .tabbtn .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#FFB84D;margin-left:5px;vertical-align:middle}
-  details.sec{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh);margin-bottom:12px;overflow:hidden}
-  details.sec>summary{list-style:none;cursor:pointer;padding:13px 16px;display:flex;align-items:center;gap:11px}
-  details.sec>summary::-webkit-details-marker{display:none}
-  .caret{transition:transform .15s;color:var(--ink-mute);font-size:11px}
-  details[open] .caret{transform:rotate(90deg)}
-  details.sec h2{margin:0;font-size:14px;font-weight:650}
-  .secbody{padding:0 16px 14px;border-top:1px solid var(--line)}
-  .fld{padding:13px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+  /* tabs as pill chips — hidden entirely when there is only one tab */
+  .tabbar{display:flex;gap:5px;overflow-x:auto;margin-bottom:22px;padding-bottom:2px}
+  .tabbar:empty{display:none}
+  .tabbtn{border:0;background:transparent;height:30px;padding:0 13px;font:inherit;font-weight:550;
+    font-size:12.5px;color:var(--ink-2);cursor:pointer;white-space:nowrap;border-radius:99px;
+    display:inline-flex;align-items:center;transition:background 120ms ease,color 120ms ease}
+  .tabbtn:hover{background:var(--fill);color:var(--ink)}
+  .tabbtn.on{background:var(--fill-2);color:var(--ink);font-weight:600}
+  .tabbtn .n{font-weight:450;opacity:.6;font-size:11.5px;margin-left:6px}
+  .tabbtn .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#FFB84D;margin-left:6px;vertical-align:middle}
+
+  /* master–detail: sticky section rail on the left, property list on the right */
+  .editor{display:grid;grid-template-columns:232px minmax(0,1fr);gap:28px;align-items:start}
+  .rail{position:sticky;top:24px;display:flex;flex-direction:column;gap:2px;
+    max-height:calc(100vh - 48px);overflow-y:auto;padding-right:4px}
+  .railcap{font-size:11px;color:var(--ink-3);padding:0 11px 8px}
+  .secitem{display:flex;align-items:center;gap:8px;padding:8px 11px;border:0;border-radius:var(--r);
+    background:transparent;color:var(--ink-2);font:inherit;font-size:12.5px;font-weight:500;
+    cursor:pointer;text-align:left;width:100%;transition:background 120ms ease,color 120ms ease}
+  .secitem:hover{background:var(--fill);color:var(--ink)}
+  .secitem.on{background:var(--fill-2);color:var(--ink);font-weight:600}
+  .secitem .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .secitem .n{font-size:11px;color:var(--ink-3);font-weight:500}
+  .secitem .dot{width:6px;height:6px;border-radius:50%;background:#FFB84D;flex:none}
+  .secitem .sh{color:var(--info-ink);font-size:10px;flex:none}
+
+  .detail{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:2px 18px 8px;min-width:0}
+  .dethead{display:flex;align-items:center;gap:9px;padding:14px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .dethead h2{margin:0;font-size:15px;font-weight:650;letter-spacing:-.015em}
+  .dethead .grow{flex:1}
+
+  /* fields as a property list: hairlines, no boxes, AI hidden behind a toggle */
+  .fld{padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05)}
   .fld:last-child{border-bottom:0}
-  .fldhead{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-  .fldhead .tag{background:rgba(255,255,255,.08);color:#999;border-radius:6px;padding:2px 7px;font-size:10.5px;font-weight:600;text-transform:none}
-  .fldhead .name{font-size:12.5px;font-weight:600;color:var(--ink-sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1}
-  .fld.dirty input,.fld.dirty textarea{border-color:#FFB84D;background:rgba(255,159,10,.08)}
-  .was{font-size:12px;color:var(--ink-sub);margin-top:5px}
-  .aiRow{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;align-items:center}
+  .fldhead{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+  .fldhead .name{font-size:12.5px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .fldhead .tag{background:var(--fill);color:var(--ink-3);border-radius:5px;padding:1px 6px;font-size:10px;font-weight:600;flex:none}
+  .fldhead .grow{flex:1}
+  .fld.dirty input[data-in],.fld.dirty textarea[data-in]{border-color:#FFB84D;background:rgba(255,159,10,.08)}
+  .was{font-size:12px;color:var(--ink-2);margin-top:5px}
+  .aibtn{border:0;background:transparent;color:var(--ink-3);font:inherit;font-size:11.5px;font-weight:600;
+    padding:3px 9px;border-radius:6px;cursor:pointer;flex:none;transition:background 120ms ease,color 120ms ease}
+  .aibtn:hover{background:var(--fill);color:var(--ink)}
+  .aibtn.on{background:var(--info-bg);color:var(--info-ink)}
+  .aiRow{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;align-items:center}
+  .aiRow[hidden]{display:none}
   .aiOut{margin-top:8px}
-  .aiOpt{border:1px solid var(--line);border-radius:var(--r);padding:9px 11px;margin-top:7px;cursor:pointer;background:var(--surface-sub);font-size:13.5px}
+  .aiOpt{border:1px solid var(--line);border-radius:var(--r);padding:9px 11px;margin-top:7px;cursor:pointer;background:var(--surface-2);font-size:13.5px}
   .aiOpt:hover{border-color:var(--focus);background:rgba(0,85,255,.1)}
   .aiOpt .angle{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--focus);margin-bottom:3px}
   .aiErr{background:var(--crit-bg);color:var(--crit-ink);padding:8px 11px;border-radius:var(--r);font-size:12.5px;margin-top:7px}
   .aiIns{flex:1;min-width:190px;font-size:13px;padding:6px 10px}
+
+  @media(max-width:960px){
+    .editor{display:block}
+    .rail{position:static;flex-direction:row;max-height:none;overflow-x:auto;margin-bottom:14px;padding-bottom:4px}
+    .secitem{width:auto;white-space:nowrap}
+    .railcap{display:none}
+  }
 </style></head><body>
 <div class="shell">
   <nav class="side"></nav>
   <main>
     <div class="phead">
       <div>
-        <a class="back" href="/console">← Pages</a>
+        <a class="back" href="/console"><span id="backicon"></span>Pages</a>
         <h1 id="ttl">Loading…</h1>
         <div class="sub" id="sub"></div>
       </div>
-      <div class="grow"></div>
-      <input type="search" id="q" placeholder="Search all tabs…" style="max-width:230px">
-      <a class="btn" id="prev" target="_blank">Preview draft ↗</a>
-      <a class="btn primary" id="livelink" target="_blank">Edit on page ↗</a>
+      <div class="phead-acts" id="acts">
+        <label class="search" style="max-width:220px">
+          <span id="qicon"></span>
+          <input type="search" id="q" placeholder="Search all tabs…" autocomplete="off">
+          <kbd>/</kbd>
+        </label>
+        <a class="btn ghost" id="prev" target="_blank">Preview draft ↗</a>
+        <a class="btn" id="livelink" target="_blank">Edit on page ↗</a>
+      </div>
     </div>
     <div id="notice"></div>
     <div class="tabbar" id="tabs"></div>
@@ -58,13 +94,15 @@
   <button class="btn primary" id="save">Save draft</button>
 </div>
 <script type="module">
-import { chrome, api, esc, ago, $ } from '/console-ui/shell.js';
+import { chrome, api, esc, ago, icon, $ } from '/console-ui/shell.js';
 
 const slug = location.pathname.split('/').pop();
 const changes = new Map();
-let data = null, acct = null, tab = null;
+let data = null, acct = null, tab = null, sel = null;
 
 acct = await chrome('pages');
+$('backicon').outerHTML = icon('back', 13);
+$('qicon').outerHTML = icon('search');
 const CAN = {
   edit: ['editor','admin'].includes(acct.user.role),
   publish: acct.user.role === 'admin',
@@ -95,11 +133,11 @@ async function load() {
 }
 
 function renderTabs() {
-  $('tabs').innerHTML = data.tabs.map(t =>
+  $('tabs').innerHTML = data.tabs.length > 1 ? data.tabs.map(t =>
     `<button class="tabbtn ${t.key === tab ? 'on' : ''}" data-t="${esc(t.key)}">${esc(t.title)}
-      <span class="n">${t.fields}</span>${t.changed ? '<span class="dot"></span>' : ''}</button>`).join('');
+      <span class="n">${t.fields}</span>${t.changed ? '<span class="dot"></span>' : ''}</button>`).join('') : '';
   $('tabs').querySelectorAll('.tabbtn').forEach(b =>
-    b.addEventListener('click', () => { tab = b.dataset.t; renderTabs(); render(); }));
+    b.addEventListener('click', () => { tab = b.dataset.t; sel = null; renderTabs(); render(); }));
   const ut = tab === '_all' ? 'highlight' : tab;
   $('prev').href = `/page/${slug}?preview=1&tab=${ut}`;
   $('livelink').href = `/page/${slug}?tab=${ut}`;
@@ -107,104 +145,139 @@ function renderTabs() {
 
 const sectionFields = new Map();
 
-function render() {
+/* Sections visible for the current tab — or, when searching, matching
+   sections across every tab. */
+function visibleSections() {
   const q = $('q').value.trim().toLowerCase();
   const scope = q ? data.tabs : data.tabs.filter(t => t.key === tab);
   const out = [];
-  sectionFields.clear();
-  scope.forEach(t => t.sections.forEach(sec => sec.fields.forEach(f => sectionFields.set(f.key, f))));
-  for (const t of scope) {
-    const secs = t.sections
-      .map(s => ({ ...s, fields: q ? s.fields.filter(f => (f.value + ' ' + f.label).toLowerCase().includes(q)) : s.fields }))
-      .filter(s => s.fields.length);
-    if (!secs.length) continue;
-    if (q) out.push(`<div class="banner"><b>${esc(t.title)}</b> — ${secs.reduce((a, s) => a + s.fields.length, 0)} match(es)</div>`);
-    for (const s of secs) {
-      out.push(`<details class="sec" ${q ? 'open' : ''}>
-        <summary><span class="caret">▶</span><h2>${esc(s.title)}</h2>
-          <span class="badge">${s.fields.length}</span>
-          ${s.shared ? '<span class="badge info" title="This copy appears on every page">every page</span>' : ''}
-          <span class="grow"></span>
-          ${s.changed ? `<span class="badge warn">${s.changed} unpublished</span>` : ''}
-          ${CAN.ai ? `<button class="btn sm" data-secai="${esc(s.key)}">AI: rewrite section</button>` : ''}
-        </summary>
-        <div class="secbody">
-          <div data-secout="${esc(s.key)}"></div>
-          ${s.fields.map(f => field(f)).join('')}
-        </div></details>`);
-    }
+  for (const t of scope) for (const s of t.sections) {
+    const fields = q ? s.fields.filter(f => (f.value + ' ' + f.label).toLowerCase().includes(q)) : s.fields;
+    if (fields.length) out.push({ tab: t, sec: s, fields });
   }
-  $('body').innerHTML = out.length ? out.join('') : '<div class="empty">Nothing to edit here.</div>';
+  return out;
+}
+
+function render() {
+  const q = $('q').value.trim().toLowerCase();
+  sectionFields.clear();
+  data.tabs.forEach(t => t.sections.forEach(sec => sec.fields.forEach(f => sectionFields.set(f.key, f))));
+
+  const list = visibleSections();
+  if (!list.length) { $('body').innerHTML = '<div class="empty">Nothing to edit here.</div>'; return; }
+  if (!sel || !list.some(x => x.sec.key === sel)) sel = list[0].sec.key;
+  const cur = list.find(x => x.sec.key === sel);
+
+  const rail = list.map(x => {
+    const localDirty = x.sec.fields.some(f => changes.has(f.key));
+    return `<button class="secitem ${x.sec.key === sel ? 'on' : ''}" data-sec="${esc(x.sec.key)}">
+      <span class="t">${esc(x.sec.title)}${q && data.tabs.length > 1 ? ` <span class="n">· ${esc(x.tab.title)}</span>` : ''}</span>
+      ${x.sec.shared ? '<span class="sh" title="This copy appears on every page">◎</span>' : ''}
+      <span class="n">${x.fields.length}</span>
+      ${(x.sec.changed || localDirty) ? '<span class="dot"></span>' : ''}
+    </button>`;
+  }).join('');
+
+  const detail = `
+    <div class="dethead">
+      <h2>${esc(cur.sec.title)}</h2>
+      <span class="badge">${cur.fields.length} field${cur.fields.length === 1 ? '' : 's'}</span>
+      ${cur.sec.shared ? '<span class="badge info" title="This copy appears on every page">every page</span>' : ''}
+      ${cur.sec.changed ? `<span class="badge warn">${cur.sec.changed} unpublished</span>` : ''}
+      <span class="grow"></span>
+      ${CAN.ai ? `<button class="btn sm" data-secai="${esc(cur.sec.key)}">✦ Rewrite section</button>` : ''}
+    </div>
+    <div data-secout="${esc(cur.sec.key)}"></div>
+    ${cur.fields.map(f => field(f)).join('')}`;
+
+  $('body').innerHTML = `<div class="editor">
+    <nav class="rail">${q ? `<div class="railcap">${list.length} matching section${list.length === 1 ? '' : 's'}</div>` : ''}${rail}</nav>
+    <section class="detail">${detail}</section>
+  </div>`;
+  $('body').querySelectorAll('.secitem').forEach(b =>
+    b.addEventListener('click', () => { sel = b.dataset.sec; render(); }));
   wire();
 }
 
 const NOAI = new Set(['link', 'state', 'asset']);
 
-/** Field types get the control they deserve: a URL box, a fixed dropdown, or text. */
-function control(f, dis) {
+/** Field types get the control they deserve: a URL box, a fixed dropdown, or text.
+    Unsaved local edits survive rail/tab switches — render from `changes` first. */
+function control(f, dis, val) {
   if (f.tag === 'state' && f.options) {
     // preserve a value the vocabulary does not know about rather than silently
     // rewriting it on save
-    const known = f.options.some(o => o.value === f.value);
+    const known = f.options.some(o => o.value === val);
     const opts = f.options.map(o =>
-      `<option value="${esc(o.value)}" ${o.value === f.value ? 'selected' : ''}>${esc(o.label)}</option>`).join('');
+      `<option value="${esc(o.value)}" ${o.value === val ? 'selected' : ''}>${esc(o.label)}</option>`).join('');
     const custom = known ? '' :
-      `<option value="${esc(f.value)}" selected>Custom — ${esc(f.value || '(none)')}</option>`;
+      `<option value="${esc(val)}" selected>Custom — ${esc(val || '(none)')}</option>`;
     return `<select data-in="${esc(f.key)}" ${dis}>${opts}${custom}</select>`;
   }
   if (f.tag === 'media' || f.tag === 'image') {
-    const isVideo = /\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(f.value);
+    const isVideo = /\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(val);
     return `<div class="mediaField">
-      <div class="mediaPrev">${f.value
+      <div class="mediaPrev">${val
         ? (isVideo
-            ? `<video src="${esc(f.value)}" muted playsinline preload="metadata"></video>`
-            : `<img src="${esc(f.value)}" alt="" loading="lazy">`)
+            ? `<video src="${esc(val)}" muted playsinline preload="metadata"></video>`
+            : `<img src="${esc(val)}" alt="" loading="lazy">`)
         : '<span class="mediaEmpty">empty</span>'}</div>
       <div style="flex:1;min-width:0">
-        <input type="text" data-in="${esc(f.key)}" value="${esc(f.value)}" ${dis}
+        <input type="text" data-in="${esc(f.key)}" value="${esc(val)}" ${dis}
           placeholder="https://…  (an image, or an .mp4 to make it a video)"
           style="font-family:ui-monospace,Menlo,monospace;font-size:12.5px">
         <div class="hint">${isVideo
           ? 'Rendering as a video with the house play button. Set a poster frame below.'
           : 'Paste an .mp4 / .webm URL to turn this slot into a video.'}</div>
       </div>
-      <a class="btn sm" href="${esc(f.value)}" target="_blank" rel="noopener">Open ↗</a>
+      <a class="btn sm" href="${esc(val)}" target="_blank" rel="noopener">Open ↗</a>
     </div>`;
   }
   if (f.tag === 'link') {
     return `<div style="display:flex;gap:7px;align-items:center">
-      <input type="text" data-in="${esc(f.key)}" value="${esc(f.value)}" ${dis}
+      <input type="text" data-in="${esc(f.key)}" value="${esc(val)}" ${dis}
         placeholder="/path or https://…" style="font-family:ui-monospace,Menlo,monospace;font-size:13px">
-      <a class="btn sm" href="${esc(f.value)}" target="_blank" rel="noopener">Test ↗</a>
+      <a class="btn sm" href="${esc(val)}" target="_blank" rel="noopener">Test ↗</a>
     </div>`;
   }
   return f.multiline
-    ? `<textarea data-in="${esc(f.key)}" ${dis}>${esc(f.value)}</textarea>`
-    : `<input type="text" data-in="${esc(f.key)}" value="${esc(f.value)}" ${dis}>`;
+    ? `<textarea data-in="${esc(f.key)}" ${dis}>${esc(val)}</textarea>`
+    : `<input type="text" data-in="${esc(f.key)}" value="${esc(val)}" ${dis}>`;
 }
 
 function field(f) {
   // a poster frame only means anything once its slot holds a video
   if (/@poster$/.test(f.key)) {
     const owner = sectionFields.get(f.key.replace(/@poster$/, ''));
-    if (!owner || !/\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(owner.value)) return '';
+    const ownerVal = owner ? (changes.has(owner.key) ? changes.get(owner.key) : owner.value) : '';
+    if (!owner || !/\.(mp4|webm|mov|m4v)(\?|#|$)/i.test(ownerVal)) return '';
   }
   const dis = CAN.edit ? '' : 'disabled';
-  return `<div class="fld ${f.dirty ? 'dirty' : ''}" data-f="${esc(f.key)}">
+  const val = changes.has(f.key) ? changes.get(f.key) : f.value;
+  const dirty = f.dirty || changes.has(f.key);
+  const ai = CAN.ai && !NOAI.has(f.tag);
+  return `<div class="fld ${dirty ? 'dirty' : ''}" data-f="${esc(f.key)}">
     <div class="fldhead">
-      <span class="tag">${esc(f.tag || '')}</span>
       <span class="name" title="${esc(f.key)}">${esc(f.label)}</span>
+      <span class="tag">${esc(f.tag || 'text')}</span>
       ${f.comments ? `<span class="badge info">${f.comments} note${f.comments === 1 ? '' : 's'}</span>` : ''}
-      ${f.dirty ? '<span class="badge warn">draft</span>' : ''}
+      ${dirty ? '<span class="badge warn">draft</span>' : ''}
+      <span class="grow"></span>
+      ${ai ? `<button class="aibtn" data-aitoggle="${esc(f.key)}" title="Rewrite with AI">✦ AI</button>` : ''}
     </div>
-    ${control(f, dis)}
+    ${control(f, dis, val)}
     ${f.dirty ? `<div class="was">Live: “${esc(f.published)}”</div>` : ''}
-    ${CAN.ai && !NOAI.has(f.tag) ? `<div class="aiRow">
+    ${ai ? `<div class="aiRow" data-airow="${esc(f.key)}" hidden>
       <input type="text" class="aiIns" data-ins="${esc(f.key)}" placeholder="Tell the AI what to change…">
       <button class="btn sm" data-ai="rewrite" data-k="${esc(f.key)}">Rewrite</button>
       <button class="btn sm" data-ai="variants" data-k="${esc(f.key)}">3 options</button>
     </div><div class="aiOut" data-out="${esc(f.key)}"></div>` : ''}
   </div>`;
+}
+
+function markRail() {
+  const on = $('body').querySelector('.secitem.on');
+  if (on && !on.querySelector('.dot')) on.insertAdjacentHTML('beforeend', '<span class="dot"></span>');
 }
 
 function wire() {
@@ -213,14 +286,21 @@ function wire() {
     el.addEventListener(on, () => {
       changes.set(el.dataset.in, el.value);
       el.closest('.fld').classList.add('dirty');
-      bar();
+      markRail(); bar();
     });
   });
+  $('body').querySelectorAll('[data-aitoggle]').forEach(b => b.addEventListener('click', () => {
+    const row = $('body').querySelector(`[data-airow="${CSS.escape(b.dataset.aitoggle)}"]`);
+    if (!row) return;
+    row.hidden = !row.hidden;
+    b.classList.toggle('on', !row.hidden);
+    if (!row.hidden) row.querySelector('.aiIns').focus();
+  }));
   $('body').querySelectorAll('[data-ai]').forEach(b => b.addEventListener('click', (e) => {
     e.preventDefault(); runAI(b.dataset.ai, b.dataset.k, b);
   }));
   $('body').querySelectorAll('[data-secai]').forEach(b => b.addEventListener('click', (e) => {
-    e.preventDefault(); e.stopPropagation(); sectionAI(b.dataset.secai);
+    e.preventDefault(); sectionAI(b.dataset.secai);
   }));
 }
 
@@ -230,7 +310,7 @@ function setValue(key, text) {
   input.value = text;
   changes.set(key, text);
   input.closest('.fld').classList.add('dirty');
-  bar();
+  markRail(); bar();
 }
 
 async function runAI(kind, key, btn) {
@@ -261,23 +341,23 @@ async function sectionAI(sectionKey) {
   const host = $('body').querySelector(`[data-secout="${CSS.escape(sectionKey)}"]`);
   const what = prompt('What should change across this whole section?\n\ne.g. "make it tighter and more concrete"');
   if (!what) return;
-  host.innerHTML = '<div class="hint"><span class="spin"></span> Claude is rewriting the section…</div>';
+  host.innerHTML = '<div class="hint" style="padding:10px 0"><span class="spin"></span> Claude is rewriting the section…</div>';
   try {
     const r = await api(`/api/pages/${slug}/ai/section`, {
       method: 'POST', body: JSON.stringify({ section: sectionKey, instruction: what })
     });
-    host.innerHTML = `<div class="banner"><b>${r.items.length} field(s) rewritten.</b>
+    host.innerHTML = `<div class="banner" style="margin-top:12px"><b>${r.items.length} field(s) rewritten.</b>
       Review below, then Save draft. <button class="btn sm" id="applyAll">Apply all</button></div>`;
     host.querySelector('#applyAll').addEventListener('click', () => {
       r.items.forEach(it => setValue(it.key, it.text));
-      host.innerHTML = '<div class="banner"><b>Applied as drafts.</b> Nothing is live until you publish.</div>';
+      host.innerHTML = '<div class="banner" style="margin-top:12px"><b>Applied as drafts.</b> Nothing is live until you publish.</div>';
     });
   } catch (e) {
     host.innerHTML = `<div class="aiErr">${esc(e.message)}</div>`;
   }
 }
 
-$('q').addEventListener('input', render);
+$('q').addEventListener('input', () => { sel = null; render(); });
 
 $('save').addEventListener('click', async () => {
   if (!changes.size) return;
@@ -301,7 +381,6 @@ $('discard').addEventListener('click', async () => {
 if (CAN.publish) {
   const b = document.createElement('button');
   b.className = 'btn primary'; b.textContent = 'Publish';
-  b.style.marginLeft = '6px';
   b.addEventListener('click', async () => {
     if (changes.size && !confirm('Save your unsaved changes first, then publish?')) return;
     if (changes.size) $('save').click();
@@ -312,8 +391,14 @@ if (CAN.publish) {
       alert(r.published ? `Published ${r.published} change(s) — live now.` : 'Nothing to publish.');
     } catch (e) { alert(e.message); }
   });
-  document.querySelector('.phead').appendChild(b);
+  $('acts').appendChild(b);
 }
+
+document.addEventListener('keydown', (e) => {
+  const t = document.activeElement;
+  const typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT');
+  if (e.key === '/' && !typing) { e.preventDefault(); $('q').focus(); }
+});
 
 window.addEventListener('beforeunload', (e) => { if (changes.size) { e.preventDefault(); e.returnValue = ''; } });
 await load();
