@@ -390,17 +390,19 @@
   var scrollAway = null, scrollAwayPending = false;
   function watchScrollAway() {
     if (scrollAway) return;
-    scrollAway = function () {
+    scrollAway = function (e) {
+      /* the drawer scrolling ITSELF is not the page moving on */
+      if (e && e.target && e.target.nodeType === 1 && e.target.closest &&
+          e.target.closest(".mu-side")) return;
       if (scrollAwayPending) return;
       scrollAwayPending = true;
       requestAnimationFrame(function () {
         scrollAwayPending = false;
-        if (!side || !activeSection || mode !== "edit" || live) return;
-        if (side.contains(document.activeElement)) return;
+        if (!side || !activeSection || mode !== "edit") return;
         var host = document.querySelector('[data-sec="' + CSS.escape(activeSection) + '"]');
         if (!host || !host.isConnected) return;
         var r = host.getBoundingClientRect();
-        if (r.bottom < 60 || r.top > window.innerHeight - 60) { closeSidebar(); return; }
+        if (r.bottom < 60 || r.top > window.innerHeight - 60) { stopTyping(); closeSidebar(); return; }
         /* What you are READING is whatever owns the middle of the screen —
            a sliver of the old section clipping the top edge does not count,
            and a sticky hero that never scrolls away but sits covered does
@@ -410,7 +412,7 @@
         var hit = document.elementFromPoint(Math.max(60, cw / 2), window.innerHeight / 2);
         if (!hit || hit.closest(".mu-side, .mu-bar, .mu-pill, .mu-toast")) return;
         var hitSec = hit.closest("[data-sec]");
-        if (hitSec && hitSec !== host && !host.contains(hitSec) && !hitSec.contains(host)) closeSidebar();
+        if (hitSec && hitSec !== host && !host.contains(hitSec) && !hitSec.contains(host)) { stopTyping(); closeSidebar(); }
       });
     };
     window.addEventListener("scroll", scrollAway, { passive: true, capture: true });
