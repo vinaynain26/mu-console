@@ -124,10 +124,19 @@ body.mu-editing [data-c-media]{ outline:1px dashed rgba(37,99,235,.4); outline-o
   display:flex; flex-direction:column;
   font-size:14px; line-height:1.55;
 }
-/* the panel arrives as a material — blur and scale resolve together */
+/* a sheet: full travel along its own edge, critically damped, in and out
+   on the same path with mirrored easing */
 @keyframes mu-slide{
-  from{ transform:translateX(16px) scale(.99); opacity:0; filter:blur(6px) }
-  to  { transform:translateX(0) scale(1);      opacity:1; filter:blur(0) }
+  from{ transform:translateX(100%) }
+  to  { transform:translateX(0) }
+}
+@keyframes mu-slide-out{
+  from{ transform:translateX(0) }
+  to  { transform:translateX(100%) }
+}
+.mu-side.mu-side--out{
+  animation:mu-slide-out .34s cubic-bezier(.32,.72,0,1) forwards !important;
+  pointer-events:none;
 }
 body.mu-side-open{ margin-right:400px; transition:margin-right .34s cubic-bezier(.32,.72,0,1) }
 @media (max-width:900px){ body.mu-side-open{ margin-right:0 } }
@@ -254,7 +263,7 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #2563EB;outline-offset:-4
 }
 .mu-filter:focus{outline:none;border-color:#2563EB;box-shadow:0 0 0 3px rgba(37,99,235,.14);background:#fff}
 
-.mu-side{ animation:mu-slide .3s cubic-bezier(.32,.72,0,1) !important }
+.mu-side{ animation:mu-slide .34s cubic-bezier(.32,.72,0,1) !important }
 .mu-grp__h{
   font-size:10.5px;font-weight:600;color:#98A2B3;margin-bottom:12px;letter-spacing:.08em;text-transform:uppercase;
 }
@@ -457,4 +466,14 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #2563EB;outline-offset:-4
   box-shadow:0 0 0 2px #2563EB inset;
   background:#fff;
   border-radius:12px;
+}
+
+/* the drawer leaves the way it came — while the page eases back underneath */
+@keyframes mu-slide-out{
+  from{ transform:translateX(0) scale(1);      opacity:1; filter:blur(0) }
+  to  { transform:translateX(24px) scale(.99); opacity:0; filter:blur(6px) }
+}
+.mu-side.mu-side--out{
+  animation:mu-slide-out .3s cubic-bezier(.32,.72,0,1) forwards !important;
+  pointer-events:none;
 }

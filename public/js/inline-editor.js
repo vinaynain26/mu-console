@@ -927,12 +927,23 @@
   var side = null;
 
   function closeSidebar() {
-    if (side) { side.remove(); side = null; }
-    document.body.classList.remove("mu-side-open");
+    document.body.classList.remove("mu-side-open");   // the page starts reclaiming its room now
     Array.prototype.forEach.call(document.querySelectorAll(".mu-sec-active"), function (n) {
       n.classList.remove("mu-sec-active");
     });
     activeSection = null;
+    if (!side) return;
+    var going = side;
+    side = null;
+    /* a sheet retreats along its own edge — full travel, critically damped,
+       nothing else changing about it while it goes */
+    var instant = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (instant) { going.remove(); return; }
+    going.classList.add("mu-side--out");
+    var done = false;
+    var finish = function () { if (!done) { done = true; going.remove(); } };
+    going.addEventListener("animationend", finish, { once: true });
+    setTimeout(finish, 400);   // belt for a lost animationend
   }
 
   var sideTab = "all";
@@ -1009,6 +1020,8 @@
     if (host) host.classList.add("mu-sec-active");
 
     if (!side) {
+      var leaving = document.querySelector(".mu-side--out");
+      if (leaving) leaving.remove();   // a reopen mid-exit clears the departing sheet
       side = el("div", "mu-side");
       /* The site scrolls through Lenis, which takes the wheel everywhere and
          would scroll the PAGE under a scrolling sidebar. Lenis honours this
