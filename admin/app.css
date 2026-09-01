@@ -1,47 +1,76 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400..800&family=Nunito+Sans:ital,opsz,wght@0,6..12,300..1000;1,6..12,300..1000&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 /* ============================================================
-   MU Console design system — the Framer layout read.
-   Not just the palette: sidebar-first frame, thumbnail grid,
-   toolbar rows, pill tabs, floating action bar. One vivid blue,
-   gray fills, hairlines, compact confident type.
+   MU Console — Masters' Union design system on Framer bones.
+   Dark-first: #000 is the canvas, white is the insert. One
+   signature gradient (cyan → yellow → orange), grotesque display
+   type with a serif-italic accent, pill buttons, noise cards,
+   soft shadows, 280ms ease-out.
    ============================================================ */
 
+@font-face{
+  font-family:'Instrument Serif';
+  src:url('/console-ui/fonts/InstrumentSerif-Regular.ttf') format('truetype');
+  font-weight:400; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'Instrument Serif';
+  src:url('/console-ui/fonts/InstrumentSerif-Italic.ttf') format('truetype');
+  font-weight:400; font-style:italic; font-display:swap;
+}
+
 :root{
-  /* color */
-  --bg:#0E0E0E; --surface:#161616; --surface-2:#1C1C1C; --surface-3:#242424;
-  --ink:#F5F5F5; --ink-2:#9A9A9A; --ink-3:#636363;
-  --line:rgba(255,255,255,.07); --line-2:rgba(255,255,255,.14);
-  --fill:rgba(255,255,255,.06); --fill-2:rgba(255,255,255,.11);
-  --brand:#0055FF; --brand-hover:#2D71FF;
-  --ok-bg:rgba(48,209,88,.15);  --ok-ink:#4ADE80;
-  --warn-bg:rgba(255,159,10,.15); --warn-ink:#FFB84D;
-  --info-bg:rgba(0,85,255,.18); --info-ink:#6D9BFF;
+  /* brand */
+  --mu-cyan:#39B6D8; --mu-yellow:#F7D344; --mu-orange:#E38330;
+  --mu-gradient:linear-gradient(90deg,#39B6D8 0%,#F7D344 50%,#E38330 100%);
+  /* surfaces — black canvas, noise-card inserts */
+  --bg:#000000; --surface:#121112; --surface-2:#1A191A; --surface-3:#262626;
+  --ink:#FFFFFF; --ink-2:rgba(255,255,255,.70); --ink-3:rgba(255,255,255,.42);
+  --line:rgba(255,255,255,.08); --line-2:rgba(255,255,255,.15);
+  --fill:rgba(255,255,255,.07); --fill-2:rgba(255,255,255,.12);
+  /* status — drafts wear the brand yellow, info wears the cyan */
+  --ok-bg:rgba(48,209,88,.14);  --ok-ink:#4ADE80;
+  --warn-bg:rgba(247,211,68,.13); --warn-ink:#F7D344;
+  --info-bg:rgba(57,182,216,.14); --info-ink:#6FCFEC;
   --crit-bg:rgba(255,69,58,.15); --crit-ink:#FF6B61;
-  --focus:#0055FF;
-  /* shape */
-  --r-sm:6px; --r:8px; --r-lg:12px; --r-xl:16px;
-  /* elevation */
-  --sh:0 0 0 1px rgba(255,255,255,.06);
-  --sh-pop:0 24px 60px rgba(0,0,0,.55), 0 0 0 1px rgba(255,255,255,.09);
+  --focus:var(--mu-cyan);
+  /* type */
+  --font-display:'Galano Grotesque','Outfit','Nunito Sans',system-ui,-apple-system,sans-serif;
+  --font-sans:'Galano Grotesque','Nunito Sans',system-ui,-apple-system,sans-serif;
+  --font-serif:'Instrument Serif',Georgia,serif;
+  --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
+  /* shape — cards 16, pills for buttons */
+  --r-sm:6px; --r:8px; --r-lg:16px; --r-xl:24px; --r-pill:999px;
+  /* elevation — soft, not punchy */
+  --sh:0 8px 24px rgba(0,0,0,.35);
+  --sh-pop:0 24px 60px rgba(0,0,0,.45);
+  --vignette:inset 0 0 120px rgba(255,255,255,.03);
+  /* motion */
+  --ease:cubic-bezier(.22,1,.36,1);
+  --dur-fast:160ms; --dur:280ms;
   /* frame */
   --side-w:232px; --content-max:1120px;
   /* legacy aliases still referenced by inline styles */
   --ink-sub:var(--ink-2); --ink-mute:var(--ink-3);
   --surface-sub:var(--surface-2); --surface-hover:var(--surface-2);
   --fill-hover:var(--fill-2); --line-strong:var(--line-2);
+  --brand:#FFFFFF; --brand-hover:#E5E5E5;
 }
 
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{
   background:var(--bg); color:var(--ink);
-  font:13.5px/1.55 Geist,-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Inter,Roboto,Arial,sans-serif;
+  font:13.5px/1.55 var(--font-sans);
   -webkit-font-smoothing:antialiased;
-  letter-spacing:-0.005em;
+}
+/* the masthead strip — the signature gradient, always cyan → yellow → orange */
+body::before{
+  content:''; position:fixed; top:0; left:0; right:0; height:2px;
+  background:var(--mu-gradient); z-index:100; pointer-events:none;
 }
 a{color:inherit}
-::selection{background:rgba(0,85,255,.35)}
+::selection{background:rgba(57,182,216,.35)}
 :focus{outline:none}
 :focus-visible{outline:2px solid var(--focus);outline-offset:2px}
 svg{display:block;flex:none}
@@ -54,7 +83,7 @@ svg{display:block;flex:none}
   position:fixed; inset:0 auto 0 0; width:var(--side-w); z-index:40;
   display:flex; flex-direction:column;
   background:var(--bg); border-right:1px solid var(--line);
-  padding:14px 10px 12px;
+  padding:16px 10px 12px;
 }
 main{
   margin-left:var(--side-w);
@@ -64,30 +93,28 @@ main>*{max-width:var(--content-max); margin-left:auto; margin-right:auto}
 
 /* brand */
 .side-brand{
-  display:flex; align-items:center; gap:9px; text-decoration:none;
-  padding:6px 10px 18px; font-size:13.5px; font-weight:650; letter-spacing:-.015em;
+  display:flex; align-items:center; gap:10px; text-decoration:none;
+  padding:6px 10px 18px;
+  font-family:var(--font-display); font-size:14px; font-weight:700; letter-spacing:-.01em;
 }
-.side-brand .logo{
-  width:24px;height:24px;border-radius:7px;background:var(--brand);color:#fff;
-  display:grid;place-items:center;font-size:12px;font-weight:700;letter-spacing:0;
-}
+.side-brand .logo{width:18px; height:auto; display:block}
 .side-brand span.dim{color:var(--ink-3);font-weight:450}
 
 /* nav */
 .side-nav{flex:1; overflow-y:auto}
 .side-nav a{
   display:flex; align-items:center; gap:9px; padding:7px 10px; border-radius:var(--r);
-  text-decoration:none; color:var(--ink-2); font-weight:500; font-size:13px; margin-bottom:1px;
-  transition:background 120ms ease, color 120ms ease;
+  text-decoration:none; color:var(--ink-2); font-weight:600; font-size:13px; margin-bottom:1px;
+  transition:background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
-.side-nav a svg{color:var(--ink-3); transition:color 120ms ease}
+.side-nav a svg{color:var(--ink-3); transition:color var(--dur-fast) var(--ease)}
 .side-nav a:hover{background:var(--fill); color:var(--ink)}
 .side-nav a:hover svg{color:var(--ink-2)}
-.side-nav a.on{background:var(--fill-2); color:var(--ink); font-weight:600}
+.side-nav a.on{background:var(--fill-2); color:var(--ink); font-weight:700}
 .side-nav a.on svg{color:var(--ink)}
 .side-grp{
-  font-size:10px;font-weight:600;color:var(--ink-3);
-  padding:18px 10px 6px; letter-spacing:.09em; text-transform:uppercase;
+  font-size:10px;font-weight:700;color:var(--ink-3);
+  padding:18px 10px 6px; letter-spacing:.12em; text-transform:uppercase;
 }
 
 /* user chip pinned to the bottom */
@@ -96,16 +123,16 @@ main>*{max-width:var(--content-max); margin-left:auto; margin-right:auto}
   display:flex; align-items:center; gap:9px;
 }
 .side-foot .me{flex:1; min-width:0}
-.side-foot .me b{display:block;font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.side-foot .me b{display:block;font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .side-foot .me span{display:block;font-size:11px;color:var(--ink-3);text-transform:capitalize}
 .avatar{
-  width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;
-  display:grid;place-items:center;font-size:11px;font-weight:650;flex:none;
+  width:28px;height:28px;border-radius:50%;background:var(--mu-gradient);color:#000;
+  display:grid;place-items:center;font-size:11px;font-weight:800;flex:none;
 }
 .iconbtn{
   width:28px;height:28px;border:0;border-radius:var(--r);background:transparent;color:var(--ink-3);
   display:grid;place-items:center;cursor:pointer;flex:none;
-  transition:background 120ms ease,color 120ms ease;
+  transition:background var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease);
 }
 .iconbtn:hover{background:var(--fill);color:var(--ink)}
 
@@ -113,15 +140,18 @@ main>*{max-width:var(--content-max); margin-left:auto; margin-right:auto}
    Page header + toolbar
    ============================================================ */
 .phead{display:flex; align-items:flex-end; gap:16px; margin-bottom:26px; flex-wrap:wrap}
-.phead h1{margin:0; font-size:26px; font-weight:650; letter-spacing:-.03em; line-height:1.15}
+.phead h1{
+  margin:0; font-family:var(--font-display); font-size:27px; font-weight:700;
+  letter-spacing:-.02em; line-height:1.1;
+}
 .phead .sub{color:var(--ink-2); font-size:13.5px; margin-top:6px; max-width:60ch}
 .phead .grow{flex:1}
 .phead-acts{display:flex; align-items:center; gap:8px; flex:none; margin-left:auto}
 .back{
-  color:var(--ink-2); text-decoration:none; font-size:12.5px; font-weight:500;
+  color:var(--ink-2); text-decoration:none; font-size:12.5px; font-weight:600;
   display:inline-flex; align-items:center; gap:5px; margin-bottom:10px;
   padding:3px 8px 3px 5px; margin-left:-5px; border-radius:var(--r-sm);
-  transition:background 120ms ease,color 120ms ease;
+  transition:background var(--dur-fast) var(--ease),color var(--dur-fast) var(--ease);
 }
 .back:hover{color:var(--ink); background:var(--fill)}
 
@@ -132,37 +162,38 @@ main>*{max-width:var(--content-max); margin-left:auto; margin-right:auto}
 .search{position:relative; width:100%; max-width:340px}
 .search>svg{position:absolute; left:11px; top:50%; translate:0 -50%; color:var(--ink-3); pointer-events:none}
 .search input,.search input[type=search]{
-  width:100%; height:36px; padding:0 40px 0 34px; border:1px solid transparent; border-radius:10px;
+  width:100%; height:36px; padding:0 40px 0 34px; border:1px solid transparent; border-radius:var(--r-pill);
   font:inherit; font-size:13px; background:var(--fill); color:var(--ink);
 }
-.search input:focus{outline:none; background:var(--surface-2); border-color:var(--brand); box-shadow:0 0 0 3px rgba(0,85,255,.25)}
+.search input:focus{outline:none; background:var(--surface-2); border-color:var(--focus); box-shadow:0 0 0 3px rgba(57,182,216,.22)}
 .search kbd{
-  position:absolute; right:9px; top:50%; translate:0 -50%;
+  position:absolute; right:11px; top:50%; translate:0 -50%;
   font:inherit; font-size:11px; color:var(--ink-3); background:var(--fill);
-  border-radius:5px; padding:2px 7px; pointer-events:none;
+  border-radius:var(--r-pill); padding:2px 8px; pointer-events:none;
 }
 .search input:focus~kbd{opacity:0}
 
 /* ============================================================
-   Buttons — gray fills, one blue
+   Buttons — pills; the primary is a white insert on black
    ============================================================ */
 .btn{
-  font:inherit; font-weight:600; font-size:12.5px; border-radius:var(--r);
-  transition:transform 90ms cubic-bezier(.2,0,0,1), background 120ms ease, color 120ms ease;
+  font:inherit; font-weight:700; font-size:12.5px; border-radius:var(--r-pill);
+  transition:transform 90ms var(--ease), background var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease), opacity var(--dur-fast) var(--ease);
   border:0; background:var(--fill); color:var(--ink);
-  height:32px; padding:0 13px; cursor:pointer; text-decoration:none; display:inline-flex;
+  height:32px; padding:0 15px; cursor:pointer; text-decoration:none; display:inline-flex;
   align-items:center; gap:6px; white-space:nowrap;
 }
 .btn:hover{background:var(--fill-2)}
-.btn:active{transform:scale(.97)}
-.btn.primary{background:var(--brand); color:#fff}
-.btn.primary:hover{background:var(--brand-hover)}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:#FFF; color:#000}
+.btn.primary:hover{background:#E5E5E5}
 .btn.crit{background:rgba(255,69,58,.2); color:#FF6B61}
 .btn.crit:hover{background:rgba(255,69,58,.32)}
 .btn.ghost{background:transparent; color:var(--ink-2)}
 .btn.ghost:hover{background:var(--fill); color:var(--ink)}
 .btn[disabled]{opacity:.4; cursor:not-allowed; transform:none !important}
-.btn.sm{height:26px; padding:0 10px; font-size:11.5px}
+.btn.sm{height:26px; padding:0 12px; font-size:11.5px}
 .btn.plain{background:transparent; text-decoration:underline; text-underline-offset:3px; color:var(--ink-2); height:auto; padding:0}
 .btn.plain:hover{color:var(--ink)}
 
@@ -170,8 +201,8 @@ main>*{max-width:var(--content-max); margin-left:auto; margin-right:auto}
    Badges + status dots
    ============================================================ */
 .badge{
-  display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600;
-  padding:3px 9px; border-radius:99px; background:var(--fill); color:var(--ink-2); white-space:nowrap;
+  display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700;
+  padding:3px 10px; border-radius:var(--r-pill); background:var(--fill); color:var(--ink-2); white-space:nowrap;
 }
 .badge.ok{background:var(--ok-bg); color:var(--ok-ink)}
 .badge.warn{background:var(--warn-bg); color:var(--warn-ink)}
@@ -180,37 +211,40 @@ main>*{max-width:var(--content-max); margin-left:auto; margin-right:auto}
 .badge .dot,.dot{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block;flex:none}
 
 /* ============================================================
-   Surfaces — boxed card (settings, edit sections), list rows
+   Surfaces — noise cards: #121112, hairline, inner vignette
    ============================================================ */
-.card{background:var(--surface); border:1px solid var(--line); border-radius:14px; margin-bottom:16px}
+.card{
+  background:var(--surface); border:1px solid var(--line-2); border-radius:var(--r-lg);
+  box-shadow:var(--sh), var(--vignette); margin-bottom:16px;
+}
 .card > header{
   padding:13px 16px; border-bottom:1px solid var(--line);
   display:flex; align-items:center; gap:10px;
 }
-.card > header h2{margin:0; font-size:13.5px; font-weight:600; letter-spacing:-.01em}
+.card > header h2{margin:0; font-size:13.5px; font-weight:700}
 .card .inner{padding:16px}
 .card .grow{flex:1}
 
 .rrow{
   display:flex; align-items:center; gap:14px; padding:13px 16px;
   border-bottom:1px solid var(--line); text-decoration:none; color:inherit;
-  transition:background 120ms ease;
+  transition:background var(--dur-fast) var(--ease);
 }
 .rrow:last-child{border-bottom:0}
 .rrow:hover{background:var(--surface-2)}
-.rrow h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0 0 3px; font-size:13.5px; font-weight:600; letter-spacing:-.008em}
+.rrow h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:0 0 3px; font-size:13.5px; font-weight:700}
 .rrow .meta{color:var(--ink-2); font-size:12px}
 
 /* ============================================================
-   Forms — filled fields, blue focus
+   Forms — filled fields, cyan focus
    ============================================================ */
-label.lbl{display:block; font-size:11.5px; font-weight:500; margin-bottom:6px; color:var(--ink-2)}
+label.lbl{display:block; font-size:11.5px; font-weight:600; margin-bottom:6px; color:var(--ink-2)}
 input[type=text],input[type=email],input[type=password],input[type=search],textarea,select{
   width:100%; padding:9px 12px; border:1px solid transparent; border-radius:var(--r);
   font:inherit; font-size:13px; background:var(--fill); color:var(--ink);
 }
 input::placeholder,textarea::placeholder{color:var(--ink-3)}
-input:focus,textarea:focus,select:focus{outline:none; background:var(--surface-2); border-color:var(--brand); box-shadow:0 0 0 3px rgba(0,85,255,.25)}
+input:focus,textarea:focus,select:focus{outline:none; background:var(--surface-2); border-color:var(--focus); box-shadow:0 0 0 3px rgba(57,182,216,.22)}
 textarea{min-height:84px; resize:vertical; line-height:1.6}
 select{appearance:none}
 .hint{color:var(--ink-3); font-size:12px; margin-top:6px}
@@ -224,26 +258,26 @@ select{appearance:none}
 }
 .banner.warn{background:var(--warn-bg); color:var(--warn-ink)}
 .banner.crit{background:var(--crit-bg); color:var(--crit-ink)}
-.banner b{font-weight:650}
-.banner code{background:rgba(255,255,255,.1); padding:1px 6px; border-radius:5px}
+.banner b{font-weight:700}
+.banner code{background:rgba(255,255,255,.1); padding:1px 6px; border-radius:5px; font-family:var(--font-mono); font-size:12px}
 
 /* ============================================================
-   Floating action bar — a centered pill, not a bottom sheet
+   Floating action bar — a centered pill
    ============================================================ */
 .savebar{
   position:fixed; left:50%; bottom:22px; z-index:60;
   width:max-content; max-width:min(92vw,620px);
-  background:rgba(30,30,30,.88);
+  background:rgba(18,17,18,.9);
   backdrop-filter:blur(20px) saturate(140%);
   -webkit-backdrop-filter:blur(20px) saturate(140%);
-  border-radius:var(--r-xl); box-shadow:var(--sh-pop);
-  color:var(--ink); padding:10px 10px 10px 16px;
+  border:1px solid var(--line-2); border-radius:var(--r-pill); box-shadow:var(--sh-pop);
+  color:var(--ink); padding:9px 9px 9px 18px;
   display:flex; align-items:center; gap:14px;
   transform:translate(-50%, calc(100% + 40px));
-  transition:transform .34s cubic-bezier(.32,.72,0,1);
+  transition:transform .34s var(--ease);
 }
 .savebar.up{transform:translate(-50%, 0)}
-.savebar .msg{font-size:13px; font-weight:500; white-space:nowrap}
+.savebar .msg{font-size:13px; font-weight:600; white-space:nowrap}
 .savebar .msg::before{
   content:''; width:7px; height:7px; border-radius:50%; background:var(--warn-ink);
   display:inline-block; margin-right:9px; vertical-align:1px;
@@ -251,8 +285,8 @@ select{appearance:none}
 .savebar .grow{flex:1}
 .savebar .btn{background:var(--fill); color:var(--ink)}
 .savebar .btn:hover{background:var(--fill-2)}
-.savebar .btn.primary{background:var(--brand); color:#fff}
-.savebar .btn.primary:hover{background:var(--brand-hover)}
+.savebar .btn.primary{background:#FFF; color:#000}
+.savebar .btn.primary:hover{background:#E5E5E5}
 
 .empty{color:var(--ink-3); text-align:center; padding:44px 20px; font-size:13px}
 .spin{width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;
@@ -269,8 +303,8 @@ select{appearance:none}
 .mediaEmpty{font-size:10.5px;color:var(--ink-3)}
 
 /* ============================================================
-   Pages — thumbnail-led grid, the Framer dashboard read.
-   Tile + caption sit on the page background; no boxed card.
+   Pages — thumbnail-led grid on the black stage. Tiles are
+   noise cards; the tint cycles the three brand accents only.
    ============================================================ */
 .pgrid{
   display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:26px 18px;
@@ -280,36 +314,37 @@ select{appearance:none}
 .pthumb{
   position:relative; aspect-ratio:16/10; border-radius:var(--r-lg); overflow:hidden;
   background:
-    radial-gradient(120% 90% at 20% 0%, var(--tint, transparent), transparent 60%),
-    linear-gradient(150deg, var(--surface-2), var(--surface));
-  box-shadow:inset 0 0 0 1px var(--line);
+    radial-gradient(120% 90% at 18% 0%, var(--tint, transparent), transparent 62%),
+    var(--surface);
+  box-shadow:inset 0 0 0 1px var(--line-2), var(--vignette);
   display:grid; place-items:center;
-  transition:box-shadow .16s ease, transform .2s cubic-bezier(.32,.72,0,1);
+  transition:box-shadow var(--dur-fast) var(--ease), transform var(--dur) var(--ease);
 }
-.pcard:hover .pthumb{box-shadow:inset 0 0 0 1px var(--line-2); transform:translateY(-2px)}
+.pcard:hover .pthumb{box-shadow:inset 0 0 0 1px rgba(255,255,255,.28), var(--vignette); transform:translateY(-2px)}
 .pmono{
-  font-size:26px; font-weight:600; letter-spacing:-.02em; color:var(--ink-3);
-  user-select:none;
+  font-family:var(--font-display); font-size:27px; font-weight:700; letter-spacing:-.01em;
+  color:var(--ink-3); user-select:none;
 }
 .pchip{
   position:absolute; left:10px; top:10px; z-index:2;
-  font-size:10px; font-weight:600; letter-spacing:.02em; color:var(--ink-2);
-  background:rgba(14,14,14,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
-  border-radius:6px; padding:3px 7px;
+  font-size:10px; font-weight:700; letter-spacing:.02em; color:var(--ink-2);
+  background:rgba(0,0,0,.55); backdrop-filter:blur(9.5px); -webkit-backdrop-filter:blur(9.5px);
+  border-radius:var(--r-pill); padding:3px 9px;
 }
 .pview{
   position:absolute; right:8px; top:8px; z-index:2;
-  width:28px; height:28px; border-radius:var(--r); display:grid; place-items:center;
-  background:rgba(14,14,14,.6); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  width:28px; height:28px; border-radius:50%; display:grid; place-items:center;
+  background:rgba(0,0,0,.55); backdrop-filter:blur(9.5px); -webkit-backdrop-filter:blur(9.5px);
   color:var(--ink-2); opacity:0; translate:0 -2px;
-  transition:opacity .14s ease, translate .14s ease, background .14s ease, color .14s ease;
+  transition:opacity var(--dur-fast) var(--ease), translate var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
 .pcard:hover .pview,.pview:focus-visible{opacity:1; translate:0 0}
-.pview:hover{background:rgba(255,255,255,.14); color:var(--ink)}
+.pview:hover{background:#FFF; color:#000}
 .pbody{padding:10px 2px 0; display:flex; align-items:baseline; gap:8px}
 .pbody .grow{flex:1; min-width:0}
 .pname{
-  display:block; font-size:13.5px; font-weight:600; letter-spacing:-.012em; line-height:1.3;
+  display:block; font-size:13.5px; font-weight:700; line-height:1.3;
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-decoration:none;
 }
 /* stretched link: the whole card clicks through to Edit */
@@ -327,25 +362,23 @@ select{appearance:none}
   .btn{transition:opacity 140ms ease}
   .btn:active{transform:none; opacity:.7}
   .savebar{transition:opacity 180ms ease}
-  .pthumb,.pcard:hover .pthumb{transform:none; transition:box-shadow .16s ease}
-  .pview{transition:opacity .14s ease}
+  .pthumb,.pcard:hover .pthumb{transform:none}
+  .pview{transition:opacity 140ms ease}
 }
 @media (prefers-reduced-transparency: reduce){
-  .savebar{background:#1E1E1E; backdrop-filter:none; -webkit-backdrop-filter:none}
-  .pchip,.pview{background:#141414; backdrop-filter:none; -webkit-backdrop-filter:none}
+  .savebar{background:#121112; backdrop-filter:none; -webkit-backdrop-filter:none}
+  .pchip,.pview{background:#000; backdrop-filter:none; -webkit-backdrop-filter:none}
 }
 @media (prefers-contrast: more){
-  body{background:#000}
-  .side{background:#000}
-  .savebar{background:#000}
   .btn{border:1px solid rgba(255,255,255,.5)}
+  .btn.primary{border-color:#FFF}
 }
 
 @media (max-width:880px){
   .side{
     position:sticky; inset:auto; top:0; width:auto; flex-direction:row; align-items:center;
     gap:2px; padding:10px 14px; border-right:0; border-bottom:1px solid var(--line);
-    background:rgba(14,14,14,.85);
+    background:rgba(0,0,0,.85);
     backdrop-filter:blur(20px) saturate(140%); -webkit-backdrop-filter:blur(20px) saturate(140%);
   }
   .side-brand{padding:0 8px 0 0}

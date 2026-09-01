@@ -36,8 +36,10 @@ if (!acct.ai) {
     to enable rewriting, variants and section passes.</div>`;
 }
 
-/* a stable, subtle tint per page so the tile grid doesn't read as one gray slab */
-const hue = (s) => { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
+/* a stable, subtle tint per page so the tile grid doesn't read as one gray
+   slab — brand accents only, always from the MU trio */
+const TINTS = ['rgba(57,182,216,.09)', 'rgba(247,211,68,.07)', 'rgba(227,131,48,.09)'];
+const tint = (s) => { let h = 0; for (const c of s) h = (h * 31 + c.charCodeAt(0)) % 997; return TINTS[h % 3]; };
 const mono = (t) => t.trim().split(/[\s_-]+/).slice(0, 2).map(w => w[0] || '').join('').toUpperCase();
 
 try {
@@ -46,7 +48,7 @@ try {
      deletes those); View lives above it as its own small anchor. */
   const card = p => `
     <div class="pcard" data-name="${esc(p.title.toLowerCase())}">
-      <div class="pthumb" style="--tint:hsla(${hue(p.title)},70%,60%,.08)">
+      <div class="pthumb" style="--tint:${tint(p.title)}">
         ${p.source === 'instrumented' ? '<span class="pchip" title="Rendered by its own app">App</span>' : ''}
         <span class="pmono">${esc(mono(p.title))}</span>
         <a class="pview" href="/page/${esc(p.slug)}" target="_blank" rel="noopener"

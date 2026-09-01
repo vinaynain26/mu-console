@@ -5,13 +5,10 @@
 <style>
   body{display:grid;place-items:center;min-height:100vh;background:var(--bg)}
   .box{width:100%;max-width:360px;padding:20px}
-  .mark{text-align:center;margin-bottom:24px}
-  .mark .logo{
-    width:40px;height:40px;border-radius:11px;background:var(--brand);color:#fff;
-    display:grid;place-items:center;font-size:18px;font-weight:700;margin:0 auto 14px;
-  }
-  .mark h1{font-size:19px;margin:0 0 4px;font-weight:650;letter-spacing:-.02em}
-  .mark p{margin:0;color:var(--ink-sub);font-size:13px}
+  .mark{text-align:center;margin-bottom:26px}
+  .mark .logo{width:150px;height:auto;margin:0 auto 16px;display:block}
+  .mark h1{font-family:var(--font-display);font-size:19px;margin:0 0 5px;font-weight:700;letter-spacing:-.01em}
+  .mark p{margin:0;color:var(--ink-sub);font-family:var(--font-serif);font-style:italic;font-size:15.5px}
   .card{border-radius:var(--r-xl)}
   .card .inner{padding:22px}
   .field{margin-bottom:14px}
@@ -24,9 +21,9 @@
 </style></head><body>
 <div class="box">
   <div class="mark">
-    <div class="logo">M</div>
+    <img class="logo" src="/console-ui/assets/mu-logo-white.svg" alt="Masters' Union">
     <h1>MU Console</h1>
-    <p>Masters' Union programme pages</p>
+    <p>Programme pages, in your hands</p>
   </div>
   <div class="card"><div class="inner">
     <div class="err" id="err"></div>

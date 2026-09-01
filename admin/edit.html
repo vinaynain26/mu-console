@@ -12,7 +12,7 @@
   .tabbtn:hover{background:var(--fill);color:var(--ink)}
   .tabbtn.on{background:var(--fill-2);color:var(--ink);font-weight:600}
   .tabbtn .n{font-weight:450;opacity:.6;font-size:11.5px;margin-left:6px}
-  .tabbtn .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#FFB84D;margin-left:6px;vertical-align:middle}
+  .tabbtn .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--warn-ink);margin-left:6px;vertical-align:middle}
 
   /* master–detail: sticky section rail on the left, property list on the right */
   .editor{display:grid;grid-template-columns:232px minmax(0,1fr);gap:28px;align-items:start}
@@ -26,10 +26,11 @@
   .secitem.on{background:var(--fill-2);color:var(--ink);font-weight:600}
   .secitem .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .secitem .n{font-size:11px;color:var(--ink-3);font-weight:500}
-  .secitem .dot{width:6px;height:6px;border-radius:50%;background:#FFB84D;flex:none}
+  .secitem .dot{width:6px;height:6px;border-radius:50%;background:var(--warn-ink);flex:none}
   .secitem .sh{color:var(--info-ink);font-size:10px;flex:none}
 
-  .detail{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:2px 18px 8px;min-width:0}
+  .detail{background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r-lg);
+    box-shadow:var(--sh),var(--vignette);padding:2px 18px 8px;min-width:0}
   .dethead{display:flex;align-items:center;gap:9px;padding:14px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
   .dethead h2{margin:0;font-size:15px;font-weight:650;letter-spacing:-.015em}
   .dethead .grow{flex:1}
@@ -41,7 +42,7 @@
   .fldhead .name{font-size:12.5px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
   .fldhead .tag{background:var(--fill);color:var(--ink-3);border-radius:5px;padding:1px 6px;font-size:10px;font-weight:600;flex:none}
   .fldhead .grow{flex:1}
-  .fld.dirty input[data-in],.fld.dirty textarea[data-in]{border-color:#FFB84D;background:rgba(255,159,10,.08)}
+  .fld.dirty input[data-in],.fld.dirty textarea[data-in]{border-color:var(--warn-ink);background:rgba(247,211,68,.07)}
   .was{font-size:12px;color:var(--ink-2);margin-top:5px}
   .aibtn{border:0;background:transparent;color:var(--ink-3);font:inherit;font-size:11.5px;font-weight:600;
     padding:3px 9px;border-radius:6px;cursor:pointer;flex:none;transition:background 120ms ease,color 120ms ease}
@@ -51,7 +52,7 @@
   .aiRow[hidden]{display:none}
   .aiOut{margin-top:8px}
   .aiOpt{border:1px solid var(--line);border-radius:var(--r);padding:9px 11px;margin-top:7px;cursor:pointer;background:var(--surface-2);font-size:13.5px}
-  .aiOpt:hover{border-color:var(--focus);background:rgba(0,85,255,.1)}
+  .aiOpt:hover{border-color:var(--focus);background:rgba(57,182,216,.1)}
   .aiOpt .angle{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--focus);margin-bottom:3px}
   .aiErr{background:var(--crit-bg);color:var(--crit-ink);padding:8px 11px;border-radius:var(--r);font-size:12.5px;margin-top:7px}
   .aiIns{flex:1;min-width:190px;font-size:13px;padding:6px 10px}
@@ -225,7 +226,7 @@ function control(f, dis, val) {
       <div style="flex:1;min-width:0">
         <input type="text" data-in="${esc(f.key)}" value="${esc(val)}" ${dis}
           placeholder="https://…  (an image, or an .mp4 to make it a video)"
-          style="font-family:ui-monospace,Menlo,monospace;font-size:12.5px">
+          style="font-family:var(--font-mono);font-size:12.5px">
         <div class="hint">${isVideo
           ? 'Rendering as a video with the house play button. Set a poster frame below.'
           : 'Paste an .mp4 / .webm URL to turn this slot into a video.'}</div>
@@ -236,7 +237,7 @@ function control(f, dis, val) {
   if (f.tag === 'link') {
     return `<div style="display:flex;gap:7px;align-items:center">
       <input type="text" data-in="${esc(f.key)}" value="${esc(val)}" ${dis}
-        placeholder="/path or https://…" style="font-family:ui-monospace,Menlo,monospace;font-size:13px">
+        placeholder="/path or https://…" style="font-family:var(--font-mono);font-size:13px">
       <a class="btn sm" href="${esc(val)}" target="_blank" rel="noopener">Test ↗</a>
     </div>`;
   }

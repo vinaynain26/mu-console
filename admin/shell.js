@@ -50,7 +50,7 @@ export async function chrome(active) {
   const side = document.querySelector('.side');
   if (side) {
     side.innerHTML = `
-      <a class="side-brand" href="/console"><span class="logo">M</span>MU Console</a>
+      <a class="side-brand" href="/console"><img class="logo" src="/console-ui/assets/mu-mark-white.svg" alt="">MU Console</a>
       <div class="side-nav">
         <div class="side-grp">Content</div>
         <a href="/console" class="${active === 'pages' ? 'on' : ''}">${icon('pages')}Pages</a>

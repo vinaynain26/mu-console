@@ -398,6 +398,7 @@
     setTimeout(function () { document.body.style.transition = ""; }, 80);
   }
   var lastScrollTs = 0;
+  var holdDrawerUntil = 0;   // structural edits shake the page; the drawer holds on
   var scrollAway = null, scrollAwayPending = false;
   function watchScrollAway() {
     if (scrollAway) return;
@@ -410,6 +411,7 @@
       scrollAwayPending = true;
       requestAnimationFrame(function () {
         scrollAwayPending = false;
+        if (Date.now() < holdDrawerUntil) return;
         if (!side || !activeSection || mode !== "edit") return;
         var host = document.querySelector('[data-sec="' + CSS.escape(activeSection) + '"]');
         if (!host || !host.isConnected) return;
@@ -491,14 +493,17 @@
       if (!host || !bucket) return;
       if (!(host.offsetParent !== null || host.getClientRects().length)) return;
       var b0 = bucketsFor(key);
-      var total = b0 ? b0.all.length + b0.details.length : 0;
-      if (!total && !(b0 && b0.lists.length)) return;
+      /* ONE number, computed exactly the way the drawer's tabs compute theirs
+         (bug 11: the pill promising 31 while the tabs summed to 33 read as
+         broken) */
+      var total = b0 ? b0.all.length + b0.details.length + b0.buttons.length + b0.images.length +
+        b0.lists.reduce(function (n, f) { return n + listItemsOf(f).length; }, 0) : 0;
+      if (!total) return;
 
-      var name = bucket.title || "section";
-      if (name.length > 26) name = name.slice(0, 25).replace(/\s+\S*$/, "") + "\u2026";
+      /* a generic label (bug 7) \u2014 the section's own copy is content, not chrome */
       var pill = el("button", "mu-pill");
       pill.type = "button";
-      pill.innerHTML = '<span class="mu-pill__i">\u270e</span> Edit \u201c' + esc(name) + '\u201d' +
+      pill.innerHTML = '<span class="mu-pill__i">\u270e</span> Edit section' +
         '<span class="mu-pill__n">' + total + "</span>";
       pill.addEventListener("click", function (e) {
         e.preventDefault(); e.stopPropagation();
@@ -509,18 +514,45 @@
       if (/^(HEADER|NAV)$/.test(host.tagName)) {
         // a bar's own corner holds its CTA — hang the pill just below instead
         pill.classList.add("mu-pill--bar");
-      } else if (host.getBoundingClientRect().height > window.innerHeight * 0.85) {
-        // a full-screen section's corners belong to the page's own fixed
-        // controls (Watch intro, arrows) — hold the right edge instead
-        pill.classList.add("mu-pill--tall");
       } else {
-        // only sections that actually start under a pinned header need the offset
+        /* ONE designated position (bug 8): the section's top-right corner,
+           pushed below any pinned chrome — never floating over mid-content */
         var inset = topInset();
         if (inset && host.getBoundingClientRect().top < inset + 40) {
           pill.style.setProperty("top", (inset + 12) + "px", "important");
         }
+        nudgeClear(pill, host);
       }
       pills.push(pill);
+    }
+
+    /* Bugs 1 & 10: the hero parks its own "Gurugram Campus" chip exactly in
+       the corner the pill wants. If the corner is already taken by the
+       section's content, step the pill down until it sits clear. */
+    function nudgeClear(pill, host) {
+      if (!document.elementsFromPoint) return;
+      var pr = pill.getBoundingClientRect();
+      if (!pr.width) return;
+      pill.style.pointerEvents = "none";
+      try {
+        for (var pass = 0; pass < 4; pass++) {
+          var r = pill.getBoundingClientRect();
+          var under = document.elementsFromPoint(r.left + r.width / 2, r.top + r.height / 2) || [];
+          var blocker = null;
+          for (var i = 0; i < under.length; i++) {
+            var u = under[i];
+            if (!u.closest || u === host || u.closest(".mu-pill, .mu-bar, .mu-side, .mu-toast")) continue;
+            if (!host.contains(u)) break;      // reached the section's backdrop
+            var owns = (u.textContent || "").trim().length > 0 && u.children.length === 0;
+            if (owns || /^(IMG|VIDEO|svg|BUTTON|A)$/.test(u.tagName)) blocker = u;
+            break;                              // only the topmost thing decides
+          }
+          if (!blocker) break;
+          var br = blocker.getBoundingClientRect();
+          var hostTop = host.getBoundingClientRect().top;
+          pill.style.setProperty("top", Math.round(br.bottom - hostTop + 10) + "px", "important");
+        }
+      } finally { pill.style.pointerEvents = ""; }
     }
 
     if (served.length) {
@@ -699,16 +731,17 @@
       return null;
     };
 
-    var titleOf = function (host) {
-      var h = host.querySelector("h1, h2, h3, h4");
-      // innerText, not textContent: stacked <span> lines need the space back
-      var t = h ? norm(h.innerText || h.textContent) : "";
-      if (t) return t.length > 34 ? t.slice(0, 33).replace(/\s+\S*$/, "") + "\u2026" : t;
+    /* Bug 12: a section's NAME must be a label, never its own copy \u2014 the
+       drawer was titling itself "Latest from the campus." because that is the
+       heading it found. Use the landmark, the element's id, or an ordinal. */
+    var titleOf = function (host, ordinal) {
+      var fixed = { HEADER: "Header", NAV: "Navigation", FOOTER: "Footer" }[host.tagName];
+      if (fixed) return fixed;
       if (host.id) {
         return host.id.replace(/[-_]+/g, " ")
           .replace(/^./, function (c) { return c.toUpperCase(); });
       }
-      return { HEADER: "Header", NAV: "Navigation", FOOTER: "Footer" }[host.tagName] || "Section";
+      return "Section" + (ordinal ? " " + ordinal : "");
     };
 
     /* A value owned by more than one key cannot be placed by matching alone:
@@ -858,25 +891,73 @@
         if (fields.indexOf(e.f) < 0) fields.push(e.f);
         e.f.section_key = key;    // stylesForBlock reads this to find siblings
       });
-      sectionsById.set(key, { title: titleOf(host), fields: fields, host: host });
+      sectionsById.set(key, { title: titleOf(host, i + 1), fields: fields, host: host });
     });
 
     /* a list's structure row has no DOM presence of its own — file it with
        the section where its items' fields landed, so the Items tab shows up
        when that part of the page is opened */
+    var attachedLists = new Set();
+    /* every field key that belongs to this list's ITEMS — code items carry
+       theirs in options, CMS-born items are keyed <listKey>.it-* */
+    var itemKeysOf = function (f) {
+      var keys = new Set();
+      (((f.options || {}).items) || []).forEach(function (it) {
+        var fs = it.fields || {};
+        for (var p in fs) {
+          var v = typeof fs[p] === "string" ? fs[p] : fs[p] && fs[p].key;
+          if (v) keys.add(v);
+        }
+      });
+      meta.forEach(function (_, k) { if (k.indexOf(f.key + ".it-") === 0) keys.add(k); });
+      return keys;
+    };
     meta.forEach(function (f) {
       if (f.type !== "list") return;
-      var prefix = f.key.split(".list:")[0] + ".";
+      /* first by where the list's OWN items render — three faculty rails from
+         three source files must each land with their own cards, not wherever
+         their file's other strings happened to fall */
+      var own = itemKeysOf(f);
       var best = null, bestN = 0;
       sectionsById.forEach(function (bkt, k) {
         var n = 0;
-        bkt.fields.forEach(function (x) { if (x.key.indexOf(prefix) === 0) n++; });
+        bkt.fields.forEach(function (x) { if (own.has(x.key)) n++; });
         if (n > bestN) { bestN = n; best = k; }
       });
+      if (!best) {
+        /* none of its items are on the page (a rail behind an unopened tab) —
+           fall back to where its source file's fields live */
+        var prefix = f.key.split(".list:")[0] + ".";
+        sectionsById.forEach(function (bkt, k) {
+          var n = 0;
+          bkt.fields.forEach(function (x) { if (x.key.indexOf(prefix) === 0) n++; });
+          if (n > bestN) { bestN = n; best = k; }
+        });
+      }
       if (best) {
         var bkt = sectionsById.get(best);
         if (bkt.fields.indexOf(f) < 0) bkt.fields.push(f);
         f.section_key = best;
+        attachedLists.add(f.key);
+      }
+    });
+    /* A list whose items never rendered still belongs somewhere: the faculty
+       rail shows Full-time and Industry, but Visiting sits behind a page tab
+       the reader hasn't opened, so none of its fields are on the page. File
+       it with its sibling lists from the same source file. */
+    meta.forEach(function (f) {
+      if (f.type !== "list" || attachedLists.has(f.key)) return;
+      var file = f.key.split(".list:")[0];
+      var sib = null;
+      meta.forEach(function (g) {
+        if (!sib && g !== f && g.type === "list" && attachedLists.has(g.key) &&
+            g.key.split(".list:")[0] === file) sib = g;
+      });
+      if (sib && sectionsById.has(sib.section_key)) {
+        var bkt2 = sectionsById.get(sib.section_key);
+        if (bkt2.fields.indexOf(f) < 0) bkt2.fields.push(f);
+        f.section_key = sib.section_key;
+        attachedLists.add(f.key);
       }
     });
   }
@@ -1029,7 +1110,15 @@
       n.classList.remove("mu-sec-active");
     });
     var host = document.querySelector('[data-sec="' + CSS.escape(sectionKey) + '"]');
-    if (host) host.classList.add("mu-sec-active");
+    if (host) {
+      host.classList.add("mu-sec-active");
+      /* bug 4: opening a section's editor should show you that section —
+         scroll it into view when it isn't already on screen */
+      var hr = host.getBoundingClientRect();
+      if (hr.bottom < 80 || hr.top > window.innerHeight - 80) {
+        host.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
 
     if (!side) {
       var leaving = document.querySelector(".mu-side--out");
@@ -1162,6 +1251,14 @@
             '<span class="mu-tab__n">' + b.details.length + "</span></summary>" +
             b.details.map(textRow).join("") + "</details>";
         }
+        /* bug 6: a collection's real controls live on Items — say so up
+           front instead of hoping the tab gets noticed */
+        if (b.lists.length) {
+          var nItems = b.lists.reduce(function (n, f) { return n + listItemsOf(f).length; }, 0);
+          html = '<div class="mu-hint" style="margin:0 0 14px">This section is a collection of ' +
+            nItems + ' slides/items — add, reorder, duplicate or hide them on the ' +
+            '<button type="button" class="mu-mini" data-jump-items>Items ' + nItems + '</button> tab.</div>' + html;
+        }
       }
     } else if (sideTab === "buttons") {
       html = b.buttons.length ? b.buttons.map(buttonRow).join("") : empty("No buttons or links in this section.");
@@ -1204,6 +1301,8 @@
         });
       });
     }
+    var jump = body.querySelector("[data-jump-items]");
+    if (jump) jump.addEventListener("click", function () { sideTab = "items"; renderTab(b); });
     wireSidebar();
     wireLists();
     if (focusKey) revealRow(focusKey, doFocus);
@@ -1390,7 +1489,18 @@
       { method: "PUT", body: JSON.stringify({ items: payload }) });
     var json = JSON.stringify({ items: out.items });
     f.value = json;
+    /* a structural edit re-mounts the app's whole tree, and the re-mount
+       resets scroll to the top — editing the faculty list must NOT land you
+       back on the hero. Pin the scroll position through the turbulence and
+       keep the drawer from stepping aside while the page finds its feet. */
+    var keepY = window.scrollY;
+    holdDrawerUntil = Date.now() + 1600;
     if (window.__MU_RUNTIME__) window.__MU_RUNTIME__.applyLocal(f.key, json, false);
+    var restore = function (tries) {
+      if (Math.abs(window.scrollY - keepY) > 4) window.scrollTo(0, keepY);
+      if (tries > 0) setTimeout(function () { restore(tries - 1); }, 200);
+    };
+    restore(7);
     var bb = bucketsFor(activeSection);
     if (bb) renderTab(bb);
   }
@@ -1972,18 +2082,97 @@
   }
 
   var lastNoFieldToast = 0;
+  var lastLinkToast = 0;
 
-  /* Nothing on the page navigates while editing. Before this, only [data-c]
-     clicks were swallowed, so hitting a button's padding followed the link and
-     threw away unsaved work. */
+  /* The page stays ALIVE while editing: slide arrows flip, videos play, menus
+     open. Only real navigation is blocked — following a link would throw away
+     unsaved work. Editing happens through the section pill and by clicking
+     plain copy; a control's own label is edited in the drawer's Buttons tab. */
+  var CONTROL_SEL = 'button, [role="button"], input, select, textarea, video, audio, summary, ' +
+    '[class*="swiper-button"], [class*="slider-arrow"], [class*="carousel-arrow"], [class*="arrow"]';
+  function interactiveControl(t) {
+    if (!t.closest) return null;
+    var c = t.closest(CONTROL_SEL);
+    if (c) return c;
+    var a = t.closest("a[href]");
+    if (a) {
+      var h = a.getAttribute("href") || "";
+      // a pseudo-link is a control wearing an <a>; it goes nowhere
+      if (h === "" || h === "#" || /^javascript:/i.test(h)) return a;
+    }
+    return null;
+  }
+  function realLink(t) {
+    if (!t.closest) return null;
+    var a = t.closest("a[href]");
+    if (!a) return null;
+    var h = a.getAttribute("href") || "";
+    if (h === "" || h === "#" || /^javascript:/i.test(h)) return null;
+    return a;
+  }
+
   document.addEventListener("click", function (e) {
     if (mode !== "edit" && mode !== "arrange") return;
     if (!e.target.closest) return;
     if (e.target.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-grip")) return;
 
-    var link = e.target.closest("a[href]");
-    if (link) { e.preventDefault(); e.stopPropagation(); }
+    /* Anchored content wins even inside a control: clicking the words
+       "WATCH NOW" edits them; clicking the play circle beside them plays.
+       The text is the editor's, the rest of the control is the site's. */
+    var editable = mode === "edit" &&
+      e.target.closest("[data-c], [data-c-media], [data-c-link], [data-c-state]");
+    if (!editable) {
+      var link = realLink(e.target);
+      if (link) {
+        /* a real link never navigates while editing — but its label is copy,
+           so fall THROUGH to the edit flow (anchored or adopted). The header's
+           nav items are exactly this: block the navigation, open the editor. */
+        e.preventDefault(); e.stopPropagation();
+      } else if (interactiveControl(e.target)) {
+        /* the site's own controls do their job — the drawer stays out of it */
+        return;
+      }
+    }
     if (mode !== "edit") return;
+
+    /* A link's own label is the best candidate for its click — never the
+       hero image sitting behind the translucent bar. Adopt the label when
+       it is unambiguous; otherwise open the drawer for the section UNDER
+       the click (the smallest host wins, so the thin bar beats the
+       full-screen hero) focused on the field that carries this text. */
+    if (!editable && realLink(e.target)) {
+      var adLink = lazyAdopt(e.target);
+      if (adLink) {
+        if (adLink.kind === "text" && adLink.adopted) beginTyping(adLink.node);
+        revealInDrawer(adLink.key, adLink.kind === "media", adLink.node);
+        return;
+      }
+      var secK = null, secHostEl = e.target.closest("[data-sec]");
+      if (secHostEl && sectionsById.has(secHostEl.dataset.sec)) secK = secHostEl.dataset.sec;
+      if (!secK) {
+        var bestPick = null;
+        sectionsById.forEach(function (bkt, k) {
+          var h = bkt.host || document.querySelector('[data-sec="' + CSS.escape(k) + '"]');
+          if (!h || !h.getBoundingClientRect) return;
+          var r = h.getBoundingClientRect();
+          if (e.clientX >= r.left && e.clientX <= r.right &&
+              e.clientY >= r.top && e.clientY <= r.bottom) {
+            if (!bestPick || r.height < bestPick.h) bestPick = { k: k, h: r.height };
+          }
+        });
+        if (bestPick) secK = bestPick.k;
+      }
+      if (secK && sectionsById.has(secK)) {
+        var linkTxt = (e.target.textContent || "").trim().toLowerCase();
+        var focusK = null;
+        (sectionsById.get(secK).fields || []).forEach(function (g) {
+          if (!focusK && linkTxt &&
+              String(g.value || "").trim().toLowerCase() === linkTxt) focusK = g.key;
+        });
+        openSidebar(secK, focusK, true);
+        return;
+      }
+    }
 
     /* Layered designs put decorative DIVs OVER the copy (the dossier's intro
        sits under an absolutely-positioned layer) — the pointer hits the
@@ -2060,7 +2249,15 @@
     document.addEventListener(evt, function (e) {
       if (mode !== "edit" || !e.target.closest) return;
       if (e.target.closest(".mu-bar, .mu-side, .mu-pill")) return;
-      if (e.target.closest("[data-c], a[href]")) e.stopPropagation();
+      /* Anchored content swallows the press — a video trigger listening on
+         pointerdown must not start playing under the words being edited.
+         Everything else on a control feels every event it normally would. */
+      if (e.target.closest("[data-c], [data-c-media], [data-c-link], [data-c-state]")) {
+        e.stopPropagation();
+        return;
+      }
+      if (interactiveControl(e.target)) return;
+      if (realLink(e.target)) e.stopPropagation();
     }, true);
   });
 
