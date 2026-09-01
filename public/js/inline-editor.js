@@ -401,12 +401,13 @@
         if (!host || !host.isConnected) return;
         var r = host.getBoundingClientRect();
         if (r.bottom < 60 || r.top > window.innerHeight - 60) { closeSidebar(); return; }
-        /* a sticky hero never leaves the viewport — it gets COVERED. Probe a
-           point inside its on-screen band: if some other section owns that
-           point now, the reader has moved on. */
-        var px = Math.min(Math.max(r.left + 40, 40), window.innerWidth - 440);
-        var py = Math.min(Math.max((Math.max(r.top, 0) + Math.min(r.bottom, window.innerHeight)) / 2, 80), window.innerHeight - 120);
-        var hit = document.elementFromPoint(px, py);
+        /* What you are READING is whatever owns the middle of the screen —
+           a sliver of the old section clipping the top edge does not count,
+           and a sticky hero that never scrolls away but sits covered does
+           not count either. If the centre belongs to a different section,
+           the drawer steps aside. */
+        var cw = document.body.classList.contains("mu-side-open") ? window.innerWidth - 400 : window.innerWidth;
+        var hit = document.elementFromPoint(Math.max(60, cw / 2), window.innerHeight / 2);
         if (!hit || hit.closest(".mu-side, .mu-bar, .mu-pill, .mu-toast")) return;
         var hitSec = hit.closest("[data-sec]");
         if (hitSec && hitSec !== host && !host.contains(hitSec) && !hitSec.contains(host)) closeSidebar();
