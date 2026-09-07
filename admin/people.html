@@ -37,7 +37,7 @@
 <script type="module">
 import { chrome, api, esc, ago, $, ROLE_TONE } from '/console-ui/shell.js';
 const acct = await chrome('people');
-if (acct.user.role !== 'admin') { document.querySelector('main').innerHTML =
+if (!['admin', 'superadmin'].includes(acct.user.role)) { document.querySelector('main').innerHTML =
   '<div class="banner crit">Only an admin can manage people.</div>'; throw new Error('nope'); }
 
 $('r').innerHTML = acct.roles.map(r => `<option value="${esc(r.key)}">${esc(r.label)}</option>`).join('');

@@ -1,0 +1,167 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Review · MU Console</title>
+<link rel="stylesheet" href="/console-ui/app.css">
+<style>
+  .rev{border-bottom:1px solid var(--line)}
+  .rev:last-child{border-bottom:0}
+  .rev > .head{display:flex; align-items:center; gap:12px; padding:14px 16px; cursor:pointer}
+  .rev > .head h3{margin:0; font-size:14px; font-weight:700; flex:1; min-width:0}
+  .rev > .head .meta{color:var(--ink-3); font-size:12.5px}
+  .rev .body{display:none; padding:0 16px 16px}
+  .rev.open .body{display:block}
+  .diff{display:grid; grid-template-columns:minmax(140px,.6fr) 1fr 1fr; gap:0; border:1px solid var(--line); border-radius:8px; overflow:hidden; font-size:13px}
+  .diff > div{padding:8px 10px; border-bottom:1px solid var(--line); min-width:0; overflow-wrap:anywhere}
+  .diff > div:nth-last-child(-n+3){border-bottom:0}
+  .diff .h{background:var(--fill); color:var(--ink-3); font-size:11.5px; text-transform:uppercase; letter-spacing:.04em}
+  .diff .k{color:var(--ink-2)}
+  .diff .k small{display:block; color:var(--ink-3); font-family:var(--font-mono); font-size:10.5px; margin-top:2px}
+  .diff .from{color:var(--crit-ink); background:rgba(255,69,58,.06)}
+  .diff .to{color:var(--ok-ink); background:rgba(48,209,88,.06)}
+  .acts{display:flex; gap:8px; align-items:center; margin-top:14px; flex-wrap:wrap}
+  .acts textarea{flex:1; min-width:220px; min-height:36px; resize:vertical}
+  .kv{display:grid; grid-template-columns:max-content 1fr; gap:6px 14px; font-size:13px; padding:14px 16px}
+  .kv b{color:var(--ink-2); font-weight:500}
+  .kv code{font-family:var(--font-mono); font-size:12px}
+  .sha{font-family:var(--font-mono); font-size:11.5px; color:var(--ink-3)}
+</style>
+</head><body>
+<div class="shell">
+  <nav class="side"></nav>
+  <main>
+    <div class="phead">
+      <div><h1>Review</h1>
+        <div class="sub">Changes sent from the studio wait here on the preview branch. Approving merges them into the live branch, and pushes the same commit to Lovable.</div></div>
+      <div class="phead-acts" id="pacts"></div>
+    </div>
+    <div id="notice"></div>
+    <div class="card">
+      <header><h2>Waiting for approval</h2><div class="grow"></div><span class="badge warn" id="pcount"></span></header>
+      <div id="pending"><div class="empty">Loading…</div></div>
+    </div>
+    <div class="card">
+      <header><h2>Where the branches stand</h2><div class="grow"></div>
+        <button class="btn sm" id="refresh">Refresh</button></header>
+      <div class="kv" id="repo"></div>
+    </div>
+    <div class="card">
+      <header><h2>Decided</h2></header>
+      <div id="done"><div class="empty">Loading…</div></div>
+    </div>
+  </main>
+</div>
+<script type="module">
+import { chrome, api, esc, ago, $, icon } from '/console-ui/shell.js';
+const acct = await chrome('review');
+const CAN = acct.user.role === 'superadmin';
+
+if (!acct.repo?.ready) {
+  $('notice').innerHTML = `<div class="banner warn"><b>Git publishing is off.</b> Set
+    <code>PERSONAL_REPO</code> and <code>GITHUB_TOKEN</code> in the environment. Until then, Publish goes
+    straight to the live database with no review.</div>`;
+}
+
+const short = (s) => s ? String(s).slice(0, 7) : '—';
+const show = (v) => { const s = String(v ?? ''); return s ? esc(s.length > 400 ? s.slice(0, 400) + '…' : s) : '<i style="color:var(--ink-3)">empty</i>'; };
+
+function diffTable(snapshot) {
+  const rows = snapshot.map(c => `
+    <div class="k">${esc(c.label || c.key)}<small>${esc(c.section || '')}${c.page === 'shared' ? ' · shared' : ''}</small></div>
+    <div class="from">${show(c.from)}</div>
+    <div class="to">${show(c.to)}</div>`).join('');
+  return `<div class="diff"><div class="h">Field</div><div class="h">Live now</div><div class="h">Proposed</div>${rows}</div>`;
+}
+
+function reviewCard(r, decided) {
+  const tone = { approved: 'ok', rejected: 'crit', superseded: '', pending: 'warn' }[r.status] || '';
+  return `
+  <div class="rev" data-id="${r.id}">
+    <div class="head">
+      <span class="badge ${tone}">${esc(r.status)}</span>
+      <h3>${esc(r.page_title || r.page_slug)} <span class="meta">· ${r.fields} field${r.fields === 1 ? '' : 's'}</span></h3>
+      <span class="meta">${esc(r.user_name)} · ${ago(r.created_at)}${decided && r.decided_by ? ` · ${esc(r.status)} by ${esc(r.decided_by)} ${ago(r.decided_at)}` : ''}</span>
+      <span class="sha" title="commit on ${esc(r.branch || '')}">${short(r.commit_sha)}</span>
+    </div>
+    <div class="body">
+      ${r.note ? `<div class="banner" style="margin-bottom:12px">${esc(r.note)}</div>` : ''}
+      ${diffTable(r.snapshot)}
+      ${decided ? (r.decision_note ? `<div class="hint" style="margin-top:10px">${esc(r.decision_note)}</div>` : '') : `
+      <div class="acts">
+        ${acct.repo?.previewUrl ? `<a class="btn" href="${esc(acct.repo.previewUrl)}" target="_blank" rel="noopener">${icon('open', 14)} Preview branch</a>` : ''}
+        <a class="btn ghost" href="/console/page/${esc(r.page_slug)}">Open in studio</a>
+        ${CAN ? `<textarea placeholder="Note to the editor (optional)" data-note></textarea>
+        <button class="btn crit" data-reject>Reject</button>
+        <button class="btn primary" data-approve>Approve &amp; go live</button>` : ''}
+      </div>`}
+    </div>
+  </div>`;
+}
+
+async function load() {
+  const [pending, done, repo] = await Promise.all([
+    api('/api/reviews?status=pending'), api('/api/reviews?status=all'), api('/api/repo'),
+  ]);
+  const P = pending.reviews;
+  $('pcount').textContent = P.length ? P.length + ' waiting' : '';
+  $('pending').innerHTML = P.length ? P.map(r => reviewCard(r, false)).join('')
+    : '<div class="empty">Nothing waiting. Editors send changes here with “Send for review”.</div>';
+  const D = done.reviews.filter(r => r.status !== 'pending');
+  $('done').innerHTML = D.length ? D.map(r => reviewCard(r, true)).join('') : '<div class="empty">No decisions yet.</div>';
+
+  $('repo').innerHTML = repo.ready ? `
+    <b>Personal repo</b><span><a href="${esc(repo.personal)}" target="_blank" rel="noopener">${esc(repo.personal)}</a></span>
+    <b>Preview branch</b><span><code>${esc(repo.preview)}</code> <span class="sha">${esc(repo.previewSha || (repo.cloned ? 'not created yet' : 'not fetched yet'))}</span>
+      ${repo.previewUrl ? ` · <a href="${esc(repo.previewUrl)}" target="_blank" rel="noopener">open preview</a>` : ''}</span>
+    <b>Live branch</b><span><code>${esc(repo.live)}</code> <span class="sha">${esc(repo.liveSha || '')}</span>
+      ${repo.liveUrl ? ` · <a href="${esc(repo.liveUrl)}" target="_blank" rel="noopener">open live</a>` : ''}</span>
+    <b>Lovable repo</b><span>${repo.lovable ? `<a href="${esc(repo.lovable)}" target="_blank" rel="noopener">${esc(repo.lovable)}</a>${repo.lovableReady ? '' : ' <span class="badge warn">no token</span>'}` : '<span style="color:var(--ink-3)">not set — approvals will not reach Lovable</span>'}</span>
+    <b>Content files</b><span><code>${esc(repo.dir)}/&lt;page&gt;.json</code></span>`
+    : '<span style="grid-column:1/-1;color:var(--ink-3)">Not configured.</span>';
+
+  $('pacts').innerHTML = CAN && repo.ready ? `
+    ${repo.lovableReady ? `<button class="btn" id="sync" title="Copy every branch from the Lovable repo into the personal repo">Sync from Lovable</button>` : ''}
+    <button class="btn ghost" id="seed" title="Write every page's live content into the preview branch">Seed content files</button>` : '';
+
+  document.querySelectorAll('.rev .head').forEach(h => h.addEventListener('click', () => h.parentElement.classList.toggle('open')));
+  if (P.length === 1) document.querySelector('.rev')?.classList.add('open');
+
+  document.querySelectorAll('[data-approve]').forEach(b => b.addEventListener('click', () => decide(b, 'approve')));
+  document.querySelectorAll('[data-reject]').forEach(b => b.addEventListener('click', () => decide(b, 'reject')));
+  $('sync')?.addEventListener('click', () => run($('sync'), 'Syncing…', async () => {
+    const r = await api('/api/repo/sync', { method: 'POST' });
+    alert('Synced from Lovable: ' + (r.branches.join(', ') || 'nothing new'));
+  }));
+  $('seed')?.addEventListener('click', () => run($('seed'), 'Seeding…', async () => {
+    if (!confirm('Commit every page’s live content to the preview branch?')) return;
+    const r = await api('/api/repo/seed', { method: 'POST' });
+    alert(r.sha ? `Committed ${r.files} file(s) as ${r.sha.slice(0, 7)}.` : 'Content files are already up to date.');
+  }));
+}
+
+async function run(btn, label, fn) {
+  const was = btn.textContent; btn.disabled = true; btn.textContent = label;
+  try { await fn(); await load(); } catch (e) { alert(e.message); }
+  finally { btn.disabled = false; btn.textContent = was; }
+}
+
+async function decide(btn, what) {
+  const card = btn.closest('.rev'); const id = card.dataset.id;
+  const note = card.querySelector('[data-note]')?.value || '';
+  if (what === 'approve' && !confirm('Merge the preview branch into live and push? Every pending review goes live together.')) return;
+  if (what === 'reject' && !confirm('Reject this change? The editor’s drafts on that page will be discarded.')) return;
+  card.querySelectorAll('button').forEach(b => b.disabled = true);
+  btn.textContent = what === 'approve' ? 'Merging & pushing…' : 'Rejecting…';
+  try {
+    const r = await api(`/api/reviews/${id}/${what}`, { method: 'POST', body: JSON.stringify({ note }) });
+    if (what === 'approve') {
+      let msg = `Live. ${r.fields} field(s) published, commit ${r.live.slice(0, 7)}.`;
+      if (r.lovable.configured) msg += r.lovable.pushed ? '\nPushed to Lovable as well.' : '\nLovable push FAILED: ' + r.lovable.error;
+      alert(msg);
+    } else alert(`Rejected. ${r.reverted} draft(s) reverted.`);
+    await load();
+  } catch (e) { alert(e.message); await load(); }
+}
+
+$('refresh').addEventListener('click', load);
+await load();
+</script></body></html>

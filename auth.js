@@ -8,27 +8,36 @@
  */
 import crypto from "node:crypto";
 
-export const ROLES = ["viewer", "commenter", "editor", "admin"];
+export const ROLES = ["viewer", "commenter", "editor", "admin", "superadmin"];
 
+/* "publish" sends a page's drafts to the preview branch for review. Only
+   "approve" puts anything on the live branch — and only a super admin has it. */
 const PERMS = {
-  viewer:    ["read"],
-  commenter: ["read", "comment"],
-  editor:    ["read", "comment", "edit", "ai"],
-  admin:     ["read", "comment", "edit", "ai", "publish", "reorder", "users"],
+  viewer:     ["read"],
+  commenter:  ["read", "comment"],
+  editor:     ["read", "comment", "edit", "ai"],
+  admin:      ["read", "comment", "edit", "ai", "publish", "reorder", "users"],
+  superadmin: ["read", "comment", "edit", "ai", "publish", "reorder", "users", "approve"],
 };
 
 export const ROLE_LABEL = {
-  viewer:    "Viewer",
-  commenter: "Commenter",
-  editor:    "Editor",
-  admin:     "Admin",
+  viewer:     "Viewer",
+  commenter:  "Commenter",
+  editor:     "Editor",
+  admin:      "Admin",
+  superadmin: "Super admin",
 };
 export const ROLE_BLURB = {
-  viewer:    "Can see drafts and comments. Changes nothing.",
-  commenter: "Can leave notes on any field.",
-  editor:    "Can edit text, use the AI writer, and save drafts.",
-  admin:     "Can publish, reorder sections and manage people.",
+  viewer:     "Can see drafts and comments. Changes nothing.",
+  commenter:  "Can leave notes on any field.",
+  editor:     "Can edit text, use the AI writer, and save drafts.",
+  admin:      "Can send changes for review, reorder sections and manage people.",
+  superadmin: "Approves reviewed changes. Approval is what goes live.",
 };
+
+/** Roles that keep the studio administrable — the last one can never be demoted. */
+export const ADMIN_ROLES = ["admin", "superadmin"];
+export const isAdmin = (role) => ADMIN_ROLES.includes(role);
 
 export const can = (role, action) => (PERMS[role] || []).includes(action);
 
@@ -51,7 +60,8 @@ export const DEFAULT_EMAIL = process.env.ADMIN_EMAIL || "figma.uiux@mastersunion
 export const DEFAULT_PASSWORD = process.env.ADMIN_PASSWORD || "mastersunion";
 
 const TEAM = [
-  { email: DEFAULT_EMAIL,                   name: "Vinay",         role: "admin" },
+  { email: DEFAULT_EMAIL,                   name: "Vinay",         role: "superadmin" },
+  { email: "admin@mastersunion.org",        name: "Site Admin",     role: "admin" },
   { email: "editor@mastersunion.org",       name: "Content Editor", role: "editor" },
   { email: "reviewer@mastersunion.org",     name: "Reviewer",       role: "commenter" },
   { email: "viewer@mastersunion.org",       name: "Viewer",         role: "viewer" },
@@ -90,6 +100,12 @@ export function initAuth(db) {
     console.log("  │  " + DEFAULT_EMAIL + "  /  " + DEFAULT_PASSWORD);
     console.log("  │  " + made + " accounts seeded, one per role, same password.");
     console.log("  └─────────────────────────────────────────────────────");
+  }
+  /* an existing database from before the review flow has its first account as
+     a plain admin — nobody could approve anything. Lift it once. */
+  if (!db.prepare("SELECT 1 FROM users WHERE role = 'superadmin' LIMIT 1").get()) {
+    const r = db.prepare("UPDATE users SET role = 'superadmin' WHERE email = ?").run(DEFAULT_EMAIL);
+    if (r.changes) console.log("  " + DEFAULT_EMAIL + " is now the super admin");
   }
   db.prepare("DELETE FROM sessions WHERE expires_at < ?").run(now);
 }

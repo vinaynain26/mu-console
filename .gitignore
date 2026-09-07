@@ -6,3 +6,6 @@ data/content.db
 content.snapshot.db
 voice-guide.snapshot.md
 demo/
+data/repo/
+data/src/
+data/manifests/

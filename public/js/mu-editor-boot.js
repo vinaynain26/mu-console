@@ -54,6 +54,7 @@
       var r = await fetch(CMS + "/api/account", { headers: { Authorization: "Bearer " + token } });
       if (!r.ok) return null;
       var j = await r.json();
+      if (j.user) j.user.review = Boolean(j.repo && j.repo.ready);   // publish means "send for review"
       return j.user || null;
     } catch { return null; }
   }
@@ -139,13 +140,15 @@
     var can = function (a) {
       return ({ viewer: ["read"], commenter: ["read", "comment"],
                 editor: ["read", "comment", "edit", "ai"],
-                admin: ["read", "comment", "edit", "ai", "publish", "reorder", "users"] }[role] || []).indexOf(a) >= 0;
+                admin: ["read", "comment", "edit", "ai", "publish", "reorder", "users"],
+                superadmin: ["read", "comment", "edit", "ai", "publish", "reorder", "users", "approve"] }[role] || []).indexOf(a) >= 0;
     };
 
     window.__MU_EDITOR__ = {
       slug: slugFor(),
       tab: "_all",
       preview: false,
+      review: Boolean(user.review),
       apiBase: CMS,
       token: token,
       consoleBase: CMS,

@@ -14,6 +14,36 @@ Sign in with `figma.uiux@mastersunion.org` / `mastersunion`.
 Three more accounts exist for trying the roles — `editor@`, `reviewer@`,
 `viewer@mastersunion.org`, same password.
 
+## Publishing through git — the review flow
+
+With a site repo configured, nothing goes live from the studio directly.
+
+1. An editor saves drafts, then presses **Send for review**. The page's copy is
+   written as `content/<slug>.json` and committed to `previewbranch` of the
+   personal repo. The page shows **In review**.
+2. A **super admin** opens `/console/review`, reads the field-by-field diff,
+   checks the preview deployment, and presses **Approve & go live** — or Reject.
+3. Approval merges `previewbranch` into `main`, pushes `main` to the personal
+   repo (what Vercel deploys) **and** to the Lovable repo, so Lovable shows the
+   same thing. Reject restores the page's file on the branch and drops the drafts.
+
+Set these in `.env` (see `.env.example`): `PERSONAL_REPO`, `GITHUB_TOKEN`,
+`LOVABLE_REPO`, `LOVABLE_TOKEN`, optionally `PREVIEW_URL`. Without them,
+Publish behaves as it always did and goes straight to the database.
+
+First-time setup, after the tokens are in place:
+
+```bash
+npm run mirror        # every Lovable branch → personal repo, creates previewbranch
+```
+
+then sign in as the super admin and press **Seed content files** on the Review
+page so `content/*.json` exists on the branch before the first edit. The
+working clone lives in `data/repo/` (sparse: only `content/` is checked out).
+
+Roles: `figma.uiux@` is the super admin; `admin@mastersunion.org` is a plain
+admin who can send for review but not approve.
+
 ## Enabling the AI writer
 
 ```bash

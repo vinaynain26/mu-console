@@ -105,9 +105,9 @@ acct = await chrome('pages');
 $('backicon').outerHTML = icon('back', 13);
 $('qicon').outerHTML = icon('search');
 const CAN = {
-  edit: ['editor','admin'].includes(acct.user.role),
-  publish: acct.user.role === 'admin',
-  ai: acct.ai && ['editor','admin'].includes(acct.user.role),
+  edit: ['editor','admin','superadmin'].includes(acct.user.role),
+  publish: ['admin','superadmin'].includes(acct.user.role),
+  ai: acct.ai && ['editor','admin','superadmin'].includes(acct.user.role),
 };
 
 function bar() {
@@ -119,9 +119,11 @@ function bar() {
 async function load() {
   data = await api(`/api/pages/${slug}/content`);
   $('ttl').textContent = data.page ? data.page.title : slug;
-  $('sub').innerHTML = data.lastPublish
-    ? `Last published by <b>${esc(data.lastPublish.user_name)}</b> — ${data.lastPublish.fields} field(s), ${ago(data.lastPublish.published_at)}`
-    : 'Never published from the studio.';
+  $('sub').innerHTML = (data.pendingReview
+    ? `<span class="info">In review</span> — ${data.pendingReview.fields} field(s) sent by <b>${esc(data.pendingReview.user_name)}</b> ${ago(data.pendingReview.created_at)}, waiting for a super admin. `
+    : '') + (data.lastPublish
+    ? `Last went live by <b>${esc(data.lastPublish.user_name)}</b> — ${data.lastPublish.fields} field(s), ${ago(data.lastPublish.published_at)}`
+    : 'Never published from the studio.');
   if (!tab || !data.tabs.some(t => t.key === tab)) {
     tab = (data.tabs.find(t => t.key === 'highlight') || data.tabs[0]).key;
   }
@@ -142,6 +144,12 @@ function renderTabs() {
   const ut = tab === '_all' ? 'highlight' : tab;
   $('prev').href = `/page/${slug}?preview=1&tab=${ut}`;
   $('livelink').href = `/page/${slug}?tab=${ut}`;
+  if (data.page?.repo) {
+    /* a GitHub page has no local render: "view" goes to its deployment, and
+       there is no preview render until the site reads content files */
+    $('prev').style.display = 'none';
+    $('livelink').textContent = 'Open site ↗';
+  }
 }
 
 const sectionFields = new Map();
@@ -381,16 +389,23 @@ $('discard').addEventListener('click', async () => {
 
 if (CAN.publish) {
   const b = document.createElement('button');
-  b.className = 'btn primary'; b.textContent = 'Publish';
+  const review = Boolean(acct.repo?.ready);
+  b.className = 'btn primary'; b.textContent = review ? 'Send for review' : 'Publish';
   b.addEventListener('click', async () => {
-    if (changes.size && !confirm('Save your unsaved changes first, then publish?')) return;
+    if (changes.size && !confirm('Save your unsaved changes first, then continue?')) return;
     if (changes.size) $('save').click();
-    if (!confirm('Publish all drafts to the live site?')) return;
+    if (!confirm(review
+      ? 'Send every draft on this page to the preview branch for a super admin to approve?'
+      : 'Publish all drafts to the live site?')) return;
+    const was = b.textContent; b.disabled = true; b.textContent = review ? 'Pushing…' : 'Publishing…';
     try {
       const r = await api(`/api/pages/${slug}/publish`, { method: 'POST' });
       await load();
-      alert(r.published ? `Published ${r.published} change(s) — live now.` : 'Nothing to publish.');
+      if (r.review) alert(`Sent ${r.review.fields} change(s) for review — commit ${r.review.sha.slice(0, 7)} on ${r.review.branch}.` +
+        (r.replaced ? ' It replaces the earlier review of this page.' : '') + ' Nothing is live until a super admin approves.');
+      else alert(r.published ? `Published ${r.published} change(s) — live now.` : 'Nothing to send.');
     } catch (e) { alert(e.message); }
+    finally { b.disabled = false; b.textContent = was; }
   });
   $('acts').appendChild(b);
 }

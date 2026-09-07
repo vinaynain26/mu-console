@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Projects · MU Console</title>
+<link rel="stylesheet" href="/console-ui/app.css">
+<style>
+  .proj{display:flex; gap:14px; align-items:flex-start; padding:16px; border-bottom:1px solid var(--line)}
+  .proj:last-child{border-bottom:0}
+  .proj .ico{width:38px; height:38px; border-radius:10px; background:var(--fill); display:grid; place-items:center; color:var(--ink-2); flex:none}
+  .proj h3{margin:0 0 3px; font-size:14.5px; font-weight:700; display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+  .proj h3 a{color:inherit; text-decoration:none}
+  .proj h3 a:hover{text-decoration:underline}
+  .proj .meta{color:var(--ink-3); font-size:12.5px; margin-top:4px}
+  .proj .desc{color:var(--ink-2); font-size:13px; margin-top:4px}
+  .br{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px}
+  .br span{font-family:var(--font-mono); font-size:11px; background:var(--fill); padding:2px 7px; border-radius:6px; color:var(--ink-2)}
+  .br span.hot{background:var(--info-bg); color:var(--info-ink)}
+  .pages{margin-top:8px; display:flex; gap:6px; flex-wrap:wrap}
+  .pages a{font-size:12px; padding:3px 9px; border-radius:6px; background:var(--fill); color:var(--ink); text-decoration:none}
+  .pages a:hover{background:var(--fill-2)}
+</style>
+</head><body>
+<div class="shell">
+  <nav class="side"></nav>
+  <main>
+    <div class="phead">
+      <div><h1>Projects</h1>
+        <div class="sub">Repositories read live from GitHub with the tokens in the environment. The Lovable source and the personal live repo are the two that publishing moves between.</div></div>
+      <div class="phead-acts"><button class="btn sm" id="refresh">Refresh</button></div>
+    </div>
+    <div id="notice"></div>
+    <div class="card">
+      <header><h2>In the publishing flow</h2><div class="grow"></div><span class="hint" id="acct"></span></header>
+      <div id="flow"><div class="empty">Asking GitHub…</div></div>
+    </div>
+    <div class="card">
+      <header><h2>Other repositories these tokens can see</h2></header>
+      <div id="others"><div class="empty">Asking GitHub…</div></div>
+    </div>
+  </main>
+</div>
+<script type="module">
+import { chrome, api, esc, ago, $, icon } from '/console-ui/shell.js';
+const acct = await chrome('projects');
+const CAN_INGEST = ['admin', 'superadmin'].includes(acct.user.role);
+
+if (!acct.repo?.ready && !acct.repo?.lovable) {
+  $('notice').innerHTML = `<div class="banner warn"><b>No GitHub token yet.</b> Put <code>LOVABLE_TOKEN</code> /
+    <code>GITHUB_TOKEN</code> in <code>.env</code> and the repositories appear here.</div>`;
+}
+
+const repoIcon = `<svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2.5A1.5 1.5 0 0 1 4.5 1h8v11.5H4.5A1.5 1.5 0 0 0 3 14z"/><path d="M3 12.5A1.5 1.5 0 0 1 4.5 11H12.5"/><path d="M5.5 4h4"/></svg>`;
+
+function card(p, pages) {
+  const role = p.role === 'lovable' ? '<span class="badge info">Lovable source</span>'
+             : p.role === 'personal' ? '<span class="badge ok">Live · personal</span>' : '';
+  const mine = pages.filter(x => x.repo && x.repo.toLowerCase() === p.name.toLowerCase());
+  return `
+  <div class="proj">
+    <div class="ico">${repoIcon}</div>
+    <div style="flex:1;min-width:0">
+      <h3><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.name)}</a> ${role}
+        ${p.private ? '<span class="badge">private</span>' : ''}${p.canPush ? '' : '<span class="badge warn">read-only</span>'}</h3>
+      ${p.description ? `<div class="desc">${esc(p.description)}</div>` : ''}
+      <div class="meta">${esc(p.account)} · default <code>${esc(p.defaultBranch)}</code> · pushed ${ago(p.pushedAt)}</div>
+      ${p.branches ? `<div class="br">${p.branches.map(b =>
+        `<span class="${b.name === acct.repo.preview || b.name === acct.repo.live ? 'hot' : ''}" title="${esc(b.sha)}">${esc(b.name)}</span>`).join('')}
+        ${p.role === 'personal' && !p.branches.some(b => b.name === acct.repo.preview) ? `<span class="badge warn">no ${esc(acct.repo.preview)} yet — run Sync</span>` : ''}</div>` : ''}
+      ${mine.length ? `<div class="pages">${mine.map(x => `<a href="/console/page/${esc(x.slug)}">${esc(x.title)} <span style="color:var(--ink-3)">· ${x.fields} fields</span></a>`).join('')}</div>`
+        : p.role ? `<div class="meta">No pages from this repo in the console yet.</div>` : ''}
+      ${p.role && CAN_INGEST ? `<div class="acts" style="margin-top:10px;display:flex;gap:8px;align-items:center">
+        <button class="btn sm" data-ingest="${esc(p.name)}">${mine.length ? 'Re-read pages from GitHub' : 'Read pages from GitHub'}</button>
+        ${mine.length && mine[0].ingested_sha ? `<span class="sha" style="font-family:var(--font-mono);font-size:11px;color:var(--ink-3)">read at ${esc(mine[0].ingested_sha.slice(0, 7))}</span>` : ''}</div>` : ''}
+    </div>
+  </div>`;
+}
+
+async function load() {
+  $('flow').innerHTML = $('others').innerHTML = '<div class="empty">Asking GitHub…</div>';
+  try {
+    const [data, pages] = await Promise.all([api('/api/projects'), api('/api/pages?all=1')]);
+    $('acct').textContent = data.accounts.length ? 'as ' + data.accounts.join(', ') : '';
+    const flow = data.projects.filter(p => p.role), rest = data.projects.filter(p => !p.role);
+    const missing = [];
+    if (!flow.some(p => p.role === 'lovable')) missing.push('Lovable repo' + (data.lovable ? ` (${data.lovable} is set but the token cannot see it)` : ' — set LOVABLE_REPO'));
+    if (!flow.some(p => p.role === 'personal')) missing.push('personal repo' + (data.personal ? ` (${data.personal} is set but the token cannot see it)` : ' — create it on GitHub and set PERSONAL_REPO'));
+    $('flow').innerHTML = flow.map(p => card(p, pages)).join('') +
+      (missing.length ? `<div class="banner warn" style="margin:12px 16px">Still missing: ${missing.map(esc).join(' · ')}</div>` : '') +
+      (!flow.length && !missing.length ? '<div class="empty">Nothing configured.</div>' : '');
+    $('others').innerHTML = rest.length ? rest.map(p => card(p, pages)).join('')
+      : '<div class="empty">None — the tokens are scoped to the repositories above.</div>';
+    document.querySelectorAll('[data-ingest]').forEach(b => b.addEventListener('click', async () => {
+      const was = b.textContent; b.disabled = true; b.textContent = 'Reading from GitHub…';
+      try {
+        const r = await api('/api/projects/ingest', { method: 'POST', body: JSON.stringify({ repo: b.dataset.ingest }) });
+        alert(r.pages.map(p => `${p.title}: ${p.fields} fields in ${p.sections} sections (${p.added} new, ${p.retired} retired)`).join('\n') + `\n\nfrom ${r.branch} @ ${r.sha.slice(0, 7)}`);
+        await load();
+      } catch (e) { alert(e.message); b.disabled = false; b.textContent = was; }
+    }));
+  } catch (e) {
+    $('flow').innerHTML = `<div class="empty">Could not reach GitHub: ${esc(e.message)}</div>`; $('others').innerHTML = '';
+  }
+}
+$('refresh').addEventListener('click', load);
+await load();
+</script></body></html>

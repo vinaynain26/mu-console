@@ -14,6 +14,8 @@ export const icon = (name, size = 16) => {
     search: '<circle cx="7" cy="7" r="4.5"/><path d="m13.5 13.5-3.3-3.3"/>',
     open: '<path d="M5 11l6-6M6 5h5v5"/>',
     back: '<path d="m9.5 3.5-4.5 4.5 4.5 4.5"/>',
+    projects: '<path d="M2 4.5A1.5 1.5 0 0 1 3.5 3h3l1.5 1.5h4.5A1.5 1.5 0 0 1 14 6v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 12.5z"/>',
+    review: '<path d="M2.5 8.5 6 12l7.5-8"/>',
   };
   return `<svg width="${size}" height="${size}" viewBox="0 0 16 16" fill="none" stroke="currentColor"
     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || ''}</svg>`;
@@ -40,7 +42,7 @@ export async function api(url, opts = {}) {
   return out;
 }
 
-export const ROLE_TONE = { admin: 'info', editor: 'ok', commenter: '', viewer: '' };
+export const ROLE_TONE = { superadmin: 'info', admin: 'info', editor: 'ok', commenter: '', viewer: '' };
 
 export async function chrome(active) {
   const acct = await api('/api/account');
@@ -53,8 +55,10 @@ export async function chrome(active) {
       <a class="side-brand" href="/console"><img class="logo" src="/console-ui/assets/mu-mark-white.svg" alt="">MU Console</a>
       <div class="side-nav">
         <div class="side-grp">Content</div>
+        ${acct.repo?.lovable || acct.repo?.ready ? `<a href="/console/projects" class="${active === 'projects' ? 'on' : ''}">${icon('projects')}Projects</a>` : ''}
         <a href="/console" class="${active === 'pages' ? 'on' : ''}">${icon('pages')}Pages</a>
-        ${u.role === 'admin' ? `<div class="side-grp">Settings</div>
+        ${['admin', 'superadmin'].includes(u.role) ? `<a href="/console/review" class="${active === 'review' ? 'on' : ''}">${icon('review')}Review${acct.pendingReviews ? ` <span class="badge warn" style="margin-left:auto">${acct.pendingReviews}</span>` : ''}</a>
+        <div class="side-grp">Settings</div>
         <a href="/console/people" class="${active === 'people' ? 'on' : ''}">${icon('people')}People &amp; roles</a>` : ''}
       </div>
       <div class="side-foot">

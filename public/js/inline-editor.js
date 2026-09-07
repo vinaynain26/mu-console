@@ -296,7 +296,7 @@
       bar.appendChild(btnUndo);
     }
     if (CAN.publish) {
-      btnPub = el("button", "mu-btn pri", "Publish");
+      btnPub = el("button", "mu-btn pri", BOOT.review ? "Send for review" : "Publish");
       btnPub.addEventListener("click", publish);
       bar.appendChild(btnPub);
     }
@@ -1174,7 +1174,7 @@
       "</div>" +
       '<div class="mu-tabs">' + tabsHtml + "</div>" +
       '<div class="mu-side__body" id="mu-side-body"></div>' +
-      '<div class="mu-side__foot">Everything here is a <b>draft</b> — nothing changes on the live site until you press Publish.</div>';
+      '<div class="mu-side__foot">Everything here is a <b>draft</b> — nothing changes on the live site until ' + (BOOT.review ? 'a super admin approves it.' : 'you press Publish.') + '</div>';
 
     side.querySelector(".mu-side__x").addEventListener("click", closeSidebar);
     side.querySelectorAll("[data-tab]").forEach(function (t) {
@@ -2286,14 +2286,18 @@
       if (!confirm("You have " + dirty.size + " unsaved change(s). Save them first?\n\nOK saves, then publishes.")) return;
       await save();
     }
-    if (!confirm("Publish all drafts on this page to the live site?")) return;
-    btnPub.innerHTML = '<span class="mu-spin"></span> Publishing';
+    var label = BOOT.review ? "Send for review" : "Publish";
+    if (!confirm(BOOT.review
+      ? "Send every draft on this page to the preview branch for a super admin to approve?"
+      : "Publish all drafts on this page to the live site?")) return;
+    btnPub.innerHTML = '<span class="mu-spin"></span> ' + (BOOT.review ? "Pushing" : "Publishing");
     try {
       var out = await api("/api/pages/" + SLUG + "/publish", { method: "POST" });
-      toast(out.published ? "Published " + out.published + " change(s) — live now" : "Nothing to publish");
+      if (out.review) toast("Sent " + out.review.fields + " change(s) for review — waiting for a super admin", 5000);
+      else toast(out.published ? "Published " + out.published + " change(s) — live now" : "Nothing to publish");
       if (out.published) setTimeout(function () { location.reload(); }, 900);
-    } catch (e) { toast(e.message, 4000); }
-    finally { btnPub.innerHTML = "Publish"; }
+    } catch (e) { toast(e.message, 5000); }
+    finally { btnPub.innerHTML = label; }
   }
 
   /* ---------------- arrange ---------------- */

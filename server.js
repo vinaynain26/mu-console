@@ -18,6 +18,8 @@ import fs from "node:fs";
 import { DatabaseSync } from "node:sqlite";
 import * as auth from "./auth.js";
 import * as ai from "./ai.js";
+import * as repo from "./repo.js";
+import * as ingest from "./ingest.js";
 
 const ROOT = import.meta.dirname;
 
@@ -86,6 +88,18 @@ db.exec(`
     user_id INTEGER, user_name TEXT, user_email TEXT,
     fields INTEGER NOT NULL, published_at TEXT
   );
+  /* a change sent for review: the drafts it carried, the commit that holds
+     them on the preview branch, and what the super admin decided. */
+  CREATE TABLE IF NOT EXISTS reviews (
+    id INTEGER PRIMARY KEY AUTOINCREMENT, page_slug TEXT NOT NULL,
+    user_id INTEGER, user_name TEXT, user_email TEXT,
+    fields INTEGER NOT NULL, snapshot TEXT NOT NULL,
+    commit_sha TEXT, branch TEXT,
+    status TEXT NOT NULL DEFAULT 'pending',
+    note TEXT, created_at TEXT,
+    decided_by TEXT, decided_at TEXT, decision_note TEXT,
+    live_sha TEXT, lovable_pushed INTEGER NOT NULL DEFAULT 0
+  );
   CREATE TABLE IF NOT EXISTS comments (
     id INTEGER PRIMARY KEY AUTOINCREMENT, page_slug TEXT NOT NULL, field_key TEXT NOT NULL,
     body TEXT NOT NULL, author_id INTEGER, author_name TEXT,
@@ -108,6 +122,12 @@ db.exec(`
   if (!pcols.includes("source")) {
     db.exec("ALTER TABLE pages ADD COLUMN source TEXT NOT NULL DEFAULT 'handbuilt'");
   }
+  if (!pcols.includes("repo")) {
+    // "owner/name" of the GitHub repository a page was ingested from; null = local
+    db.exec("ALTER TABLE pages ADD COLUMN repo TEXT");
+  }
+  if (!pcols.includes("url")) db.exec("ALTER TABLE pages ADD COLUMN url TEXT");            // where the page renders
+  if (!pcols.includes("ingested_sha")) db.exec("ALTER TABLE pages ADD COLUMN ingested_sha TEXT");
 }
 
 const cols = db.prepare("PRAGMA table_info(page_content)").all().map((c) => c.name);
@@ -382,6 +402,8 @@ app.get("/api/account", (req, res) => {
     roles: auth.ROLES.map((r) => ({ key: r, label: auth.ROLE_LABEL[r], blurb: auth.ROLE_BLURB[r] })),
     ai: ai.configured(),
     aiInfo: ai.describe(),
+    repo: repo.describe(),
+    pendingReviews: db.prepare("SELECT COUNT(*) n FROM reviews WHERE status = 'pending'").get().n,
     consoleUrl: CONSOLE,
     defaultEmail: auth.DEFAULT_EMAIL,
   });
@@ -395,6 +417,9 @@ app.post("/api/account/users", auth.require_("users"), (req, res) => {
   const { email, name, role = "editor", password } = req.body || {};
   if (!email || !name || !password) return res.status(400).json({ error: "email, name and password are required." });
   if (!auth.ROLES.includes(role)) return res.status(400).json({ error: "Unknown role." });
+  if (role === "superadmin" && req.user.role !== "superadmin") {
+    return res.status(403).json({ error: "Only a super admin can add another super admin." });
+  }
   const { hash, salt } = auth.hashPassword(password);
   try {
     db.prepare(`INSERT INTO users (email,name,role,pass_hash,pass_salt,created_at) VALUES (?,?,?,?,?,?)`)
@@ -411,10 +436,14 @@ app.put("/api/account/users/:id", auth.require_("users"), (req, res) => {
   if (role) {
     if (!auth.ROLES.includes(role)) return res.status(400).json({ error: "Unknown role." });
     // Don't let the last admin demote themselves into a locked-out system.
-    const admins = db.prepare("SELECT COUNT(*) n FROM users WHERE role='admin'").get().n;
+    const admins = db.prepare("SELECT COUNT(*) n FROM users WHERE role IN ('admin','superadmin')").get().n;
     const target = db.prepare("SELECT role FROM users WHERE id = ?").get(id);
-    if (target?.role === "admin" && role !== "admin" && admins <= 1) {
+    if (auth.isAdmin(target?.role) && !auth.isAdmin(role) && admins <= 1) {
       return res.status(400).json({ error: "This is the only admin. Promote someone else first." });
+    }
+    /* only a super admin can mint or remove another super admin */
+    if ((role === "superadmin" || target?.role === "superadmin") && req.user.role !== "superadmin") {
+      return res.status(403).json({ error: "Only a super admin can change who is super admin." });
     }
     db.prepare("UPDATE users SET role = ? WHERE id = ?").run(role, id);
   }
@@ -478,6 +507,14 @@ app.get("/page/:slug", (req, res, next) => {
      template here to render, so send the editor to where the page actually
      lives instead of failing to look up a view that was never meant to exist. */
   if (page.template === "__external") {
+    /* a page ingested from GitHub renders wherever that repo is deployed —
+       the live site if we know it, else the Lovable project itself */
+    if (page.repo) {
+      const site = (process.env.LIVE_URL || "").replace(/\/+$/, "");
+      if (site) return res.redirect(site + (page.slug === "home" ? "/" : "/" + page.slug) + (req.user ? "?edit=1" : ""));
+      if (page.url) return res.redirect(page.url);
+      return res.status(404).send("This page renders from its GitHub repo. Set LIVE_URL to where it is deployed.");
+    }
     const base = (process.env.APP_BASE_URL || "http://localhost:3000").replace(/\/+$/, "");
     const path0 = page.slug === "mu-home" ? "/"
       : page.slug === "shared" ? "/"
@@ -529,12 +566,13 @@ app.get("/page/:slug", (req, res, next) => {
        byte-for-byte what it was, apart from the data-c anchors. */
     if (editing) {
       const boot = {
-        slug: page.slug, tab, preview: draft, consoleUrl: CONSOLE,
+        slug: page.slug, tab, preview: draft, consoleUrl: CONSOLE, review: repo.configured(),
         user: { name: req.user.name, email: req.user.email, role: req.user.role },
         can: {
           edit: auth.can(req.user.role, "edit"),
           comment: auth.can(req.user.role, "comment"),
           publish: auth.can(req.user.role, "publish"),
+          approve: auth.can(req.user.role, "approve"),
           reorder: auth.can(req.user.role, "reorder"),
           ai: auth.can(req.user.role, "ai") && ai.configured(),
         },
@@ -623,17 +661,52 @@ app.get("/api/public/content/:slug", (req, res) => {
 /* ------------------------------------------------------------------ *
  * content API
  * ------------------------------------------------------------------ */
-app.get("/api/pages", auth.require_("read"), (_req, res) => {
+app.get("/api/pages", auth.require_("read"), (req, res) => {
+  /* Once a repo is connected the shelf is the repo: pages that came from
+     GitHub. The hand-built and demo pages stay in the database and are a
+     ?all=1 away, but they are not what an editor should be looking at. */
+  const githubOnly = repo.describe().lovable || repo.configured();
+  const where = githubOnly && req.query.all !== "1" ? "WHERE p.repo IS NOT NULL" : "";
   res.json(db.prepare(`
-    SELECT p.slug, p.title, p.source,
+    SELECT p.slug, p.title, p.source, p.repo, p.url, p.ingested_sha,
            COUNT(CASE WHEN c.retired = 0 AND c.tag <> 'meta' THEN 1 END) AS fields,
            COUNT(DISTINCT CASE WHEN c.retired = 0 THEN c.section_key END) AS sections,
            SUM(CASE WHEN c.value <> c.draft_value AND c.retired = 0 THEN 1 ELSE 0 END) AS unpublished,
            (SELECT user_name FROM publishes WHERE page_slug = p.slug ORDER BY id DESC LIMIT 1) AS last_publisher,
-           (SELECT published_at FROM publishes WHERE page_slug = p.slug ORDER BY id DESC LIMIT 1) AS last_published
+           (SELECT published_at FROM publishes WHERE page_slug = p.slug ORDER BY id DESC LIMIT 1) AS last_published,
+           (SELECT COUNT(*) FROM reviews r WHERE r.page_slug = p.slug AND r.status = 'pending') AS pending_reviews
     FROM pages p LEFT JOIN page_content c ON c.page_slug = p.slug
+    ${where}
     GROUP BY p.slug ORDER BY p.title
   `).all());
+});
+
+/**
+ * Pull a repository's pages into the console: clone it from GitHub, read the
+ * copy out of its source, seed fields. Rerun any time the code changes.
+ */
+app.post("/api/projects/ingest", auth.require_("publish"), async (req, res) => {
+  const name = ingest.repoSlug(req.body?.repo || "");
+  if (!/^[\w.-]+\/[\w.-]+$/.test(name)) return res.status(400).json({ error: "repo must be owner/name." });
+  const c = repo.cfg();
+  const isLovable = name.toLowerCase() === ingest.repoSlug(c.lovable).toLowerCase();
+  const isPersonal = name.toLowerCase() === ingest.repoSlug(c.personal).toLowerCase();
+  const token = isLovable ? c.lovableToken : c.token || c.lovableToken;
+  if (!token) return res.status(400).json({ error: "No GitHub token for that repository." });
+  const branch = String(req.body?.branch || (isPersonal ? c.preview : c.live));
+  try {
+    const out = await ingest.ingest(db, {
+      url: "https://github.com/" + name + ".git", token, branch,
+      homeSlug: String(req.body?.homeSlug || "home"), siteUrl: process.env.LIVE_URL || null,
+    });
+    res.json({ ...out, branch, by: req.user.name });
+  } catch (e) { res.status(502).json({ error: e.message }); }
+});
+
+/** Repositories straight from GitHub, with the two in the flow marked. */
+app.get("/api/projects", auth.require_("read"), async (_req, res) => {
+  try { res.json(await repo.listProjects()); }
+  catch (e) { res.status(502).json({ error: e.message }); }
 });
 
 app.get("/api/pages/:slug/content", auth.require_("read"), (req, res) => {
@@ -694,7 +767,11 @@ app.get("/api/pages/:slug/content", auth.require_("read"), (req, res) => {
     "SELECT user_name, user_email, fields, published_at FROM publishes WHERE page_slug = ? ORDER BY id DESC LIMIT 1"
   ).get(req.params.slug) || null;
 
-  res.json({ page, tabs, lastPublish });
+  const pendingReview = db.prepare(
+    "SELECT id, user_name, fields, created_at, commit_sha FROM reviews WHERE page_slug = ? AND status = 'pending' ORDER BY id DESC LIMIT 1"
+  ).get(req.params.slug) || null;
+
+  res.json({ page, tabs, lastPublish, pendingReview, review: repo.configured() });
 });
 
 app.put("/api/pages/:slug/content", auth.require_("edit"), (req, res) => {
@@ -843,33 +920,209 @@ app.delete("/api/pages/:slug/lists/:listKey/items/:itemId", auth.require_("edit"
   res.json({ items });
 });
 
-app.post("/api/pages/:slug/publish", auth.require_("publish"), (req, res) => {
-  /* Shared copy is edited from the page it appears on, so publishing that page
-     has to carry it. The count is reported separately, because a shared change
-     goes live everywhere and the person clicking Publish should be told. */
-  const pg = db.prepare("SELECT source FROM pages WHERE slug = ?").get(req.params.slug);
-  const alsoShared = pg && pg.source === "instrumented" && req.params.slug !== "shared";
-  const scope = alsoShared ? [req.params.slug, "shared"] : [req.params.slug];
+/* ------------------------------------------------------------------ *
+ * publishing
+ *
+ * With a repo configured, "publish" means: write this page's drafts as JSON,
+ * commit them to the preview branch, and open a review. The DB keeps the
+ * drafts as drafts; they become live values only when a super admin
+ * approves — the same moment the preview branch is merged into live.
+ *
+ * Without a repo (a laptop with no token) it does what it always did: flips
+ * draft to live in the database. That keeps the studio usable offline.
+ * ------------------------------------------------------------------ */
+function publishScope(slug) {
+  const pg = db.prepare("SELECT source FROM pages WHERE slug = ?").get(slug);
+  const alsoShared = pg && pg.source === "instrumented" && slug !== "shared";
+  return alsoShared ? [slug, "shared"] : [slug];
+}
 
-  const pending = db.prepare(
-    `SELECT page_slug, field_key, value, draft_value FROM page_content
-     WHERE page_slug IN (${scope.map(() => "?").join(",")}) AND value <> draft_value`
+function pendingDrafts(scope) {
+  return db.prepare(
+    `SELECT page_slug, field_key, label, section_title, value, draft_value FROM page_content
+     WHERE page_slug IN (${scope.map(() => "?").join(",")}) AND value <> draft_value AND retired = 0`
   ).all(...scope);
-  if (!pending.length) return res.json({ published: 0 });
+}
 
+/** The file the site reads: every published field of one page, draft or live. */
+function contentFile(slug, column) {
+  const rows = db.prepare(
+    `SELECT field_key, ${column} AS v FROM page_content WHERE page_slug = ? AND retired = 0 ORDER BY field_key`
+  ).all(slug);
+  const fields = {};
+  for (const r of rows) fields[r.field_key] = r.v;
+  return JSON.stringify({ slug, count: rows.length, fields }, null, 2) + "\n";
+}
+
+/** Apply a set of {page, key, to} changes as the live value, with revisions. */
+function goLive(changes, who, now) {
   const rev = db.prepare(`INSERT INTO revisions
     (page_slug, field_key, old_value, new_value, changed_by, changed_at) VALUES (?,?,?,?,?,?)`);
-  const pub = db.prepare("UPDATE page_content SET value = draft_value WHERE page_slug = ? AND field_key = ?");
-  const now = new Date().toISOString();
-  for (const p of pending) {
-    rev.run(p.page_slug, p.field_key, p.value, p.draft_value, req.user.name, now);
-    pub.run(p.page_slug, p.field_key);
+  const pub = db.prepare("UPDATE page_content SET value = ? WHERE page_slug = ? AND field_key = ?");
+  let n = 0;
+  for (const c of changes) {
+    const cur = db.prepare("SELECT value FROM page_content WHERE page_slug = ? AND field_key = ?").get(c.page, c.key);
+    if (!cur || cur.value === c.to) continue;
+    rev.run(c.page, c.key, cur.value, c.to, who, now);
+    pub.run(c.to, c.page, c.key);
+    n++;
   }
+  return n;
+}
+
+app.post("/api/pages/:slug/publish", auth.require_("publish"), async (req, res) => {
+  const slug = req.params.slug;
+  const scope = publishScope(slug);
+  const pending = pendingDrafts(scope);
+  if (!pending.length) return res.json({ published: 0, review: null });
+  const now = new Date().toISOString();
   const sharedCount = pending.filter((p) => p.page_slug === "shared").length;
-  db.prepare(`INSERT INTO publishes (page_slug,user_id,user_name,user_email,fields,published_at)
-              VALUES (?,?,?,?,?,?)`)
-    .run(req.params.slug, req.user.id, req.user.name, req.user.email, pending.length, now);
-  res.json({ published: pending.length, shared: sharedCount, by: req.user.name, at: now });
+
+  if (!repo.configured()) {
+    /* the old direct path — nothing is reviewed, and the caller is told so */
+    const n = goLive(pending.map((p) => ({ page: p.page_slug, key: p.field_key, to: p.draft_value })), req.user.name, now);
+    db.prepare(`INSERT INTO publishes (page_slug,user_id,user_name,user_email,fields,published_at)
+                VALUES (?,?,?,?,?,?)`).run(slug, req.user.id, req.user.name, req.user.email, n, now);
+    return res.json({ published: n, shared: sharedCount, by: req.user.name, at: now, review: null, direct: true });
+  }
+
+  /* one open review per page: a second send replaces it rather than stacking */
+  const open = db.prepare("SELECT id FROM reviews WHERE page_slug = ? AND status = 'pending'").get(slug);
+
+  const snapshot = pending.map((p) => ({
+    page: p.page_slug, key: p.field_key, label: p.label, section: p.section_title,
+    from: p.value, to: p.draft_value,
+  }));
+  const files = {};
+  for (const s of scope) files[repo.contentPath(s)] = contentFile(s, "draft_value");
+  const title = (db.prepare("SELECT title FROM pages WHERE slug = ?").get(slug) || {}).title || slug;
+  const note = String(req.body?.note || "").trim().slice(0, 500);
+  const message = `content(${slug}): ${pending.length} change${pending.length === 1 ? "" : "s"} to ${title}` +
+    (sharedCount ? ` (+${sharedCount} shared)` : "") + `\n\nSent for review by ${req.user.name} <${req.user.email}>` +
+    (note ? `\n\n${note}` : "");
+
+  let out;
+  try {
+    out = await repo.commitToPreview({ files, message, author: { name: req.user.name, email: req.user.email } });
+  } catch (e) {
+    return res.status(502).json({ error: "Could not push to the preview branch: " + e.message });
+  }
+
+  if (open) db.prepare("UPDATE reviews SET status = 'superseded', decided_at = ? WHERE id = ?").run(now, open.id);
+  const info = db.prepare(`INSERT INTO reviews
+    (page_slug,user_id,user_name,user_email,fields,snapshot,commit_sha,branch,status,note,created_at)
+    VALUES (?,?,?,?,?,?,?,?,'pending',?,?)`)
+    .run(slug, req.user.id, req.user.name, req.user.email, pending.length, JSON.stringify(snapshot),
+         out.sha, repo.cfg().preview, note || null, now);
+
+  res.json({
+    published: 0, review: { id: info.lastInsertRowid, fields: pending.length, sha: out.sha, branch: repo.cfg().preview },
+    shared: sharedCount, by: req.user.name, at: now, replaced: Boolean(open),
+  });
+});
+
+/* ---------------- reviews ---------------- */
+const reviewRow = (r) => r && ({ ...r, snapshot: JSON.parse(r.snapshot) });
+
+app.get("/api/reviews", auth.require_("read"), async (req, res) => {
+  const status = String(req.query.status || "pending");
+  const rows = db.prepare(
+    `SELECT r.*, p.title AS page_title FROM reviews r LEFT JOIN pages p ON p.slug = r.page_slug
+     WHERE (? = 'all' OR r.status = ?) ORDER BY r.id DESC LIMIT 100`
+  ).all(status, status).map(reviewRow);
+  res.json({ reviews: rows, repo: await repo.status(), canApprove: auth.can(req.user.role, "approve") });
+});
+
+app.get("/api/reviews/:id", auth.require_("read"), (req, res) => {
+  const r = reviewRow(db.prepare(
+    "SELECT r.*, p.title AS page_title FROM reviews r LEFT JOIN pages p ON p.slug = r.page_slug WHERE r.id = ?"
+  ).get(Number(req.params.id)));
+  if (!r) return res.status(404).json({ error: "No such review." });
+  res.json(r);
+});
+
+app.post("/api/reviews/:id/approve", auth.require_("approve"), async (req, res) => {
+  const r = reviewRow(db.prepare("SELECT * FROM reviews WHERE id = ?").get(Number(req.params.id)));
+  if (!r) return res.status(404).json({ error: "No such review." });
+  if (r.status !== "pending") return res.status(409).json({ error: "This review is already " + r.status + "." });
+  const now = new Date().toISOString();
+  const title = (db.prepare("SELECT title FROM pages WHERE slug = ?").get(r.page_slug) || {}).title || r.page_slug;
+  const message = `Go live: ${title} — ${r.fields} change${r.fields === 1 ? "" : "s"} by ${r.user_name}\n\n` +
+    `Approved by ${req.user.name} <${req.user.email}> (review #${r.id})`;
+
+  let out;
+  try { out = await repo.approveToLive({ message }); }
+  catch (e) { return res.status(502).json({ error: e.message }); }
+
+  /* the merge carried every pending review's file, so all of them went live */
+  const all = db.prepare("SELECT * FROM reviews WHERE status = 'pending' ORDER BY id").all().map(reviewRow);
+  let fields = 0;
+  const mark = db.prepare(`UPDATE reviews SET status = 'approved', decided_by = ?, decided_at = ?, decision_note = ?,
+                            live_sha = ?, lovable_pushed = ? WHERE id = ?`);
+  const note = String(req.body?.note || "").trim().slice(0, 500) || null;
+  for (const x of all) {
+    fields += goLive(x.snapshot, req.user.name, now);
+    mark.run(req.user.name, now, x.id === r.id ? note : "approved together with #" + r.id, out.sha, out.lovable.pushed ? 1 : 0, x.id);
+    db.prepare(`INSERT INTO publishes (page_slug,user_id,user_name,user_email,fields,published_at)
+                VALUES (?,?,?,?,?,?)`).run(x.page_slug, req.user.id, req.user.name, req.user.email, x.fields, now);
+  }
+  res.json({ approved: all.map((x) => x.id), fields, live: out.sha, lovable: out.lovable, at: now });
+});
+
+app.post("/api/reviews/:id/reject", auth.require_("approve"), async (req, res) => {
+  const r = reviewRow(db.prepare("SELECT * FROM reviews WHERE id = ?").get(Number(req.params.id)));
+  if (!r) return res.status(404).json({ error: "No such review." });
+  if (r.status !== "pending") return res.status(409).json({ error: "This review is already " + r.status + "." });
+  const now = new Date().toISOString();
+  const note = String(req.body?.note || "").trim().slice(0, 500) || null;
+
+  /* Put the page's file on the preview branch back to what is live, and drop
+     the drafts. A fresh commit rather than a revert: it cannot conflict, and
+     other pages' pending reviews stay untouched on the branch. */
+  const scope = publishScope(r.page_slug);
+  const files = {};
+  for (const s of scope) files[repo.contentPath(s)] = contentFile(s, "value");
+  try {
+    await repo.commitToPreview({
+      files, author: { name: req.user.name, email: req.user.email },
+      message: `content(${r.page_slug}): rejected review #${r.id}\n\nRejected by ${req.user.name}` + (note ? `\n\n${note}` : ""),
+    });
+  } catch (e) {
+    return res.status(502).json({ error: "Could not update the preview branch: " + e.message });
+  }
+  const undo = db.prepare("UPDATE page_content SET draft_value = value WHERE page_slug = ? AND field_key = ? AND draft_value = ?");
+  let reverted = 0;
+  for (const c of r.snapshot) reverted += undo.run(c.page, c.key, c.to).changes;
+  db.prepare("UPDATE reviews SET status = 'rejected', decided_by = ?, decided_at = ?, decision_note = ? WHERE id = ?")
+    .run(req.user.name, now, note, r.id);
+  res.json({ rejected: r.id, reverted, at: now });
+});
+
+/* ---------------- the repos themselves ---------------- */
+app.get("/api/repo", auth.require_("read"), async (_req, res) => res.json(await repo.status()));
+
+app.get("/api/repo/pending", auth.require_("read"), async (_req, res) => {
+  try { res.json(await repo.pendingOnPreview()); }
+  catch (e) { res.status(502).json({ error: e.message }); }
+});
+
+/** Pull everything Lovable has into the personal repo. Safe to repeat. */
+app.post("/api/repo/sync", auth.require_("approve"), async (_req, res) => {
+  try { res.json(await repo.mirrorFromLovable()); }
+  catch (e) { res.status(502).json({ error: e.message }); }
+});
+
+/** Commit every page's LIVE content to the preview branch — the first-time seed. */
+app.post("/api/repo/seed", auth.require_("approve"), async (req, res) => {
+  const files = {};
+  for (const p of db.prepare("SELECT slug FROM pages").all()) files[repo.contentPath(p.slug)] = contentFile(p.slug, "value");
+  try {
+    const out = await repo.commitToPreview({
+      files, author: { name: req.user.name, email: req.user.email },
+      message: "content: seed every page from the console\n\nBy " + req.user.name,
+    });
+    res.json({ files: Object.keys(files).length, ...out });
+  } catch (e) { res.status(502).json({ error: e.message }); }
 });
 
 app.post("/api/pages/:slug/revert", auth.require_("edit"), (req, res) => {
@@ -1014,7 +1267,9 @@ const gate = (req, res, next) => req.user ? next() : res.redirect(CONSOLE + "/lo
 app.get(CONSOLE + "/login", (req, res) =>
   req.user ? res.redirect(CONSOLE) : res.sendFile(path.join(ROOT, "admin/login.html")));
 app.get(CONSOLE, gate, send("index.html"));
+app.get(CONSOLE + "/projects", gate, send("projects.html"));
 app.get(CONSOLE + "/people", gate, send("people.html"));
+app.get(CONSOLE + "/review", gate, send("review.html"));
 app.get(CONSOLE + "/page/:slug", gate, send("edit.html"));
 app.get("/", (_req, res) => res.redirect(CONSOLE));
 /* the old path, so nobody's bookmark dies */
@@ -1023,5 +1278,6 @@ app.get("/admin", (_req, res) => res.redirect(CONSOLE));
 app.listen(PORT, () => {
   console.log(`\n  console    http://localhost:${PORT}${CONSOLE}`);
   console.log(`  live page  http://localhost:${PORT}/page/pgp-bharat`);
+  console.log(`  publishing ${(() => { const d = repo.describe(); return d.ready ? `via git — ${d.preview} → ${d.live} on ${d.personal}` + (d.lovableReady ? ` (+ Lovable)` : ``) : `direct to DB — set PERSONAL_REPO + GITHUB_TOKEN for review flow`; })()}`);
   console.log(`  AI writer  ${(() => { const d = ai.describe(); return d.ready ? `ready — ${d.provider} / ${d.model}` : `off — add a key to .env (provider: ${d.provider})`; })()}\n`);
 });

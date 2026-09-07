@@ -1,0 +1,4 @@
+# Railway builds with Nixpacks. The console shells out to git for publishing,
+# and the default Node image does not ship it.
+[phases.setup]
+nixPkgs = ["...", "git"]
