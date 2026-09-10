@@ -202,6 +202,12 @@
 
     // keep the page in step, unless the page is what just changed
     var painted = false;
+    /* Our own writes are mutations too. The re-adopt observer used to stay out
+       of the way because `live` was set while typing, but the page is never
+       contenteditable on an instrumented app, so `live` is always null and
+       every keystroke woke a full re-adopt pass — which re-tags elements and
+       switches the field you are editing out from under you. */
+    obsMuted = true;
     if (!opts.fromPage) {
       var sel = CSS.escape(key);
       var each = function (q, fn) {
@@ -293,9 +299,13 @@
        copy, applyLocal(k, v, true) repaints none. Silence is only right when
        the PAGE is the source of the change, which is the caret's own node on
        a server-rendered page. Everywhere else, ask the app to paint. */
-    pushRuntime(key, value, opts.fromPage);
+    /* If we painted the element ourselves there is nothing left to show, and
+       a repaint would only remount the carousel and throw you back to slide 1
+       mid-edit. Repaint ONLY when the element was not on the page to paint. */
+    pushRuntime(key, value, opts.fromPage || painted, opts.typing);
     markNode(key);
     refreshCount();
+    setTimeout(function () { obsMuted = false; }, 0);
   }
 
   /* A loud applyLocal repaints the entire app. That is the only thing that
@@ -303,13 +313,18 @@
      the page flash as if it were reloading. So the store is told the truth
      immediately and the repaint waits for the typing to settle. */
   var rtTimer = null;
-  function pushRuntime(key, value, silent) {
+  var REPAINT_IDLE = 2500;   // how long typing must stop before the app repaints
+  function pushRuntime(key, value, silent, typing) {
     var R = window.__MU_RUNTIME__;
     if (!R) return;
-    R.applyLocal(key, value, true);          // store is right this instant
+    R.applyLocal(key, value, true);          // the store is right this instant
     if (silent) return;
     clearTimeout(rtTimer);
-    rtTimer = setTimeout(function () { R.applyLocal(key, value, false); }, 150);
+    if (!typing) { R.applyLocal(key, value, false); return; }   // undo, AI, commit
+    /* Mid-word, a repaint is a whole-app repaint and reads as the page
+       reloading under you. Wait until the typing genuinely stops; blurring the
+       field commits immediately anyway. */
+    rtTimer = setTimeout(function () { R.applyLocal(key, value, false); }, REPAINT_IDLE);
   }
 
   function applyState(host, key, value) {
@@ -473,6 +488,8 @@
     if (domObs) return;
     domObs = new MutationObserver(function (muts) {
       if (obsMuted || mode !== "edit" || live) return;
+      var ae = document.activeElement;
+      if (ae && ae.closest && ae.closest(".mu-side, .mu-pop")) return;   // someone is typing
       var relevant = false;
       for (var i = 0; i < muts.length && !relevant; i++) {
         var tgt = muts[i].target;
@@ -1297,7 +1314,9 @@
       revertField(key);
       if (input) input.value = valueOf(key);
     });
-    input.addEventListener("input", function () { setField(key, input.value); });
+    input.addEventListener("input", function () { setField(key, input.value, { typing: true }); });
+    // leaving the field is the commit point: repaint once, now
+    input.addEventListener("blur", function () { pushRuntime(key, valueOf(key), false); });
     Array.prototype.forEach.call(pop.querySelectorAll("[data-ai]"), function (b) {
       b.addEventListener("click", function () { runAI(b.dataset.ai, b.dataset.k, b, pop); });
     });
@@ -2058,7 +2077,7 @@
       var ev = input.tagName === "SELECT" ? "change" : "input";
       input.addEventListener(ev, function () {
         var key = input.dataset.f;
-        setField(key, input.value, { fromSidebar: true });
+        setField(key, input.value, { fromSidebar: true, typing: true });
         var media = side.querySelector('[data-poster="' + CSS.escape(key) + '"]');
         if (media) media.style.display = isVideo(input.value) ? "" : "none";
       });
@@ -2106,7 +2125,7 @@
         box.style.height = Math.min(box.scrollHeight, 320) + "px";
       }
       box.addEventListener("input", function () {
-        setField(box.dataset.rich, box.innerHTML, { fromSidebar: true });
+        setField(box.dataset.rich, box.innerHTML, { fromSidebar: true, typing: true });
         grow();
       });
       grow();
