@@ -1132,6 +1132,7 @@
 
   function togglePeek(on) {
     if (!side) return;
+    closePop();
     var peeking = side.classList.toggle("mu-side--peek", on);
     document.body.classList.toggle("mu-side-peek", peeking);   // the toolbar re-centres
     var btn = document.querySelector("[data-peek]");
@@ -1140,6 +1141,77 @@
       btn.title = peeking ? "Bring the panel back" : "Peek at the page behind the panel";
       btn.setAttribute("aria-pressed", peeking ? "true" : "false");
     }
+  }
+
+  /* ---------------- the peek popover ----------------
+     While peeking, the page IS the screen. A click must not drag the drawer
+     back, so the field's controls come to the element instead: the words, the
+     AI, or the image URL, right where you are looking. */
+  var pop = null;
+  function peeking() { return !!side && side.classList.contains("mu-side--peek"); }
+  function closePop() { if (pop) { pop.remove(); pop = null; } }
+
+  function placePop(node) {
+    if (!pop) return;
+    /* the containment block pins `inset:auto !important` on every piece of
+       editor chrome, so the placement has to be !important too or the card
+       lands wherever the document flow leaves it */
+    var put = function (x, y) {
+      pop.style.setProperty("left", x + "px", "important");
+      pop.style.setProperty("top", y + "px", "important");
+    };
+    var m = 12, r = node && node.getBoundingClientRect ? node.getBoundingClientRect() : null;
+    if (!r) { put(m, m); return; }
+    var w = pop.getBoundingClientRect().width || 320;
+    put(Math.min(Math.max(m, r.left), window.innerWidth - w - m), r.bottom + 10);
+    var h = pop.getBoundingClientRect().height;
+    if (r.bottom + 10 + h > window.innerHeight - m) {
+      put(Math.min(Math.max(m, r.left), window.innerWidth - w - m), Math.max(m, r.top - h - 10));
+    }
+  }
+
+  function openPop(key, node) {
+    closePop();
+    var f = meta.get(key) || meta.get(String(key).replace(/@poster$/, ""));
+    if (!f) return;
+    var isMedia = f.tag === "media";
+    var v = valueOf(key);
+
+    pop = el("div", "mu-pop");
+    pop.innerHTML =
+      '<div class="mu-pop__h"><span>' + esc(friendly(f.tag)) + "</span>" +
+        '<button type="button" class="mu-revert" data-revert="' + esc(key) + '" title="Undo this field">↺ Undo</button>' +
+        '<button type="button" class="mu-pop__x" title="Close (Esc)" aria-label="Close">✕</button>' +
+      "</div>" +
+      (isMedia
+        ? '<input type="text" class="mu-mono" data-f="' + esc(key) + '" value="' + esc(v) +
+            '" placeholder="https://\u2026 paste a CDN link">' +
+          '<div class="mu-hint">Paste a URL to replace the picture, clear it to restore.</div>'
+        : '<textarea data-f="' + esc(key) + '" rows="3">' + esc(v) + "</textarea>") +
+      (CAN.ai && !isMedia
+        ? '<div class="mu-pop__ai">' +
+            '<input type="text" data-ins="' + esc(key) + '" placeholder="Optional: shorter, warmer, lead with the number\u2026">' +
+            '<button class="mu-mini" type="button" data-ai="rewrite" data-k="' + esc(key) + '">Rewrite</button>' +
+            '<button class="mu-mini" type="button" data-ai="variants" data-k="' + esc(key) + '">Options</button>' +
+          "</div>" +
+          '<div class="mu-hint">Leave it empty for a straight rewrite in the house voice. ' +
+            '<b>Rewrite</b> returns one line, <b>Options</b> returns three angles. Click one to use it.</div>' +
+          '<div class="mu-out" data-out="' + esc(key) + '"></div>'
+        : "");
+    document.body.appendChild(pop);
+    placePop(node);
+
+    var input = pop.querySelector("[data-f]");
+    pop.querySelector(".mu-pop__x").addEventListener("click", closePop);
+    pop.querySelector("[data-revert]").addEventListener("click", function () {
+      revertField(key);
+      if (input) input.value = valueOf(key);
+    });
+    input.addEventListener("input", function () { setField(key, input.value); });
+    Array.prototype.forEach.call(pop.querySelectorAll("[data-ai]"), function (b) {
+      b.addEventListener("click", function () { runAI(b.dataset.ai, b.dataset.k, b, pop); });
+    });
+    if (isMedia) { input.focus(); input.select(); }
   }
 
   var sideTab = "all";
@@ -1456,6 +1528,7 @@
      its way. Peek is dropped on every new selection: you asked to see the
      page, and the panel has now been asked for again. */
   function revealInDrawer(key, doFocus, node) {
+    if (peeking()) { openPop(key, node); return; }   // the page stays uncovered
     findInDrawer(key, doFocus, node);
     togglePeek(false);
     keepClear(node && node.isConnected ? node : nodeForKey(key));
@@ -1774,7 +1847,7 @@
           : '<input type="text" data-f="' + esc(f.key) + '" value="' + esc(v) + '">') +
       (CAN.ai
         ? '<div class="mu-ai" data-aibox="' + esc(f.key) + '" hidden>' +
-            '<input type="text" class="mu-ai__ins" data-ins="' + esc(f.key) + '" placeholder="What should change?">' +
+            '<input type="text" class="mu-ai__ins" data-ins="' + esc(f.key) + '" placeholder="Optional: shorter, warmer, lead with the number\u2026">' +
             '<button class="mu-mini" type="button" data-ai="rewrite" data-k="' + esc(f.key) + '">Rewrite</button>' +
             '<button class="mu-mini" type="button" data-ai="variants" data-k="' + esc(f.key) + '">Options</button>' +
           '</div><div class="mu-out" data-out="' + esc(f.key) + '"></div>'
@@ -2009,6 +2082,10 @@
   }
 
   function syncSidebarInput(key, value) {
+    if (pop) {
+      var pi = pop.querySelector('[data-f="' + CSS.escape(key) + '"]');
+      if (pi && pi.value !== value) pi.value = value;
+    }
     if (!side) return;
     var rich = side.querySelector('[data-rich="' + CSS.escape(key) + '"]');
     if (rich) { if (rich.innerHTML !== value) rich.innerHTML = value; return; }
@@ -2029,9 +2106,10 @@
   }
 
   /* ---------------- AI ---------------- */
-  async function runAI(kind, key, btn) {
-    var out = side.querySelector('[data-out="' + CSS.escape(key) + '"]');
-    var ins = side.querySelector('[data-ins="' + CSS.escape(key) + '"]');
+  async function runAI(kind, key, btn, host) {
+    host = host || side;
+    var out = host.querySelector('[data-out="' + CSS.escape(key) + '"]');
+    var ins = host.querySelector('[data-ins="' + CSS.escape(key) + '"]');
     out.innerHTML = '<div class="mu-hint"><span class="mu-spin"></span> Writing in the house voice…</div>';
     btn.disabled = true;
     try {
@@ -2251,7 +2329,7 @@
   document.addEventListener("click", function (e) {
     if (mode !== "edit" && mode !== "arrange") return;
     if (!e.target.closest) return;
-    if (e.target.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-grip")) return;
+    if (e.target.closest(".mu-bar, .mu-side, .mu-toast, .mu-pill, .mu-grip, .mu-pop")) return;
 
     /* Anchored content wins even inside a control: clicking the words
        "WATCH NOW" edits them; clicking the play circle beside them plays.
@@ -2387,7 +2465,7 @@
   ["mousedown", "touchstart", "pointerdown"].forEach(function (evt) {
     document.addEventListener(evt, function (e) {
       if (mode !== "edit" || !e.target.closest) return;
-      if (e.target.closest(".mu-bar, .mu-side, .mu-pill")) return;
+      if (e.target.closest(".mu-bar, .mu-side, .mu-pill, .mu-pop")) return;
       /* Anchored content swallows the press — a video trigger listening on
          pointerdown must not start playing under the words being edited.
          Everything else on a control feels every event it normally would. */
@@ -2496,7 +2574,9 @@
     if (dirty.size) { e.preventDefault(); e.returnValue = ""; }
   });
   document.addEventListener("keydown", function (e) {
-    if (e.key !== "Escape" || !side || live) return;
+    if (e.key !== "Escape") return;
+    if (pop) { closePop(); return; }
+    if (!side || live) return;
     // one Escape puts a peeking panel back, the next one closes it
     if (side.classList.contains("mu-side--peek")) togglePeek(false);
     else closeSidebar();
