@@ -190,6 +190,9 @@
   /* ---------------- the one place a value changes ---------------- */
   function setField(key, value, opts) {
     opts = opts || {};
+    // the words currently on the page, needed to find the element again if
+    // React has replaced it and taken our data-c with it
+    var was = dirty.has(key) ? dirty.get(key) : ((meta.get(key) || {}).value || "");
     if (!original.has(key)) {
       var f = meta.get(key);
       original.set(key, f ? f.value : "");
@@ -198,36 +201,115 @@
     else dirty.set(key, value);
 
     // keep the page in step, unless the page is what just changed
+    var painted = false;
     if (!opts.fromPage) {
-      var node = document.querySelector('[data-c="' + CSS.escape(key) + '"]');
-      /* The one node we must not rewrite is the one holding the caret: the
-         words are already in it, and replacing its contents there swallows
-         the cursor mid-word. Testing `live` instead cost us every drawer
-         edit — clicking copy on the page makes that node `live` and nothing
-         ever cleared it, so typing in the drawer updated no page at all. */
-      if (node && node !== document.activeElement) {
+      var sel = CSS.escape(key);
+      var each = function (q, fn) {
+        var n = document.querySelectorAll(q);
+        Array.prototype.forEach.call(n, fn);
+        if (n.length) painted = true;
+      };
+
+      /* EVERY node carrying this key, not just querySelector's first hit. A
+         responsive build renders the same string twice, a desktop copy and a
+         mobile one, so patching only the first could rewrite an invisible
+         duplicate and leave the words on screen untouched. Typing never
+         noticed, because it edits its own node directly — which is exactly
+         why typing worked while undo looked dead.
+
+         The node holding the caret is normally skipped: the words are already
+         in it and replacing its contents swallows the cursor mid-word. An undo
+         overrides that, since replacing the contents is the entire point. */
+      /* A remounting component sheds its anchors (the same reason an img
+         loses data-c-media moments after regroup tagged it), so the attribute
+         alone is not a reliable handle. Add the node we were actually given —
+         the one the caret was in — and the field's remembered node, or an undo
+         writes into thin air while the words sit there unchanged. */
+      var targets = Array.prototype.slice.call(document.querySelectorAll('[data-c="' + sel + '"]'));
+      var add = function (n) {
+        if (n && n.isConnected && n.nodeType === 1 && targets.indexOf(n) < 0) targets.push(n);
+      };
+      add(opts.node);
+      var mf = meta.get(key);
+      if (!targets.length && mf) add(mf.__node);
+      targets.forEach(function (node) {
+        if (!opts.force && node === document.activeElement) return;
         if (node.hasAttribute("data-c-rich")) node.innerHTML = value;
         else node.textContent = value;
+        painted = true;
+      });
+
+      /* Nothing matched. On an instrumented app that means React re-rendered
+         and replaced the element, discarding the data-c that lazyAdopt put
+         there by hand (a repaint hands back a NEW node — verified). Our own
+         reference is detached and the runtime cannot repaint a key it never
+         rendered, so the only handle left is the wording itself: find the
+         element still showing the old words and adopt it again. */
+      if (!painted && was && String(was).length > 2 && !opts.fromPage) {
+        var wanted = normText(was);
+        /* Match on the wording, then take the TIGHTEST element that carries
+           it. Requiring a childless element was wrong: a heading wraps its
+           words in spans, so the real target was skipped every time and the
+           undo silently missed the page. */
+        var best = null, bestN = Infinity;
+        var cand = document.body.querySelectorAll("h1,h2,h3,h4,h5,h6,p,span,div,li,a,button,strong,em,td,th");
+        for (var ci = 0; ci < cand.length; ci++) {
+          var c = cand[ci];
+          if (c.closest(".mu-side, .mu-bar, .mu-pop, .mu-toast, .mu-pill")) continue;
+          if (normText(c.textContent) !== wanted) continue;
+          var n2 = c.getElementsByTagName("*").length;
+          if (n2 < bestN) { best = c; bestN = n2; }
+        }
+        if (best) {
+          best.setAttribute("data-c", key);
+          if (best.hasAttribute("data-c-rich")) best.innerHTML = value;
+          else best.textContent = value;
+          var mf2 = meta.get(key);
+          if (mf2) mf2.__node = best;
+          painted = true;
+        }
       }
 
-      var link = document.querySelector('a[data-c-link="' + CSS.escape(key) + '"]');
-      if (link) link.setAttribute("href", value);
+      each('a[data-c-link="' + sel + '"]', function (link) { link.setAttribute("href", value); });
 
-      var stateHost = document.querySelector('[data-c-state="' + CSS.escape(key) + '"]');
-      if (stateHost) applyState(stateHost, key, value);
+      each('[data-c-state="' + sel + '"]', function (host) { applyState(host, key, value); });
 
-      var media = document.querySelector('[data-c-media="' + CSS.escape(key) + '"]');
-      if (media && media.tagName === "IMG" && !isVideo(value)) {
+      each('[data-c-media="' + sel + '"]', function (media) {
+        if (media.tagName !== "IMG" || isVideo(value)) return;
         media.src = value || media.dataset.muSrc || value;
         if (media.srcset) media.removeAttribute("srcset");   // or the browser keeps the old picture
-      }
+      });
     }
     if (!opts.fromSidebar) syncSidebarInput(key, value);
-    /* keep the app's own store true (silently — the DOM is already patched),
-       so a structural re-render doesn't roll this edit back */
-    if (window.__MU_RUNTIME__) window.__MU_RUNTIME__.applyLocal(key, value, true);
+    /* Keep the app's own store true, and let it REPAINT.
+
+       Patching the DOM ourselves is not enough here. A carousel renders
+       several panels side by side and only one anchor among them: the
+       [data-c] node for a dossier headline sits at x=2524, off screen, while
+       the copy you are reading is another element React owns and we cannot
+       see. Writing the anchored copy "succeeds" and changes nothing visible.
+
+       Verified against the runtime: applyLocal(k, v, false) repaints every
+       copy, applyLocal(k, v, true) repaints none. Silence is only right when
+       the PAGE is the source of the change, which is the caret's own node on
+       a server-rendered page. Everywhere else, ask the app to paint. */
+    pushRuntime(key, value, opts.fromPage);
     markNode(key);
     refreshCount();
+  }
+
+  /* A loud applyLocal repaints the entire app. That is the only thing that
+     reaches a copy we have no anchor for, but firing it per keystroke makes
+     the page flash as if it were reloading. So the store is told the truth
+     immediately and the repaint waits for the typing to settle. */
+  var rtTimer = null;
+  function pushRuntime(key, value, silent) {
+    var R = window.__MU_RUNTIME__;
+    if (!R) return;
+    R.applyLocal(key, value, true);          // store is right this instant
+    if (silent) return;
+    clearTimeout(rtTimer);
+    rtTimer = setTimeout(function () { R.applyLocal(key, value, false); }, 150);
   }
 
   function applyState(host, key, value) {
@@ -243,10 +325,18 @@
   function revertField(key) {
     if (!original.has(key)) return;
     // a field being typed in is skipped by setField's page sync — release it
-    if (live && live.dataset.c === key) stopTyping();
-    setField(key, original.get(key));
+    /* hold on to the element BEFORE stopTyping clears `live` — it is the one
+       the user was typing in, and the only handle guaranteed to be right */
+    var target = live && live.dataset.c === key ? live : null;
+    if (target) stopTyping();
+    Array.prototype.forEach.call(document.querySelectorAll('[data-c="' + CSS.escape(key) + '"]'), function (n) {
+      if (n === document.activeElement && n.blur) n.blur();
+    });
+    if (target && target === document.activeElement && target.blur) target.blur();
+    setField(key, original.get(key), { force: true, node: target });
     var f = meta.get(key);
     if (f) f.value = original.get(key);
+
   }
 
   function revertAll() {
@@ -1211,7 +1301,9 @@
     Array.prototype.forEach.call(pop.querySelectorAll("[data-ai]"), function (b) {
       b.addEventListener("click", function () { runAI(b.dataset.ai, b.dataset.k, b, pop); });
     });
-    if (isMedia) { input.focus(); input.select(); }
+    input.focus();
+    if (isMedia) input.select();
+    else if (input.setSelectionRange) input.setSelectionRange(input.value.length, input.value.length);
   }
 
   var sideTab = "all";
@@ -2136,6 +2228,15 @@
 
   /* ---------------- typing on the page ---------------- */
   function beginTyping(node) {
+    /* An instrumented app is React. React owns the text nodes under any
+       component it re-renders, so a contenteditable inside one gets its
+       characters duplicated and reordered as it reconciles: "ran" comes back
+       "rann", "MUCH" comes back "MAXZDCZXUCH", and the edit never reaches the
+       editor at all — the toolbar still reads "No changes". Selection and cut
+       break for the same reason. There, the card IS the editing surface and
+       the page is never made editable. A server-rendered page has no such
+       owner and keeps typing in place. */
+    if (window.__MU_RUNTIME__) return;
     if (live === node) return;
     stopTyping();
     live = node;
@@ -2420,7 +2521,7 @@
       e.preventDefault(); e.stopPropagation();
       beginTyping(node);
       syncSidebarInput(node.dataset.c, node.hasAttribute("data-c-rich") ? node.innerHTML : node.textContent);
-      revealInDrawer(node.dataset.c, false, node);   // page keeps the cursor
+      revealInDrawer(node.dataset.c, !!window.__MU_RUNTIME__, node);   // the page keeps the cursor only where it can
       return;
     }
     var media = hit.closest("[data-c-media]");
