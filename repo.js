@@ -18,7 +18,7 @@
  *   LOVABLE_TOKEN   PAT with contents:write on the Lovable repo (optional)
  *   PREVIEW_BRANCH  default "previewbranch"
  *   LIVE_BRANCH     default "main"
- *   CONTENT_DIR     default "content" — where the JSON files live in the repo
+ *   CONTENT_DIR     default "public/content" — where the JSON files live in the repo
  *   PREVIEW_URL     a deployment of the preview branch, shown on the review screen
  */
 import { execFile } from "node:child_process";
@@ -34,7 +34,9 @@ export const cfg = () => ({
   lovableToken: process.env.LOVABLE_TOKEN || process.env.GITHUB_TOKEN || "",
   preview: process.env.PREVIEW_BRANCH || "previewbranch",
   live: process.env.LIVE_BRANCH || "main",
-  dir: (process.env.CONTENT_DIR || "content").replace(/^\/+|\/+$/g, ""),
+  /* under public/ so the built site serves the files statically, and the
+     runtime shipped with it can fetch them from any deployment */
+  dir: (process.env.CONTENT_DIR || "public/content").replace(/^\/+|\/+$/g, ""),
   previewUrl: process.env.PREVIEW_URL || "",
   liveUrl: process.env.LIVE_URL || "",
   clone: process.env.REPO_CLONE_DIR || path.join(ROOT, "data/repo"),

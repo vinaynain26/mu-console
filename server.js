@@ -20,6 +20,7 @@ import * as auth from "./auth.js";
 import * as ai from "./ai.js";
 import * as repo from "./repo.js";
 import * as ingest from "./ingest.js";
+import * as preview from "./preview.js";
 
 const ROOT = import.meta.dirname;
 
@@ -128,6 +129,7 @@ db.exec(`
   }
   if (!pcols.includes("url")) db.exec("ALTER TABLE pages ADD COLUMN url TEXT");            // where the page renders
   if (!pcols.includes("ingested_sha")) db.exec("ALTER TABLE pages ADD COLUMN ingested_sha TEXT");
+  if (!pcols.includes("route")) db.exec("ALTER TABLE pages ADD COLUMN route TEXT");
 }
 
 const cols = db.prepare("PRAGMA table_info(page_content)").all().map((c) => c.name);
@@ -381,6 +383,9 @@ app.post("/api/account/login", (req, res) => {
   if (!row) return bad();
   if (!auth.verifyPassword(password, row.pass_hash, row.pass_salt)) return bad();
 
+  /* BUG 6: the limiter counted successful sign-ins too, so a team behind one
+     office address locked itself out after ten logins. Only failures count. */
+  loginTries.delete(ip);
   const { token, expires } = auth.createSession(db, row.id);
   auth.setSessionCookie(res, token, expires);
   db.prepare("UPDATE users SET last_seen = ? WHERE id = ?").run(new Date().toISOString(), row.id);
@@ -510,6 +515,12 @@ app.get("/page/:slug", (req, res, next) => {
     /* a page ingested from GitHub renders wherever that repo is deployed —
        the live site if we know it, else the Lovable project itself */
     if (page.repo) {
+      if (preview.status(page.repo).built) {
+        const q = [];
+        if (req.query.preview === "1" || req.query.edit === "1") q.push("preview=1");   // an editor wants drafts
+        if (req.query.edit === "1") q.push("edit=1");
+        return res.redirect(preview.baseFor(page.repo).replace(/\/$/, "") + (page.route || "/") + (q.length ? "?" + q.join("&") : ""));
+      }
       const site = (process.env.LIVE_URL || "").replace(/\/+$/, "");
       if (site) return res.redirect(site + (page.slug === "home" ? "/" : "/" + page.slug) + (req.user ? "?edit=1" : ""));
       if (page.url) return res.redirect(page.url);
@@ -694,13 +705,69 @@ app.post("/api/projects/ingest", auth.require_("publish"), async (req, res) => {
   const token = isLovable ? c.lovableToken : c.token || c.lovableToken;
   if (!token) return res.status(400).json({ error: "No GitHub token for that repository." });
   const branch = String(req.body?.branch || (isPersonal ? c.preview : c.live));
+  if (!ingest.isBranchName(branch)) return res.status(400).json({ error: "Not a valid branch name." });
+  const homeSlug = String(req.body?.homeSlug || "home");
+  if (!/^[a-z0-9][a-z0-9-]{0,60}$/.test(homeSlug)) return res.status(400).json({ error: "homeSlug must be a lowercase slug." });
   try {
     const out = await ingest.ingest(db, {
       url: "https://github.com/" + name + ".git", token, branch,
-      homeSlug: String(req.body?.homeSlug || "home"), siteUrl: process.env.LIVE_URL || null,
+      homeSlug, siteUrl: process.env.LIVE_URL || null,
     });
-    res.json({ ...out, branch, by: req.user.name });
+    /* the preview build starts on its own, so "read pages" is one click to a rendered page */
+    preview.build({ repoName: name, url: "https://github.com/" + name + ".git", token, branch }).catch(() => {});
+    res.json({ ...out, branch, by: req.user.name, building: true });
   } catch (e) { res.status(502).json({ error: e.message }); }
+});
+
+/* ------------------------------------------------------------------ *
+ * rendering a GitHub site in the console
+ * ------------------------------------------------------------------ */
+function manifestFor(repoName) {
+  try { return JSON.parse(fs.readFileSync(path.join(ROOT, "data/manifests", preview.dirOf(repoName) + ".json"), "utf8")); }
+  catch { return null; }
+}
+
+app.get("/api/pages/:slug/preview", auth.require_("read"), (req, res) => {
+  const page = db.prepare("SELECT slug, repo, route, ingested_sha FROM pages WHERE slug = ?").get(req.params.slug);
+  if (!page?.repo) return res.status(404).json({ error: "Not a GitHub page." });
+  const st = preview.status(page.repo);
+  const url = st.built ? preview.baseFor(page.repo).replace(/\/$/, "") + (page.route || "/") : null;
+  res.json({ ...st, url, previewUrl: url ? url + "?preview=1" : null, editUrl: url ? url + "?preview=1&edit=1" : null, stale: Boolean(st.built && page.ingested_sha && st.built.sha !== page.ingested_sha) });
+});
+
+app.post("/api/pages/:slug/preview/build", auth.require_("publish"), (req, res) => {
+  const page = db.prepare("SELECT slug, repo FROM pages WHERE slug = ?").get(req.params.slug);
+  if (!page?.repo) return res.status(404).json({ error: "Not a GitHub page." });
+  const c = repo.cfg();
+  const isLovable = page.repo.toLowerCase() === ingest.repoSlug(c.lovable).toLowerCase();
+  const token = isLovable ? c.lovableToken : c.token || c.lovableToken;
+  const branch = String(req.body?.branch || (isLovable ? c.live : c.preview));
+  if (!ingest.isBranchName(branch)) return res.status(400).json({ error: "Not a valid branch name." });
+  // fire and poll: a build is a minute or two, longer than a request should hang
+  preview.build({ repoName: page.repo, url: "https://github.com/" + page.repo + ".git", token, branch }).catch(() => {});
+  res.json({ started: true, ...preview.status(page.repo) });
+});
+
+/** The fields whose console value differs from the source, for the overlay. */
+app.get("/api/preview/:dir/overlay", auth.require_("read"), (req, res) => {
+  const route = String(req.query.route || "/");
+  const page = db.prepare("SELECT slug, repo FROM pages WHERE repo IS NOT NULL").all()
+    .find((p) => preview.dirOf(p.repo) === req.params.dir &&
+      ((db.prepare("SELECT route FROM pages WHERE slug = ?").get(p.slug).route || "/") === route));
+  if (!page) return res.json({ changes: [] });
+  const man = manifestFor(page.repo);
+  const orig = new Map();
+  for (const p of man?.pages || []) if (p.slug === page.slug) for (const f of p.fields) orig.set(f.key, f);
+  const col = req.query.preview === "1" ? "draft_value" : "value";
+  const rows = db.prepare(`SELECT field_key, type, ${col} AS v FROM page_content WHERE page_slug = ? AND retired = 0`).all(page.slug);
+  const changes = [];
+  for (const r of rows) {
+    const o = orig.get(r.field_key);
+    if (!o || o.text === r.v || !r.v) continue;
+    changes.push({ key: r.field_key, type: o.type, from: o.text, to: r.v });
+  }
+  res.set("Cache-Control", "no-store");
+  res.json({ slug: page.slug, draft: col === "draft_value", changes });
 });
 
 /** Repositories straight from GitHub, with the two in the flow marked. */
@@ -944,14 +1011,56 @@ function pendingDrafts(scope) {
   ).all(...scope);
 }
 
-/** The file the site reads: every published field of one page, draft or live. */
+/**
+ * The file the site reads: every field of one page, draft or live. For a page
+ * read from GitHub it also carries the ORIGINAL text per key, which is how the
+ * runtime in the site finds the words to replace.
+ */
 function contentFile(slug, column) {
   const rows = db.prepare(
-    `SELECT field_key, ${column} AS v FROM page_content WHERE page_slug = ? AND retired = 0 ORDER BY field_key`
+    `SELECT field_key, type, ${column} AS v FROM page_content WHERE page_slug = ? AND retired = 0 ORDER BY field_key`
   ).all(slug);
-  const fields = {};
-  for (const r of rows) fields[r.field_key] = r.v;
-  return JSON.stringify({ slug, count: rows.length, fields }, null, 2) + "\n";
+  const page = db.prepare("SELECT repo, route FROM pages WHERE slug = ?").get(slug);
+  const fields = {}, types = {}, source = {};
+  const man = page?.repo ? manifestFor(page.repo) : null;
+  const orig = new Map();
+  for (const p of man?.pages || []) if (p.slug === slug) for (const f of p.fields) orig.set(f.key, f.text);
+  for (const r of rows) {
+    fields[r.field_key] = r.v;
+    if (r.type === "media" || r.type === "link") types[r.field_key] = r.type;
+    if (orig.has(r.field_key)) source[r.field_key] = orig.get(r.field_key);
+  }
+  const out = { slug, route: page?.route || null, count: rows.length, fields };
+  if (man) { out.source = source; out.types = types; }
+  return JSON.stringify(out, null, 2) + "\n";
+}
+
+/**
+ * What a GitHub site needs besides its content files: the runtime script, a
+ * route→page map, and one <script> tag in index.html. All idempotent — git
+ * only commits what actually changed.
+ */
+function siteFiles() {
+  const files = {};
+  const pages = db.prepare("SELECT slug, repo, route FROM pages WHERE repo IS NOT NULL").all();
+  if (!pages.length) return files;
+  const dir = repo.cfg().dir;
+  const pub = dir.replace(/\/content$/, "");                       // public/content -> public
+  const routes = {};
+  for (const p of pages) routes[p.route || "/"] = p.slug;
+  files[dir + "/routes.json"] = JSON.stringify(routes, null, 2) + "\n";
+  files[pub + "/mu-content.js"] = fs.readFileSync(path.join(ROOT, "public/js/mu-content.js"), "utf8");
+  /* the tag goes into the repo's own index.html, read from the ingest clone */
+  const src = path.join(ROOT, "data/src", preview.dirOf(pages[0].repo), "index.html");
+  if (fs.existsSync(src)) {
+    let html = fs.readFileSync(src, "utf8");
+    if (!html.includes("mu-content.js")) {
+      const tag = `    <script src="/mu-content.js"></script>\n`;
+      html = html.includes("</head>") ? html.replace("</head>", tag + "  </head>") : tag + html;
+      files["index.html"] = html;
+    }
+  }
+  return files;
 }
 
 /** Apply a set of {page, key, to} changes as the live value, with revisions. */
@@ -993,7 +1102,7 @@ app.post("/api/pages/:slug/publish", auth.require_("publish"), async (req, res) 
     page: p.page_slug, key: p.field_key, label: p.label, section: p.section_title,
     from: p.value, to: p.draft_value,
   }));
-  const files = {};
+  const files = siteFiles();
   for (const s of scope) files[repo.contentPath(s)] = contentFile(s, "draft_value");
   const title = (db.prepare("SELECT title FROM pages WHERE slug = ?").get(slug) || {}).title || slug;
   const note = String(req.body?.note || "").trim().slice(0, 500);
@@ -1114,8 +1223,8 @@ app.post("/api/repo/sync", auth.require_("approve"), async (_req, res) => {
 
 /** Commit every page's LIVE content to the preview branch — the first-time seed. */
 app.post("/api/repo/seed", auth.require_("approve"), async (req, res) => {
-  const files = {};
-  for (const p of db.prepare("SELECT slug FROM pages").all()) files[repo.contentPath(p.slug)] = contentFile(p.slug, "value");
+  const files = siteFiles();
+  for (const p of db.prepare("SELECT slug FROM pages WHERE repo IS NOT NULL").all()) files[repo.contentPath(p.slug)] = contentFile(p.slug, "value");
   try {
     const out = await repo.commitToPreview({
       files, author: { name: req.user.name, email: req.user.email },
@@ -1263,6 +1372,28 @@ app.post("/api/pages/:slug/ai/section", auth.require_("ai"), async (req, res) =>
  * ------------------------------------------------------------------ */
 const send = (f) => (_req, res) => res.sendFile(path.join(ROOT, "admin", f));
 const gate = (req, res, next) => req.user ? next() : res.redirect(CONSOLE + "/login");
+
+/* the built site, for anyone signed in — with the inline editor on ?edit=1 */
+app.get(/^\/preview\//, gate, (req, res, next) => {
+  req.muEditorBoot = (dir, route) => {
+    const page = db.prepare("SELECT slug, route, repo FROM pages WHERE repo IS NOT NULL").all()
+      .find((p) => preview.dirOf(p.repo) === dir && (p.route || "/") === route);
+    if (!page || !auth.can(req.user.role, "read")) return null;
+    return {
+      slug: page.slug, tab: "_all", preview: req.query.preview === "1", consoleUrl: CONSOLE, review: repo.configured(),
+      user: { name: req.user.name, email: req.user.email, role: req.user.role },
+      can: {
+        edit: auth.can(req.user.role, "edit"),
+        comment: auth.can(req.user.role, "comment"),
+        publish: auth.can(req.user.role, "publish"),
+        approve: auth.can(req.user.role, "approve"),
+        reorder: false,                      // sections here are source files, not movable blocks
+        ai: auth.can(req.user.role, "ai") && ai.configured(),
+      },
+    };
+  };
+  preview.serve(req, res, next);
+});
 
 app.get(CONSOLE + "/login", (req, res) =>
   req.user ? res.redirect(CONSOLE) : res.sendFile(path.join(ROOT, "admin/login.html")));

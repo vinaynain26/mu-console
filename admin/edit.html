@@ -144,9 +144,39 @@ function renderTabs() {
   const ut = tab === '_all' ? 'highlight' : tab;
   $('prev').href = `/page/${slug}?preview=1&tab=${ut}`;
   $('livelink').href = `/page/${slug}?tab=${ut}`;
-  if (data.page?.repo) {
-    /* a GitHub page has no local render: "view" goes to its deployment, and
-       there is no preview render until the site reads content files */
+  if (data.page?.repo) previewLinks();
+}
+
+/* A GitHub page renders from the console's own build of the repo. Until
+   that build exists the links point nowhere useful, so offer the build. */
+let pollTimer = null;
+async function previewLinks() {
+  const st = await api(`/api/pages/${slug}/preview`).catch(() => null);
+  if (!st) return;
+  let b = $('buildbtn');
+  if (!b) {
+    b = document.createElement('button'); b.id = 'buildbtn'; b.className = 'btn ghost';
+    $('acts').insertBefore(b, $('prev'));
+    b.addEventListener('click', async () => {
+      b.disabled = true; b.textContent = 'Building…';
+      try { await api(`/api/pages/${slug}/preview/build`, { method: 'POST' }); } catch (e) { alert(e.message); }
+      previewLinks();
+    });
+  }
+  if (st.building) {
+    b.disabled = true; b.textContent = 'Building…';
+    b.title = st.log.split('\n').filter(Boolean).slice(-1)[0] || '';
+    clearTimeout(pollTimer); pollTimer = setTimeout(previewLinks, 2500);
+  } else {
+    b.disabled = false;
+    b.textContent = st.built ? (st.stale ? 'Rebuild preview (code changed)' : 'Rebuild preview') : 'Build preview';
+    b.title = st.error ? 'Last build failed: ' + st.error : st.built ? 'Built ' + ago(st.built.at) + ' from ' + st.built.sha.slice(0, 7) : 'Build the site from GitHub so it can be previewed here';
+    if (st.error && !st.built) alert('Build failed:\n' + st.error + '\n\n' + st.log.slice(-1500));
+  }
+  if (st.url) {
+    $('prev').style.display = ''; $('prev').href = st.previewUrl; $('prev').textContent = 'Preview draft ↗';
+    $('livelink').href = st.editUrl; $('livelink').textContent = 'Edit on page ↗';
+  } else {
     $('prev').style.display = 'none';
     $('livelink').textContent = 'Open site ↗';
   }

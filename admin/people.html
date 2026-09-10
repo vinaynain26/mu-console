@@ -40,6 +40,8 @@ const acct = await chrome('people');
 if (!['admin', 'superadmin'].includes(acct.user.role)) { document.querySelector('main').innerHTML =
   '<div class="banner crit">Only an admin can manage people.</div>'; throw new Error('nope'); }
 
+/* only a super admin may hand out super admin — the server enforces it, the menu should not tease it */
+if (acct.user.role !== 'superadmin') acct.roles = acct.roles.filter(r => r.key !== 'superadmin');
 $('r').innerHTML = acct.roles.map(r => `<option value="${esc(r.key)}">${esc(r.label)}</option>`).join('');
 $('r').value = 'editor';
 const blurb = () => { const r = acct.roles.find(x => x.key === $('r').value); $('rblurb').textContent = r ? r.blurb : ''; };

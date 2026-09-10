@@ -677,6 +677,16 @@
       if (/^(https?:)?\//.test(v) || /\.(png|jpe?g|webp|svg|gif|avif|mp4|webm|mov)([?#]|$)/i.test(v)) {
         var hit = byUrl.get(urlKey(v));
         if (hit) return hit;
+        /* a page read from GitHub holds the SOURCE path of an image, and the
+           build renamed the file (hero.jpg -> hero-B2xq.jpg): match the stem */
+        if (f.tag === "media" && !/^(https?:)?\//.test(v)) {
+          var sstem = v.split("/").pop().replace(/\.[a-z0-9]+$/i, ""), shits = [];
+          byUrl.forEach(function (els3, k3) {
+            var b3 = k3.split("/").pop();
+            if (b3.indexOf(sstem + "-") === 0 || b3.indexOf(sstem + ".") === 0) shits = shits.concat(els3);
+          });
+          if (shits.length) return shits;
+        }
       }
       var t = lc(v);
       if (!t) return null;

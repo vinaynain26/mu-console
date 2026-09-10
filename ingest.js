@@ -29,17 +29,33 @@ const ROOT = import.meta.dirname;
 
 /* ---------------- getting the source ---------------- */
 
+/** A git ref we are willing to pass on a command line: no leading dash, no shell noise. */
+export const isBranchName = (b) => /^[A-Za-z0-9][\w./-]{0,200}$/.test(String(b)) && !/\.\.|\/\/|@\{|\.lock$|\/$/.test(b);
+
+/* BUG 2: ingest and the preview build both work in the same clone. A build
+   patches App.tsx for a minute; an ingest landing mid-build would either fail
+   its checkout or read the patched file. One queue per clone directory. */
+const locks = new Map();
+export function withSource(key, fn) {
+  const prev = locks.get(key) || Promise.resolve();
+  const next = prev.then(fn, fn);
+  locks.set(key, next.catch(() => {}));
+  return next;
+}
+
 export const repoSlug = (u) => String(u || "").replace(/^https:\/\/github\.com\//, "").replace(/\.git$/, "").replace(/\/+$/, "");
 const dirFor = (slug) => path.join(process.env.SRC_CLONE_DIR || path.join(ROOT, "data/src"), slug.replace("/", "--"));
 
 /** A shallow clone of one branch, refreshed on every call. Returns its path. */
 export async function fetchSource({ url, token, branch }) {
+  if (!isBranchName(branch)) throw new Error("Not a valid branch name: " + branch);
   const dir = dirFor(repoSlug(url));
   if (!fs.existsSync(path.join(dir, ".git"))) {
     fs.mkdirSync(path.dirname(dir), { recursive: true });
     await repo.git(["clone", "-q", "--depth", "1", "--branch", branch, url, dir], { token, timeout: 600e3 });
   } else {
-    await repo.git(["fetch", "-q", "--depth", "1", "origin", branch], { cwd: dir, token, timeout: 600e3 });
+    await repo.git(["fetch", "-q", "--depth", "1", "origin", "--", branch], { cwd: dir, token, timeout: 600e3 });
+    await repo.git(["checkout", "-q", "--", "."], { cwd: dir }).catch(() => {});   // never carry a stray edit forward
     await repo.git(["checkout", "-q", "-B", branch, "FETCH_HEAD"], { cwd: dir });
   }
   const sha = await repo.git(["rev-parse", "HEAD"], { cwd: dir });
@@ -271,10 +287,11 @@ export function seed(db, scanResult, { repoName, url, sha }) {
   if (!cols.includes("repo")) db.exec("ALTER TABLE pages ADD COLUMN repo TEXT");
   if (!cols.includes("url")) db.exec("ALTER TABLE pages ADD COLUMN url TEXT");
   if (!cols.includes("ingested_sha")) db.exec("ALTER TABLE pages ADD COLUMN ingested_sha TEXT");
+  if (!cols.includes("route")) db.exec("ALTER TABLE pages ADD COLUMN route TEXT");     // the app's own path for this page
 
-  const upPage = db.prepare(`INSERT INTO pages (slug, title, template, layout, source, repo, url, ingested_sha)
-    VALUES (?, ?, '__external', 'main', 'github', ?, ?, ?)
-    ON CONFLICT(slug) DO UPDATE SET title = excluded.title, repo = excluded.repo, url = excluded.url, ingested_sha = excluded.ingested_sha, source = 'github', template = '__external'`);
+  const upPage = db.prepare(`INSERT INTO pages (slug, title, template, layout, source, repo, url, ingested_sha, route)
+    VALUES (?, ?, '__external', 'main', 'github', ?, ?, ?, ?)
+    ON CONFLICT(slug) DO UPDATE SET title = excluded.title, repo = excluded.repo, url = excluded.url, ingested_sha = excluded.ingested_sha, route = excluded.route, source = 'github', template = '__external'`);
   const ins = db.prepare(`INSERT INTO page_content
     (page_slug, field_key, section_key, section_title, section_ord, tab_key, tab_title, label, tag, type, multiline, ord, value, draft_value, updated_at, updated_by, retired)
     VALUES (?,?,?,?,?,'_all','Whole page',?,?,?,?,?,?,?,?,?,0)
@@ -285,7 +302,7 @@ export function seed(db, scanResult, { repoName, url, sha }) {
 
   const report = [];
   for (const p of scanResult.pages) {
-    upPage.run(p.slug, p.title, repoName, url || null, sha || null);
+    upPage.run(p.slug, p.title, repoName, url || null, sha || null, p.route);
     const keys = [];
     let added = 0, kept = 0;
     let sOrd = 0;
@@ -310,8 +327,10 @@ export function seed(db, scanResult, { repoName, url, sha }) {
 /** Clone + scan + seed, and write the manifest the runtime will need. */
 export async function ingest(db, { url, token, branch, homeSlug = "home", siteUrl }) {
   const name = repoSlug(url);
-  const { dir, sha } = await fetchSource({ url, token, branch });
-  const result = scan(dir, { homeSlug });
+  const { dir, sha, result } = await withSource(name, async () => {
+    const got = await fetchSource({ url, token, branch });
+    return { ...got, result: scan(got.dir, { homeSlug }) };
+  });
   const report = seed(db, result, { repoName: name, url: siteUrl || result.lovableUrl, sha });
   const manifest = {
     repo: name, sha, at: new Date().toISOString(),

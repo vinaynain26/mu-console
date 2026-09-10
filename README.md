@@ -14,6 +14,19 @@ Sign in with `figma.uiux@mastersunion.org` / `mastersunion`.
 Three more accounts exist for trying the roles — `editor@`, `reviewer@`,
 `viewer@mastersunion.org`, same password.
 
+## Pages from GitHub, rendered in the console
+
+A Lovable site is read straight out of its repository: **Projects → Read pages
+from GitHub** (or `npm run ingest-repo`) clones it, parses the React source and
+lifts every heading, paragraph, button label, data array entry, image and link
+into fields keyed by file + hash of the text. Rerunning after Lovable edits
+keeps every field whose text survived and never overwrites an edit.
+
+The same click builds the site with its own Vite build and serves it at
+`/preview/<owner--repo>/`. **Preview draft** shows the page with the console's
+drafts laid over the rendered copy; **View live copy** shows what is published.
+Builds land in `data/builds/`, sources in `data/src/`; both are gitignored.
+
 ## Publishing through git — the review flow
 
 With a site repo configured, nothing goes live from the studio directly.
