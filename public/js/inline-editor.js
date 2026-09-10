@@ -1315,8 +1315,9 @@
       if (input) input.value = valueOf(key);
     });
     input.addEventListener("input", function () { setField(key, input.value, { typing: true }); });
-    // leaving the field is the commit point: repaint once, now
-    input.addEventListener("blur", function () { pushRuntime(key, valueOf(key), false); });
+    /* No repaint on blur. The element was already painted directly while you
+       typed, so a repaint adds nothing and costs the carousel its slide. When
+       nothing could be painted, the idle timer in pushRuntime still covers it. */
     Array.prototype.forEach.call(pop.querySelectorAll("[data-ai]"), function (b) {
       b.addEventListener("click", function () { runAI(b.dataset.ai, b.dataset.k, b, pop); });
     });
