@@ -263,6 +263,18 @@
     });
   }
 
+  /* markNode paints one row at the moment it changes. The drawer, though,
+     rebuilds its whole body on every open, tab switch and section change, and
+     the fresh rows come back clean. Since "↺ Undo" is display:none until
+     .is-dirty, a field edited a moment ago silently lost the way back.
+     Repaint after every render. */
+  function paintDirty() {
+    if (!side) return;
+    Array.prototype.forEach.call(side.querySelectorAll("[data-row]"), function (row) {
+      row.classList.toggle("is-dirty", dirty.has(row.getAttribute("data-row")));
+    });
+  }
+
   /* ---------------- toolbar ---------------- */
   var bar, elCount, btnSave, btnPub, btnUndo;
 
@@ -1315,6 +1327,7 @@
     if (jump) jump.addEventListener("click", function () { sideTab = "items"; renderTab(b); });
     wireSidebar();
     wireLists();
+    paintDirty();
     if (focusKey) revealRow(focusKey, doFocus);
     else if (activeFieldKey) markActiveRow(activeFieldKey);
   }
