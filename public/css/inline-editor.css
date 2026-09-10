@@ -60,7 +60,11 @@
   to  { transform:translateX(-50%) translateY(0)    scale(1);   opacity:1; filter:blur(0) }
 }
 .mu-bar *{box-sizing:border-box}
+/* the toolbar centres itself in the strip the drawer leaves free — and takes
+   the whole width back while the drawer is peeking off-screen */
 body.mu-side-open .mu-bar{ left:calc(50% - 202px) !important }
+body.mu-side-open.mu-side-left .mu-bar{ left:calc(50% + 202px) !important }
+body.mu-side-open.mu-side-peek .mu-bar{ left:50% !important }
 .mu-seg{display:flex;background:rgba(0,0,0,.4);border-radius:999px;padding:3px;gap:2px}
 .mu-seg button{border:0;background:transparent;color:rgba(245,247,250,.6);font:inherit;font-weight:700;padding:6px 14px;border-radius:999px;cursor:pointer}
 .mu-seg button:hover{color:#fff}
@@ -143,8 +147,61 @@ body.mu-editing [data-c-media]{ outline:1px dashed rgba(57,182,216,.5); outline-
   animation:mu-slide-out .34s cubic-bezier(.32,.72,0,1) forwards !important;
   pointer-events:none;
 }
-body.mu-side-open{ margin-right:400px; transition:margin-right .34s cubic-bezier(.32,.72,0,1) }
-@media (max-width:900px){ body.mu-side-open{ margin-right:0 } }
+/* The page is NOT pushed over to make room. `body { margin-right:400px }`
+   re-laid-out a design that was never meant to be 400px narrower — on the home
+   page it moved 387 of 415 anchored elements, re-wrapped headlines and made
+   fixed-height cards clip their own text, so whatever you had just clicked was
+   somewhere else by the time the drawer arrived. The page now looks exactly as
+   a visitor sees it, and the drawer moves instead: it takes whichever edge
+   leaves the edited element clear (.mu-side--left), and Peek steps it off the
+   screen entirely when neither edge does. */
+/* !important throughout: the containment reset at the top of this file zeroes
+   transform, transition and animation on .mu-side so a host page's stylesheet
+   cannot reach in. Specificity alone loses to it. */
+.mu-side{ transition:transform .3s cubic-bezier(.32,.72,0,1) !important }
+.mu-side.mu-side--left{
+  left:0 !important; right:auto !important;
+  border-left:0; border-right:1px solid rgba(255,255,255,.12);
+  box-shadow:28px 0 70px rgba(0,0,0,.5);
+  animation-name:mu-slide-left !important;
+}
+@keyframes mu-slide-left{
+  from{ transform:translateX(-100%) }
+  to  { transform:translateX(0) }
+}
+
+/* Peek: the panel steps off its own edge, leaving the eye button as a handle.
+   Everything it holds — the open tab, the caret, every unsaved edit — is still
+   there when it comes back, which closing and reopening never gave you. */
+.mu-side.mu-side--peek{ transform:translateX(100%) !important; animation:none !important }
+.mu-side.mu-side--left.mu-side--peek{ transform:translateX(-100%) !important }
+.mu-side--peek .mu-side__title,
+.mu-side--peek .mu-side__x,
+.mu-side--peek .mu-tabs,
+.mu-side--peek .mu-side__body,
+.mu-side--peek .mu-side__foot{ opacity:0; pointer-events:none; transition:opacity .18s ease !important }
+.mu-side--peek .mu-side__head{ border-bottom-color:transparent }
+
+/* the eye, first thing on the bar, with a gap before the mode switch */
+.mu-bar__peek{
+  flex:none; width:30px; height:30px; border:0; border-radius:99px; cursor:pointer;
+  display:grid; place-items:center; margin-right:6px;
+  background:rgba(255,255,255,.07); color:#B9B9B9;
+  transition:background 140ms ease,color 140ms ease;
+}
+.mu-bar__peek[hidden]{ display:none }
+.mu-bar__peek:hover{ background:rgba(255,255,255,.14); color:#fff }
+.mu-bar__peek.on{ background:rgba(57,182,216,.22); color:#39B6D8 }
+
+.mu-side__peek{
+  order:-1; flex:none; width:30px; height:30px; border:0; border-radius:9px; cursor:pointer;
+  display:grid; place-items:center;
+  background:rgba(255,255,255,.07); color:#B9B9B9;
+  transition:background 140ms ease,color 140ms ease;
+}
+.mu-side--left .mu-side__peek{ order:1 }
+.mu-side__peek:hover{ background:rgba(255,255,255,.14); color:#fff }
+.mu-side__peek.on{ background:rgba(57,182,216,.22); color:#39B6D8 }
 
 .mu-side__head{
   flex:none; display:flex; align-items:center; gap:12px; padding:20px 20px 15px;
@@ -317,8 +374,9 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #39B6D8;outline-offset:-4
   .mu-item,.mu-item:hover{ transform:none; transition:none !important }
   .mu-item:hover .mu-item__acts{ animation:none }
   .mu-btn:hover{ transform:none }
-  body.mu-side-open{ transition:none }
-  .mu-btn,.mu-seg button,.mu-pill,.mu-side__x,.mu-tab{ transition:opacity 140ms ease }
+  /* peek still moves the panel — it just arrives there at once */
+  .mu-side{ transition:none !important }
+  .mu-btn,.mu-seg button,.mu-pill,.mu-side__x,.mu-side__peek,.mu-tab{ transition:opacity 140ms ease }
   .mu-btn:active,.mu-seg button:active,.mu-pill:active{ transform:none; opacity:.7 }
   .mu-toast{ transition:opacity 140ms ease }
 }

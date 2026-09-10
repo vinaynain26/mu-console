@@ -200,7 +200,12 @@
     // keep the page in step, unless the page is what just changed
     if (!opts.fromPage) {
       var node = document.querySelector('[data-c="' + CSS.escape(key) + '"]');
-      if (node && node !== live) {
+      /* The one node we must not rewrite is the one holding the caret: the
+         words are already in it, and replacing its contents there swallows
+         the cursor mid-word. Testing `live` instead cost us every drawer
+         edit — clicking copy on the page makes that node `live` and nothing
+         ever cleared it, so typing in the drawer updated no page at all. */
+      if (node && node !== document.activeElement) {
         if (node.hasAttribute("data-c-rich")) node.innerHTML = value;
         else node.textContent = value;
       }
@@ -276,10 +281,23 @@
   }
 
   /* ---------------- toolbar ---------------- */
-  var bar, elCount, btnSave, btnPub, btnUndo;
+  var bar, elCount, btnSave, btnPub, btnUndo, btnPeek;
 
   function buildBar() {
     bar = el("div", "mu-bar");
+
+    /* The eye lives on the bar, at the left edge, so it is in the same place
+       whether the drawer is open, moved to the other side, or peeking. */
+    btnPeek = el("button", "mu-bar__peek");
+    btnPeek.type = "button";
+    btnPeek.innerHTML = EYE;
+    btnPeek.setAttribute("data-peek", "");
+    btnPeek.setAttribute("aria-pressed", "false");
+    btnPeek.title = "Peek at the page behind the panel";
+    btnPeek.setAttribute("aria-label", "Peek at the page");
+    btnPeek.addEventListener("click", function () { togglePeek(); });
+    btnPeek.hidden = mode !== "edit";   // peeking is an editing move
+    bar.appendChild(btnPeek);
     var seg = el("div", "mu-seg");
     [["browse", "Browse"], ["edit", "Edit"], ["arrange", "Arrange"]].forEach(function (m) {
       if (m[0] === "edit" && !CAN.edit) return;
@@ -337,6 +355,7 @@
   function setMode(m) {
     if (mode === "edit" && m !== "edit") { stopTyping(); closeSidebar(); }
     mode = m;
+    if (btnPeek) btnPeek.hidden = m !== "edit";
     document.body.classList.toggle("mu-editing", m === "edit");
     document.body.classList.toggle("mu-arranging", m === "arrange");
     Array.prototype.forEach.call(bar.querySelectorAll(".mu-seg button"), function (b) {
@@ -405,10 +424,6 @@
      it steps aside — the next click on anything brings it back, opened to
      wherever you are now. Never fires while typing, and never while your
      cursor is working inside the drawer itself. */
-  function snapMargin() {
-    document.body.style.transition = "none";
-    setTimeout(function () { document.body.style.transition = ""; }, 80);
-  }
   var lastScrollTs = 0;
   var holdDrawerUntil = 0;   // structural edits shake the page; the drawer holds on
   var scrollAway = null, scrollAwayPending = false;
@@ -428,17 +443,21 @@
         var host = document.querySelector('[data-sec="' + CSS.escape(activeSection) + '"]');
         if (!host || !host.isConnected) return;
         var r = host.getBoundingClientRect();
-        if (r.bottom < 60 || r.top > window.innerHeight - 60) { stopTyping(); snapMargin(); closeSidebar(); return; }
+        if (r.bottom < 60 || r.top > window.innerHeight - 60) { stopTyping(); closeSidebar(); return; }
         /* What you are READING is whatever owns the middle of the screen —
            a sliver of the old section clipping the top edge does not count,
            and a sticky hero that never scrolls away but sits covered does
            not count either. If the centre belongs to a different section,
-           the drawer steps aside. */
-        var cw = document.body.classList.contains("mu-side-open") ? window.innerWidth - 400 : window.innerWidth;
-        var hit = document.elementFromPoint(Math.max(60, cw / 2), window.innerHeight / 2);
+           the drawer steps aside. Aim at the middle of the strip the drawer
+           leaves free, whichever edge it is currently parked on. */
+        var sr = side.getBoundingClientRect();
+        var free = side.classList.contains("mu-side--left")
+          ? { from: sr.right, to: window.innerWidth }
+          : { from: 0, to: sr.left };
+        var hit = document.elementFromPoint(Math.max(60, (free.from + free.to) / 2), window.innerHeight / 2);
         if (!hit || hit.closest(".mu-side, .mu-bar, .mu-pill, .mu-toast")) return;
         var hitSec = hit.closest("[data-sec]");
-        if (hitSec && hitSec !== host && !host.contains(hitSec) && !hitSec.contains(host)) { stopTyping(); snapMargin(); closeSidebar(); }
+        if (hitSec && hitSec !== host && !host.contains(hitSec) && !hitSec.contains(host)) { stopTyping(); closeSidebar(); }
       });
     };
     window.addEventListener("scroll", scrollAway, { passive: true, capture: true });
@@ -520,6 +539,7 @@
       pill.addEventListener("click", function (e) {
         e.preventDefault(); e.stopPropagation();
         openSidebar(key);
+        togglePeek(false);
       });
       if (getComputedStyle(host).position === "static") host.style.position = "relative";
       host.appendChild(pill);
@@ -1032,7 +1052,7 @@
   var side = null;
 
   function closeSidebar() {
-    document.body.classList.remove("mu-side-open");   // the page starts reclaiming its room now
+    document.body.classList.remove("mu-side-open", "mu-side-left", "mu-side-peek");
     Array.prototype.forEach.call(document.querySelectorAll(".mu-sec-active"), function (n) {
       n.classList.remove("mu-sec-active");
     });
@@ -1049,6 +1069,77 @@
     var finish = function () { if (!done) { done = true; going.remove(); } };
     going.addEventListener("animationend", finish, { once: true });
     setTimeout(finish, 400);   // belt for a lost animationend
+  }
+
+  /* ---------------- keeping the edited thing in sight ----------------
+     The drawer used to push the page aside with `body { margin-right }`. That
+     kept every element reachable, but it re-laid-out a design that was never
+     meant to be 400px narrower: on the home page 387 of 415 anchored elements
+     moved, headlines re-wrapped, and fixed-height cards clipped their own
+     text. Whatever you had just clicked was somewhere else by the time the
+     drawer arrived.
+
+     So the page now keeps the exact layout a visitor sees, and the DRAWER is
+     what moves: it takes whichever edge leaves the thing you are editing in
+     the clear, and Peek slides it off when neither edge does. */
+  var SIDE_W = 400;
+
+  function sideWidth() { return side ? side.getBoundingClientRect().width : SIDE_W; }
+
+  /** The edge that leaves `node` uncovered, or null when both would cover it. */
+  function clearEdgeFor(node) {
+    if (!node || !node.getBoundingClientRect) return null;
+    var r = node.getBoundingClientRect();
+    if (!r.width && !r.height) return null;
+    var w = sideWidth();
+    if (r.right <= window.innerWidth - w) return "right";
+    if (r.left >= w) return "left";
+    return null;   // spans both gutters — only Peek can uncover it
+  }
+
+  /** Vertical room is the one thing scrolling can always buy. */
+  function scrollIntoClear(node) {
+    var r = node.getBoundingClientRect(), pad = 90;
+    if (r.top >= pad && r.bottom <= window.innerHeight - pad) return;
+    var y = window.scrollY + r.top - Math.max(pad, (window.innerHeight - r.height) / 2);
+    var lenis = window.__lenis;
+    if (lenis && lenis.scrollTo) lenis.scrollTo(Math.max(0, y), { duration: 0.6 });
+    else window.scrollTo({ top: Math.max(0, y), behavior: "smooth" });
+  }
+
+  /** Put the drawer where it does not sit on top of what is being edited. */
+  function keepClear(node) {
+    if (!side || !node || !node.isConnected) return;
+    var edge = clearEdgeFor(node);
+    if (edge) setDrawerEdge(edge);
+    scrollIntoClear(node);
+  }
+
+  function setDrawerEdge(edge) {
+    if (!side) return;
+    var left = edge === "left";
+    side.classList.toggle("mu-side--left", left);
+    document.body.classList.toggle("mu-side-left", left);
+  }
+
+  /* Peek: step the panel off its edge so the page can be read, keeping every
+     unsaved edit and the open tab exactly as they were. Closing the drawer and
+     opening it again to check a change was the whole complaint. */
+  var EYE = '<svg viewBox="0 0 20 20" width="15" height="15" fill="none" aria-hidden="true">' +
+    '<path d="M1.6 10S4.7 4.6 10 4.6 18.4 10 18.4 10 15.3 15.4 10 15.4 1.6 10 1.6 10Z"' +
+      ' stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>' +
+    '<circle cx="10" cy="10" r="2.4" stroke="currentColor" stroke-width="1.5"/></svg>';
+
+  function togglePeek(on) {
+    if (!side) return;
+    var peeking = side.classList.toggle("mu-side--peek", on);
+    document.body.classList.toggle("mu-side-peek", peeking);   // the toolbar re-centres
+    var btn = document.querySelector("[data-peek]");
+    if (btn) {
+      btn.classList.toggle("on", peeking);
+      btn.title = peeking ? "Bring the panel back" : "Peek at the page behind the panel";
+      btn.setAttribute("aria-pressed", peeking ? "true" : "false");
+    }
   }
 
   var sideTab = "all";
@@ -1125,9 +1216,11 @@
     if (host) {
       host.classList.add("mu-sec-active");
       /* bug 4: opening a section's editor should show you that section —
-         scroll it into view when it isn't already on screen */
+         scroll it into view when it isn't already on screen. A named field
+         is more specific than its section, so leave the scrolling to
+         keepClear() when there is one, rather than aiming twice. */
       var hr = host.getBoundingClientRect();
-      if (hr.bottom < 80 || hr.top > window.innerHeight - 80) {
+      if (!focusKey && (hr.bottom < 80 || hr.top > window.innerHeight - 80)) {
         host.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }
@@ -1359,8 +1452,16 @@
   }
 
   /* One door for every page click: same section, other section, any tab —
-     the drawer lands on the clicked thing immediately. */
+     the drawer lands on the clicked thing immediately, and then gets out of
+     its way. Peek is dropped on every new selection: you asked to see the
+     page, and the panel has now been asked for again. */
   function revealInDrawer(key, doFocus, node) {
+    findInDrawer(key, doFocus, node);
+    togglePeek(false);
+    keepClear(node && node.isConnected ? node : nodeForKey(key));
+  }
+
+  function findInDrawer(key, doFocus, node) {
     var f = meta.get(key) || meta.get(key.replace(/@poster$/, ""));
     var sec = null;
     if (node && node.closest) {
@@ -1734,7 +1835,9 @@
                  : '<img src="' + esc(shown) + '" alt="" loading="lazy">')
           : '<span>empty</span>') + "</div>" +
         '<div class="mu-media-fields">' +
-          '<label class="mu-lab">Source</label>' +
+          '<label class="mu-lab"><span>Source</span>' +
+            '<button type="button" class="mu-revert" data-revert="' + esc(f.key) + '" title="Undo this image">↺ Undo</button>' +
+          "</label>" +
           '<input type="text" class="mu-mono" data-f="' + esc(f.key) + '" value="' + esc(v) + '" placeholder="https://…">' +
           '<div class="mu-hint">' + (!v && shown
             ? "Showing the built-in image — paste a URL to replace it, clear to restore."
@@ -1799,6 +1902,8 @@
         var n = document.querySelector('[data-c="' + CSS.escape(input.dataset.f) + '"]') ||
                 document.querySelector('[data-c-media="' + CSS.escape(input.dataset.f) + '"]');
         if (n) {
+          // typing here should land somewhere you can watch it land
+          keepClear(n);
           n.classList.add("mu-spot");
           setTimeout(function () { n.classList.remove("mu-spot"); }, 1400);
         }
@@ -1909,6 +2014,18 @@
     if (rich) { if (rich.innerHTML !== value) rich.innerHTML = value; return; }
     var input = side.querySelector('[data-f="' + CSS.escape(key) + '"]');
     if (input && input.value !== value) input.value = value;
+
+    /* an image card shows the picture, not the URL — undo has to reach that too */
+    var card = side.querySelector('[data-row="' + CSS.escape(key) + '"]');
+    var thumb = card && card.querySelector(".mu-thumb img, .mu-thumb video");
+    if (thumb) {
+      var shown = value;
+      if (!shown) {
+        var mn = document.querySelector('[data-c-media="' + CSS.escape(key) + '"]');
+        if (mn) shown = mn.currentSrc || mn.src || "";
+      }
+      if (shown && thumb.getAttribute("src") !== shown) thumb.setAttribute("src", shown);
+    }
   }
 
   /* ---------------- AI ---------------- */
@@ -1954,6 +2071,7 @@
     node.focus();
     node.addEventListener("input", onType);
     node.addEventListener("keydown", onTypeKey);
+    node.addEventListener("blur", onTypeBlur);
   }
   function onType() {
     setField(live.dataset.c, live.hasAttribute("data-c-rich") ? live.innerHTML : live.textContent, { fromPage: true });
@@ -1962,12 +2080,18 @@
     if (e.key === "Escape") { e.preventDefault(); stopTyping(); }
     if (e.key === "Enter" && !e.shiftKey && !/^(P|DIV|LI)$/.test(live.tagName)) { e.preventDefault(); stopTyping(); }
   }
+  /* The cursor moving into the drawer ends the edit on the page. A `live`
+     node that nobody releases is not harmless: it also silences the
+     re-adoption observer (watchDom bails while anything is live) for the
+     rest of the session. */
+  function onTypeBlur() { stopTyping(); }
   function stopTyping() {
     if (!live) return;
     live.removeAttribute("contenteditable");
     live.classList.remove("mu-live");
     live.removeEventListener("input", onType);
     live.removeEventListener("keydown", onTypeKey);
+    live.removeEventListener("blur", onTypeBlur);
     live = null;
   }
 
@@ -2183,6 +2307,8 @@
               String(g.value || "").trim().toLowerCase() === linkTxt) focusK = g.key;
         });
         openSidebar(secK, focusK, true);
+        togglePeek(false);
+        keepClear(focusK ? nodeForKey(focusK) : e.target);
         return;
       }
     }
@@ -2370,7 +2496,10 @@
     if (dirty.size) { e.preventDefault(); e.returnValue = ""; }
   });
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && side && !live) closeSidebar();
+    if (e.key !== "Escape" || !side || live) return;
+    // one Escape puts a peeking panel back, the next one closes it
+    if (side.classList.contains("mu-side--peek")) togglePeek(false);
+    else closeSidebar();
   });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", buildBar);
   else buildBar();
