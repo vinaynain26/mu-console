@@ -36,7 +36,8 @@
   /* For debugging placement from the console: the fields as loaded and the
      visual sections the sight pass built. The rendered DOM is the only
      honest witness on this site, and this is how to ask it. */
-  BOOT.inspect = function () { return { meta: meta, sections: sectionsById, ambiguous: ambiguousKeys }; };
+  var lastPass = {};   // what the latest sight pass decided about shared words
+  BOOT.inspect = function () { return { meta: meta, sections: sectionsById, ambiguous: ambiguousKeys, pass: lastPass }; };
   var live = null;                // node being typed into
   var activeSection = null;
 
@@ -1087,6 +1088,22 @@
       rivals.get(t).push(f);
     });
     var copyBlocked = new Set();
+    /* words that stay unanchored still show where their list renders — the
+       carousel must not lose its Items tab because two slides say the same
+       thing: host -> "listKey" -> weight */
+    var blockedHits = new Map();
+    var noteBlocked = function (f) {
+      var itm = itemOfKey.get(f.key);
+      if (!itm) return;
+      var lk = itm.split("#")[0];
+      (locate(f) || []).forEach(function (n) {
+        var h = hostOf(n);
+        if (!h) return;
+        if (!blockedHits.has(h)) blockedHits.set(h, {});
+        var m = blockedHits.get(h);
+        m[lk] = (m[lk] || 0) + placementWeight(f);
+      });
+    };
     rivals.forEach(function (fs) {
       var byList = {};
       fs.forEach(function (f) {
@@ -1111,9 +1128,13 @@
           var builtIn = present.filter(function (f) { return f.key.indexOf(lk + ".it-") !== 0; });
           present = builtIn.length === 1 ? builtIn : [];
         }
-        group.forEach(function (f) { if (present.length !== 1 || present[0] !== f) copyBlocked.add(f); });
+        group.forEach(function (f) {
+          if (present.length !== 1 || present[0] !== f) { copyBlocked.add(f); noteBlocked(f); }
+        });
       });
     });
+
+    lastPass = { rivals: rivals, blocked: copyBlocked, itemOfKey: itemOfKey, itemFields: itemFields, listCounts: listCounts, blockedHits: blockedHits };
 
     ambiguous.forEach(function (f) {
       if (copyBlocked.has(f)) return;
@@ -1188,6 +1209,8 @@
       var score = function (bkt) {
         var n = 0;
         bkt.fields.forEach(function (x) { if (own.has(x.key)) n += placementWeight(x); });
+        var bh = bkt.host && blockedHits.get(bkt.host);
+        if (bh && bh[f.key]) n += bh[f.key];
         return n;
       };
       var best = null, bestN = 0;
@@ -1222,7 +1245,7 @@
        the reader hasn't opened, so none of its fields are on the page. File
        it with its sibling lists from the same source file. */
     meta.forEach(function (f) {
-      if (f.type !== "list" || attachedLists.has(f.key)) return;
+      if (f.type !== "list" || isChildList(f.key) || attachedLists.has(f.key)) return;
       var file = f.key.split(".list:")[0];
       var sib = null;
       meta.forEach(function (g) {
@@ -1874,6 +1897,7 @@
      the programmes grid prints the same ordinals and links, and six of those
      strays outweighed five real slide fields — the Items tab followed them. */
   function placementWeight(x) {
+    if (x.type === "list") return 0;            // a structure row is JSON, not words on the page
     if (ambiguousKeys.has(x.key)) return 0.1;
     var v = String(x.value == null ? "" : x.value).trim();
     if (x.tag === "link" || x.tag === "media" || v.length < 4) return 0.2;
@@ -1985,6 +2009,33 @@
       "Built-in items can be hidden, never deleted. Click an item’s name to edit its text.</div>");
   }
 
+  /* A carousel shows one item at a time, and a new one lands at the end,
+     behind ten presses of the arrow. The carousel exposes a control per
+     position ("Go to chapter 11"); press the one for the new item, once the
+     structural repaint has settled, so the slide being edited is the slide
+     on screen. A grid or a rail has no such control and nothing happens. */
+  function revealItem(f, position) {
+    setTimeout(function () {
+      var b = sectionsById.get(f.section_key);
+      var host = b && b.host;
+      if (!host || !host.isConnected) return;
+      var n = position + 1;
+      var goto_ = Array.prototype.filter.call(host.querySelectorAll("button[aria-label], [role=button][aria-label], [role=tab][aria-label]"),
+        function (x) { return /\b(go to|jump to|show|slide|chapter|item|page)\b/i.test(x.getAttribute("aria-label") || ""); });
+      var hit = goto_.filter(function (x) { return new RegExp("(^|\\D)" + n + "(\\D|$)").test(x.getAttribute("aria-label")); })[0]
+        || (position < goto_.length ? goto_[position] : null);
+      if (!hit) return;
+      hit.click();
+      var r = host.getBoundingClientRect();
+      if (r.top < 0 || r.top > window.innerHeight * 0.5) keepClear(host);
+    }, 1700);   // after saveStructure's scroll pin lets go
+  }
+  function visiblePosition(f, id) {
+    var pos = -1, seen = -1;
+    listItemsOf(f).forEach(function (x) { if (!x.hidden) { seen++; if (x.id === id) pos = seen; } });
+    return pos;
+  }
+
   async function saveStructure(f, items) {
     var payload = items.map(function (x) {
       var e = { id: x.id };
@@ -2042,7 +2093,8 @@
             again.forEach(function (x, i) { if (x.id === out.id) ni = i; });
             if (ni >= 0) { var moved = again.splice(ni, 1)[0]; again.splice(idx + 1, 0, moved); }
             await saveStructure(f, again);
-            toast("Duplicated — click its name to edit the copy");
+            revealItem(f, visiblePosition(f, out.id));
+            toast("Duplicated. Edit the copy here, or click its text on the page.");
           } else if (act === "del") {
             if (!window.confirm("Delete this item? Its wording is kept in the CMS history.")) return;
             await api("/api/pages/" + SLUG + "/lists/" + encodeURIComponent(listKey) + "/items/" + encodeURIComponent(id),
@@ -2065,6 +2117,7 @@
             { method: "POST", body: JSON.stringify({}) });
           adoptCmsItem(f, out, null);
           await saveStructure(f, listItemsOf(f));
+          revealItem(f, visiblePosition(f, out.id));
           toast("Added as a copy of the first slide. Click any of its text on the page to change it.");
           /* take them straight to the new item's first empty field */
           var firstKey = out.fields && (out.fields.headline || out.fields.title ||

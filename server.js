@@ -789,7 +789,7 @@ app.post("/api/pages/:slug/lists/:listKey/items", auth.require_("edit"), (req, r
   /* "+ Add" starts as a copy of the FIRST item — a real slide, picture, stats
      and all — with only its number advanced. A blank card was uneditable: the
      inline editor finds copy by the words on the page, and an empty item put
-     no words there. Duplicate copies its source verbatim. */
+     no words there. Duplicate copies its source the same way, number aside. */
   const seedFrom = copyFrom || (codeItems[0] && codeItems[0].id) || null;
   const source = seedFrom ? codeItems.find((i) => i.id === seedFrom) : null;
   const getDraft = db.prepare("SELECT draft_value FROM page_content WHERE page_slug = ? AND field_key = ?");
@@ -837,10 +837,12 @@ app.post("/api/pages/:slug/lists/:listKey/items", auth.require_("edit"), (req, r
       seed = draftOf(sk && typeof sk === "object" ? sk.key : sk);
     }
     if (!seed && copyFrom && copyFrom.startsWith("it-")) seed = draftOf(`${listKey}.${copyFrom}.${tp.prop}`);
-    if (!copyFrom && typeof values[tp.prop] !== "string") {
+    /* the number is never copied: two slides both saying "01" would leave
+       the editor unable to tell them apart on the page */
+    if (typeof values[tp.prop] !== "string") {
       const n = sequenceFor(tp);
       if (n) seed = n;
-      else if (!source) seed = placeholderFor(tp);
+      else if (!source && !copyFrom) seed = placeholderFor(tp);
     }
     put(key, tp.prop, tp.prop, tp.type || "text", seed);
     fields[tp.prop] = key;
