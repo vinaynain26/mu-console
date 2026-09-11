@@ -758,7 +758,7 @@ app.put("/api/pages/:slug/lists/:listKey", auth.require_("edit"), (req, res) => 
   const cmsIds = new Set(
     db.prepare("SELECT field_key FROM page_content WHERE page_slug = ? AND field_key LIKE ? AND retired = 0")
       .all(found.slug, req.params.listKey + ".it-%")
-      .map((r) => r.field_key.slice(req.params.listKey.length + 1).split(".")[0]));
+      .map((r) => r.field_key.slice(req.params.listKey.length + 1).split(".")[0].split(":")[0]));
   const clean = [];
   for (const e of items) {
     if (!e || typeof e.id !== "string") continue;
@@ -783,40 +783,125 @@ app.post("/api/pages/:slug/lists/:listKey/items", auth.require_("edit"), (req, r
   const { copyFrom = null, values = {} } = req.body || {};
   const id = "it-" + crypto.randomBytes(4).toString("hex").slice(0, 7);
   const now = new Date().toISOString();
+  const codeItems = meta.items || [];
+  const listKey = req.params.listKey;
 
-  /* seed values: explicit > copied from an existing item's drafts > empty */
-  const source = copyFrom ? (meta.items || []).find((i) => i.id === copyFrom) : null;
+  /* "+ Add" starts as a copy of the FIRST item — a real slide, picture, stats
+     and all — with only its number advanced. A blank card was uneditable: the
+     inline editor finds copy by the words on the page, and an empty item put
+     no words there. Duplicate copies its source verbatim. */
+  const seedFrom = copyFrom || (codeItems[0] && codeItems[0].id) || null;
+  const source = seedFrom ? codeItems.find((i) => i.id === seedFrom) : null;
   const getDraft = db.prepare("SELECT draft_value FROM page_content WHERE page_slug = ? AND field_key = ?");
+  const draftOf = (key) => {
+    if (typeof key !== "string") return "";
+    const r = getDraft.get(found.slug, key) || getDraft.get("shared", key);
+    return r ? r.draft_value : "";
+  };
+  const nth = listDraft(found.row, meta).filter((e) => !e.hidden).length + 1;
+  /* a running number ("01" … "10") continues the sequence */
+  const sequenceFor = (tp) => {
+    const last = codeItems[codeItems.length - 1];
+    const lk = last && last.fields && last.fields[tp.prop];
+    const lastVal = draftOf(lk && typeof lk === "object" ? lk.key : lk);
+    return /^\d+$/.test(lastVal) ? String(nth).padStart(lastVal.length, "0") : null;
+  };
+  /* a list with nothing to copy from still gets words on the page */
+  const placeholderFor = (tp) => {
+    if (tp.type && tp.type !== "text") return "";
+    if (/^(id|slug|key|route|href|url|bg|ink|colou?r|class(Name)?)$/i.test(tp.prop)) return "";
+    const words = tp.prop.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/[_-]+/g, " ").toLowerCase();
+    return "New " + ({ cta: "button text", body: "body text", n: "number" }[tp.prop] || words);
+  };
+
   const ins = db.prepare(`INSERT OR REPLACE INTO page_content
     (page_slug, field_key, section_key, section_title, section_ord, tab_key, tab_title,
      label, tag, type, multiline, ord, value, draft_value, updated_at, updated_by, retired)
     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)`);
+  const setOptions = db.prepare("UPDATE page_content SET options = ? WHERE page_slug = ? AND field_key = ?");
+  const rows = {};   // every row born here, key -> {value, type, label}: the editor mirrors these
+  const put = (key, label, tag, type, seed) => {
+    ins.run(found.slug, key, found.row.section_key, found.row.section_title,
+      found.row.section_ord, "_all", "Whole page", label, tag,
+      type, seed.length > 90 ? 1 : 0, 9000, "", seed, now, req.user.name);
+    rows[key] = { value: seed, type, label };
+  };
+
   const fields = {};
   for (const tp of meta.itemTemplate || []) {
     if (tp.type === "group" || tp.type === "chips" || tp.type === "list") continue;
-    const key = `${req.params.listKey}.${id}.${tp.prop}`;
+    const key = `${listKey}.${id}.${tp.prop}`;
     let seed = typeof values[tp.prop] === "string" ? values[tp.prop] : "";
     if (!seed && source && source.fields && source.fields[tp.prop]) {
-      const src = getDraft.get(found.slug, source.fields[tp.prop])
-        || getDraft.get("shared", source.fields[tp.prop]);
-      if (src) seed = src.draft_value;
+      const sk = source.fields[tp.prop];
+      seed = draftOf(sk && typeof sk === "object" ? sk.key : sk);
     }
-    if (!seed && source && copyFrom.startsWith("it-")) {
-      const src = getDraft.get(found.slug, `${req.params.listKey}.${copyFrom}.${tp.prop}`);
-      if (src) seed = src.draft_value;
+    if (!seed && copyFrom && copyFrom.startsWith("it-")) seed = draftOf(`${listKey}.${copyFrom}.${tp.prop}`);
+    if (!copyFrom && typeof values[tp.prop] !== "string") {
+      const n = sequenceFor(tp);
+      if (n) seed = n;
+      else if (!source) seed = placeholderFor(tp);
     }
-    ins.run(found.slug, key, found.row.section_key, found.row.section_title,
-      found.row.section_ord, "_all", "Whole page", tp.prop, tp.prop,
-      tp.type || "text", seed.length > 90 ? 1 : 0, 9000,
-      "", seed, now, req.user.name);
+    put(key, tp.prop, tp.prop, tp.type || "text", seed);
     fields[tp.prop] = key;
+  }
+
+  /* Child lists — a chapter's stats and chips. A code item's live in its
+     options as field keys; a CMS-born item's live under <listKey>.<id>:<prop>
+     exactly as the runtime reads them, which is where the copy goes too. */
+  const childShape = (prop) => {
+    const sample = codeItems[0] && codeItems[0].children && codeItems[0].children[prop];
+    const first = Array.isArray(sample) ? sample[0] : null;
+    return first && typeof first === "object" ? Object.keys(first) : null;   // null = plain strings
+  };
+  const childSeeds = (prop) => {
+    if (source && source.children && Array.isArray(source.children[prop])) {
+      return source.children[prop].map((kid) =>
+        typeof kid === "object" && kid
+          ? Object.fromEntries(Object.entries(kid).map(([p, k]) => [p, draftOf(k)]))
+          : draftOf(kid));
+    }
+    if (copyFrom && copyFrom.startsWith("it-")) {
+      const childKey = `${listKey}.${copyFrom}:${prop}`;
+      let entries = [];
+      try { entries = JSON.parse(draftOf(childKey) || "{}").items || []; } catch { /* none */ }
+      const props = childShape(prop);
+      return entries.filter((e) => e && !e.hidden && typeof e.id === "string").map((e) =>
+        props ? Object.fromEntries(props.map((p) => [p, draftOf(`${childKey}.${e.id}.${p}`)]))
+              : draftOf(`${childKey}.${e.id}`));
+    }
+    return [];
+  };
+  for (const tp of meta.itemTemplate || []) {
+    if (tp.type !== "group" && tp.type !== "chips" && tp.type !== "list") continue;
+    const kids = childSeeds(tp.prop);
+    if (!kids.length) continue;
+    const childKey = `${listKey}.${id}:${tp.prop}`;
+    const props = childShape(tp.prop);
+    const entries = [];
+    for (const kid of kids) {
+      const cid = "it-" + crypto.randomBytes(4).toString("hex").slice(0, 7);
+      entries.push({ id: cid, src: "cms" });
+      if (props && kid && typeof kid === "object") {
+        for (const p of props) put(`${childKey}.${cid}.${p}`, p, p, "text", String(kid[p] == null ? "" : kid[p]));
+      } else {
+        put(`${childKey}.${cid}`, tp.prop, tp.prop, "text", String(kid == null ? "" : kid));
+      }
+    }
+    put(childKey, `List: ${tp.prop}`, "list", "list", JSON.stringify({ items: entries }));
+    setOptions.run(JSON.stringify({
+      itemTemplate: props ? props.map((p) => ({ prop: p, type: "text" })) : [{ prop: tp.prop, type: "text" }],
+      items: [],
+    }), found.slug, childKey);
   }
 
   const items = listDraft(found.row, meta);
   items.push({ id, src: "cms" });
   db.prepare("UPDATE page_content SET draft_value = ?, updated_at = ?, updated_by = ? WHERE page_slug = ? AND field_key = ?")
-    .run(JSON.stringify({ items }), now, req.user.name, found.slug, req.params.listKey);
-  res.json({ id, fields, items });
+    .run(JSON.stringify({ items }), now, req.user.name, found.slug, listKey);
+  const values_ = {};
+  for (const [prop, key] of Object.entries(fields)) values_[prop] = rows[key].value;
+  res.json({ id, fields, values: values_, rows, items });
 });
 
 app.delete("/api/pages/:slug/lists/:listKey/items/:itemId", auth.require_("edit"), (req, res) => {
@@ -829,8 +914,8 @@ app.delete("/api/pages/:slug/lists/:listKey/items/:itemId", auth.require_("edit"
 
   if (itemId.startsWith("it-")) {
     /* born here: retire its rows (wording kept) and drop it from the order */
-    db.prepare("UPDATE page_content SET retired = 1 WHERE page_slug = ? AND field_key LIKE ?")
-      .run(found.slug, `${req.params.listKey}.${itemId}.%`);
+    db.prepare("UPDATE page_content SET retired = 1 WHERE page_slug = ? AND (field_key LIKE ? OR field_key LIKE ?)")
+      .run(found.slug, `${req.params.listKey}.${itemId}.%`, `${req.params.listKey}.${itemId}:%`);   // and its stats/chips
     items = items.filter((e) => e.id !== itemId);
   } else {
     /* the code ships this item — it can only be hidden, never deleted */

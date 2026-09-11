@@ -33,6 +33,10 @@
   var sectionsById = new Map();   // section key -> { title, fields[] }
   var comments = new Map();
   var mode = "browse";
+  /* For debugging placement from the console: the fields as loaded and the
+     visual sections the sight pass built. The rendered DOM is the only
+     honest witness on this site, and this is how to ask it. */
+  BOOT.inspect = function () { return { meta: meta, sections: sectionsById, ambiguous: ambiguousKeys }; };
   var live = null;                // node being typed into
   var activeSection = null;
 
@@ -148,6 +152,15 @@
 
   var VIDEO_RE = /\.(mp4|webm|mov|m4v)(\?|#|$)/i;
   var isVideo = function (v) { return VIDEO_RE.test(String(v || "")); };
+  /* the page's own <video> (the campus film behind the hero's play button),
+     as opposed to an image slot an editor dropped an mp4 into */
+  var isVideoNode = function (key) {
+    var n = document.querySelector('[data-c-media="' + CSS.escape(key) + '"]');
+    return !!n && n.tagName === "VIDEO";
+  };
+  /* field keys whose words also appear under another key — set by the sight
+     pass, read wherever "which section does this belong to" is decided */
+  var ambiguousKeys = new Set();
 
   /* ---------------- helpers ---------------- */
   function el(tag, cls, html) {
@@ -280,11 +293,25 @@
 
       each('[data-c-state="' + sel + '"]', function (host) { applyState(host, key, value); });
 
+      var videoNeedsApp = false;
       each('[data-c-media="' + sel + '"]', function (media) {
+        var next = value || media.dataset.muSrc || "";
+        /* The page's own <video>. Setting src is not enough: a video keeps
+           the file it already opened until load() tells it to start over. */
+        if (media.tagName === "VIDEO") {
+          if (!value) videoNeedsApp = true;   // a reset: only the app knows the shipped file for sure
+          if (!next || media.src === next) return;
+          media.pause();
+          media.setAttribute("src", next);
+          media.load();
+          return;
+        }
+        // an mp4 in an IMAGE slot is the runtime's player to build, not ours to paint
         if (media.tagName !== "IMG" || isVideo(value)) return;
-        media.src = value || media.dataset.muSrc || value;
+        media.src = next || value;
         if (media.srcset) media.removeAttribute("srcset");   // or the browser keeps the old picture
       });
+      if (videoNeedsApp) painted = false;
     }
     if (!opts.fromSidebar) syncSidebarInput(key, value);
     /* Keep the app's own store true, and let it REPAINT.
@@ -352,6 +379,17 @@
     var f = meta.get(key);
     if (f) f.value = original.get(key);
 
+  }
+
+  /** Clear a media field so the page goes back to the file the site shipped
+      with: the runtime reads an empty value as "unset" and falls back to the
+      code's own asset. Different from Undo, which only backs out this
+      session's edit and cannot reach past a publish. */
+  function resetField(key) {
+    var f = meta.get(key);
+    if (!f || f.tag !== "media") return;
+    setField(key, "", { force: true });
+    toast("Back to the original " + (isVideoNode(key) ? "video" : "image"));
   }
 
   function revertAll() {
@@ -895,9 +933,66 @@
       var t = lc(f.value);
       if (t) owners.set(t, (owners.get(t) || 0) + 1);
     });
+    ambiguousKeys.clear();
+    meta.forEach(function (f) {
+      if ((owners.get(lc(f.value)) || 0) > 1) ambiguousKeys.add(f.key);
+    });
 
     var groups = new Map();   // host element -> { host, entries: [{f, node}] }
     var fileHosts = new Map();  // source file -> Map(host -> placed count)
+
+    /* Which list item does a field belong to? A code item lists its fields
+       (and its stats/chips) in the list's options; a CMS-born item is keyed
+       <listKey>.<itemId>.<prop> or <listKey>.<itemId>:<child>… */
+    var itemOfKey = new Map();    // field key -> "listKey#itemId"
+    var itemFields = new Map();   // "listKey#itemId" -> its fields
+    var tagField = function (key, tag) {
+      var g = meta.get(key);
+      if (!g) return;
+      itemOfKey.set(key, tag);
+      if (!itemFields.has(tag)) itemFields.set(tag, []);
+      itemFields.get(tag).push(g);
+    };
+    meta.forEach(function (lf) {
+      if (lf.type !== "list" || isChildList(lf.key)) return;
+      (((lf.options || {}).items) || []).forEach(function (it) {
+        var tag = lf.key + "#" + it.id;
+        var fs = it.fields || {};
+        for (var p in fs) {
+          var v = typeof fs[p] === "string" ? fs[p] : fs[p] && fs[p].key;
+          if (v) tagField(v, tag);
+        }
+        var ch = it.children || {};
+        for (var cp in ch) (ch[cp] || []).forEach(function (kid) {
+          if (typeof kid === "string") tagField(kid, tag);
+          else if (kid) for (var kp in kid) { if (typeof kid[kp] === "string") tagField(kid[kp], tag); }
+        });
+      });
+      meta.forEach(function (_, k) {
+        if (k.indexOf(lf.key + ".it-") === 0) tagField(k, lf.key + "#" + k.slice(lf.key.length + 1).split(/[.:]/)[0]);
+      });
+    });
+    /* how often each wording occurs WITHIN a list — "01" is shared with two
+       faculty panels elsewhere, but inside the chapters it names one slide */
+    var listCounts = new Map();
+    itemFields.forEach(function (fs, tag) {
+      var lk = tag.split("#")[0];
+      if (!listCounts.has(lk)) listCounts.set(lk, new Map());
+      var m = listCounts.get(lk);
+      fs.forEach(function (g) { var t = lc(g.value); if (t) m.set(t, (m.get(t) || 0) + 1); });
+    });
+    /* is this item on the page inside `host`? — some wording of its own that
+       no other item of the list uses is rendered there */
+    var itemOnHost = function (tag, host) {
+      var fs = itemFields.get(tag) || [];
+      var m = listCounts.get(tag.split("#")[0]) || new Map();
+      return fs.some(function (g) {
+        var t = lc(g.value);
+        if (!t || m.get(t) !== 1) return false;
+        var els = locate(g);
+        return !!els && els.some(function (n) { return hostOf(n) === host; });
+      });
+    };
     var claim = function (f, node, host) {
       var g = groups.get(host);
       if (!g) { g = { host: host, entries: [] }; groups.set(host, g); }
@@ -978,7 +1073,50 @@
       });
     });
 
+    /* A slide added in the CMS starts as a copy of the first one, so it says
+       the same words as its original. Only the item that is actually on the
+       page — shown, in the same section, by a word of its own such as its
+       number — may take those words; anchoring the copy's headline to the
+       original's key would edit the wrong slide. The newest slide's number
+       is also the carousel's total ("12 / 12"), so when both look present
+       the built-in one wins; with neither in sight, nobody takes them. */
+    var rivals = new Map();
     ambiguous.forEach(function (f) {
+      var t = lc(f.value);
+      if (!rivals.has(t)) rivals.set(t, []);
+      rivals.get(t).push(f);
+    });
+    var copyBlocked = new Set();
+    rivals.forEach(function (fs) {
+      var byList = {};
+      fs.forEach(function (f) {
+        var itm = itemOfKey.get(f.key);
+        if (!itm) return;
+        var lk = itm.split("#")[0];
+        (byList[lk] = byList[lk] || []).push(f);
+      });
+      Object.keys(byList).forEach(function (lk) {
+        var group = byList[lk];
+        if (group.length < 2) return;
+        var hosts = [];
+        (locate(group[0]) || []).forEach(function (n) {
+          var h = hostOf(n);
+          if (h && hosts.indexOf(h) < 0) hosts.push(h);
+        });
+        var present = group.filter(function (f) {
+          var tag = itemOfKey.get(f.key);
+          return hosts.some(function (h) { return itemOnHost(tag, h); });
+        });
+        if (present.length > 1) {
+          var builtIn = present.filter(function (f) { return f.key.indexOf(lk + ".it-") !== 0; });
+          present = builtIn.length === 1 ? builtIn : [];
+        }
+        group.forEach(function (f) { if (present.length !== 1 || present[0] !== f) copyBlocked.add(f); });
+      });
+    });
+
+    ambiguous.forEach(function (f) {
+      if (copyBlocked.has(f)) return;
       var els = locate(f);
       if (!els || !els.length) return;
       var fh = fileHosts.get(f.__src);
@@ -1039,30 +1177,29 @@
     var attachedLists = new Set();
     /* every field key that belongs to this list's ITEMS — code items carry
        theirs in options, CMS-born items are keyed <listKey>.it-* */
-    var itemKeysOf = function (f) {
-      var keys = new Set();
-      (((f.options || {}).items) || []).forEach(function (it) {
-        var fs = it.fields || {};
-        for (var p in fs) {
-          var v = typeof fs[p] === "string" ? fs[p] : fs[p] && fs[p].key;
-          if (v) keys.add(v);
-        }
-      });
-      meta.forEach(function (_, k) { if (k.indexOf(f.key + ".it-") === 0) keys.add(k); });
-      return keys;
-    };
+    var itemKeysOf = listItemKeys;
     meta.forEach(function (f) {
-      if (f.type !== "list") return;
+      if (f.type !== "list" || isChildList(f.key)) return;
       /* first by where the list's OWN items render — three faculty rails from
          three source files must each land with their own cards, not wherever
          their file's other strings happened to fall */
       var own = itemKeysOf(f);
+      /* weigh the copy that landed in each section, not count it */
+      var score = function (bkt) {
+        var n = 0;
+        bkt.fields.forEach(function (x) { if (own.has(x.key)) n += placementWeight(x); });
+        return n;
+      };
       var best = null, bestN = 0;
       sectionsById.forEach(function (bkt, k) {
-        var n = 0;
-        bkt.fields.forEach(function (x) { if (own.has(x.key)) n++; });
+        var n = score(bkt);
         if (n > bestN) { bestN = n; best = k; }
       });
+      /* Once placed, stay put unless somewhere else is convincing. A carousel
+         showing a blank slide has nothing of the list on screen for a moment,
+         and a re-pass then must not hand the Items tab to a grid of strays. */
+      if (f.section_key && f.section_key !== best && sectionsById.has(f.section_key) &&
+          (score(sectionsById.get(f.section_key)) >= 1 || bestN < 2)) best = f.section_key;
       if (!best) {
         /* none of its items are on the page (a rail behind an unopened tab) —
            fall back to where its source file's fields live */
@@ -1292,8 +1429,10 @@
       "</div>" +
       (isMedia
         ? '<input type="text" class="mu-mono" data-f="' + esc(key) + '" value="' + esc(v) +
-            '" placeholder="https://\u2026 paste a CDN link">' +
-          '<div class="mu-hint">Paste a URL to replace the picture, clear it to restore.</div>'
+            '" placeholder="https://\u2026 paste a link to an image or video">' +
+          '<div class="mu-hint">Paste a URL to replace this ' + (isVideoNode(key) ? "video" : "image") + '. ' +
+            '<button type="button" class="mu-reset" data-reset="' + esc(key) + '"' + (v ? "" : " hidden") +
+              ' title="Put back the file the site shipped with">Reset to original</button></div>'
         : '<textarea data-f="' + esc(key) + '" rows="3">' + esc(v) + "</textarea>") +
       (CAN.ai && !isMedia
         ? '<div class="mu-pop__ai">' +
@@ -1314,7 +1453,16 @@
       revertField(key);
       if (input) input.value = valueOf(key);
     });
-    input.addEventListener("input", function () { setField(key, input.value, { typing: true }); });
+    var rst = pop.querySelector("[data-reset]");
+    if (rst) rst.addEventListener("click", function () {
+      resetField(key);
+      rst.hidden = true;
+      if (input) input.value = "";
+    });
+    input.addEventListener("input", function () {
+      setField(key, input.value, { typing: true });
+      if (rst) rst.hidden = !input.value;
+    });
     /* No repaint on blur. The element was already painted directly while you
        typed, so a repaint adds nothing and costs the carousel its slide. When
        nothing could be painted, the idle timer in pushRuntime still covers it. */
@@ -1348,7 +1496,21 @@
 
     /* lists: the structure rows for this section, each carrying its code
        items in options and any CMS-born items as sibling field rows */
-    var lists = fields.filter(function (f) { return f.type === "list"; });
+    var lists = fields.filter(function (f) { return f.type === "list" && !isChildList(f.key); });
+
+    /* A carousel spans more than the one block its list was filed under.
+       From any other block showing some of that list's own words, point at
+       the Items tab instead of leaving the slides looking uneditable. */
+    var listsElsewhere = [];
+    if (!lists.length) {
+      meta.forEach(function (lf) {
+        if (lf.type !== "list" || isChildList(lf.key) || !lf.section_key || lf.section_key === sectionKey) return;
+        if (!sectionsById.has(lf.section_key)) return;
+        var owned = listItemKeys(lf);
+        var strong = fields.filter(function (x) { return owned.has(x.key) && placementWeight(x) >= 1; }).length;
+        if (strong) listsElsewhere.push(lf);
+      });
+    }
 
     /* Screen-reader labels and placeholders matter, but they are one level
        deeper than the copy an editor came for — folded away, not mixed in. */
@@ -1380,6 +1542,7 @@
       details: details,
       buttons: buttons,
       lists: lists,
+      listsElsewhere: listsElsewhere,
       images: fields.filter(function (f) {
         if (f.tag !== "media") return false;
         var n = document.querySelector('[data-c-media="' + CSS.escape(f.key) + '"]');
@@ -1548,6 +1711,13 @@
             nItems + ' slides/items — add, reorder, duplicate or hide them on the ' +
             '<button type="button" class="mu-mini" data-jump-items>Items ' + nItems + '</button> tab.</div>' + html;
         }
+        (b.listsElsewhere || []).forEach(function (lf) {
+          var home = sectionsById.get(lf.section_key);
+          html = '<div class="mu-hint" style="margin:0 0 14px">The ' + esc(listName(lf).toLowerCase()) +
+            ' shown here are a collection of ' + listItemsOf(lf).length + '. Add, reorder or hide them on ' +
+            '<b>' + esc(home ? home.title : "its own section") + '</b>: ' +
+            '<button type="button" class="mu-mini" data-jump-list="' + esc(lf.key) + '">Open its Items tab</button></div>' + html;
+        });
       }
     } else if (sideTab === "buttons") {
       html = b.buttons.length ? b.buttons.map(buttonRow).join("") : empty("No buttons or links in this section.");
@@ -1592,6 +1762,14 @@
     }
     var jump = body.querySelector("[data-jump-items]");
     if (jump) jump.addEventListener("click", function () { sideTab = "items"; renderTab(b); });
+    Array.prototype.forEach.call(body.querySelectorAll("[data-jump-list]"), function (btn) {
+      btn.addEventListener("click", function () {
+        var lf = meta.get(btn.getAttribute("data-jump-list"));
+        if (!lf || !lf.section_key) return;
+        sideTab = "items";
+        openSidebar(lf.section_key);
+      });
+    });
     wireSidebar();
     wireLists();
     paintDirty();
@@ -1677,10 +1855,41 @@
      A list field's options carry the code's items; CMS-born items are sibling
      rows keyed <listKey>.<itemId>.<prop>; the field's draft value is the
      structure JSON. This merges the three into what the page will render. */
+  /* every field key that belongs to a list's ITEMS — code items carry theirs
+     in options, CMS-born items are keyed <listKey>.it-* */
+  function listItemKeys(f) {
+    var keys = new Set();
+    (((f.options || {}).items) || []).forEach(function (it) {
+      var fs = it.fields || {};
+      for (var p in fs) {
+        var v = typeof fs[p] === "string" ? fs[p] : fs[p] && fs[p].key;
+        if (v) keys.add(v);
+      }
+    });
+    meta.forEach(function (_, k) { if (k.indexOf(f.key + ".it-") === 0) keys.add(k); });
+    return keys;
+  }
+  /* How much a field's presence says about where its list lives. A headline
+     is unmistakable; a chapter's "08" or "/faculty" is a real value too, but
+     the programmes grid prints the same ordinals and links, and six of those
+     strays outweighed five real slide fields — the Items tab followed them. */
+  function placementWeight(x) {
+    if (ambiguousKeys.has(x.key)) return 0.1;
+    var v = String(x.value == null ? "" : x.value).trim();
+    if (x.tag === "link" || x.tag === "media" || v.length < 4) return 0.2;
+    return v.length > 20 ? 2 : 1;
+  }
+  /* a CMS-born item's stats/chips list — <listKey>.<itemId>:<prop> — is
+     edited through its text rows, never through an Items panel of its own */
+  function isChildList(key) { return /\.it-[0-9a-f]+:/.test(key); }
+  function listName(f) {
+    return (f.key.split("list:")[1] || "Items").replace(/[_-]+/g, " ").toLowerCase()
+      .replace(/^raw /, "").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+  }
   function cmsItemsOf(listKey) {
     var byId = {};
     meta.forEach(function (g, k) {
-      if (k.indexOf(listKey + ".it-") !== 0) return;
+      if (k.indexOf(listKey + ".it-") !== 0 || isChildList(k)) return;
       var rest = k.slice(listKey.length + 1);
       var id = rest.split(".")[0];
       var prop = rest.slice(id.length + 1);
@@ -1745,8 +1954,7 @@
 
   function listPanel(f) {
     var items = listItemsOf(f);
-    var name = (f.key.split("list:")[1] || "Items").replace(/[_-]+/g, " ").toLowerCase()
-      .replace(/^raw /, "").replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+    var name = listName(f);
     var shown = items.filter(function (x) { return !x.hidden; }).length;
     var rows = items.map(function (it, i) {
       var goto_ = itemGotoKey(it);
@@ -1857,7 +2065,7 @@
             { method: "POST", body: JSON.stringify({}) });
           adoptCmsItem(f, out, null);
           await saveStructure(f, listItemsOf(f));
-          toast("Added — now give it some text");
+          toast("Added as a copy of the first slide. Click any of its text on the page to change it.");
           /* take them straight to the new item's first empty field */
           var firstKey = out.fields && (out.fields.headline || out.fields.title ||
             out.fields.name || out.fields.label || out.fields[Object.keys(out.fields)[0]]);
@@ -1884,20 +2092,27 @@
      editable without a reload — copying the source item's drafts when it was
      a duplicate, exactly as the server did */
   function adoptCmsItem(f, out, source) {
-    Object.keys(out.fields || {}).forEach(function (prop) {
-      var k = out.fields[prop];
-      var val = "";
-      if (source) {
-        var sf = source.fields && source.fields[prop];
-        var sk = sf && (sf.key || sf);
-        if (typeof sk === "string") val = valueOf(sk);
-      }
-      meta.set(k, { key: k, label: prop, tag: prop, type: "text", multiline: val.length > 90,
-        options: null, value: val, published: "", dirty: false,
-        section_key: f.section_key, __cmsItem: true });
-      var bucket = sectionsById.get(f.section_key);
+    var rows = out.rows;
+    if (!rows) {   // an older server: field keys only, values from the copied item
+      rows = {};
+      Object.keys(out.fields || {}).forEach(function (prop) {
+        var val = "";
+        if (source) {
+          var sf = source.fields && source.fields[prop];
+          var sk = sf && (sf.key || sf);
+          if (typeof sk === "string") val = valueOf(sk);
+        }
+        rows[out.fields[prop]] = { value: val, type: "text", label: prop };
+      });
+    }
+    var bucket = sectionsById.get(f.section_key);
+    Object.keys(rows).forEach(function (k) {
+      var r = rows[k];
+      meta.set(k, { key: k, label: r.label, tag: r.type === "list" ? "list" : r.label, type: r.type || "text",
+        multiline: String(r.value).length > 90, options: null, value: r.value, published: "",
+        dirty: false, section_key: f.section_key, __src: f.__src, __cmsItem: true });
       if (bucket) bucket.fields.push(meta.get(k));
-      if (window.__MU_RUNTIME__) window.__MU_RUNTIME__.applyLocal(k, val, true);
+      if (window.__MU_RUNTIME__) window.__MU_RUNTIME__.applyLocal(k, r.value, true);
     });
   }
 
@@ -2006,12 +2221,15 @@
     /* No CMS value yet just means the page still shows the built-in file —
        find it through the anchor so the editor sees what a visitor sees. */
     var shown = v;
-    if (!shown) {
-      var mn = document.querySelector('[data-c-media="' + CSS.escape(f.key) + '"]');
-      if (mn) shown = mn.currentSrc || mn.src || "";
-    }
-    var vid = isVideo(v || shown);
-    var head = !v && f.label && !/\.(png|jpe?g|webp|svg|gif|avif|mp4|webm)$/i.test(f.label)
+    var mn = document.querySelector('[data-c-media="' + CSS.escape(f.key) + '"]');
+    if (!shown && mn) shown = mn.currentSrc || mn.src || "";
+    /* the page's own player (the campus film) — swapping the file is the
+       whole job; there is no image slot to turn into a video */
+    var ownPlayer = !!mn && mn.tagName === "VIDEO";
+    var vid = ownPlayer || isVideo(v || shown);
+    var head = ownPlayer
+      ? '<div class="mu-card__h">Video \u00b7 ' + esc(f.label || "") + "</div>"
+      : !v && f.label && !/\.(png|jpe?g|webp|svg|gif|avif|mp4|webm)$/i.test(f.label)
       ? '<div class="mu-card__h">Image \u00b7 ' + esc(f.label) + "</div>" : "";
     return '<div class="mu-card" data-row="' + esc(f.key) + '">' + head +
       '<div class="mu-media-row">' +
@@ -2021,17 +2239,23 @@
           : '<span>empty</span>') + "</div>" +
         '<div class="mu-media-fields">' +
           '<label class="mu-lab"><span>Source</span>' +
-            '<button type="button" class="mu-revert" data-revert="' + esc(f.key) + '" title="Undo this image">↺ Undo</button>' +
+            '<button type="button" class="mu-revert" data-revert="' + esc(f.key) + '" title="Undo this ' + (ownPlayer ? "video" : "image") + '">↺ Undo</button>' +
+            '<button type="button" class="mu-reset" data-reset="' + esc(f.key) + '"' + (v ? "" : " hidden") +
+              ' title="Put back the file the site shipped with">Reset to original</button>' +
           "</label>" +
-          '<input type="text" class="mu-mono" data-f="' + esc(f.key) + '" value="' + esc(v) + '" placeholder="https://…">' +
-          '<div class="mu-hint">' + (!v && shown
+          '<input type="text" class="mu-mono" data-f="' + esc(f.key) + '" value="' + esc(v) + '" placeholder="' +
+            (ownPlayer ? "https://… link to an .mp4 or .webm" : "https://…") + '">' +
+          '<div class="mu-hint">' + (ownPlayer
+            ? (v ? "Custom video. Reset puts back the film the site shipped with."
+                 : "Showing the built-in film. Paste an .mp4 or .webm URL to replace it.")
+            : !v && shown
             ? "Showing the built-in image — paste a URL to replace it, clear to restore."
             : vid
             ? "Rendering as a video with the house play button."
             : "Paste an .mp4 or .webm to turn this into a video.") + "</div>" +
         "</div>" +
       "</div>" +
-      '<div data-poster="' + esc(f.key) + '"' + (vid ? "" : ' style="display:none"') + ">" +
+      '<div data-poster="' + esc(f.key) + '"' + (vid && !ownPlayer ? "" : ' style="display:none"') + ">" +
         '<label class="mu-lab">Poster frame</label>' +
         '<input type="text" class="mu-mono" data-f="' + esc(f.key) + '@poster" value="' + esc(poster) + '" placeholder="https://… still image">' +
       "</div>" +
@@ -2080,7 +2304,9 @@
         var key = input.dataset.f;
         setField(key, input.value, { fromSidebar: true, typing: true });
         var media = side.querySelector('[data-poster="' + CSS.escape(key) + '"]');
-        if (media) media.style.display = isVideo(input.value) ? "" : "none";
+        if (media && !isVideoNode(key)) media.style.display = isVideo(input.value) ? "" : "none";
+        var rs = side.querySelector('[data-reset="' + CSS.escape(key) + '"]');
+        if (rs) rs.hidden = !input.value;
       });
       input.addEventListener("focus", function () {
         markActiveRow(input.dataset.f);
@@ -2096,6 +2322,9 @@
     });
     side.querySelectorAll("[data-revert]").forEach(function (b) {
       b.addEventListener("click", function () { revertField(b.dataset.revert); });
+    });
+    side.querySelectorAll("[data-reset]").forEach(function (b) {
+      b.addEventListener("click", function () { resetField(b.dataset.reset); b.hidden = true; });
     });
     side.querySelectorAll("[data-rich]").forEach(function (box) {
       /* The selection has to be remembered. Clicking a toolbar button moves

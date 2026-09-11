@@ -368,6 +368,16 @@ body.mu-arranging [data-sec].mu-over{outline:3px solid #39B6D8;outline-offset:-4
 .mu-row.is-dirty .mu-revert,.mu-card.is-dirty .mu-revert{display:inline-block}
 .mu-revert:hover{background:rgba(255,69,58,.2)}
 
+/* reset — put the shipped file back; offered once a media field holds a custom URL */
+.mu-reset{
+  flex:none;border:0;background:rgba(255,255,255,.07);border-radius:99px;padding:5px 10px;
+  font-family:inherit;font-size:10.5px;font-weight:700;color:#F5F5F5;cursor:pointer;line-height:1.3;
+  text-transform:none;letter-spacing:0;
+}
+.mu-reset:hover{background:rgba(255,255,255,.16)}
+.mu-reset[hidden]{display:none}
+.mu-pop .mu-reset{margin-top:6px}
+
 /* ---- accessibility ---- */
 @media (prefers-reduced-motion: reduce){
   .mu-side,.mu-bar{ animation:none !important }
