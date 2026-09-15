@@ -548,7 +548,7 @@
         }
         // only pages the sight pass grouped — a template page's server-sent
         // sections must never be re-drawn by sight
-        if (!document.querySelector("[data-mu-vsec]")) return;
+        if (!sighted && !document.querySelector("[data-mu-vsec]")) return;
         obsMuted = true;   // our own attribute/span writes must not re-trigger the pass
         try {
           /* a React re-render that replaced a section's children takes the
@@ -556,7 +556,7 @@
              re-place them all (addSectionPills runs the sight pass itself) */
           var orphaned = false;
           sectionsById.forEach(function (b) {
-            if (b.host && b.host.isConnected && !b.host.querySelector(".mu-pill")) orphaned = true;
+            if (b.host && (!b.host.isConnected || !b.host.querySelector(".mu-pill"))) orphaned = true;
           });
           if (orphaned) addSectionPills();
           else regroupBySight();
@@ -750,7 +750,9 @@
      that is nowhere on this page gets no pill and no sidebar row: the shared
      bucket carries every page's components, and offering a programme page's
      copy on the home page is what made the list unusable. */
+  var sighted = false;   // this page's sections were found by sight, not sent by the server
   function regroupBySight() {
+    sighted = true;
     // entering Edit twice must not stack a second pass on the first
     Array.prototype.forEach.call(document.querySelectorAll("[data-mu-vsec]"), function (n) {
       n.removeAttribute("data-sec");
@@ -2537,8 +2539,15 @@
        editor at all — the toolbar still reads "No changes". Selection and cut
        break for the same reason. There, the card IS the editing surface and
        the page is never made editable. A server-rendered page has no such
-       owner and keeps typing in place. */
-    if (window.__MU_RUNTIME__) return;
+       owner and keeps typing in place.
+
+       A runtime that REMOUNTS on a loud applyLocal (the lab build does:
+       pageTyping is its promise) is the exception. While the caret is on the
+       page the store is kept true silently, so React never paints; when
+       typing ends, one loud call throws the whole tree away and rebuilds it
+       from the store, so any node contenteditable split is gone with it. */
+    var R0 = window.__MU_RUNTIME__;
+    if (R0 && !R0.pageTyping) return;
     if (live === node) return;
     stopTyping();
     live = node;
@@ -2568,12 +2577,23 @@
   function onTypeBlur() { stopTyping(); }
   function stopTyping() {
     if (!live) return;
-    live.removeAttribute("contenteditable");
-    live.classList.remove("mu-live");
-    live.removeEventListener("input", onType);
-    live.removeEventListener("keydown", onTypeKey);
-    live.removeEventListener("blur", onTypeBlur);
+    /* release first: dropping contenteditable blurs the node, and that blur
+       calls back in here. With `live` already null the second call is a no-op
+       instead of a crash on a node that is being cleaned up. */
+    var done = live, doneKey = live.dataset.c;
     live = null;
+    done.removeAttribute("contenteditable");
+    done.classList.remove("mu-live");
+    done.removeEventListener("input", onType);
+    done.removeEventListener("keydown", onTypeKey);
+    done.removeEventListener("blur", onTypeBlur);
+    /* the caret has left: let a remounting runtime rebuild the page from the
+       store, so what React holds and what the page shows agree again */
+    var R1 = window.__MU_RUNTIME__;
+    if (R1 && R1.pageTyping && doneKey && dirty.has(doneKey)) {
+      clearTimeout(rtTimer);
+      R1.applyLocal(doneKey, dirty.get(doneKey), false);
+    }
   }
 
   /* A page that re-renders sheds its anchors: the dossier remounts its slide
@@ -2823,7 +2843,10 @@
       e.preventDefault(); e.stopPropagation();
       beginTyping(node);
       syncSidebarInput(node.dataset.c, node.hasAttribute("data-c-rich") ? node.innerHTML : node.textContent);
-      revealInDrawer(node.dataset.c, !!window.__MU_RUNTIME__, node);   // the page keeps the cursor only where it can
+      /* the page keeps the cursor only where it can: a runtime that cannot
+         take typing hands focus to the drawer instead */
+      var R2 = window.__MU_RUNTIME__;
+      revealInDrawer(node.dataset.c, !!(R2 && !R2.pageTyping), node);
       return;
     }
     var media = hit.closest("[data-c-media]");

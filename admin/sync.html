@@ -1,0 +1,103 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sync · MU Console</title>
+<link rel="stylesheet" href="/console-ui/app.css">
+<style>
+  .kv{display:grid;grid-template-columns:150px 1fr;gap:8px 14px;font-size:13.5px}
+  .kv b{color:var(--ink-sub);font-weight:500}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+  .cmp{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
+  .cmp>div{border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:13.5px}
+  .cmp .lbl{display:block;margin-bottom:5px}
+  .act{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .dir{min-width:44px;justify-content:center}
+  .ok{color:var(--ok,#2a9d5c)} .bad{color:var(--crit,#d64545)}
+</style>
+</head><body>
+<div class="shell">
+  <nav class="side"></nav>
+  <main>
+    <div class="phead">
+      <div><h1>Sync</h1>
+        <div class="sub">Published copy is committed into the Lovable repo. Lovable's commits flow back here on every poll.</div></div>
+      <div class="act"><button class="btn primary" id="pull">Sync now</button><span class="hint" id="pullmsg"></span></div>
+    </div>
+    <div class="card">
+      <header><h2>Connection</h2></header>
+      <div class="inner" id="conn"><div class="empty">Loading…</div></div>
+    </div>
+    <div class="card">
+      <header><h2>Conflicts</h2><div class="grow"></div><span class="hint" id="cn"></span></header>
+      <div class="inner" id="conflicts"><div class="empty">Loading…</div></div>
+    </div>
+    <div class="card">
+      <header><h2>Activity</h2></header>
+      <div id="log"><div class="empty">Loading…</div></div>
+    </div>
+  </main>
+</div>
+<script type="module">
+import { chrome, api, esc, ago, $ } from '/console-ui/shell.js';
+const acct = await chrome('sync');
+const canEdit = acct.user.role === 'admin' || acct.user.role === 'editor';
+const sha = (s) => s ? `<span class="mono">${esc(String(s).slice(0, 7))}</span>` : '<span class="hint">none yet</span>';
+
+async function load() {
+  let d;
+  try { d = await api('/api/sync'); } catch (e) { $('conn').innerHTML = `<div class="banner crit">${esc(e.message)}</div>`; return; }
+  const st = d.state || {};
+  const repoLink = d.repoUrl ? `<a href="${esc(d.repoUrl)}" target="_blank" rel="noopener">${esc(d.repo)} ↗</a>` : esc(d.repo || 'not configured');
+  $('conn').innerHTML = d.configured ? `
+    <div class="kv">
+      <b>Repository</b><span>${repoLink} <span class="hint">branch ${esc(d.branch)}</span></span>
+      <b>Push</b><span>${d.canPush ? '<span class="ok">ready</span>' : '<span class="bad">read only, no LOVABLE_TOKEN</span>'}</span>
+      <b>Polling</b><span>every ${esc(d.pollSeconds)}s${d.pulling ? ' · pulling now' : ''}</span>
+      <b>Last pulled</b><span>${sha(st.last_remote_sha)} <span class="hint">${ago(st.last_scan_at)}</span></span>
+      <b>Last pushed</b><span>${sha(st.last_push_sha)} <span class="hint">${ago(st.last_push_at)}</span></span>
+      <b>Last error</b><span>${st.last_error ? `<span class="bad">${esc(st.last_error)}</span>` : '<span class="hint">none</span>'}</span>
+    </div>` : '<div class="banner crit">Set LOVABLE_REPO in .env to connect a repository.</div>';
+
+  const cs = d.conflicts || [];
+  $('cn').textContent = cs.length ? cs.length + ' open' : 'none open';
+  $('conflicts').innerHTML = cs.length ? cs.map(c => `
+    <div style="padding:10px 0;border-bottom:1px solid var(--line)">
+      <div><b>${esc(c.label || c.old_key)}</b> <span class="hint">on ${esc(c.page_slug)} · ${esc(c.file)} · ${ago(c.created_at)}</span></div>
+      <div class="cmp">
+        <div><span class="lbl">Original</span>${esc(c.original)}</div>
+        <div><span class="lbl">Lovable now</span>${c.theirs == null ? '<span class="hint">removed</span>' : esc(c.theirs)}</div>
+        <div><span class="lbl">Your draft</span>${esc(c.mine)}</div>
+      </div>
+      ${canEdit ? `<div class="act">
+        <button class="btn" data-res="keep-theirs" data-id="${c.id}">Keep Lovable's</button>
+        <button class="btn primary" data-res="reapply-mine" data-id="${c.id}" ${c.new_key ? '' : 'disabled title="Lovable removed this text"'}>Re-apply mine as a draft</button>
+      </div>` : ''}
+    </div>`).join('') : '<div class="empty">No conflicts. A conflict appears when Lovable changes text you have an unpublished draft on.</div>';
+  $('conflicts').querySelectorAll('[data-res]').forEach(b => b.addEventListener('click', async () => {
+    b.disabled = true;
+    try { await api('/api/sync/conflicts/' + b.dataset.id, { method: 'POST', body: JSON.stringify({ resolution: b.dataset.res }) }); await load(); }
+    catch (e) { alert(e.message); b.disabled = false; }
+  }));
+
+  const log = d.log || [];
+  $('log').innerHTML = log.length ? log.map(l => `
+    <div class="rrow">
+      <span class="badge dir ${l.direction === 'push' ? 'info' : 'ok'}">${esc(l.direction)}</span>
+      <div style="flex:1"><h3 style="font-weight:500">${esc(l.summary)}</h3>
+        <div class="meta">${sha(l.sha)} · ${esc(l.actor || '')} · ${ago(l.at)}</div></div>
+    </div>`).join('') : '<div class="empty">Nothing has synced yet. Press Sync now.</div>';
+}
+
+$('pull').addEventListener('click', async () => {
+  $('pull').disabled = true; $('pullmsg').textContent = 'Pulling…';
+  try {
+    const r = await api('/api/sync/pull', { method: 'POST', body: '{}' });
+    $('pullmsg').textContent = r.totals ? `Done: ${r.totals.kept} kept, ${r.totals.added} added, ${r.totals.retired} retired, ${r.totals.conflicts} conflicts.` : 'Up to date.';
+  } catch (e) { $('pullmsg').textContent = e.message; }
+  $('pull').disabled = false;
+  await load();
+});
+if (!canEdit) $('pull').disabled = true;
+
+await load();
+setInterval(load, 10000);
+</script></body></html>

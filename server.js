@@ -18,6 +18,11 @@ import fs from "node:fs";
 import { DatabaseSync } from "node:sqlite";
 import * as auth from "./auth.js";
 import * as ai from "./ai.js";
+import * as syncRepo from "./sync/repo.js";
+import * as syncStore from "./sync/store.js";
+import { pullNow, startPolling, summary as syncSummary } from "./sync/watch.js";
+import { pushPage, SourceMovedError } from "./sync/push.js";
+import * as labBuild from "./sync/build.js";
 
 const ROOT = import.meta.dirname;
 
@@ -60,7 +65,11 @@ const MU_PAUSE = "https://images.mastersunion.link/uploads/27062025/v1/MainButto
     }
   }
 }
-const db = new DatabaseSync(path.join(ROOT, "data/content.db"));
+/* DB_PATH lets an experiment branch keep its own file (data/lab.db) while the
+   normal server keeps data/content.db. Relative to the project root. */
+const DB_FILE = path.join(ROOT, process.env.DB_PATH || "data/content.db");
+fs.mkdirSync(path.dirname(DB_FILE), { recursive: true });
+const db = new DatabaseSync(DB_FILE);
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS pages (
@@ -234,6 +243,7 @@ for (const file of fs.readdirSync(path.join(ROOT, "data")).filter((f) => /^seed(
 }
 
 auth.initAuth(db);
+syncStore.ensureSchema(db);
 
 /* ------------------------------------------------------------------ *
  * the render-time hook
@@ -382,6 +392,7 @@ app.get("/api/account", (req, res) => {
     roles: auth.ROLES.map((r) => ({ key: r, label: auth.ROLE_LABEL[r], blurb: auth.ROLE_BLURB[r] })),
     ai: ai.configured(),
     aiInfo: ai.describe(),
+    sync: syncSummary(db),
     consoleUrl: CONSOLE,
     defaultEmail: auth.DEFAULT_EMAIL,
   });
@@ -469,6 +480,44 @@ function applyOrder(html, slug, tab) {
   return out;
 }
 
+/* The lab build of the Lovable app: its assets under /lab-build, and each
+   route served at /page/<slug> with this page's copy inlined and, for a
+   signed-in user, the inline editor on top. The app itself never fetches
+   content: the store is filled before its first render. */
+app.use("/lab-build", express.static(labBuild.DIST, { index: false, maxAge: "1h" }));
+
+function serveLabPage(req, res, page) {
+  const html = labBuild.indexHtml();
+  const st = labBuild.buildState();
+  if (!html) {
+    return res.status(503).send("<p>The site is being built from the repo" + (st.building ? " right now" : "") +
+      ". Refresh in a few seconds." + (st.lastError ? "</p><pre>" + st.lastError.replace(/</g, "&lt;") + "</pre>" : "</p>"));
+  }
+  const draft = req.query.preview === "1";
+  const tab = "_all";
+  const content = Object.fromEntries(contentFor(page.slug, { draft }));
+  let out = html.replace("<head>", `<head>\n<script type="application/json" id="__mu_content">${JSON.stringify(content).replace(/</g, "\\u003c")}</script>`);
+  if (req.user && auth.can(req.user.role, "read")) {
+    const boot = {
+      slug: page.slug, tab, preview: draft, consoleUrl: CONSOLE,
+      user: { name: req.user.name, email: req.user.email, role: req.user.role },
+      can: {
+        edit: auth.can(req.user.role, "edit"),
+        comment: auth.can(req.user.role, "comment"),
+        publish: auth.can(req.user.role, "publish"),
+        reorder: false,
+        ai: auth.can(req.user.role, "ai") && ai.configured(),
+      },
+    };
+    const tag = `<link rel="stylesheet" href="/assets/css/inline-editor.css">
+<script>window.__MU_EDITOR__=${JSON.stringify(boot).replace(/</g, "\\u003c")};</script>
+<script src="/assets/js/inline-editor.js" defer></script>`;
+    out = out.includes("</body>") ? out.replace("</body>", tag + "\n</body>") : out + tag;
+  }
+  res.set("Cache-Control", "no-store, must-revalidate");
+  res.type("html").send(out);
+}
+
 app.get("/page/:slug", (req, res, next) => {
   const page = db.prepare("SELECT * FROM pages WHERE slug = ?").get(req.params.slug);
   if (!page) return next();
@@ -478,6 +527,7 @@ app.get("/page/:slug", (req, res, next) => {
      template here to render, so send the editor to where the page actually
      lives instead of failing to look up a view that was never meant to exist. */
   if (page.template === "__external") {
+    if (page.repo) return serveLabPage(req, res, page);
     const base = (process.env.APP_BASE_URL || "http://localhost:3000").replace(/\/+$/, "");
     const path0 = page.slug === "mu-home" ? "/"
       : page.slug === "shared" ? "/"
@@ -625,7 +675,7 @@ app.get("/api/public/content/:slug", (req, res) => {
  * ------------------------------------------------------------------ */
 app.get("/api/pages", auth.require_("read"), (_req, res) => {
   res.json(db.prepare(`
-    SELECT p.slug, p.title, p.source,
+    SELECT p.slug, p.title, p.source, p.repo, p.branch, p.ingested_sha,
            COUNT(CASE WHEN c.retired = 0 AND c.tag <> 'meta' THEN 1 END) AS fields,
            COUNT(DISTINCT CASE WHEN c.retired = 0 THEN c.section_key END) AS sections,
            SUM(CASE WHEN c.value <> c.draft_value AND c.retired = 0 THEN 1 ELSE 0 END) AS unpublished,
@@ -930,11 +980,30 @@ app.delete("/api/pages/:slug/lists/:listKey/items/:itemId", auth.require_("edit"
   res.json({ items });
 });
 
-app.post("/api/pages/:slug/publish", auth.require_("publish"), (req, res) => {
+app.post("/api/pages/:slug/publish", auth.require_("publish"), async (req, res) => {
+  const pg = db.prepare("SELECT source, repo FROM pages WHERE slug = ?").get(req.params.slug);
+
+  /* A page that came from the Lovable repo publishes by writing its drafts
+     into the source and pushing. The database re-keys only after the push
+     is verified, so a failed push leaves every draft exactly as it was. */
+  if (pg?.repo) {
+    if (!syncRepo.canPush()) return res.status(400).json({ error: "Sync cannot push: set LOVABLE_TOKEN in .env." });
+    try {
+      const out = await pushPage(db, req.params.slug, { user: req.user });
+      if (out.pushed) await pullNow(db, { reason: "publish" }).catch((e) => console.log("  sync after publish: " + e.message));
+      return res.json({ published: out.pushed, pushed: true, sha: out.sha, files: out.files, by: req.user.name, at: new Date().toISOString() });
+    } catch (e) {
+      if (e instanceof SourceMovedError) {
+        pullNow(db, { reason: "publish", force: true }).catch(() => {});
+        return res.status(409).json({ error: e.message, moved: e.missing });
+      }
+      return res.status(502).json({ error: e.message });
+    }
+  }
+
   /* Shared copy is edited from the page it appears on, so publishing that page
      has to carry it. The count is reported separately, because a shared change
      goes live everywhere and the person clicking Publish should be told. */
-  const pg = db.prepare("SELECT source FROM pages WHERE slug = ?").get(req.params.slug);
   const alsoShared = pg && pg.source === "instrumented" && req.params.slug !== "shared";
   const scope = alsoShared ? [req.params.slug, "shared"] : [req.params.slug];
 
@@ -1093,6 +1162,43 @@ app.post("/api/pages/:slug/ai/section", auth.require_("ai"), async (req, res) =>
 });
 
 /* ------------------------------------------------------------------ *
+ * sync with the Lovable repo
+ * ------------------------------------------------------------------ */
+app.get("/api/sync", auth.require_("read"), (_req, res) => {
+  res.json({ ...syncSummary(db), build: labBuild.buildState(), log: syncStore.recentLog(db, 30), conflicts: syncStore.openConflicts(db) });
+});
+
+app.post("/api/sync/pull", auth.require_("edit"), async (req, res) => {
+  try { res.json(await pullNow(db, { reason: req.user.name, force: true })); }
+  catch (e) { res.status(502).json({ error: e.message }); }
+});
+
+/* GitHub push webhook. No session; a shared token in the URL when one is set. */
+app.post("/api/sync/webhook", (req, res) => {
+  const secret = syncRepo.cfg().webhookSecret;
+  if (secret && req.query.token !== secret) return res.status(403).json({ error: "Bad token." });
+  if (!syncRepo.configured()) return res.status(400).json({ error: "Sync is not configured." });
+  res.status(202).json({ accepted: true });
+  pullNow(db, { reason: "webhook" }).catch((e) => console.log("  sync webhook: " + e.message));
+});
+
+app.post("/api/sync/conflicts/:id", auth.require_("edit"), (req, res) => {
+  const c = syncStore.getConflict(db, Number(req.params.id));
+  if (!c) return res.status(404).json({ error: "No such conflict." });
+  if (c.resolved_at) return res.status(409).json({ error: "Already resolved." });
+  const resolution = String(req.body?.resolution || "");
+  if (!["keep-theirs", "reapply-mine"].includes(resolution)) return res.status(400).json({ error: "resolution must be keep-theirs or reapply-mine." });
+  if (resolution === "reapply-mine") {
+    if (!c.new_key) return res.status(400).json({ error: "Lovable removed this text, so there is nothing to re-apply it to." });
+    const n = db.prepare("UPDATE page_content SET draft_value = ?, updated_at = ?, updated_by = ? WHERE page_slug = ? AND field_key = ? AND retired = 0")
+      .run(c.mine, new Date().toISOString(), req.user.name, c.page_slug, c.new_key).changes;
+    if (!n) return res.status(409).json({ error: "The replacement field is gone. Sync and look again." });
+  }
+  syncStore.resolveConflict(db, c.id, resolution);
+  res.json({ resolved: c.id, resolution });
+});
+
+/* ------------------------------------------------------------------ *
  * studio pages
  * ------------------------------------------------------------------ */
 const send = (f) => (_req, res) => res.sendFile(path.join(ROOT, "admin", f));
@@ -1102,13 +1208,22 @@ app.get(CONSOLE + "/login", (req, res) =>
   req.user ? res.redirect(CONSOLE) : res.sendFile(path.join(ROOT, "admin/login.html")));
 app.get(CONSOLE, gate, send("index.html"));
 app.get(CONSOLE + "/people", gate, send("people.html"));
+app.get(CONSOLE + "/sync", gate, send("sync.html"));
 app.get(CONSOLE + "/page/:slug", gate, send("edit.html"));
 app.get("/", (_req, res) => res.redirect(CONSOLE));
 /* the old path, so nobody's bookmark dies */
 app.get("/admin", (_req, res) => res.redirect(CONSOLE));
 
+if (syncRepo.configured() && !process.env.SYNC_NO_POLL) {
+  startPolling(db, { seconds: syncRepo.cfg().pollSeconds, onError: (e) => console.log("  sync: " + e.message) });
+  if (!labBuild.buildState().built) {
+    pullNow(db, { reason: "boot", force: true }).catch((e) => console.log("  sync at boot: " + e.message));
+  }
+}
+
 app.listen(PORT, () => {
   console.log(`\n  console    http://localhost:${PORT}${CONSOLE}`);
   console.log(`  live page  http://localhost:${PORT}/page/pgp-bharat`);
+  console.log(`  sync       ${(() => { const d = syncRepo.describe(); return d.configured ? `${d.repo} @ ${d.branch}, every ${d.pollSeconds}s${d.canPush ? "" : " (read only: no LOVABLE_TOKEN)"}` : "off"; })()}`);
   console.log(`  AI writer  ${(() => { const d = ai.describe(); return d.ready ? `ready — ${d.provider} / ${d.model}` : `off — add a key to .env (provider: ${d.provider})`; })()}\n`);
 });

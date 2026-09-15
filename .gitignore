@@ -6,3 +6,7 @@ data/content.db
 content.snapshot.db
 voice-guide.snapshot.md
 demo/
+
+# Lovable sync lab: a working clone of the site repo and its own database
+data/lab-repo/
+data/lab.db

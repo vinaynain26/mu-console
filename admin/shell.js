@@ -14,6 +14,7 @@ export const icon = (name, size = 16) => {
     search: '<circle cx="7" cy="7" r="4.5"/><path d="m13.5 13.5-3.3-3.3"/>',
     open: '<path d="M5 11l6-6M6 5h5v5"/>',
     back: '<path d="m9.5 3.5-4.5 4.5 4.5 4.5"/>',
+    sync: '<path d="M13.5 6.5A5.5 5.5 0 0 0 3.4 5"/><path d="M3 2v3.5h3.5"/><path d="M2.5 9.5A5.5 5.5 0 0 0 12.6 11"/><path d="M13 14v-3.5H9.5"/>',
   };
   return `<svg width="${size}" height="${size}" viewBox="0 0 16 16" fill="none" stroke="currentColor"
     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || ''}</svg>`;
@@ -54,6 +55,7 @@ export async function chrome(active) {
       <div class="side-nav">
         <div class="side-grp">Content</div>
         <a href="/console" class="${active === 'pages' ? 'on' : ''}">${icon('pages')}Pages</a>
+        <a href="/console/sync" class="${active === 'sync' ? 'on' : ''}">${icon('sync')}Sync</a>
         ${u.role === 'admin' ? `<div class="side-grp">Settings</div>
         <a href="/console/people" class="${active === 'people' ? 'on' : ''}">${icon('people')}People &amp; roles</a>` : ''}
       </div>
