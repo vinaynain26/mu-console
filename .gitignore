@@ -10,3 +10,9 @@ demo/
 # Lovable sync lab: a working clone of the site repo and its own database
 data/lab-repo/
 data/lab.db
+
+# lab sync: runtime pid lock, never commit
+data/lab-repo.lock
+data/lab.db
+data/lab-repo/
+data/lab-dist/

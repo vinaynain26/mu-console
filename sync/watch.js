@@ -23,7 +23,13 @@ export async function pullNow(db, { reason = "manual", force = false } = {}) {
     let remote;
     try { remote = await repo.remoteHead(); }
     catch (e) { throw new Error("Could not reach " + repo.repoName() + ": " + e.message); }
-    if (!force && remote === getState(db).last_remote_sha) { failures = 0; return { skipped: true, sha: remote }; }
+    if (!force && remote === getState(db).last_remote_sha) {
+      failures = 0;
+      /* nothing new, but GitHub answered: a lingering "could not reach" from an
+         earlier blip is no longer true, and the panel must not keep saying it */
+      if (/^Could not reach/.test(getState(db).last_error || "")) setState(db, { last_error: null });
+      return { skipped: true, sha: remote };
+    }
     const sha = await repo.serial(() => repo.resetToRemote());
     const result = scan(c.clone, { homeSlug: "home" });
     const report = applyScan(db, result, { repo: repo.repoName(), branch: c.branch, sha, prefix: c.prefix });

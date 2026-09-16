@@ -49,3 +49,14 @@ test("a second server cannot sync against a clone another one holds", () => {
   releaseLock();
   assert.equal(lockHolder(), null, "released");
 });
+
+test("a reachable remote with nothing new clears a stale reach error", async () => {
+  const db = makeDb();
+  const remote = makeRemote(FIXTURE_APP);
+  useRemote(remote.bare, path.join(tmpDir("sync-clone"), "repo"));
+  await pullNow(db);
+  db.prepare("UPDATE sync_state SET last_error = 'Could not reach x: blip' WHERE id = 1").run();
+  const r = await pullNow(db, { reason: "poll" });
+  assert.equal(r.skipped, true);
+  assert.equal(getState(db).last_error, null);
+});
