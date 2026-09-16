@@ -10,19 +10,25 @@ import { getState, setState, logEvent, openConflicts } from "./store.js";
 import { rebuild, buildState, buildable } from "./build.js";
 
 let pulling = false;
+let failures = 0;        // consecutive, so a flapping network logs once, not forever
 
 export async function pullNow(db, { reason = "manual", force = false } = {}) {
   if (!repo.configured()) throw new Error("Sync is not configured. Set LOVABLE_REPO in .env.");
   const c = repo.cfg();
-  const remote = await repo.remoteHead();
-  if (!force && remote === getState(db).last_remote_sha) return { skipped: true, sha: remote };
   pulling = true;
   try {
+    /* Reading the remote head sits INSIDE the guard on purpose. It used to be
+       outside, so a failure here left nothing behind: no last_error, no log
+       line, and a Sync panel that looked healthy while nothing was syncing. */
+    let remote;
+    try { remote = await repo.remoteHead(); }
+    catch (e) { throw new Error("Could not reach " + repo.repoName() + ": " + e.message); }
+    if (!force && remote === getState(db).last_remote_sha) { failures = 0; return { skipped: true, sha: remote }; }
     const sha = await repo.serial(() => repo.resetToRemote());
     const result = scan(c.clone, { homeSlug: "home" });
     const report = applyScan(db, result, { repo: repo.repoName(), branch: c.branch, sha, prefix: c.prefix });
     const now = new Date().toISOString();
-    setState(db, { last_remote_sha: sha, last_scan_at: now, last_error: null });
+    setState(db, { last_remote_sha: sha, last_scan_at: now, last_error: null });   // a good pull clears the last failure
     const totals = report.reduce((a, r) => ({ added: a.added + r.added, kept: a.kept + r.kept, retired: a.retired + r.retired, conflicts: a.conflicts + r.conflicts }),
       { added: 0, kept: 0, retired: 0, conflicts: 0 });
     logEvent(db, { direction: "pull", sha,
@@ -38,9 +44,18 @@ export async function pullNow(db, { reason = "manual", force = false } = {}) {
       logEvent(db, { direction: "build", sha, summary: "failed: " + String(e.message).split("\n")[0].slice(0, 160), actor: reason });
     }
     if (build) logEvent(db, { direction: "build", sha, summary: `built in ${(build.lastBuildMs / 1000).toFixed(1)}s`, actor: reason });
+    failures = 0;
     return { sha, report, totals, build };
   } catch (e) {
-    setState(db, { last_error: String(e.message).slice(0, 500) });
+    const msg = String(e.message).slice(0, 500);
+    /* Log a failure the first time it appears, then stay quiet while it
+       repeats: a poll every 20s would bury the history under one line. The
+       comparison is against what the database already holds, so this behaves
+       the same after a restart as it does in a single run. */
+    const seen = getState(db).last_error;
+    setState(db, { last_error: msg });
+    if (seen !== msg) logEvent(db, { direction: "error", sha: null, summary: msg.split("\n")[0].slice(0, 160), actor: reason });
+    failures++;
     throw e;
   } finally { pulling = false; }
 }
@@ -53,4 +68,7 @@ export function startPolling(db, { seconds = 20, onError = () => {} } = {}) {
   return () => clearInterval(t);
 }
 
-export const summary = (db) => ({ ...repo.describe(), state: getState(db), conflicts: openConflicts(db).length, pulling, build: buildState() });
+export const summary = (db) => ({
+  ...repo.describe(), state: getState(db), conflicts: openConflicts(db).length,
+  pulling, failures, build: buildState(), owner: repo.lockHolder(),
+});

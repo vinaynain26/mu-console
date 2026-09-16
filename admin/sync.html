@@ -51,7 +51,7 @@ async function load() {
     <div class="kv">
       <b>Repository</b><span>${repoLink} <span class="hint">branch ${esc(d.branch)}</span></span>
       <b>Push</b><span>${d.canPush ? '<span class="ok">ready</span>' : '<span class="bad">read only, no LOVABLE_TOKEN</span>'}</span>
-      <b>Polling</b><span>every ${esc(d.pollSeconds)}s${d.pulling ? ' · pulling now' : ''}</span>
+      <b>Polling</b><span>${d.owner && d.owner.pid ? `every ${esc(d.pollSeconds)}s${d.pulling ? ' · pulling now' : ''}${d.failures ? ` · <span class="bad">${d.failures} failed attempt${d.failures === 1 ? '' : 's'} in a row</span>` : ''}` : '<span class="bad">not running here (another server owns the clone)</span>'}</span>
       <b>Last pulled</b><span>${sha(st.last_remote_sha)} <span class="hint">${ago(st.last_scan_at)}</span></span>
       <b>Last pushed</b><span>${sha(st.last_push_sha)} <span class="hint">${ago(st.last_push_at)}</span></span>
       <b>Last error</b><span>${st.last_error ? `<span class="bad">${esc(st.last_error)}</span>` : '<span class="hint">none</span>'}</span>

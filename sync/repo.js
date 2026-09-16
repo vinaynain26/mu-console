@@ -136,3 +136,36 @@ export async function commitAndPush({ files, message, author }) {
 export async function verifyPushed(sha) {
   return (await remoteHead()) === sha;
 }
+
+/* ---------------- one syncer at a time ----------------
+ *
+ * Two servers pointed at the same clone reset, build and push into one
+ * directory and produce a state neither of them can explain. The lock is a
+ * file holding a pid: a live pid that is not us means someone else owns this
+ * clone, and we stay read-only.
+ */
+const lockFile = () => path.join(path.dirname(cfg().clone), path.basename(cfg().clone) + ".lock");
+
+const alive = (pid) => { try { process.kill(pid, 0); return true; } catch (e) { return e.code === "EPERM"; } };
+
+/** { pid, at } when a live process holds the lock, else null. */
+export function lockHolder() {
+  try {
+    const held = JSON.parse(fs.readFileSync(lockFile(), "utf8"));
+    return held && alive(held.pid) ? held : null;
+  } catch { return null; }
+}
+
+/** True when this process may sync. Re-taking our own lock is fine. */
+export function acquireLock() {
+  const held = lockHolder();
+  if (held && held.pid !== process.pid) return false;
+  fs.mkdirSync(path.dirname(lockFile()), { recursive: true });
+  fs.writeFileSync(lockFile(), JSON.stringify({ pid: process.pid, at: new Date().toISOString() }));
+  return true;
+}
+
+export function releaseLock() {
+  const held = lockHolder();
+  if (!held || held.pid === process.pid) { try { fs.unlinkSync(lockFile()); } catch { /* already gone */ } }
+}

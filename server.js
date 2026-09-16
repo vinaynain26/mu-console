@@ -1214,16 +1214,37 @@ app.get("/", (_req, res) => res.redirect(CONSOLE));
 /* the old path, so nobody's bookmark dies */
 app.get("/admin", (_req, res) => res.redirect(CONSOLE));
 
+/* Only one process may sync against the clone. A second server would reset,
+   build and push into the same directory as the first, and the result is a
+   state neither can explain. The second one still serves pages; it just does
+   not sync. */
+let syncOwner = false;
 if (syncRepo.configured() && !process.env.SYNC_NO_POLL) {
-  startPolling(db, { seconds: syncRepo.cfg().pollSeconds, onError: (e) => console.log("  sync: " + e.message) });
-  if (!labBuild.buildState().built) {
-    pullNow(db, { reason: "boot", force: true }).catch((e) => console.log("  sync at boot: " + e.message));
+  syncOwner = syncRepo.acquireLock();
+  if (!syncOwner) {
+    const held = syncRepo.lockHolder();
+    console.log(`\n  ! sync is OFF here: process ${held && held.pid} already syncs ${syncRepo.cfg().clone}.`);
+    console.log("    Stop that server first, or run this one with SYNC_NO_POLL=1 to silence this.\n");
+  } else {
+    startPolling(db, { seconds: syncRepo.cfg().pollSeconds, onError: (e) => console.log("  sync: " + e.message) });
+    if (!labBuild.buildState().built) {
+      pullNow(db, { reason: "boot", force: true }).catch((e) => console.log("  sync at boot: " + e.message));
+    }
+    for (const sig of ["SIGINT", "SIGTERM"]) {
+      process.on(sig, () => { syncRepo.releaseLock(); process.exit(0); });
+    }
+    process.on("exit", () => syncRepo.releaseLock());
   }
 }
 
 app.listen(PORT, () => {
   console.log(`\n  console    http://localhost:${PORT}${CONSOLE}`);
   console.log(`  live page  http://localhost:${PORT}/page/pgp-bharat`);
-  console.log(`  sync       ${(() => { const d = syncRepo.describe(); return d.configured ? `${d.repo} @ ${d.branch}, every ${d.pollSeconds}s${d.canPush ? "" : " (read only: no LOVABLE_TOKEN)"}` : "off"; })()}`);
+  console.log(`  sync       ${(() => {
+    const d = syncRepo.describe();
+    if (!d.configured) return "off";
+    if (!syncOwner) return `${d.repo} @ ${d.branch} — NOT SYNCING (another server owns the clone)`;
+    return `${d.repo} @ ${d.branch}, every ${d.pollSeconds}s${d.canPush ? "" : " (read only: no LOVABLE_TOKEN)"}`;
+  })()}`);
   console.log(`  AI writer  ${(() => { const d = ai.describe(); return d.ready ? `ready — ${d.provider} / ${d.model}` : `off — add a key to .env (provider: ${d.provider})`; })()}\n`);
 });
