@@ -54,11 +54,21 @@ export default function muLab({ root, prefix = "lab", homeSlug = "home", pagePre
       const q = (s) => JSON.stringify(s);
 
       /* copy -> runtime lookups */
+      const arrayGroups = new Map();        // ObjectProperty node -> [occurrence]
       for (const o of collectCopy(tree)) {
         if (!looksLikeCopy(o.value)) continue;
         const key = scope + "." + hashText(o.value);
         const call = `__mu(${q(key)}, ${q(o.value)})`;
         const n = o.node;
+        if (o.arrayProp) {
+          /* the whole property becomes one getter below: a module-level array
+             is built once at boot, so wrapping the items in place would freeze
+             whatever the store held then */
+          const g = arrayGroups.get(o.arrayProp) || [];
+          g.push({ node: n, call });
+          arrayGroups.set(o.arrayProp, g);
+          continue;
+        }
         if (o.kind === "jsxtext") {
           const raw = code.slice(n.start, n.end);
           const lead = raw.match(/^\s*/)[0], trail = raw.match(/\s*$/)[0];
@@ -72,6 +82,18 @@ export default function muLab({ root, prefix = "lab", homeSlug = "home", pagePre
         } else {
           edits.push({ start: n.start, end: n.end, text: call });                 // {"x"} or {`x`}
         }
+      }
+
+      /* `features: ["a", "b"]` -> `get features() { return [__mu(k1,"a"), __mu(k2,"b")]; }`,
+         so every read re-materialises the list from the store. Non-string
+         entries are carried through untouched. */
+      for (const [prop, items] of arrayGroups) {
+        const arr = prop.value;
+        let arrSrc = code.slice(arr.start, arr.end);
+        for (const it of [...items].sort((a, b) => b.node.start - a.node.start)) {
+          arrSrc = arrSrc.slice(0, it.node.start - arr.start) + it.call + arrSrc.slice(it.node.end - arr.start);
+        }
+        edits.push({ start: prop.start, end: prop.end, text: `get ${code.slice(prop.key.start, prop.key.end)}() { return ${arrSrc}; }` });
       }
 
       /* routing: live under /page/<prefix>-<route> */

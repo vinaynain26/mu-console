@@ -138,11 +138,24 @@ export function collectCopy(tree) {
       if (v && (TEXT_ATTRS.has(name) || (custom && !SKIP_PROPS.has(name) && v.length > 2))) {
         out.push({ node: n.value, kind: "string", value: v, tag: name, label: v });
       }
-    } else if (n.type === "ObjectProperty" && !stack.length && n.value.type === "StringLiteral") {
+    } else if (n.type === "ObjectProperty" && !stack.length) {
       const k = n.key.type === "Identifier" ? n.key.name : n.key.type === "StringLiteral" ? n.key.value : null;
       if (!k || SKIP_DATA.has(k)) return;
-      const v = clean(n.value.value);
-      if (v) out.push({ node: n.value, kind: "string", value: v, tag: k, label: humanize(k) + ": " + (v.length > 40 ? v.slice(0, 37) + "…" : v), prop: n });
+      const label = (v) => humanize(k) + ": " + (v.length > 40 ? v.slice(0, 37) + "…" : v);
+      if (n.value.type === "StringLiteral") {
+        const v = clean(n.value.value);
+        if (v) out.push({ node: n.value, kind: "string", value: v, tag: k, label: label(v), prop: n });
+      } else if (n.value.type === "ArrayExpression") {
+        /* A plain list of strings is copy too: a plan's feature bullets, a
+           set of chips. Each item is its own field; the property carries the
+           whole array, so the build wraps the property rather than the item
+           (see `arrayProp`) or a module-level array would freeze at boot. */
+        for (const el of n.value.elements) {
+          if (el?.type !== "StringLiteral") continue;
+          const v = clean(el.value);
+          if (v) out.push({ node: el, kind: "string", value: v, tag: k, label: label(v), arrayProp: n });
+        }
+      }
     }
   });
   return out;

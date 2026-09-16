@@ -63,3 +63,15 @@ test("a hash that is not in the file produces no hit", () => {
 test("a href is never a hit even when its hash is asked for", () => {
   assert.equal(locate(INDEX, new Set([hashText("#contact")])).length, 0);
 });
+
+test("a string array item is replaced on its own, leaving its neighbours alone", () => {
+  const { out } = rewrite(PRICING, "10 automated workflows", "20 automated workflows");
+  assert.equal(out, PRICING.replace('"10 automated workflows"', '"20 automated workflows"'));
+  assert.ok(out.includes('"Up to 5 team members"'), "the item before it is untouched");
+});
+
+test("a bullet shared by two plans is rewritten in both, matching the one-field rule", () => {
+  const { out, hits } = rewrite(PRICING, "Email support", "Chat support");
+  assert.equal(hits.length, 2);
+  assert.equal((out.match(/Chat support/g) || []).length, 2);
+});

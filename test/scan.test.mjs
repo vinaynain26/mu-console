@@ -48,3 +48,16 @@ test("split headline pieces are separate fields", () => {
   for (const v of ["Pricing that", "scales", "with your", "ambition"]) assert.ok(byValue(f, v), v);
   assert.equal(byValue(f, "scales").tag, "em");
 });
+
+test("items in a string array are fields, keyed and tagged by their property", () => {
+  const pricing = scan(FIXTURE_APP, { homeSlug: "home" }).pages[1];
+  const f = pricing.sections.flatMap((s) => s.fields);
+  for (const v of ["Up to 5 team members", "10 automated workflows", "Up to 25 team members", "Unlimited workflows"]) {
+    const hit = f.find((x) => x.value === v);
+    assert.ok(hit, "missing array item: " + v);
+    assert.equal(hit.tag, "features");
+    assert.equal(hit.key, "pages/Pricing.tsx." + hashText(v));
+  }
+  assert.equal(f.filter((x) => x.value === "Email support").length, 1, "the same bullet in two plans is one field");
+  assert.ok(f.find((x) => x.value === "Starter"), "plain object props still work");
+});
