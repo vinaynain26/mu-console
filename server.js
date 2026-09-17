@@ -1247,8 +1247,14 @@ if (syncRepo.configured() && !process.env.SYNC_NO_POLL) {
       labBuild.serveSite().then(() => console.log("  site       http://localhost:" + (process.env.SITE_PORT || 3000) + "  (built from the repo)"))
         .catch((e) => console.log("  site: " + e.message));
     }
-    for (const sig of ["SIGINT", "SIGTERM"]) {
-      process.on(sig, () => { syncRepo.releaseLock(); process.exit(0); });
+    for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"]) {
+      process.on(sig, () => {
+        /* say so: a silent exit 0 is what turned one stopped server into
+           an afternoon of guessing */
+        console.log(`\n  received ${sig} at ${new Date().toISOString()}: stopping the site and releasing the sync lock`);
+        syncRepo.releaseLock();
+        process.exit(0);
+      });
     }
     process.on("exit", () => syncRepo.releaseLock());
   }
