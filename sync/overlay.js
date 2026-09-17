@@ -13,9 +13,13 @@ import path from "node:path";
 const HERE = path.resolve(import.meta.dirname, "overlay");
 const MARK = "/* mu-cms overlay */";
 
+/* a file already carrying the instrumentation, whether by this overlay or
+   because the repo committed it, is left alone */
+const instrumented = (s) => s.includes(MARK) || /mu-cms-runtime|tools\/mu-cms\/plugin/.test(s);
+
 function patch(file, edits) {
   let s = fs.readFileSync(file, "utf8");
-  if (s.includes(MARK)) return false;                       // already applied
+  if (instrumented(s)) return false;
   for (const { anchor, insert, replace } of edits) {
     if (!s.includes(anchor)) {
       throw new Error(`overlay: anchor not found in ${path.basename(file)}: ${JSON.stringify(anchor.slice(0, 60))}. The site changed under the CMS; the overlay needs updating.`);
@@ -27,9 +31,10 @@ function patch(file, edits) {
 }
 
 export function applyOverlay(clone, { cmsUrl = "http://localhost:4000", homeSlug = "mu-home" } = {}) {
-  /* whole files */
+  /* whole files, only where the repo does not carry them itself */
   for (const rel of ["tools/mu-cms/plugin.mjs", "tools/mu-cms/keys.mjs", "src/mu-cms-runtime.ts"]) {
     const to = path.join(clone, rel);
+    if (fs.existsSync(to)) continue;
     fs.mkdirSync(path.dirname(to), { recursive: true });
     fs.copyFileSync(path.join(HERE, rel), to);
   }
@@ -46,7 +51,7 @@ export function applyOverlay(clone, { cmsUrl = "http://localhost:4000", homeSlug
   {
     const f = path.join(clone, "src/server.ts");
     let s = fs.readFileSync(f, "utf8");
-    if (!s.includes(MARK)) {
+    if (!instrumented(s)) {
       const fetchLine = "const response = await handler.fetch(request, env, ctx);";
       if (!s.includes(fetchLine)) throw new Error("overlay: anchor not found in server.ts: handler.fetch line. The site changed under the CMS; the overlay needs updating.");
       s = `import { AsyncLocalStorage } from "node:async_hooks"; ${MARK}\nimport { setServerStoreProvider } from "./mu-cms-runtime";\n` + s;

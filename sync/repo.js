@@ -103,7 +103,10 @@ export async function resetToRemote() {
   const cwd = await ensureClone();
   await git(["merge", "--abort"], { cwd }).catch(() => {});
   await git(["fetch", "-q", "origin", c.branch], { cwd, token: c.token });
-  await git(["checkout", "-q", "-B", c.branch, "FETCH_HEAD"], { cwd });
+  /* forced: build-time overlay edits and untracked files must never block
+     taking the remote, and the clean runs AFTER the checkout so the new
+     commit's .gitignore decides what survives (provisioned assets do) */
+  await git(["checkout", "-q", "-f", "-B", c.branch, "FETCH_HEAD"], { cwd });
   await git(["reset", "-q", "--hard", "FETCH_HEAD"], { cwd });
   await git(["clean", "-fdq"], { cwd });
   return git(["rev-parse", "HEAD"], { cwd });

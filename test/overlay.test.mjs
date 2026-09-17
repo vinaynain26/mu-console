@@ -42,3 +42,17 @@ test("a moved anchor stops the build with the file named", () => {
   fs.writeFileSync(path.join(d, "src/routes/__root.tsx"), "export const Route = {};\n");
   assert.throws(() => applyOverlay(d, {}), /anchor not found in __root\.tsx/);
 });
+
+test("a repo that already carries the instrumentation is left untouched", () => {
+  const d = cleanSite();
+  applyOverlay(d, { cmsUrl: "http://cms.test", homeSlug: "mu-home" });
+  /* simulate the committed form: same content, no overlay marker */
+  for (const f of ["vite.config.ts", "src/server.ts", "src/routes/__root.tsx"]) {
+    const p = path.join(d, f); fs.writeFileSync(p, fs.readFileSync(p, "utf8").split("/* mu-cms overlay */").join(""));
+  }
+  fs.writeFileSync(path.join(d, "src/mu-cms-runtime.ts"), "// the repo's own copy\n");
+  const before = ["vite.config.ts", "src/server.ts", "src/routes/__root.tsx", "src/mu-cms-runtime.ts"].map((f) => fs.readFileSync(path.join(d, f), "utf8")).join("\n");
+  applyOverlay(d, { cmsUrl: "http://other.test", homeSlug: "mu-home" });
+  const after = ["vite.config.ts", "src/server.ts", "src/routes/__root.tsx", "src/mu-cms-runtime.ts"].map((f) => fs.readFileSync(path.join(d, f), "utf8")).join("\n");
+  assert.equal(after, before, "nothing rewritten, the repo's runtime not clobbered");
+});
