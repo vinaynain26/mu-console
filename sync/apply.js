@@ -16,9 +16,11 @@
 import { addConflict } from "./store.js";
 import { clean } from "./scan.js";
 
-/* a key this scanner could have produced: lab "<file.ext>.<8hex>" or plugin "<scope>.<7hex>[-N]" */
+/* a key this scanner could have produced: lab "<file.ext>.<8hex>" or plugin
+   "<scope>.<7hex>[-N]", on a text, picture or link row. Lists, dates and
+   items born in the CMS are other features' rows. */
 const SCAN_KEY = /^[A-Za-z0-9_/.-]+\.[0-9a-f]{7,8}(-\d+)?$/;
-const ownsRow = (r) => (r.type === "text" || r.type === "rich") && SCAN_KEY.test(r.field_key) && !/\.(list|media|link|date):/.test(r.field_key);
+const ownsRow = (r) => ["text", "rich", "media", "link"].includes(r.type) && SCAN_KEY.test(r.field_key) && !/\.(list|media|link|date):/.test(r.field_key);
 
 export function ensureContentColumns(db) {
   const cols = db.prepare("PRAGMA table_info(page_content)").all().map((c) => c.name);
@@ -70,8 +72,9 @@ export function applyScan(db, scanResult, { repo, branch, sha, prefix = "lab", a
           kept++;
           /* the key is the hash of the source text, so a kept key means the
              source still reads as it did at seed time; a different CMS value
-             is an edit the repo never got. Keep it, as a draft. */
-          if (clean(was.value) !== clean(f.value)) {
+             is an edit the repo never got. Keep it, as a draft. Text only: a
+             picture's or link's CMS value is an override by design. */
+          if ((f.type === "text" || f.type === "rich") && clean(was.value) !== clean(f.value)) {
             const draft = was.draft_value !== was.value ? was.draft_value : was.value;
             reconcileRow.run(f.value, draft, slug, f.key);
             reconciled++;

@@ -14,9 +14,12 @@ import { keyParts7, hashText7 } from "./keys.js";
 import { locate, splice } from "./writeback.js";
 import { logEvent, setState } from "./store.js";
 
-/* a scan-shaped key on a text row: the only kind that can be written back */
+/* what can be written back: a text row with a scan-shaped key, or a picture
+   or link row that a scan has placed in a file (src_file). Anything else,
+   a list, a date, an item born in the CMS, goes live here only. */
 const SCAN_KEY = /^[A-Za-z0-9_/.-]+\.[0-9a-f]{7,8}(-\d+)?$/;
-const writable = (r) => (r.type === "text" || r.type === "rich") && SCAN_KEY.test(r.field_key) && !/\.(list|media|link|date):/.test(r.field_key);
+const writable = (r) => SCAN_KEY.test(r.field_key) && !/\.(list|media|link|date):/.test(r.field_key) &&
+  ((r.type === "text" || r.type === "rich") || ((r.type === "media" || r.type === "link") && r.src_file));
 
 /* Where a field lives and which occurrence it is. A plugin key is
    "<scope>.<7hex>[-N]" and cannot name its file, so the row carries it in
@@ -27,8 +30,12 @@ function locateRow(row) {
   const lp = keyParts(row.field_key);
   return { file: row.src_file || lp.file, hash: lp.hash, ordinal: 1, scope: lp.scope, style: "lab" };
 }
-const newKeyFor = (loc, text) => loc.style === "plugin"
-  ? loc.scope + "." + hashText7(text) + (loc.ordinal > 1 ? "-" + loc.ordinal : "")
+/* after a write the source holds the new value, and the field's identity
+   follows it: text hashes as itself, a picture as "media:<url>", a link as
+   "link:<url>", exactly as the plugin will key it on the next build */
+const basisFor = (type, text) => type === "media" ? "media:" + text : type === "link" ? "link:" + text : text;
+const newKeyFor = (loc, text, type) => loc.style === "plugin"
+  ? loc.scope + "." + hashText7(basisFor(type, text)) + (loc.ordinal > 1 ? "-" + loc.ordinal : "")
   : loc.scope + "." + hashText(text);
 
 export class SourceMovedError extends Error {
@@ -128,7 +135,7 @@ function rekey(db, slug, pending, sha, user, files, local = []) {
   try {
     for (const p of pending) {
       const text = clean(p.draft_value);
-      const newKey = newKeyFor(p.__loc, text);
+      const newKey = newKeyFor(p.__loc, text, p.type);
       if (newKey !== p.field_key && exists.get(slug, newKey)) {
         fold.run(slug, p.field_key);               // the editor typed another field's text: one field now
       } else {

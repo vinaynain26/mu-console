@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import Eyebrow from "@/components/Eyebrow";
 
 const stats = [
-  { label: "Offers per student", value: "3.03×", className: "text-lg" },
+  { label: "Offers per student", value: "3.03×", className: "text-lg", image: "/photos/offers.webp", href: "/placements" },
   { label: "Median package", value: "₹45L", status: true ? "Round closed" : "Apply now" },
 ];
 

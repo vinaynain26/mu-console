@@ -141,6 +141,29 @@ const humanize = (s) => s.replace(/\.[^.]+$/, "").replace(/([a-z0-9])([A-Z])/g, 
    whether an attribute sat on a capitalised component. */
 export function collectCopy(tree) {
   const out = [];
+  /* src={logo} and src={logoAsset.url} both trace back to an import whose
+     filename is the picture's identity */
+  const importSources = new Map();
+  for (const node of tree.program.body) {
+    if (node.type !== "ImportDeclaration") continue;
+    for (const sp of node.specifiers) {
+      if (sp.type === "ImportDefaultSpecifier" || sp.type === "ImportSpecifier") {
+        importSources.set(sp.local.name, path.basename(node.source.value).replace(/\.asset\.json$/, ""));
+      }
+    }
+  }
+  const hintFor = (expr) => {
+    let name = null;
+    if (expr.type === "Identifier") name = expr.name;
+    else if (expr.type === "MemberExpression" && expr.object.type === "Identifier" && expr.property.type === "Identifier" &&
+             /^(url|src|default|href|image|img|photo)$/.test(expr.property.name)) name = expr.object.name;
+    const h = name ? importSources.get(name) : null;
+    return h && ASSET_RE.test(h) ? h : null;
+  };
+  /* what the plugin's generate(expr, { concise: true }) prints for the two shapes hintFor accepts */
+  const exprCode = (expr) => expr.type === "Identifier" ? expr.name : expr.object.name + "." + expr.property.name;
+  const propKey = (q) => q.key && (q.key.type === "Identifier" ? q.key.name : q.key.type === "StringLiteral" ? q.key.value : null);
+
   walk(tree, (n, stack) => {
     const parent = stack[stack.length - 1];
     if (n.type === "JSXText") {
@@ -168,12 +191,41 @@ export function collectCopy(tree) {
         const v = clean(el.value);
         if (v) out.push({ node: el, kind: "string", ctx: "attrarray", value: v, tag: name, label: v, propName: name, onComponent, elName: tag, attrArray: n });
       }
+    } else if (n.type === "JSXAttribute" && n.value && TARGET_ATTRS[n.name.name] && n.name.type === "JSXIdentifier") {
+      /* a link target or a picture source on an element */
+      const kind = TARGET_ATTRS[n.name.name];
+      if (n.value.type === "StringLiteral") {
+        const v = n.value.value;
+        if (v && !/^[#?]/.test(v)) out.push({ node: n.value, kind: "string", ctx: kind, value: v, keyText: kind + ":" + v, tag: n.name.name, type: kind, label: kind === "media" ? path.basename(v) : v });
+      } else if (n.value.type === "JSXExpressionContainer" && n.value.expression.type !== "JSXEmptyExpression") {
+        const hint = hintFor(n.value.expression);
+        if (hint) out.push({ node: n.value.expression, kind: "expr", ctx: kind, value: "", keyText: kind + ":" + exprCode(n.value.expression), tag: n.name.name, type: kind, label: hint });
+      }
     } else if (n.type === "JSXAttribute" && n.value?.type === "StringLiteral") {
       const tag = elName(stack[stack.length - 1]);
       const name = n.name.type === "JSXNamespacedName" ? n.name.namespace.name + "-" + n.name.name.name : n.name.name;
       const onComponent = /^[A-Z]/.test(tag);
       const v = clean(n.value.value);
       if (v) out.push({ node: n.value, kind: "string", ctx: "attr", value: v, tag: name, label: v, propName: name, onComponent, elName: tag });
+    } else if (n.type === "ObjectProperty" && !stack.length && n.__parentObj && MEDIA_PROPS.has(propKey(n)) && n.__parentObj.type !== "ObjectPattern") {
+      /* a picture in the data: image: mu01, img: "/…/x.webp", or an empty slot */
+      const k = propKey(n), val = n.value;
+      if (val.type === "StringLiteral" && !val.value) {
+        const sib = (n.__parentObj.properties || []).map((q) => {
+          const kk = propKey(q);
+          if (!kk || !/^(title|name|label|heading|headline)$/.test(kk)) return null;
+          return q.type === "ObjectProperty" && q.value.type === "StringLiteral" ? q.value.value : null;
+        }).find(Boolean);
+        if (sib) out.push({ node: val, kind: "string", ctx: "media", value: "", keyText: "media-slot:" + sib, tag: "src", type: "media", label: sib.slice(0, 70), prop: n });
+      } else if (val.type === "StringLiteral") {
+        if (/[./]/.test(val.value)) out.push({ node: val, kind: "string", ctx: "media", value: val.value, keyText: "media:" + val.value, tag: "src", type: "media", label: path.basename(val.value), prop: n });
+      } else {
+        const hint = hintFor(val);
+        if (hint) out.push({ node: val, kind: "expr", ctx: "media", value: "", keyText: "media:import:" + hint, tag: "src", type: "media", label: hint, prop: n });
+      }
+    } else if (n.type === "ObjectProperty" && !stack.length && n.__parentObj && LINK_PROPS.has(propKey(n)) && n.__parentObj.type !== "ObjectPattern" && n.value.type === "StringLiteral") {
+      const v = n.value.value;
+      if (/^(\/|https?:)/.test(v) && !/^\/\//.test(v)) out.push({ node: n.value, kind: "string", ctx: "link", value: v, keyText: "link:" + v, tag: "href", type: "link", label: v, prop: n });
     } else if (n.type === "ObjectProperty" && !stack.length) {
       const k = n.key.type === "Identifier" ? n.key.name : n.key.type === "StringLiteral" ? n.key.value : null;
       if (!k) return;
@@ -232,6 +284,10 @@ const COPY_PROPS = new Set([
 ]);
 const STAT_PROPS = new Set(["value", "stat", "statLabel", "delta", "pct", "prefix", "suffix", "unit", "n"]);
 const COPY_ATTRS = new Set(["alt", "title", "placeholder", "aria-label"]);
+const MEDIA_PROPS = new Set(["image", "img", "icon", "logo", "avatar", "photo", "poster", "video", "thumbnail", "thumb", "src"]);
+const LINK_PROPS = new Set(["href", "applyHref", "viewAllHref", "route", "link"]);
+const TARGET_ATTRS = { href: "link", to: "link", src: "media", poster: "media" };
+const ASSET_RE = /\.(png|jpe?g|webp|svg|gif|avif|mp4|webm|mov)$/i;
 
 const isCopy = (s) => {
   const v = String(s).trim();
@@ -262,7 +318,7 @@ export const PROFILES = {
       if (!looksLikeCopy(o.value)) return false;
       if (o.ctx === "attr" || o.ctx === "attrarray") return TEXT_ATTRS.has(o.propName) || (o.onComponent && !SKIP_PROPS.has(o.propName) && o.value.length > 2);
       if (o.ctx === "prop" || o.ctx === "arrayitem") return !SKIP_DATA.has(o.propName);
-      if (o.ctx === "condarm") return false;
+      if (o.ctx === "condarm" || o.ctx === "media" || o.ctx === "link") return false;
       return true;
     },
     scope: (rel) => rel.replace(/^src\//, ""),
@@ -277,6 +333,7 @@ export const PROFILES = {
     accepts(o, extra = new Set()) {
       if (o.meta) return false;
       const byProp = (k, v) => ((COPY_PROPS.has(k) || extra.has(k)) && isCopy(v)) || ((STAT_PROPS.has(k) || extra.has(k)) && isShortDisplay(v));
+      if (o.ctx === "media" || o.ctx === "link") return true;
       if (o.ctx === "jsxtext" || o.ctx === "container") return isCopy(o.value);
       if (o.ctx === "attr") return (COPY_ATTRS.has(o.propName) && isCopy(o.value)) || (o.onComponent && byProp(o.propName, o.value));
       if (o.ctx === "attrarray") return o.onComponent && byProp(o.propName, o.value);
@@ -299,9 +356,9 @@ function fieldsOf(file, root, profile) {
   const out = [], seen = profile.newSeen();
   for (const o of collectCopy(parse(src, PARSE_OPTS))) {
     if (!profile.accepts(o, extra)) continue;
-    const key = profile.key(scope, o.value, seen);
+    const key = profile.key(scope, o.keyText ?? o.value, seen);
     if (!key) continue;                                        // lab: same text twice = one field
-    out.push({ key, label: o.label || (o.value.length > 60 ? o.value.slice(0, 57) + "…" : o.value), tag: o.tag, type: "text", value: o.value, file: rel });
+    out.push({ key, label: o.label || (o.value.length > 60 ? o.value.slice(0, 57) + "…" : o.value), tag: o.tag, type: o.type || "text", value: o.value, file: rel });
   }
   return out;
 }

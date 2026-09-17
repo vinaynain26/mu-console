@@ -1000,9 +1000,9 @@ app.post("/api/pages/:slug/publish", auth.require_("publish"), async (req, res) 
         by: req.user.name, at: new Date().toISOString(),
         /* the one line the editor shows */
         message: out.pushed && out.local
-          ? `Published ${out.published}: ${out.pushed} text change${out.pushed === 1 ? "" : "s"} sent to GitHub, ${out.local} image/link/list change${out.local === 1 ? "" : "s"} live in the CMS (not synced to Lovable yet)`
+          ? `Published ${out.published}: ${out.pushed} sent to GitHub as ${String(out.sha || "").slice(0, 7)}, ${out.local} list/date change${out.local === 1 ? "" : "s"} live in the CMS only`
           : out.pushed ? `Published ${out.pushed} change${out.pushed === 1 ? "" : "s"}: sent to GitHub as ${String(out.sha || "").slice(0, 7)}`
-          : out.local ? `Published ${out.local} image/link/list change${out.local === 1 ? "" : "s"}: live in the CMS (text syncs to Lovable, media does not yet)`
+          : out.local ? `Published ${out.local} list/date change${out.local === 1 ? "" : "s"}: live in the CMS only (lists do not sync to Lovable yet)`
           : "Nothing to publish",
       });
     } catch (e) {

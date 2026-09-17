@@ -102,3 +102,34 @@ test("a publish with only a picture makes no commit and still goes live", async 
   assert.equal(row(db, "mu-home", "routes-index.media:hero").value, "https://cdn.example/x.jpg");
   assert.equal(db.prepare("SELECT COUNT(*) n FROM publishes WHERE page_slug = 'mu-home'").get().n, 1);
 });
+
+test("a picture change is written into the source and re-keyed, then the pull agrees", async () => {
+  const { remote, db } = await setup();
+  const key = K("routes-index", "media:/x.png");
+  assert.ok(row(db, "mu-home", key), "the picture is a field after the scan");
+  draft(db, "mu-home", key, "https://cdn.example/new-campus.jpg");
+  const out = await pushPage(db, "mu-home", { user: USER });
+  assert.equal(out.pushed, 1); assert.equal(out.local, 0);
+  remote.git(["pull", "-q", "origin", "main"]);
+  const src = fs.readFileSync(path.join(remote.work, "src/routes/index.tsx"), "utf8");
+  assert.ok(src.includes('src="https://cdn.example/new-campus.jpg"'), "the source now names the new picture");
+  assert.ok(!src.includes('"/x.png"'));
+  const r = row(db, "mu-home", K("routes-index", "media:https://cdn.example/new-campus.jpg"));
+  assert.ok(r, "re-keyed to the new picture's identity"); assert.equal(r.value, "https://cdn.example/new-campus.jpg"); assert.equal(r.type, "media");
+  /* the pull after our own push must not add, retire or reconcile anything */
+  const head = await repo.resetToRemote();
+  const rep = applyScan(db, scan(repo.cfg().clone, { homeSlug: "mu-home" }), { repo: "local", branch: "main", sha: head, prefix: "", homeSlug: "mu-home" });
+  const home = rep.find((p) => p.slug === "mu-home");
+  assert.deepEqual([home.added, home.retired, home.reconciled, home.conflicts], [0, 0, 0, 0]);
+});
+
+test("a data-object picture and a link publish the same way", async () => {
+  const { remote, db } = await setup();
+  draft(db, "mu-home", K("routes-index", "media:/photos/offers.webp"), "/photos/offers-2026.webp");
+  draft(db, "mu-home", K("routes-index", "link:/placements"), "/placements-2026");
+  const out = await pushPage(db, "mu-home", { user: USER });
+  assert.equal(out.pushed, 2);
+  remote.git(["pull", "-q", "origin", "main"]);
+  const src = fs.readFileSync(path.join(remote.work, "src/routes/index.tsx"), "utf8");
+  assert.ok(src.includes('image: "/photos/offers-2026.webp"')); assert.ok(src.includes('href: "/placements-2026"'));
+});

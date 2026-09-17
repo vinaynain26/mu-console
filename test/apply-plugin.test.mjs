@@ -70,8 +70,33 @@ test("rows the scanner does not own are left exactly as they were", () => {
   }
 });
 
+test("a picture row whose source vanished is retired too", () => {
+  const db = makeDb(); seedLikePlugin(db);
+  db.prepare(`INSERT INTO page_content (page_slug, field_key, section_key, section_title, label, tag, type, value, draft_value, updated_by)
+    VALUES (?,?,?,?,?,?,?,?,?,?)`).run("mu-home", K("routes-index", "media:/gone.png"), "routes-index", "Index", "gone.png", "src", "media", "", "", "import");
+  applyScan(db, scan(ROOT, { homeSlug: "mu-home" }), OPTS);
+  assert.equal(row(db, "mu-home", K("routes-index", "media:/gone.png")).retired, 1);
+  assert.equal(row(db, "mu-home", "routes-index.media:hero.jpg").retired, 0, "a row keyed outside the scan's shape is still left alone");
+});
+
 test("a text row whose source vanished is retired, like before", () => {
   const db = makeDb(); seedLikePlugin(db);
   applyScan(db, scan(ROOT, { homeSlug: "mu-home" }), OPTS);
   assert.equal(row(db, "mu-home", K("routes-index", "Text that was deleted upstream")).retired, 1);
+});
+
+test("pictures and links are fields with the plugin's identity, and are never reconciled", () => {
+  const db = makeDb(); seedLikePlugin(db);
+  /* a picture row the plugin seeded, with an override the editor set */
+  db.prepare(`INSERT INTO page_content (page_slug, field_key, section_key, section_title, label, tag, type, value, draft_value, updated_by)
+    VALUES (?,?,?,?,?,?,?,?,?,?)`).run("mu-home", K("routes-index", "media:/x.png"), "routes-index", "Index", "x.png", "src", "media", "https://cdn.example/override.jpg", "https://cdn.example/override.jpg", "Vinay");
+  const report = applyScan(db, scan(ROOT, { homeSlug: "mu-home" }), OPTS);
+  const pic = row(db, "mu-home", K("routes-index", "media:/x.png"));
+  assert.equal(pic.value, "https://cdn.example/override.jpg", "the CMS override is kept, not reconciled");
+  assert.equal(pic.draft_value, pic.value); assert.equal(pic.src_file, "src/routes/index.tsx"); assert.equal(pic.type, "media");
+  const dataPic = row(db, "mu-home", K("routes-index", "media:/photos/offers.webp"));
+  assert.ok(dataPic, "a picture in a data object is a field"); assert.equal(dataPic.type, "media"); assert.equal(dataPic.value, "/photos/offers.webp");
+  const link = row(db, "mu-home", K("routes-index", "link:/placements"));
+  assert.ok(link, "a link in a data object is a field"); assert.equal(link.type, "link");
+  assert.equal(report.find((p) => p.slug === "mu-home").reconciled, 0);
 });

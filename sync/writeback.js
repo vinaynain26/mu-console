@@ -28,7 +28,7 @@ export function locate(source, hashes) {
   const hits = [], counts = new Map();
   for (const o of collectCopy(tree)) {
     if (!isField(o)) continue;
-    const full = fullHash(o.value);
+    const full = fullHash(o.keyText ?? o.value);
     let hash = null;
     for (const h of hashes) if (full.startsWith(h)) { hash = h; break; }
     if (!hash) continue;
@@ -51,6 +51,7 @@ function render(hit, text) {
     const lead = hit.raw.match(/^\s*/)[0], trail = hit.raw.match(/\s*$/)[0];
     return lead + escapeJsxText(text) + trail;
   }
+  if (hit.kind === "expr") return JSON.stringify(text);          // src={heroBg} -> src={"https://…"}
   if (hit.kind === "template") {
     return "`" + text.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$\{/g, "\\${") + "`";
   }
