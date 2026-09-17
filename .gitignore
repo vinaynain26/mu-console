@@ -17,3 +17,5 @@ data/lab.db
 data/lab-repo/
 data/lab-dist/
 .env.bak*
+data/cms.pid
+data/cms.log

@@ -12,7 +12,8 @@
     "ingest": "node scripts/ingest-page.mjs",
     "voice": "node scripts/extract-voice.mjs",
     "heal": "node scripts/heal-drift.mjs",
-    "test": "node --test \"test/*.test.mjs\""
+    "test": "node --test \"test/*.test.mjs\"",
+    "cms": "node scripts/cms.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.117.1",
