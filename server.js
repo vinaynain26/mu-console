@@ -995,7 +995,16 @@ app.post("/api/pages/:slug/publish", auth.require_("publish"), async (req, res) 
     try {
       const out = await pushPage(db, req.params.slug, { user: req.user });
       if (out.pushed) await pullNow(db, { reason: "publish" }).catch((e) => console.log("  sync after publish: " + e.message));
-      return res.json({ published: out.pushed, pushed: true, sha: out.sha, files: out.files, by: req.user.name, at: new Date().toISOString() });
+      return res.json({
+        published: out.published, pushed: out.pushed, local: out.local, sha: out.sha, files: out.files,
+        by: req.user.name, at: new Date().toISOString(),
+        /* the one line the editor shows */
+        message: out.pushed && out.local
+          ? `Published ${out.published}: ${out.pushed} text change${out.pushed === 1 ? "" : "s"} sent to GitHub, ${out.local} image/link/list change${out.local === 1 ? "" : "s"} live in the CMS (not synced to Lovable yet)`
+          : out.pushed ? `Published ${out.pushed} change${out.pushed === 1 ? "" : "s"}: sent to GitHub as ${String(out.sha || "").slice(0, 7)}`
+          : out.local ? `Published ${out.local} image/link/list change${out.local === 1 ? "" : "s"}: live in the CMS (text syncs to Lovable, media does not yet)`
+          : "Nothing to publish",
+      });
     } catch (e) {
       if (e instanceof SourceMovedError) {
         pullNow(db, { reason: "publish", force: true }).catch(() => {});

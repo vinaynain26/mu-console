@@ -68,7 +68,7 @@ test("two drafts in two files go in one commit", async () => {
 test("nothing to publish is a no-op", async () => {
   const { db, sha } = await setup();
   const out = await pushPage(db, "lab-home", { user: USER });
-  assert.deepEqual(out, { pushed: 0, sha: null, files: [] });
+  assert.deepEqual(out, { pushed: 0, local: 0, published: 0, sha: null, files: [] });
   assert.equal(await repo.remoteHead(), sha);
 });
 

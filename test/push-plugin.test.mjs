@@ -74,3 +74,31 @@ test("a home-page data prop publishes through a getter-free source file", async 
   remote.git(["pull", "-q", "origin", "main"]);
   assert.ok(fs.readFileSync(path.join(remote.work, "src/routes/index.tsx"), "utf8").includes('label: "Offers per graduate"'));
 });
+
+test("a publish with a picture and a text change pushes the text and takes the picture live locally", async () => {
+  const { remote, db } = await setup();
+  /* a media row the Vite plugin would have seeded: no source text to write back */
+  db.prepare(`INSERT INTO page_content (page_slug, field_key, section_key, section_title, label, tag, type, value, draft_value, updated_by)
+    VALUES (?,?,?,?,?,?,?,?,?,?)`).run("mu-home", "routes-index.media:hero-building-light", "routes-index", "Index", "hero-building-light.webp", "src", "media", "", "https://cdn.example/new-hero.mp4", "Vinay");
+  draft(db, "mu-home", K("routes-index", "Find your"), "Find the");
+  const out = await pushPage(db, "mu-home", { user: USER });
+  assert.equal(out.pushed, 1, "the text change went to the repo");
+  assert.equal(out.local, 1, "the picture went live in the CMS");
+  assert.equal(out.published, 2);
+  remote.git(["pull", "-q", "origin", "main"]);
+  assert.ok(fs.readFileSync(path.join(remote.work, "src/routes/index.tsx"), "utf8").includes("Find the"));
+  const media = row(db, "mu-home", "routes-index.media:hero-building-light");
+  assert.equal(media.value, "https://cdn.example/new-hero.mp4", "live now"); assert.equal(media.draft_value, media.value);
+  assert.equal(db.prepare("SELECT COUNT(*) n FROM revisions WHERE field_key = ?").get("routes-index.media:hero-building-light").n, 1);
+});
+
+test("a publish with only a picture makes no commit and still goes live", async () => {
+  const { db, sha } = await setup();
+  db.prepare(`INSERT INTO page_content (page_slug, field_key, section_key, section_title, label, tag, type, value, draft_value, updated_by)
+    VALUES (?,?,?,?,?,?,?,?,?,?)`).run("mu-home", "routes-index.media:hero", "routes-index", "Index", "hero.webp", "src", "media", "", "https://cdn.example/x.jpg", "Vinay");
+  const out = await pushPage(db, "mu-home", { user: USER });
+  assert.deepEqual([out.pushed, out.local, out.sha], [0, 1, null]);
+  assert.equal(await repo.remoteHead(), sha, "nothing was committed");
+  assert.equal(row(db, "mu-home", "routes-index.media:hero").value, "https://cdn.example/x.jpg");
+  assert.equal(db.prepare("SELECT COUNT(*) n FROM publishes WHERE page_slug = 'mu-home'").get().n, 1);
+});

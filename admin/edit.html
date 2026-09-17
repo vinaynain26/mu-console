@@ -389,7 +389,7 @@ if (CAN.publish) {
     try {
       const r = await api(`/api/pages/${slug}/publish`, { method: 'POST' });
       await load();
-      alert(r.pushed ? `Pushed ${r.published} change(s) to GitHub as ${String(r.sha || '').slice(0, 7)}. Lovable picks it up from there.` : r.published ? `Published ${r.published} change(s), live now.` : 'Nothing to publish.');
+      alert(r.message || (r.published ? `Published ${r.published} change(s), live now.` : 'Nothing to publish.'));
     } catch (e) { alert(e.message); }
   });
   $('acts').appendChild(b);

@@ -2933,7 +2933,7 @@
     btnPub.innerHTML = '<span class="mu-spin"></span> Publishing';
     try {
       var out = await api("/api/pages/" + SLUG + "/publish", { method: "POST" });
-      toast(out.published ? "Published " + out.published + " change(s) — live now" : "Nothing to publish");
+      toast(out.message || (out.published ? "Published " + out.published + " change(s), live now" : "Nothing to publish"), out.message ? 6000 : undefined);
       if (out.published) setTimeout(function () { location.reload(); }, 900);
     } catch (e) { toast(e.message, 4000); }
     finally { btnPub.innerHTML = "Publish"; }
