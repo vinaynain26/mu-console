@@ -31,7 +31,7 @@ export async function pullNow(db, { reason = "manual", force = false } = {}) {
       return { skipped: true, sha: remote };
     }
     const sha = await repo.serial(() => repo.resetToRemote());
-    const result = scan(c.clone, { homeSlug: "home" });
+    const result = scan(c.clone, { homeSlug: c.homeSlug });
     const report = applyScan(db, result, { repo: repo.repoName(), branch: c.branch, sha, prefix: c.prefix });
     const now = new Date().toISOString();
     setState(db, { last_remote_sha: sha, last_scan_at: now, last_error: null });   // a good pull clears the last failure

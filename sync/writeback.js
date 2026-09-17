@@ -6,18 +6,35 @@
  * source at those offsets, from the end backwards. Formatting, comments and
  * everything else survive, so the designer sees a one-line diff in Lovable.
  */
+import crypto from "node:crypto";
 import { parse } from "@babel/parser";
-import { PARSE_OPTS, collectCopy, looksLikeCopy, hashText } from "./scan.js";
+import { PARSE_OPTS, collectCopy, clean, PROFILES } from "./scan.js";
 
-/** Every occurrence in `source` whose text hashes to one of `hashes`. */
+/* only what some scanner profile counts as copy may ever be rewritten: a
+   class name or an href that happens to hash like a field is not a field */
+const isField = (o) => Object.values(PROFILES).some((pr) => pr.accepts(o));
+
+const fullHash = (text) => crypto.createHash("sha1").update(clean(text)).digest("hex");
+
+/**
+ * Every occurrence in `source` whose text hashes to one of `hashes`. A hash
+ * may be 7 or 8 characters (plugin or lab keys): it matches as a prefix.
+ * Each hit carries its `hash` as asked for, the full sha1, and its `ordinal`
+ * among hits of the same text in source order (1 = first), which is what a
+ * "-2" key refers to.
+ */
 export function locate(source, hashes) {
   const tree = parse(source, PARSE_OPTS);
-  const hits = [];
+  const hits = [], counts = new Map();
   for (const o of collectCopy(tree)) {
-    if (!looksLikeCopy(o.value)) continue;
-    const hash = hashText(o.value);
-    if (!hashes.has(hash)) continue;
-    hits.push({ hash, kind: o.kind, start: o.node.start, end: o.node.end, raw: source.slice(o.node.start, o.node.end) });
+    if (!isField(o)) continue;
+    const full = fullHash(o.value);
+    let hash = null;
+    for (const h of hashes) if (full.startsWith(h)) { hash = h; break; }
+    if (!hash) continue;
+    const ordinal = (counts.get(full) || 0) + 1;
+    counts.set(full, ordinal);
+    hits.push({ hash, full, ordinal, kind: o.kind, start: o.node.start, end: o.node.end, raw: source.slice(o.node.start, o.node.end) });
   }
   return hits;
 }
@@ -42,11 +59,14 @@ function render(hit, text) {
   return q + body + q;
 }
 
-/** New source with each hit replaced by the text for its hash. */
-export function splice(source, hits, textByHash) {
+/** New source with each hit replaced. `textFor` is a Map keyed by hash (every
+    occurrence of that text changes) or a function of the hit (so a caller can
+    change only the second occurrence). Undefined leaves a hit alone. */
+export function splice(source, hits, textFor) {
+  const pick = typeof textFor === "function" ? textFor : (h) => textFor.get(h.hash);
   let out = source;
   for (const h of [...hits].sort((a, b) => b.start - a.start)) {
-    const text = textByHash.get(h.hash);
+    const text = pick(h);
     if (text === undefined) continue;
     out = out.slice(0, h.start) + render(h, text) + out.slice(h.end);
   }

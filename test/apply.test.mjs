@@ -88,5 +88,8 @@ test("text that comes back revives the retired row with its old value", () => {
   assert.equal(row(db, "lab-home", key).retired, 1);
   applyScan(db, scan(FIXTURE_APP), OPTS);
   assert.equal(row(db, "lab-home", key).retired, 0);
-  assert.equal(row(db, "lab-home", key).value, "Edited");
+  /* the repo says one thing and the CMS said another: the CMS wording is
+     kept as a pending draft over the repo text, never silently "live" */
+  assert.equal(row(db, "lab-home", key).value, "Welcome to SecureFlow.");
+  assert.equal(row(db, "lab-home", key).draft_value, "Edited");
 });

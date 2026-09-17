@@ -23,6 +23,7 @@ import * as syncStore from "./sync/store.js";
 import { pullNow, startPolling, summary as syncSummary } from "./sync/watch.js";
 import { pushPage, SourceMovedError } from "./sync/push.js";
 import * as labBuild from "./sync/build.js";
+import { ensureContentColumns } from "./sync/apply.js";
 
 const ROOT = import.meta.dirname;
 
@@ -244,6 +245,7 @@ for (const file of fs.readdirSync(path.join(ROOT, "data")).filter((f) => /^seed(
 
 auth.initAuth(db);
 syncStore.ensureSchema(db);
+ensureContentColumns(db);
 
 /* ------------------------------------------------------------------ *
  * the render-time hook
@@ -527,7 +529,9 @@ app.get("/page/:slug", (req, res, next) => {
      template here to render, so send the editor to where the page actually
      lives instead of failing to look up a view that was never meant to exist. */
   if (page.template === "__external") {
-    if (page.repo) return serveLabPage(req, res, page);
+    /* a static SPA build is served here; a site build runs on its own port
+       and is reached through the APP_BASE_URL redirect below */
+    if (page.repo && labBuild.mode() === "spa" && labBuild.buildState().built) return serveLabPage(req, res, page);
     const base = (process.env.APP_BASE_URL || "http://localhost:3000").replace(/\/+$/, "");
     const path0 = page.slug === "mu-home" ? "/"
       : page.slug === "shared" ? "/"
@@ -1229,6 +1233,10 @@ if (syncRepo.configured() && !process.env.SYNC_NO_POLL) {
     startPolling(db, { seconds: syncRepo.cfg().pollSeconds, onError: (e) => console.log("  sync: " + e.message) });
     if (!labBuild.buildState().built) {
       pullNow(db, { reason: "boot", force: true }).catch((e) => console.log("  sync at boot: " + e.message));
+    } else if (labBuild.mode() === "site") {
+      /* a build from last time: serve it now, the poll will rebuild if the repo moved */
+      labBuild.serveSite().then(() => console.log("  site       http://localhost:" + (process.env.SITE_PORT || 3000) + "  (built from the repo)"))
+        .catch((e) => console.log("  site: " + e.message));
     }
     for (const sig of ["SIGINT", "SIGTERM"]) {
       process.on(sig, () => { syncRepo.releaseLock(); process.exit(0); });

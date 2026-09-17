@@ -8,8 +8,22 @@ import fs from "node:fs";
 import path from "node:path";
 import * as repo from "./repo.js";
 import { keyParts, hashText, clean } from "./scan.js";
+import { keyParts7, hashText7 } from "./keys.js";
 import { locate, splice } from "./writeback.js";
 import { logEvent, setState } from "./store.js";
+
+/* Where a field lives and which occurrence it is. A plugin key is
+   "<scope>.<7hex>[-N]" and cannot name its file, so the row carries it in
+   src_file; a lab key "<file.ext>.<8hex>" names the file itself. */
+function locateRow(row) {
+  const p7 = keyParts7(row.field_key);
+  if (row.src_file && p7) return { file: row.src_file, hash: p7.hash, ordinal: p7.ordinal, scope: p7.scope, style: "plugin" };
+  const lp = keyParts(row.field_key);
+  return { file: row.src_file || lp.file, hash: lp.hash, ordinal: 1, scope: lp.scope, style: "lab" };
+}
+const newKeyFor = (loc, text) => loc.style === "plugin"
+  ? loc.scope + "." + hashText7(text) + (loc.ordinal > 1 ? "-" + loc.ordinal : "")
+  : loc.scope + "." + hashText(text);
 
 export class SourceMovedError extends Error {
   constructor(missing) {
@@ -24,17 +38,20 @@ export async function pushPage(db, slug, { user }) {
   const page = db.prepare("SELECT * FROM pages WHERE slug = ?").get(slug);
   if (!page?.repo) throw new Error("This page did not come from the repo, so there is nothing to push.");
   if (!repo.canPush()) throw new Error("Sync cannot push: set LOVABLE_TOKEN in .env.");
-  const pending = db.prepare(`SELECT field_key, label, value, draft_value FROM page_content
+  const pending = db.prepare(`SELECT field_key, label, value, draft_value, src_file FROM page_content
     WHERE page_slug = ? AND value <> draft_value AND retired = 0 ORDER BY section_ord, ord`).all(slug);
   if (!pending.length) return { pushed: 0, sha: null, files: [] };
 
-  /* per file: which hashes to find, and the text each becomes */
+  /* per file: which hashes to find, and the text each (hash, ordinal) becomes */
   const byFile = new Map();
   for (const p of pending) {
-    const { file, hash } = keyParts(p.field_key);
-    if (!byFile.has(file)) byFile.set(file, { hashes: new Set(), text: new Map(), labels: new Map() });
-    const f = byFile.get(file);
-    f.hashes.add(hash); f.text.set(hash, clean(p.draft_value)); f.labels.set(hash, p.label);
+    const loc = locateRow(p);
+    p.__loc = loc;
+    if (!byFile.has(loc.file)) byFile.set(loc.file, { hashes: new Set(), text: new Map(), labels: new Map() });
+    const f = byFile.get(loc.file);
+    f.hashes.add(loc.hash);
+    f.text.set(loc.hash + "#" + loc.ordinal, clean(p.draft_value));
+    f.labels.set(loc.hash + "#" + loc.ordinal, p.label);
   }
   const message = `content(${slug}): ${pending.length} change${pending.length === 1 ? "" : "s"} via MU Console\n\n` +
     pending.map((p) => `${short(p.label, 40)}: ${short(p.value)} -> ${short(p.draft_value)}`).join("\n");
@@ -44,12 +61,12 @@ export async function pushPage(db, slug, { user }) {
     const files = {}, missing = [];
     for (const [file, f] of byFile) {
       const abs = path.join(repo.cfg().clone, file);
-      if (!fs.existsSync(abs)) { for (const h of f.hashes) missing.push({ file, label: f.labels.get(h) }); continue; }
+      if (!fs.existsSync(abs)) { for (const id of f.text.keys()) missing.push({ file, label: f.labels.get(id) }); continue; }
       const src = fs.readFileSync(abs, "utf8");
       const hits = locate(src, f.hashes);
-      const found = new Set(hits.map((h) => h.hash));
-      for (const h of f.hashes) if (!found.has(h)) missing.push({ file, label: f.labels.get(h) });
-      files[file] = splice(src, hits, f.text);
+      const found = new Set(hits.map((h) => h.hash + "#" + h.ordinal));
+      for (const id of f.text.keys()) if (!found.has(id)) missing.push({ file, label: f.labels.get(id) });
+      files[file] = splice(src, hits, (h) => f.text.get(h.hash + "#" + h.ordinal));
     }
     if (missing.length) throw new SourceMovedError(missing);
     return repo.commitAndPush({ files, message, author: { name: user.name, email: user.email } });
@@ -85,7 +102,7 @@ function rekey(db, slug, pending, sha, user, files) {
   try {
     for (const p of pending) {
       const text = clean(p.draft_value);
-      const newKey = keyParts(p.field_key).scope + "." + hashText(text);
+      const newKey = newKeyFor(p.__loc, text);
       if (newKey !== p.field_key && exists.get(slug, newKey)) {
         fold.run(slug, p.field_key);               // the editor typed another field's text: one field now
       } else {

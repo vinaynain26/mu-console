@@ -24,7 +24,8 @@ export const cfg = () => ({
   token: process.env.LOVABLE_TOKEN || "",
   branch: process.env.LOVABLE_BRANCH || "main",
   clone: process.env.SYNC_CLONE_DIR || path.join(ROOT, "data/lab-repo"),
-  prefix: process.env.SYNC_SLUG_PREFIX || "lab",
+  prefix: process.env.SYNC_SLUG_PREFIX ?? "lab",           // "" means none: pages land on their own slugs
+  homeSlug: process.env.SYNC_HOME_SLUG || "home",
   pollSeconds: Number(process.env.SYNC_POLL_SECONDS || 20),
   webhookSecret: process.env.SYNC_WEBHOOK_SECRET || "",
 });
@@ -80,6 +81,15 @@ export const serial = (fn) => {
 export async function ensureClone() {
   const c = cfg();
   if (!configured()) throw new Error("Sync is not configured. Set LOVABLE_REPO in .env.");
+  if (fs.existsSync(path.join(c.clone, ".git"))) {
+    /* LOVABLE_REPO changed under an existing clone: start over, and take the
+       old build with it, or the page would keep serving the previous site */
+    const origin = await git(["remote", "get-url", "origin"], { cwd: c.clone }).catch(() => "");
+    if (origin.replace(/\.git$/, "") !== c.repo.replace(/\.git$/, "")) {
+      fs.rmSync(c.clone, { recursive: true, force: true });
+      fs.rmSync(process.env.SYNC_DIST_DIR || path.join(ROOT, "data/lab-dist"), { recursive: true, force: true });
+    }
+  }
   if (!fs.existsSync(path.join(c.clone, ".git"))) {
     fs.mkdirSync(path.dirname(c.clone), { recursive: true });
     await git(["clone", "-q", "--branch", c.branch, "--single-branch", c.repo, c.clone], { token: c.token, timeout: 600e3 });
