@@ -369,6 +369,18 @@ body.mu-editing [data-sec]:hover > .mu-pill--tall,body.mu-editing [data-sec].mu-
   background:rgba(255,255,255,.85);color:var(--mu-ink);box-shadow:var(--mu-shadow-chip);
 }
 .mu-media-fields{min-width:0}
+/* upload: a quiet action in the label row, the preview as the drop zone */
+.mu-upbtn{
+  flex:none;border:0;background:var(--mu-fill);border-radius:999px;height:22px;padding:0 9px;
+  font-family:inherit;font-size:11px;font-weight:600;line-height:1;color:var(--mu-ink);letter-spacing:0;text-transform:none;
+}
+.mu-upbtn:hover{background:var(--mu-fill-hover)}
+.mu-thumb.is-over{box-shadow:inset 0 0 0 2px var(--mu-accent);background:var(--mu-accent-soft)}
+.mu-card.is-uploading .mu-thumb img,.mu-card.is-uploading .mu-thumb video{opacity:.55}
+.mu-up{position:absolute !important;inset:auto 0 0 0 !important;padding:8px 10px;background:linear-gradient(to top,rgba(0,0,0,.45),transparent)}
+.mu-up[hidden]{display:none}
+.mu-up__bar{height:3px;border-radius:2px;background:#fff;width:0;transition:width 120ms linear !important;box-shadow:0 0 0 .5px rgba(0,0,0,.15)}
+.mu-up__t{margin-top:6px;font-size:11px;font-weight:600;color:#fff;letter-spacing:.02em;text-shadow:0 1px 2px rgba(0,0,0,.4)}
 .mu-media-fields .mu-hint{display:none}
 
 /* the AI box materializes under its row */

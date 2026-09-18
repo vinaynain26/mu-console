@@ -2529,6 +2529,63 @@
   }
 
   var PLAY = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>';
+
+  /* ---------------- uploading a picture ----------------
+     The file goes to the CMS, which holds the UnionStack key, and the CDN
+     link comes back into the URL field through the same path a pasted link
+     takes. The preview shows the chosen file at once, with progress over it,
+     so the wait is never a blank. */
+  var uploadsReady = null;   // null until the server has said; false hides the control
+  function checkUploads() {
+    api("/api/uploads/status").then(function (j) { uploadsReady = !!j.ready; }, function () { uploadsReady = false; });
+  }
+  function uploadFile(key, file) {
+    var card = side && side.querySelector('[data-row="' + CSS.escape(key) + '"]');
+    var input = side && side.querySelector('[data-f="' + CSS.escape(key) + '"]');
+    if (!card || !input) return;
+    var thumb = card.querySelector(".mu-thumb"), up = card.querySelector(".mu-up"), bar = card.querySelector(".mu-up__bar"), txt = card.querySelector(".mu-up__t");
+    var local = URL.createObjectURL(file);
+    var isVid = /^video\//.test(file.type);
+    var media = thumb.querySelector("img, video");
+    if (!media || (media.tagName === "VIDEO") !== isVid) {
+      thumb.querySelectorAll("img, video, span").forEach(function (n) { if (!n.closest(".mu-up, .mu-thumb__play")) n.remove(); });
+      media = document.createElement(isVid ? "video" : "img");
+      if (isVid) { media.muted = true; media.playsInline = true; }
+      thumb.insertBefore(media, thumb.firstChild);
+    }
+    media.setAttribute("src", local);
+    card.classList.add("is-uploading");
+    up.hidden = false; bar.style.setProperty("width", "0%", "important"); txt.textContent = "Uploading\u2026";
+    var done = function (ok, msg) {
+      card.classList.remove("is-uploading");
+      up.hidden = true;
+      if (!ok) { toast(msg, 4500); syncSidebarInput(key, valueOf(key)); }
+    };
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", API + "/api/uploads");
+    if (TOKEN) xhr.setRequestHeader("Authorization", "Bearer " + TOKEN);
+    xhr.setRequestHeader("Content-Type", file.type || "application/octet-stream");
+    xhr.setRequestHeader("X-Filename", encodeURIComponent(file.name || "upload"));
+    xhr.upload.onprogress = function (e) {
+      if (!e.lengthComputable) return;
+      var pct = Math.round(e.loaded / e.total * 100);
+      bar.style.setProperty("width", pct + "%", "important");
+      txt.textContent = pct < 100 ? "Uploading\u2026 " + pct + "%" : "Storing\u2026";
+    };
+    xhr.onerror = function () { done(false, "Could not reach the CMS to upload."); };
+    xhr.onload = function () {
+      var j = {};
+      try { j = JSON.parse(xhr.responseText || "{}"); } catch (e) { /* not json */ }
+      if (xhr.status < 200 || xhr.status >= 300 || !j.url) return done(false, j.error || "The upload failed (" + xhr.status + ").");
+      input.value = j.url;
+      input.dispatchEvent(new Event("input", { bubbles: true }));   // the same path a pasted link takes
+      syncSidebarInput(key, j.url);
+      URL.revokeObjectURL(local);
+      done(true);
+      toast("Uploaded " + (file.name || "file"));
+    };
+    xhr.send(file);
+  }
   function mediaRow(f) {
     var v = valueOf(f.key);
     var poster = valueOf(f.key + "@poster");
@@ -2545,16 +2602,22 @@
     var name = (f.label || "").replace(/\.(png|jpe?g|webp|svg|gif|avif|mp4|webm)$/i, "").replace(/[-_]+/g, " ");
     return '<div class="mu-card" data-row="' + esc(f.key) + '">' +
       '<div class="mu-media-row">' +
-        '<div class="mu-thumb">' + (shown
+        '<div class="mu-thumb" data-drop="' + esc(f.key) + '">' + (shown
           ? (vid ? '<video src="' + esc(shown) + '" muted playsinline preload="metadata"></video>' +
                    '<div class="mu-thumb__play"><span>' + PLAY + '</span></div>'
                  : '<img src="' + esc(shown) + '" alt="" loading="lazy">')
-          : '<span>Empty slot</span>') + "</div>" +
+          : '<span>Empty slot</span>') +
+          '<div class="mu-up" hidden><div class="mu-up__bar"></div><div class="mu-up__t">Uploading\u2026</div></div>' +
+        "</div>" +
         '<div class="mu-media-fields">' +
           '<label class="mu-lab"><span>' + esc(what + (name ? " \u00b7 " + name : "")) + "</span>" +
             '<button type="button" class="mu-revert" data-revert="' + esc(f.key) + '" title="Undo this ' + (ownPlayer ? "video" : "image") + '">↺ Undo</button>' +
             '<button type="button" class="mu-reset" data-reset="' + esc(f.key) + '"' + (v ? "" : " hidden") +
               ' title="Put back the file the site shipped with">Original</button>' +
+            (uploadsReady !== false
+              ? '<button type="button" class="mu-upbtn" data-upload="' + esc(f.key) + '" title="Upload a file from this computer">Upload</button>' +
+                '<input type="file" data-upfile="' + esc(f.key) + '" accept="' + (ownPlayer ? "video/mp4,video/webm" : "image/*,video/mp4,video/webm") + '" hidden>'
+              : "") +
           "</label>" +
           '<input type="text" class="mu-mono" data-f="' + esc(f.key) + '" value="' + esc(v) + '" placeholder="' +
             (ownPlayer ? "Paste a video URL (.mp4 or .webm)" : "Paste an image or video URL") + '">' +
@@ -2639,6 +2702,30 @@
     });
     side.querySelectorAll("[data-revert]").forEach(function (b) {
       b.addEventListener("click", function () { revertField(b.dataset.revert); });
+    });
+    side.querySelectorAll("[data-upload]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var inp = side.querySelector('[data-upfile="' + CSS.escape(b.dataset.upload) + '"]');
+        if (inp) inp.click();
+      });
+    });
+    side.querySelectorAll("[data-upfile]").forEach(function (inp) {
+      inp.addEventListener("change", function () {
+        if (inp.files && inp.files[0]) uploadFile(inp.dataset.upfile, inp.files[0]);
+        inp.value = "";
+      });
+    });
+    side.querySelectorAll("[data-drop]").forEach(function (zone) {
+      if (uploadsReady === false) return;
+      var over = function (e) { e.preventDefault(); e.stopPropagation(); zone.classList.add("is-over"); };
+      zone.addEventListener("dragenter", over);
+      zone.addEventListener("dragover", over);
+      zone.addEventListener("dragleave", function () { zone.classList.remove("is-over"); });
+      zone.addEventListener("drop", function (e) {
+        e.preventDefault(); e.stopPropagation(); zone.classList.remove("is-over");
+        var file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (file) uploadFile(zone.dataset.drop, file);
+      });
     });
     side.querySelectorAll("[data-reset]").forEach(function (b) {
       b.addEventListener("click", function () { resetField(b.dataset.reset); b.hidden = true; });
@@ -3280,4 +3367,5 @@
   });
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", buildBar);
   else buildBar();
+  if (CAN.edit) checkUploads();
 })();

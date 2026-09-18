@@ -18,6 +18,7 @@ import fs from "node:fs";
 import { DatabaseSync } from "node:sqlite";
 import * as auth from "./auth.js";
 import * as ai from "./ai.js";
+import * as uploads from "./uploads.js";
 import * as syncRepo from "./sync/repo.js";
 import * as syncStore from "./sync/store.js";
 import { pullNow, startPolling, summary as syncSummary } from "./sync/watch.js";
@@ -344,7 +345,7 @@ app.use((req, res, next) => {
   if (!req.path.startsWith("/api/")) return next();
   res.set("Access-Control-Allow-Origin", req.headers.origin || "*");
   res.set("Vary", "Origin");
-  res.set("Access-Control-Allow-Headers", "authorization, content-type, accept");
+  res.set("Access-Control-Allow-Headers", "authorization, content-type, accept, x-filename");
   res.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   if (req.method === "OPTIONS") return res.sendStatus(204);
   next();
@@ -1135,6 +1136,30 @@ function loadField(slug, key) {
     ceiling: ceilingFor(slug, f.tag), siblings,
   };
 }
+
+/* ------------------------------------------------------------------ *
+ * uploads
+ *
+ * A picture chosen in the editor arrives here as raw bytes (the browser
+ * sends the file body itself, its type in Content-Type and its name in
+ * X-Filename), goes to UnionStack with the server's key, and the CDN link
+ * comes back. The editor drops that link into the picture field; publish
+ * then treats it like any pasted URL. Nothing is kept on this server.
+ * ------------------------------------------------------------------ */
+app.get("/api/uploads/status", auth.require_("edit"), (_req, res) => res.json({ ready: uploads.configured() }));
+app.post("/api/uploads", auth.require_("edit"), express.raw({ type: () => true, limit: "52mb" }), async (req, res) => {
+  try {
+    const out = await uploads.upload({
+      bytes: Buffer.isBuffer(req.body) ? req.body : Buffer.alloc(0),
+      filename: decodeURIComponent(String(req.headers["x-filename"] || "upload")),
+      mimeType: req.headers["content-type"] || "",
+    });
+    res.json(out);
+  } catch (e) {
+    const x = uploads.explain(e);
+    res.status(x.status).json(x);
+  }
+});
 
 app.post("/api/pages/:slug/ai/rewrite", auth.require_("ai"), async (req, res) => {
   const { key, instruction } = req.body || {};
