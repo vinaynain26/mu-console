@@ -17,10 +17,13 @@ import OpenAI from "openai";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod";
 
-/* Presets so a free key needs one line in .env, not three. */
+/* Presets so a free key needs one line in .env, not three. `fallbacks` are
+   tried in order when the chosen model is overloaded (429/503, "high
+   demand"); AI_FALLBACK_MODELS in .env overrides the list. */
 const PRESETS = {
   groq:       { base: "https://api.groq.com/openai/v1",                    model: "llama-3.3-70b-versatile", env: "GROQ_API_KEY" },
-  gemini:     { base: "https://generativelanguage.googleapis.com/v1beta/openai", model: "gemini-flash-latest", env: "GEMINI_API_KEY" },
+  gemini:     { base: "https://generativelanguage.googleapis.com/v1beta/openai", model: "gemini-flash-latest", env: "GEMINI_API_KEY",
+                fallbacks: ["gemini-flash-latest", "gemini-3.5-flash-lite", "gemini-flash-lite-latest"] },
   openrouter: { base: "https://openrouter.ai/api/v1",                      model: "meta-llama/llama-3.3-70b-instruct:free", env: "OPENROUTER_API_KEY" },
   cerebras:   { base: "https://api.cerebras.ai/v1",                        model: "llama-3.3-70b",           env: "CEREBRAS_API_KEY" },
   mistral:    { base: "https://api.mistral.ai/v1",                         model: "mistral-large-latest",    env: "MISTRAL_API_KEY" },
@@ -56,7 +59,23 @@ export function describe() {
 }
 export const configured = () => Boolean(settings().key);
 
+/** Models to try after the configured one, never repeating it. */
+export function fallbackModels() {
+  const s = settings();
+  const list = process.env.AI_FALLBACK_MODELS != null
+    ? process.env.AI_FALLBACK_MODELS.split(",").map((m) => m.trim()).filter(Boolean)
+    : (PRESETS[s.name]?.fallbacks || []);
+  return [...new Set(list)].filter((m) => m !== s.model);
+}
+
+/* The provider is drowning, not wrong: a 429, a 503, Anthropic's 529, or
+   Google's "high demand" body. Worth another model; not worth showing. */
+const overloaded = (err) => [429, 503, 529].includes(err?.status) ||
+  /high demand|overloaded|UNAVAILABLE|rate.?limit|try again later/i.test(String(err?.message || ""));
+
 let anthropicClient = null, oaiClient = null;
+/* tests point AI_BASE_URL at a stub between runs */
+export const _resetClients = () => { anthropicClient = null; oaiClient = null; };
 
 function unconfigured(s) {
   const e = new Error(
@@ -102,30 +121,46 @@ export async function generate({ system, user, schema, effort = "medium" }) {
   /* OpenAI-compatible. Strict json_schema support varies a lot between these
      hosts, so ask for a JSON object and validate with the same zod schema —
      that works everywhere from Groq to a local Ollama. */
-  if (!oaiClient) oaiClient = new OpenAI({ apiKey: s.key, baseURL: s.base });
+  if (!oaiClient) oaiClient = new OpenAI({ apiKey: s.key, baseURL: s.base, maxRetries: Number(process.env.AI_MAX_RETRIES ?? 2) });
 
   const shape = JSON.stringify(shapeHint(schema), null, 2);
   const sys = system + "\n\nReply with a single JSON object and nothing else. Shape:\n" + shape;
 
-  let last = null;
-  for (let attempt = 0; attempt < 2; attempt++) {
-    const res = await oaiClient.chat.completions.create({
-      model: s.model,
-      max_tokens: 4000,
-      response_format: { type: "json_object" },
-      messages: [
-        { role: "system", content: sys },
-        { role: "user", content: attempt === 0 ? user : user + "\n\nYour last reply was not valid JSON of that shape. Return only the JSON object." },
-      ],
-    });
-    const text = res.choices?.[0]?.message?.content || "";
-    try {
-      const parsed = schema.parse(JSON.parse(stripFence(text)));
-      return { out: parsed, usage: res.usage, provider: s.name, model: s.model };
-    } catch (e) { last = e; }
+  /* the chosen model first, then its fallbacks: an overloaded host answers
+     with the next model, and only when every one is overloaded does the
+     editor hear about it */
+  let busy = null;
+  for (const model of [s.model, ...fallbackModels()]) {
+    let last = null;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      let res;
+      try {
+        res = await oaiClient.chat.completions.create({
+          model,
+          max_tokens: 4000,
+          response_format: { type: "json_object" },
+          messages: [
+            { role: "system", content: sys },
+            { role: "user", content: attempt === 0 ? user : user + "\n\nYour last reply was not valid JSON of that shape. Return only the JSON object." },
+          ],
+        });
+      } catch (err) {
+        if (overloaded(err)) { busy = err; break; }   // this model is out: try the next
+        throw err;
+      }
+      const text = res.choices?.[0]?.message?.content || "";
+      try {
+        const parsed = schema.parse(JSON.parse(stripFence(text)));
+        return { out: parsed, usage: res.usage, provider: s.name, model };
+      } catch (e) { last = e; }
+    }
+    if (busy) continue;
+    const e = new Error("The model did not return usable JSON after two tries. " + (last?.message || ""));
+    e.code = "unparsed";
+    throw e;
   }
-  const e = new Error("The model did not return usable JSON after two tries. " + (last?.message || ""));
-  e.code = "unparsed";
+  const e = new Error("Every model is overloaded right now.");
+  e.code = "overloaded"; e.cause = busy;
   throw e;
 }
 
@@ -154,6 +189,9 @@ function shapeHint(schema) {
 /** Turns any provider's error into something an editor can act on. */
 export function explain(err) {
   if (err?.code === "unconfigured") return { status: 503, error: err.message };
+  if (err?.code === "overloaded" || err?.status === 503 || err?.status === 529 || (err?.status === 429 && /high demand|overloaded/i.test(String(err?.message || "")))) {
+    return { status: 503, error: "The AI model is overloaded right now. Trying again in a moment usually works." };
+  }
   if (err?.code === "refusal") return { status: 422, error: err.message };
   if (err?.code === "unparsed") return { status: 502, error: err.message };
 
