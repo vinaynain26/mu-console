@@ -787,6 +787,10 @@
        Keys are lowercased: the page often renders uppercase via CSS
        (text-transform), and "FIND YOUR" must still find "Find your". */
     var lc = function (s) { return norm(s).toLowerCase(); };
+    /* what the page shows for a field right now: an unsaved draft, else the
+       saved value. After a remount the page renders the draft, so the pass
+       must look for THAT, or the field just edited loses its anchor. */
+    var cur = function (f) { return valueOf(f.key); };
     var byText = new Map(), byAttr = new Map(), byUrl = new Map();
     var pushTo = function (map, k, node) {
       if (!k) return;
@@ -832,7 +836,7 @@
         '[data-c="' + sel + '"], [data-c-media="' + sel + '"], ' +
         '[data-c-link="' + sel + '"], [data-c-state="' + sel + '"]');
       if (a) return [a];
-      var v = String(f.value == null ? "" : f.value).trim();
+      var v = String(cur(f) == null ? "" : cur(f)).trim();
       /* A bundled image has no value in the CMS — the build renamed the file
          (mu-01.webp -> mu-01-B2xq.webp), so the seeder stored the source
          filename as the label and we match on its stem. */
@@ -933,12 +937,12 @@
        already lives. No file-mate there — no pill; the studio still lists it. */
     var owners = new Map();
     meta.forEach(function (f) {
-      var t = lc(f.value);
+      var t = lc(cur(f));
       if (t) owners.set(t, (owners.get(t) || 0) + 1);
     });
     ambiguousKeys.clear();
     meta.forEach(function (f) {
-      if ((owners.get(lc(f.value)) || 0) > 1) ambiguousKeys.add(f.key);
+      if ((owners.get(lc(cur(f))) || 0) > 1) ambiguousKeys.add(f.key);
     });
 
     var groups = new Map();   // host element -> { host, entries: [{f, node}] }
@@ -1021,9 +1025,9 @@
       }
       if (!node.hasAttribute("data-c") && !node.hasAttribute("data-c-media") &&
           f.tag !== "rich" &&
-          String(f.value).trim() &&
-          String(f.value).indexOf("<") < 0) {
-        if (node.childElementCount === 0 && lc(node.textContent) === lc(f.value)) {
+          String(cur(f)).trim() &&
+          String(cur(f)).indexOf("<") < 0) {
+        if (node.childElementCount === 0 && lc(node.textContent) === lc(cur(f))) {
           node.setAttribute("data-c", f.key);
           node.setAttribute("data-mu-adopted", "1");
         } else {
@@ -1033,7 +1037,7 @@
              the node away, the next pass simply wraps it again. */
           for (var wi = 0; wi < node.childNodes.length; wi++) {
             var wtn = node.childNodes[wi];
-            if (wtn.nodeType !== 3 || lc(wtn.nodeValue) !== lc(f.value)) continue;
+            if (wtn.nodeType !== 3 || lc(wtn.nodeValue) !== lc(cur(f))) continue;
             var wsp = document.createElement("span");
             wsp.setAttribute("data-c", f.key);
             wsp.setAttribute("data-mu-adopted", "1");
@@ -1053,7 +1057,7 @@
       var anchor = document.querySelector(
         '[data-c="' + sel + '"], [data-c-media="' + sel + '"], ' +
         '[data-c-link="' + sel + '"], [data-c-state="' + sel + '"]');
-      if (!anchor && (owners.get(lc(f.value)) || 0) > 1) {
+      if (!anchor && (owners.get(lc(cur(f))) || 0) > 1) {
         ambiguous.push(f);
         return;
       }
@@ -1065,7 +1069,7 @@
         // own field — placement is not ownership, so it never takes the node.
         // A PIECE of an element ("FIND" and "YOUR" in one heading) shares the
         // element with its sibling pieces, so it never takes it either.
-        var partial = f.tag !== "media" && lc(node.textContent) !== lc(f.value);
+        var partial = f.tag !== "media" && lc(node.textContent) !== lc(cur(f));
         var owns = f.tag !== "media" && !partial;
         if (owns && taken.has(node)) return;
         var host = hostOf(node);
@@ -1085,7 +1089,7 @@
        the built-in one wins; with neither in sight, nobody takes them. */
     var rivals = new Map();
     ambiguous.forEach(function (f) {
-      var t = lc(f.value);
+      var t = lc(cur(f));
       if (!rivals.has(t)) rivals.set(t, []);
       rivals.get(t).push(f);
     });
@@ -1147,7 +1151,7 @@
       var bestHost = null, bestNode = null, bestScore = 0;
       var partial = f.tag !== "media";
       els.forEach(function (node) {
-        var whole = !partial || lc(node.textContent) === lc(f.value);
+        var whole = !partial || lc(node.textContent) === lc(cur(f));
         if (whole && taken.has(node)) return;
         var host = hostOf(node);
         if (!host) return;
@@ -1155,7 +1159,7 @@
         if (score > bestScore) { bestScore = score; bestHost = host; bestNode = node; }
       });
       if (bestHost) {
-        if (lc(bestNode.textContent) === lc(f.value)) taken.add(bestNode);
+        if (lc(bestNode.textContent) === lc(cur(f))) taken.add(bestNode);
         claim(f, bestNode, bestHost);
       }
     });

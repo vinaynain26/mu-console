@@ -107,6 +107,11 @@ if (typeof document !== "undefined") {
   (window as unknown as Record<string, unknown>).__MU_RUNTIME__ = {
     applyLocal: (k: string, v: string, silent?: boolean) => applyLocal(k, v, silent),
     version: () => version,
+    /* The editor may leave the caret on the page: while someone types, the
+       store is kept true silently (no paint), and when they stop, one loud
+       applyLocal bumps the version and the root remounts the whole tree from
+       the store, so any node the browser split while editable is gone. */
+    pageTyping: true,
   };
 }
 

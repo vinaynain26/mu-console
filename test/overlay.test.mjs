@@ -56,3 +56,12 @@ test("a repo that already carries the instrumentation is left untouched", () => 
   const after = ["vite.config.ts", "src/server.ts", "src/routes/__root.tsx", "src/mu-cms-runtime.ts"].map((f) => fs.readFileSync(path.join(d, f), "utf8")).join("\n");
   assert.equal(after, before, "nothing rewritten, the repo's runtime not clobbered");
 });
+
+test("the runtime promises pageTyping: the site remounts on a loud applyLocal, so the editor may keep the caret on the page", () => {
+  const d = cleanSite();
+  applyOverlay(d, { cmsUrl: "http://cms.test", homeSlug: "mu-home" });
+  const rt = fs.readFileSync(path.join(d, "src/mu-cms-runtime.ts"), "utf8");
+  const block = rt.slice(rt.indexOf("__MU_RUNTIME__ = {"), rt.indexOf("};", rt.indexOf("__MU_RUNTIME__ = {")));
+  assert.match(block, /pageTyping:\s*true/, "window.__MU_RUNTIME__ carries pageTyping: true");
+  assert.match(block, /applyLocal:/, "next to applyLocal, which is what makes the promise true");
+});
