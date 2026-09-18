@@ -164,19 +164,22 @@ export function collectCopy(tree) {
   const exprCode = (expr) => expr.type === "Identifier" ? expr.name : expr.object.name + "." + expr.property.name;
   const propKey = (q) => q.key && (q.key.type === "Identifier" ? q.key.name : q.key.type === "StringLiteral" ? q.key.value : null);
 
-  walk(tree, (n, stack) => {
+  walk(tree, (n, stack, astParent) => {
     const parent = stack[stack.length - 1];
+    /* {"literal"} as an attribute value, src={"/x.jpg"} or title={"…"}, is
+       not element text, and the plugin has no rule for it either */
+    const inAttr = astParent?.type === "JSXAttribute";
     if (n.type === "JSXText") {
       const v = clean(n.value);
       if (v) out.push({ node: n, kind: "jsxtext", ctx: "jsxtext", value: v, tag: (elName(parent) || "text").toLowerCase() });
-    } else if (n.type === "JSXExpressionContainer" && n.expression.type === "ConditionalExpression" && stack.length && parent && n !== parent.openingElement) {
+    } else if (n.type === "JSXExpressionContainer" && !inAttr && n.expression.type === "ConditionalExpression" && stack.length && parent && n !== parent.openingElement) {
       /* {open ? "Hide details" : "View details"}: both arms are copy */
       for (const arm of [n.expression.consequent, n.expression.alternate]) {
         if (arm.type !== "StringLiteral") continue;
         const v = clean(arm.value);
         if (v) out.push({ node: arm, kind: "string", ctx: "container", value: v, tag: (elName(parent) || "text").toLowerCase(), condJsx: n });
       }
-    } else if (n.type === "JSXExpressionContainer" && (n.expression.type === "StringLiteral" || n.expression.type === "TemplateLiteral")) {
+    } else if (n.type === "JSXExpressionContainer" && !inAttr && (n.expression.type === "StringLiteral" || n.expression.type === "TemplateLiteral")) {
       const ex = n.expression;
       const v = ex.type === "StringLiteral" ? clean(ex.value) : ex.expressions.length ? "" : clean(ex.quasis.map((q) => q.value.cooked).join(""));
       if (v && stack.length && parent && n !== parent.openingElement) {
@@ -199,7 +202,10 @@ export function collectCopy(tree) {
         if (v && !/^[#?]/.test(v)) out.push({ node: n.value, kind: "string", ctx: kind, value: v, keyText: kind + ":" + v, tag: n.name.name, type: kind, label: kind === "media" ? path.basename(v) : v });
       } else if (n.value.type === "JSXExpressionContainer" && n.value.expression.type !== "JSXEmptyExpression") {
         const hint = hintFor(n.value.expression);
-        if (hint) out.push({ node: n.value.expression, kind: "expr", ctx: kind, value: "", keyText: kind + ":" + exprCode(n.value.expression), tag: n.name.name, type: kind, label: hint });
+        /* `container` is the {…} around the expression: a write-back replaces
+           all of it with a plain attribute, src="…", because src={"…"} is a
+           form neither the plugin nor this scan reads as a picture */
+        if (hint) out.push({ node: n.value.expression, container: n.value, kind: "expr", ctx: kind, value: "", keyText: kind + ":" + exprCode(n.value.expression), tag: n.name.name, type: kind, label: hint });
       }
     } else if (n.type === "JSXAttribute" && n.value?.type === "StringLiteral") {
       const tag = elName(stack[stack.length - 1]);

@@ -133,3 +133,50 @@ test("a data-object picture and a link publish the same way", async () => {
   const src = fs.readFileSync(path.join(remote.work, "src/routes/index.tsx"), "utf8");
   assert.ok(src.includes('image: "/photos/offers-2026.webp"')); assert.ok(src.includes('href: "/placements-2026"'));
 });
+
+test("a picture that was an imported asset publishes as a plain src attribute, and the pull keeps the field", async () => {
+  const { remote, db } = await setup();
+  /* src={heroBuilding}: the plugin keys it by the expression, the CMS holds no path for it */
+  const key = K("routes-index", "media:heroBuilding");
+  const before = row(db, "mu-home", key);
+  assert.ok(before, "src={heroBuilding} is a field after the scan"); assert.equal(before.type, "media"); assert.equal(before.value, "");
+  draft(db, "mu-home", key, "https://cdn.example/hero-2026.webp");
+  const out = await pushPage(db, "mu-home", { user: USER });
+  assert.equal(out.pushed, 1); assert.equal(out.local, 0);
+  remote.git(["pull", "-q", "origin", "main"]);
+  const src = fs.readFileSync(path.join(remote.work, "src/routes/index.tsx"), "utf8");
+  assert.ok(src.includes('src="https://cdn.example/hero-2026.webp"'), "written as a plain attribute, the one form the plugin and the scan both key");
+  assert.ok(!src.includes('src={"https://cdn.example/hero-2026.webp"}'), "never a literal inside braces, which neither of them sees");
+  const newKey = K("routes-index", "media:https://cdn.example/hero-2026.webp");
+  const r = row(db, "mu-home", newKey);
+  assert.ok(r, "re-keyed to the new picture's identity"); assert.equal(r.value, "https://cdn.example/hero-2026.webp");
+  /* the pull after our own push: nothing added, and above all nothing retired */
+  const head = await repo.resetToRemote();
+  const rep = applyScan(db, scan(repo.cfg().clone, { homeSlug: "mu-home" }), { repo: "local", branch: "main", sha: head, prefix: "", homeSlug: "mu-home" });
+  const home = rep.find((p) => p.slug === "mu-home");
+  assert.deepEqual([home.added, home.retired, home.reconciled, home.conflicts], [0, 0, 0, 0]);
+  assert.equal(row(db, "mu-home", newKey).retired, 0, "the picture is still a field the editor can change again");
+});
+
+test("a picture published onto a key that exists as a dormant row revives that row with the new value", async () => {
+  const { remote, db } = await setup();
+  /* the state production got into: the target key already exists, retired,
+     holding an override from an earlier life (a picture's key is its URL,
+     its value is whatever the CMS last showed there) */
+  const target = K("routes-index", "media:https://cdn.example/new-campus.jpg");
+  db.prepare(`INSERT INTO page_content (page_slug, field_key, section_key, section_title, label, tag, type, value, draft_value, updated_by, retired, src_file)
+    VALUES (?,?,?,?,?,?,?,?,?,?,1,?)`).run("mu-home", target, "routes-index", "Index", "new-campus.jpg", "src", "media", "/stale.png", "/stale.png", "Vinay", "src/routes/index.tsx");
+  draft(db, "mu-home", K("routes-index", "media:/x.png"), "https://cdn.example/new-campus.jpg");
+  const out = await pushPage(db, "mu-home", { user: USER });
+  assert.equal(out.pushed, 1);
+  remote.git(["pull", "-q", "origin", "main"]);
+  assert.ok(fs.readFileSync(path.join(remote.work, "src/routes/index.tsx"), "utf8").includes('src="https://cdn.example/new-campus.jpg"'));
+  const r = row(db, "mu-home", target);
+  assert.equal(r.retired, 0, "the row under the new key is live");
+  assert.equal(r.value, "https://cdn.example/new-campus.jpg", "and shows the picture the editor published, not its old override");
+  assert.equal(r.draft_value, r.value);
+  const head = await repo.resetToRemote();
+  applyScan(db, scan(repo.cfg().clone, { homeSlug: "mu-home" }), { repo: "local", branch: "main", sha: head, prefix: "", homeSlug: "mu-home" });
+  assert.equal(row(db, "mu-home", target).value, "https://cdn.example/new-campus.jpg", "the pull after the push keeps it");
+  assert.equal(row(db, "mu-home", K("routes-index", "media:/x.png")).retired, 1, "the row it came from is folded away");
+});

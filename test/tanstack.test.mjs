@@ -53,3 +53,11 @@ test("copy rules follow the plugin: allowlisted props, stat values, component pr
   assert.equal(byValue(home, "summary_large_image").length, 0, "head() metadata is never copy");
   assert.equal(byValue(home, "3.03×")[0].tag, "value");
 });
+
+test("a literal in braces on an attribute is not a field, as the plugin has no rule for it", () => {
+  const home = out().pages.find((p) => p.slug === "mu-home");
+  const all = home.sections.flatMap((s) => s.fields);
+  assert.equal(all.filter((f) => /poster-in-braces/.test(f.value) || /poster-in-braces/.test(f.label)).length, 0, 'src={"/…jpg"} is neither a picture nor text');
+  assert.equal(byValue(home, "Braced attribute text").length, 0, 'title={"…"} is not element text');
+  assert.ok(all.some((f) => f.type === "media" && f.label === "hero-building.webp"), "src={heroBuilding} next to it is still a picture");
+});

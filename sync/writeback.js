@@ -34,7 +34,9 @@ export function locate(source, hashes) {
     if (!hash) continue;
     const ordinal = (counts.get(full) || 0) + 1;
     counts.set(full, ordinal);
-    hits.push({ hash, full, ordinal, kind: o.kind, start: o.node.start, end: o.node.end, raw: source.slice(o.node.start, o.node.end) });
+    /* src={heroBuilding}: the hit is the whole {…}, so the attribute becomes src="…" */
+    const span = o.container || o.node, kind = o.container ? "attrexpr" : o.kind;
+    hits.push({ hash, full, ordinal, kind, start: span.start, end: span.end, raw: source.slice(span.start, span.end) });
   }
   return hits;
 }
@@ -51,7 +53,8 @@ function render(hit, text) {
     const lead = hit.raw.match(/^\s*/)[0], trail = hit.raw.match(/\s*$/)[0];
     return lead + escapeJsxText(text) + trail;
   }
-  if (hit.kind === "expr") return JSON.stringify(text);          // src={heroBg} -> src={"https://…"}
+  // image: heroBg -> image: "https://…"; src={heroBg} -> src="https://…" (the {…} is the hit)
+  if (hit.kind === "expr" || hit.kind === "attrexpr") return JSON.stringify(text);
   if (hit.kind === "template") {
     return "`" + text.replace(/\\/g, "\\\\").replace(/`/g, "\\`").replace(/\$\{/g, "\\${") + "`";
   }

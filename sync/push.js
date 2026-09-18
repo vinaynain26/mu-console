@@ -128,6 +128,12 @@ function rekey(db, slug, pending, sha, user, files, local = []) {
   const rename = db.prepare(`UPDATE page_content SET field_key = ?, value = ?, draft_value = ?, updated_at = ?, updated_by = ?
     WHERE page_slug = ? AND field_key = ?`);
   const fold = db.prepare("UPDATE page_content SET retired = 1, value = draft_value WHERE page_slug = ? AND field_key = ?");
+  /* the key the text now hashes to may belong to a retired row from an earlier
+     life, holding whatever the CMS showed there then (a picture's key is its
+     URL, its value an override). The source now reads this text at this
+     spot, so that row wakes carrying it, or the pull revives it stale. */
+  const revive = db.prepare(`UPDATE page_content SET retired = 0, value = ?, draft_value = ?, updated_at = ?, updated_by = ?
+    WHERE page_slug = ? AND field_key = ? AND retired = 1`);
   const moveRev = db.prepare("UPDATE revisions SET field_key = ? WHERE page_slug = ? AND field_key = ?");
   const moveCom = db.prepare("UPDATE comments SET field_key = ? WHERE page_slug = ? AND field_key = ?");
   const rev = db.prepare("INSERT INTO revisions (page_slug, field_key, old_value, new_value, changed_by, changed_at) VALUES (?,?,?,?,?,?)");
@@ -138,6 +144,7 @@ function rekey(db, slug, pending, sha, user, files, local = []) {
       const newKey = newKeyFor(p.__loc, text, p.type);
       if (newKey !== p.field_key && exists.get(slug, newKey)) {
         fold.run(slug, p.field_key);               // the editor typed another field's text: one field now
+        revive.run(text, text, now, user.name, slug, newKey);
       } else {
         rename.run(newKey, text, text, now, user.name, slug, p.field_key);
         moveRev.run(newKey, slug, p.field_key);
