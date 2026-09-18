@@ -44,3 +44,21 @@ test("identical content is a no-op", async () => {
   const out = await repo.commitAndPush({ files: { "src/App.tsx": same }, message: "noop", author: { name: "A", email: "a@b.c" } });
   assert.equal(out.sha, null);
 });
+
+test("pictures the CMS fetched into public/__l5e survive a reset, even when the repo does not ignore them", async () => {
+  const remote = makeRemote(FIXTURE_APP);
+  useRemote(remote.bare, path.join(tmpDir("sync-clone"), "repo"));
+  await repo.resetToRemote();
+  const clone = repo.cfg().clone;
+  assert.ok(!/__l5e/.test(fs.existsSync(path.join(clone, ".gitignore")) ? fs.readFileSync(path.join(clone, ".gitignore"), "utf8") : ""), "the fixture repo does not ignore it");
+  const pic = path.join(clone, "public/__l5e/assets-v1/abc/one.png");
+  fs.mkdirSync(path.dirname(pic), { recursive: true });
+  fs.writeFileSync(pic, "PNG");
+  /* the designer pushes; the next pull resets the clone to that */
+  remote.git(["pull", "-q", "origin", "main"]);
+  fs.appendFileSync(path.join(remote.work, "src/pages/Index.tsx"), "\n// designer\n");
+  remote.git(["commit", "-qam", "designer edit"]); remote.git(["push", "-q", "origin", "main"]);
+  await repo.resetToRemote();
+  assert.ok(fs.existsSync(pic), "still there after the reset");
+  assert.ok(!(await repo.git(["status", "--short"], { cwd: clone })).includes("__l5e"), "and git does not list it as untracked");
+});

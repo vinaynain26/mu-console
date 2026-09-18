@@ -97,10 +97,27 @@ export async function ensureClone() {
   return c.clone;
 }
 
+/* What the CMS puts into the clone that the repo must never be asked
+   about: the pictures fetched into public/__l5e. Listed in .git/info/exclude,
+   which no checkout, reset or clean ever touches, so a repo whose own
+   .gitignore does not name the folder cannot make a pull wipe 700MB of
+   pictures and fetch them all again. */
+const OURS = ["public/__l5e/", "bun.lock.lovable"];
+function excludeOurs(cwd) {
+  const f = path.join(cwd, ".git/info/exclude");
+  let cur = "";
+  try { cur = fs.readFileSync(f, "utf8"); } catch { /* fresh clone */ }
+  const missing = OURS.filter((l) => !cur.split("\n").includes(l));
+  if (!missing.length) return;
+  fs.mkdirSync(path.dirname(f), { recursive: true });
+  fs.appendFileSync(f, (cur && !cur.endsWith("\n") ? "\n" : "") + "# MU Console's own files\n" + missing.join("\n") + "\n");
+}
+
 /** Make the clone exactly origin/<branch>, discarding anything local. Returns the sha. */
 export async function resetToRemote() {
   const c = cfg();
   const cwd = await ensureClone();
+  excludeOurs(cwd);
   await git(["merge", "--abort"], { cwd }).catch(() => {});
   await git(["fetch", "-q", "origin", c.branch], { cwd, token: c.token });
   /* forced: build-time overlay edits and untracked files must never block

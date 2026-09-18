@@ -178,10 +178,14 @@
   function toast(msg, ms) {
     var t = el("div", "mu-toast", esc(msg));
     document.body.appendChild(t);
-    requestAnimationFrame(function () { t.classList.add("show"); });
+    var Mo = window.MU_MOTION;
+    /* centred by its own transform: mu-motion owns transform, so the -50%
+       ride along as the fixed part of it */
+    if (Mo) { Mo.set(t, { extra: "translateX(-50%)" }); Mo.materialize(t, { y: 8, blur: 6, response: 0.3 }); }
+    else t.classList.add("show");
     setTimeout(function () {
-      t.classList.remove("show");
-      setTimeout(function () { t.remove(); }, 220);
+      if (Mo) Mo.dematerialize(t, { y: 8 }).then(function () { t.remove(); });
+      else t.remove();
     }, ms || 2200);
   }
   async function api(url, opts) {
@@ -425,7 +429,22 @@
   }
 
   /* ---------------- toolbar ---------------- */
-  var bar, elCount, btnSave, btnPub, btnUndo, btnPeek;
+  var bar, elCount, btnSave, btnPub, btnUndo, btnPeek, segPill, btnMore, menu = null;
+  var M = window.MU_MOTION;   // springs; absent only if the boot failed to load it
+
+  var MORE = '<svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor" aria-hidden="true">' +
+    '<circle cx="4" cy="10" r="1.7"/><circle cx="10" cy="10" r="1.7"/><circle cx="16" cy="10" r="1.7"/></svg>';
+
+  /* One line of status: the count is the only bold word. A transient word
+     ("Saving…", "Saved") overrides it for a moment, then the count returns. */
+  var statusHold = null;
+  function setStatus(text, kind, ms) {
+    if (!elCount) return;
+    clearTimeout(statusHold);
+    elCount.className = "mu-count" + (kind ? " is-" + kind : "");
+    elCount.innerHTML = text;
+    if (ms) statusHold = setTimeout(refreshCount, ms);
+  }
 
   function buildBar() {
     bar = el("div", "mu-bar");
@@ -442,11 +461,16 @@
     btnPeek.addEventListener("click", function () { togglePeek(); });
     btnPeek.hidden = mode !== "edit";   // peeking is an editing move
     bar.appendChild(btnPeek);
+
+    /* mode: a segmented control whose selection pill springs between options */
     var seg = el("div", "mu-seg");
+    segPill = el("div", "mu-seg__pill");
+    seg.appendChild(segPill);
     [["browse", "Browse"], ["edit", "Edit"], ["arrange", "Arrange"]].forEach(function (m) {
       if (m[0] === "edit" && !CAN.edit) return;
       if (m[0] === "arrange" && !CAN.reorder) return;
       var b = el("button", m[0] === mode ? "on" : "", m[1]);
+      b.type = "button";
       b.dataset.mode = m[0];
       b.addEventListener("click", function () { setMode(m[0]); });
       seg.appendChild(b);
@@ -458,41 +482,147 @@
     bar.appendChild(el("div", "mu-sep"));
 
     if (CAN.edit) {
-      btnSave = el("button", "mu-btn", "Save draft");
+      btnUndo = el("button", "mu-btn", "Undo");
+      btnUndo.type = "button";
+      btnUndo.title = "Undo every unsaved change on this page";
+      btnUndo.disabled = true;
+      btnUndo.addEventListener("click", revertAll);
+      bar.appendChild(btnUndo);
+      btnSave = el("button", "mu-btn", "Save");
+      btnSave.type = "button";
+      btnSave.title = "Save these changes as a draft";
       btnSave.disabled = true;
       btnSave.addEventListener("click", save);
       bar.appendChild(btnSave);
     }
-    if (CAN.edit) {
-      btnUndo = el("button", "mu-btn", "Undo all");
-      btnUndo.disabled = true;
-      btnUndo.addEventListener("click", revertAll);
-      bar.appendChild(btnUndo);
-    }
     if (CAN.publish) {
       btnPub = el("button", "mu-btn pri", "Publish");
+      btnPub.type = "button";
       btnPub.addEventListener("click", publish);
       bar.appendChild(btnPub);
     }
-    var prev = el("a", "mu-btn", BOOT.preview ? "Live" : "Preview");
-    prev.href = "/page/" + SLUG + "?tab=" + encodeURIComponent(TAB) + (BOOT.preview ? "" : "&preview=1");
-    bar.appendChild(prev);
+    bar.appendChild(el("div", "mu-sep"));
 
-    var studio = el("a", "mu-btn", "Studio ↗");
-    studio.href = (BOOT.consoleBase || "") + BOOT.consoleUrl + "/page/" + SLUG;
-    bar.appendChild(studio);
-
-    bar.appendChild(el("span", "mu-role", esc(BOOT.user.role)));
+    /* everything that is not editing lives one level deeper */
+    btnMore = el("button", "mu-bar__more", MORE);
+    btnMore.type = "button";
+    btnMore.title = "More";
+    btnMore.setAttribute("aria-label", "More");
+    btnMore.setAttribute("aria-haspopup", "menu");
+    btnMore.addEventListener("click", function (e) { e.stopPropagation(); toggleMenu(); });
+    bar.appendChild(btnMore);
 
     document.body.appendChild(bar);
+    if (M) {
+      M.pressFeedback(bar, ".mu-btn:not([disabled]), .mu-seg button, .mu-bar__peek, .mu-bar__more");
+      placeSegPill(false);
+      M.set(bar, { extra: "translateX(-50%)" });   // centred by its own transform, which mu-motion now owns
+      M.materialize(bar, { y: 10, blur: 6, response: 0.35 });
+      watchBarCover();
+    }
     refreshCount();
+  }
+
+  /* The bar must never sit on the words someone is reading. After the page
+     settles, look through the bar at what is under it; site text there
+     lifts the bar out of the way, on a spring, and it comes back down when
+     the text has scrolled on. */
+  var barLift = 0, coverTimer = null;
+  function checkBarCover() {
+    if (!bar || !document.elementsFromPoint) return;
+    var r = bar.getBoundingClientRect();
+    var covering = false;
+    [0.15, 0.5, 0.85].forEach(function (f) {
+      if (covering) return;
+      var stack = document.elementsFromPoint(r.left + r.width * f, r.top + r.height / 2 + barLift);
+      for (var i = 0; i < stack.length; i++) {
+        var n = stack[i];
+        if (!n.closest || n.closest(".mu-bar, .mu-side, .mu-menu, .mu-toast, .mu-pop, .mu-pill")) continue;
+        var txt = (n.childNodes.length && Array.prototype.some.call(n.childNodes, function (c) { return c.nodeType === 3 && c.nodeValue.trim().length > 2; }));
+        if (txt && /^(P|H1|H2|H3|H4|H5|H6|A|SPAN|LI|BUTTON|LABEL|STRONG|EM|SMALL)$/.test(n.tagName)) { covering = true; }
+        break;   // only the topmost thing under the bar matters
+      }
+    });
+    var want = covering ? -56 : 0;
+    if (want !== barLift) { barLift = want; M.spring(bar, { y: want }, { damping: 1, response: 0.3 }); }
+  }
+  function watchBarCover() {
+    var later = function () { clearTimeout(coverTimer); coverTimer = setTimeout(checkBarCover, 160); };
+    window.addEventListener("scroll", later, { passive: true, capture: true });
+    window.addEventListener("resize", later);
+    later();
+  }
+
+  /* the selection pill takes the shape of the chosen option */
+  function placeSegPill(animate) {
+    if (!segPill) return;
+    var on = bar.querySelector(".mu-seg button.on");
+    if (!on) { segPill.style.setProperty("opacity", "0", "important"); return; }
+    segPill.style.setProperty("opacity", "1", "important");
+    segPill.style.setProperty("width", on.offsetWidth + "px", "important");
+    if (!M) { segPill.style.setProperty("left", on.offsetLeft + "px", "important"); return; }
+    if (animate) M.spring(segPill, { x: on.offsetLeft }, { damping: 1, response: 0.28 });
+    else M.set(segPill, { x: on.offsetLeft });
+  }
+
+  function toggleMenu(open) {
+    var want = open == null ? !menu : open;
+    if (!want) {
+      if (!menu) return;
+      var going = menu; menu = null;
+      btnMore.classList.remove("on");
+      btnMore.setAttribute("aria-expanded", "false");
+      if (M) M.dematerialize(going, { y: 6 }).then(function () { going.remove(); }); else going.remove();
+      return;
+    }
+    if (menu) return;
+    menu = el("div", "mu-menu");
+    menu.setAttribute("role", "menu");
+    var item = function (label, href, hint) {
+      var a = el("a", "mu-menu__item", "<span>" + esc(label) + "</span>" + (hint ? "<span>" + esc(hint) + "</span>" : ""));
+      a.href = href; a.setAttribute("role", "menuitem");
+      return a;
+    };
+    menu.appendChild(item(BOOT.preview ? "Live page" : "Preview draft",
+      "/page/" + SLUG + "?tab=" + encodeURIComponent(TAB) + (BOOT.preview ? "" : "&preview=1")));
+    menu.appendChild(item("Open in Studio", (BOOT.consoleBase || "") + BOOT.consoleUrl + "/page/" + SLUG, "↗"));
+    menu.appendChild(el("div", "mu-menu__line"));
+    menu.appendChild(el("div", "mu-menu__who", "<b>" + esc(BOOT.user.name || BOOT.user.email || "") + "</b>" + esc(BOOT.user.role || "")));
+    document.body.appendChild(menu);
+    /* anchored to its button: it grows out of the corner it came from */
+    var r = btnMore.getBoundingClientRect(), mw = menu.offsetWidth, mh = menu.offsetHeight;
+    menu.style.setProperty("left", Math.max(12, Math.min(r.right - mw, window.innerWidth - mw - 12)) + "px", "important");
+    menu.style.setProperty("top", (r.top - mh - 8) + "px", "important");
+    btnMore.classList.add("on");
+    btnMore.setAttribute("aria-expanded", "true");
+    if (M) M.materialize(menu, { y: 6, scale: 0.96, response: 0.24 });
+    var away = function (e) {
+      if (menu && !menu.contains(e.target) && e.target !== btnMore) { toggleMenu(false); document.removeEventListener("pointerdown", away, true); }
+    };
+    setTimeout(function () { document.addEventListener("pointerdown", away, true); }, 0);
   }
 
   function refreshCount() {
     var n = dirty.size;
-    elCount.innerHTML = n ? "<b>" + n + "</b> unsaved" : (BOOT.preview ? "Previewing draft" : "No changes");
+    clearTimeout(statusHold);
+    if (elCount) {
+      elCount.className = "mu-count";
+      elCount.innerHTML = n ? "<b>" + n + "</b> unsaved" : (BOOT.preview ? "Previewing draft" : "No changes");
+    }
     if (btnSave) btnSave.disabled = !n;
     if (btnUndo) btnUndo.disabled = !n;
+    refreshFoot();
+  }
+
+  /* the drawer's one line of reassurance follows the same truth */
+  function refreshFoot() {
+    var f = side && side.querySelector(".mu-side__foot");
+    if (!f) return;
+    var n = dirty.size;
+    f.className = "mu-side__foot" + (n ? " is-dirty" : "");
+    f.innerHTML = '<span class="mu-dot"></span>' + (n
+      ? "Draft \u00b7 <b>" + n + " unsaved</b>"
+      : "Nothing changes on the site until you publish");
   }
 
   /* ---------------- modes ---------------- */
@@ -505,15 +635,77 @@
     Array.prototype.forEach.call(bar.querySelectorAll(".mu-seg button"), function (b) {
       b.classList.toggle("on", b.dataset.mode === m);
     });
+    placeSegPill(true);
+    toggleMenu(false);
     if (m === "arrange") enterArrange(); else exitArrange();
     if (m === "edit") {
       loadComments();
-      loadMeta().then(function () { addSectionPills(); watchDom(); watchScrollAway(); });
+      loadMeta().then(function () {
+        addSectionPills(); watchDom(); watchScrollAway(); watchHover();
+        /* one breath of gold over everything editable, then rest */
+        document.body.classList.add("mu-wash");
+        setTimeout(function () { document.body.classList.remove("mu-wash"); }, 800);
+      });
     } else {
+      unwatchHover();
       removeSectionPills();
       unwatchDom();
       unwatchScrollAway();
     }
+  }
+
+  /* ---------------- the name of what the pointer is over ----------------
+     In Edit mode a field shows its ring on hover (CSS) and, above its top-left
+     corner, a small chip saying what it is: "Heading", "Button label",
+     "Picture". One chip, moved rather than made, hidden the moment the
+     pointer leaves editable ground. */
+  var chip = null, chipFor = null, hoverOn = false;
+  function chipText(node) {
+    if (node.hasAttribute("data-c-media")) return node.tagName === "VIDEO" ? "Video" : "Picture";
+    if (node.hasAttribute("data-c-link")) return "Link";
+    if (node.hasAttribute("data-c-state")) return "State";
+    var f = meta.get(node.dataset.c);
+    return f ? friendly(f.tag) : "Text";
+  }
+  function showChip(node) {
+    if (!chip) { chip = el("div", "mu-chip"); document.body.appendChild(chip); }
+    chipFor = node;
+    chip.textContent = chipText(node);
+    var r = node.getBoundingClientRect();
+    var x = Math.max(8, Math.min(r.left, window.innerWidth - chip.offsetWidth - 8));
+    var y = r.top - 28 < 8 ? r.bottom + 6 : r.top - 28;
+    chip.style.setProperty("left", x + "px", "important");
+    chip.style.setProperty("top", y + "px", "important");
+    if (M) M.materialize(chip, { y: 3, blur: 4, scale: 0.97, response: 0.2 });
+  }
+  function hideChip() {
+    if (!chip || !chipFor) return;
+    chipFor = null;
+    var c = chip;
+    if (M) M.spring(c, { opacity: 0, y: 3, blur: 4 }, { damping: 1, response: 0.16 });
+    else c.style.setProperty("opacity", "0", "important");
+  }
+  function onHover(e) {
+    if (mode !== "edit" || live) { hideChip(); return; }
+    var t = e.target && e.target.closest ? e.target.closest("[data-c], [data-c-media], [data-c-link], [data-c-state]") : null;
+    if (t && t.closest(".mu-side, .mu-bar, .mu-pill, .mu-pop, .mu-menu")) t = null;
+    if (!t) { hideChip(); return; }
+    if (t !== chipFor) showChip(t);
+  }
+  function watchHover() {
+    if (hoverOn) return;
+    hoverOn = true;
+    document.addEventListener("pointermove", onHover, { passive: true });
+    document.addEventListener("pointerleave", hideChip);
+    window.addEventListener("scroll", hideChip, { passive: true, capture: true });
+  }
+  function unwatchHover() {
+    if (!hoverOn) return;
+    hoverOn = false;
+    document.removeEventListener("pointermove", onHover);
+    document.removeEventListener("pointerleave", hideChip);
+    window.removeEventListener("scroll", hideChip, { capture: true });
+    hideChip();
   }
 
   /* ---------------- continuous adoption ----------------
@@ -1289,6 +1481,7 @@
     media: "Image or video", image: "Image", link: "Link", state: "State", rich: "Text block",
     "aria-label": "Screen-reader label", alt: "Image description", title: "Page title",
     placeholder: "Placeholder", name: "Name", role: "Role", headline: "Headline",
+    textpath: "Circle text", textPath: "Circle text", src: "Picture", poster: "Poster frame", href: "Link", to: "Link",
     quote: "Quote", pullQuote: "Pull quote", closing: "Closing line", tag: "Tag",
     stat: "Stat", eyebrow: "Eyebrow", heading: "Heading", body: "Paragraph",
     proof: "Proof point", chips: "Chip", cta: "Button text", description: "Description",
@@ -1333,15 +1526,20 @@
     if (!side) return;
     var going = side;
     side = null;
-    /* a sheet retreats along its own edge — full travel, critically damped,
-       nothing else changing about it while it goes */
-    var instant = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (instant) { going.remove(); return; }
+    /* a sheet retreats along its own edge, critically damped, and is only
+       removed once it has arrived there: reopened mid-flight, openSidebar
+       takes it back from wherever it is */
     going.classList.add("mu-side--out");
-    var done = false;
-    var finish = function () { if (!done) { done = true; going.remove(); } };
-    going.addEventListener("animationend", finish, { once: true });
-    setTimeout(finish, 400);   // belt for a lost animationend
+    leavingSide = going;
+    var gone = function () { if (leavingSide === going) { leavingSide = null; going.remove(); } };
+    if (M) M.spring(going, { x: sideOffscreenX(going) }, { damping: 1, response: 0.35 }).then(gone);
+    else gone();
+  }
+  var leavingSide = null;
+  /* where "off the edge" is for this sheet, in px, signed by its edge */
+  function sideOffscreenX(el) {
+    var w = el.offsetWidth || 400;
+    return el.classList.contains("mu-side--left") ? -w : w;
   }
 
   /* ---------------- keeping the edited thing in sight ----------------
@@ -1391,8 +1589,15 @@
   function setDrawerEdge(edge) {
     if (!side) return;
     var left = edge === "left";
+    var was = side.classList.contains("mu-side--left");
     side.classList.toggle("mu-side--left", left);
     document.body.classList.toggle("mu-side-left", left);
+    if (M && was !== left) {
+      /* it changes edge in place: arrive from the new edge, settle at rest */
+      var peekingNow = side.classList.contains("mu-side--peek");
+      M.set(side, { x: sideOffscreenX(side) });
+      if (!peekingNow) M.spring(side, { x: 0 }, { damping: 1, response: 0.35 });
+    }
   }
 
   /* Peek: step the panel off its edge so the page can be read, keeping every
@@ -1408,6 +1613,7 @@
     closePop();
     var peeking = side.classList.toggle("mu-side--peek", on);
     document.body.classList.toggle("mu-side-peek", peeking);   // the toolbar re-centres
+    if (M) M.spring(side, { x: peeking ? sideOffscreenX(side) : 0 }, { damping: 1, response: 0.35 });
     var btn = document.querySelector("[data-peek]");
     if (btn) {
       btn.classList.toggle("on", peeking);
@@ -1475,6 +1681,7 @@
         : "");
     document.body.appendChild(pop);
     placePop(node);
+    if (M) { M.materialize(pop, { y: -6, scale: 0.97, blur: 6, response: 0.24 }); M.pressFeedback(pop, ".mu-mini, .mu-pop__x, .mu-revert, .mu-reset, .mu-opt"); }
 
     var input = pop.querySelector("[data-f]");
     pop.querySelector(".mu-pop__x").addEventListener("click", closePop);
@@ -1602,17 +1809,21 @@
     }
 
     if (!side) {
-      var leaving = document.querySelector(".mu-side--out");
-      if (leaving) leaving.remove();   // a reopen mid-exit clears the departing sheet
-      side = el("div", "mu-side");
-      side.classList.add("mu-side--gliding");   // solid while moving: blur is not animatable cheaply
-      setTimeout(function () { if (side) side.classList.remove("mu-side--gliding"); }, 400);
-      /* The site scrolls through Lenis, which takes the wheel everywhere and
-         would scroll the PAGE under a scrolling sidebar. Lenis honours this
-         attribute on anything in the event's path. */
-      side.setAttribute("data-lenis-prevent", "");
-      document.body.appendChild(side);
+      if (leavingSide && leavingSide.isConnected) {
+        /* reopened mid-exit: the same sheet turns around from where it is */
+        side = leavingSide; leavingSide = null;
+        side.classList.remove("mu-side--out");
+      } else {
+        side = el("div", "mu-side");
+        /* The site scrolls through Lenis, which takes the wheel everywhere and
+           would scroll the PAGE under a scrolling sidebar. Lenis honours this
+           attribute on anything in the event's path. */
+        side.setAttribute("data-lenis-prevent", "");
+        document.body.appendChild(side);
+        if (M) M.set(side, { x: sideOffscreenX(side) });
+      }
       document.body.classList.add("mu-side-open");
+      if (M) M.spring(side, { x: 0 }, { damping: 1, response: 0.35 });
     }
 
     // land on the tab that holds what was clicked: an image lands on
@@ -1648,24 +1859,57 @@
     side.innerHTML =
       '<div class="mu-side__head">' +
         '<div class="mu-side__title">' +
-          '<div class="mu-side__eyebrow">You’re editing</div>' +
-          '<div class="mu-side__h">' + esc(b.title) + "</div>" +
+          '<div class="mu-side__eyebrow">' + esc(pageName()) + '</div>' +
+          '<div class="mu-side__h" title="' + esc(b.title) + '">' + esc(sectionName(sectionKey, b)) + "</div>" +
         "</div>" +
         '<button class="mu-side__x" type="button" title="Close (Esc)" aria-label="Close">✕</button>' +
       "</div>" +
-      '<div class="mu-tabs">' + tabsHtml + "</div>" +
+      '<div class="mu-tabs"><div class="mu-tabs__pill"></div>' + tabsHtml + "</div>" +
       '<div class="mu-side__body" id="mu-side-body"></div>' +
-      '<div class="mu-side__foot">Everything here is a <b>draft</b> — nothing changes on the live site until you press Publish.</div>';
+      '<div class="mu-side__foot"></div>';
 
     side.querySelector(".mu-side__x").addEventListener("click", closeSidebar);
     side.querySelectorAll("[data-tab]").forEach(function (t) {
       t.addEventListener("click", function () {
-        if (t.disabled) return;
+        if (t.disabled || t.dataset.tab === sideTab) return;
         sideTab = t.dataset.tab;
-        renderTab(b);
+        renderTab(b, null, false, true);
       });
     });
+    if (M) M.pressFeedback(side, ".mu-tab, .mu-side__x, .mu-btn, .mu-mini, .mu-ib, .mu-add, .mu-aibtn, .mu-revert, .mu-reset, .mu-opt, .mu-side__peek");
+    refreshFoot();
     renderTab(b, focusKey, doFocus);
+  }
+
+  /* Where am I: the page, then the section by the words a reader knows it
+     by. A section's name is the first heading inside it; failing that the
+     component's own title; never "Section 2" when anything better exists. */
+  function pageName() {
+    var path = location.pathname.replace(/^\/|\/$/g, "");
+    if (!path) return "Home";
+    var t = path.split("/").pop().replace(/[-_]+/g, " ");
+    return t.charAt(0).toUpperCase() + t.slice(1);
+  }
+  function sectionName(sectionKey, b) {
+    var host = document.querySelector('[data-sec="' + CSS.escape(sectionKey) + '"]');
+    var h = host && host.querySelector("h1, h2, h3");
+    var t = h ? (h.innerText || h.textContent || "").replace(/\s+/g, " ").trim() : "";
+    if (t.length > 44) t = t.slice(0, 43).replace(/\s+\S*$/, "") + "\u2026";
+    if (t && t.replace(/[^A-Za-z0-9\u0900-\u097F]/g, "").length >= 3) return t;
+    return b.title || "Section";
+  }
+
+  /* the selection pill of the tab control takes the shape of the active tab */
+  function placeTabPill(animate) {
+    var pill = side && side.querySelector(".mu-tabs__pill");
+    var on = side && side.querySelector(".mu-tab.on");
+    if (!pill) return;
+    if (!on) { pill.style.setProperty("opacity", "0", "important"); return; }
+    pill.style.setProperty("opacity", "1", "important");
+    pill.style.setProperty("width", on.offsetWidth + "px", "important");
+    if (!M) { pill.style.setProperty("left", on.offsetLeft + "px", "important"); return; }
+    if (animate) M.spring(pill, { x: on.offsetLeft }, { damping: 1, response: 0.28 });
+    else M.set(pill, { x: on.offsetLeft });
   }
 
   function tabBtn(key, label, n) {
@@ -1674,10 +1918,11 @@
       '<span class="mu-tab__n">' + n + "</span></button>";
   }
 
-  function renderTab(b, focusKey, doFocus) {
+  function renderTab(b, focusKey, doFocus, switched) {
     side.querySelectorAll("[data-tab]").forEach(function (t) {
       t.classList.toggle("on", t.dataset.tab === sideTab);
     });
+    placeTabPill(!!switched);
     var body = side.querySelector("#mu-side-body");
     var html;
     if (sideTab === "all") {
@@ -1719,7 +1964,8 @@
           if (cl !== undefined && cl !== cur) {
             cur = cl;
             var ct = cl ? headTitle(cl) : "";
-            if (ct && ct !== b.title) html += '<div class="mu-grp__h">' + esc(ct) + "</div>";
+            var shownTitle = side.querySelector(".mu-side__h") ? side.querySelector(".mu-side__h").textContent : b.title;
+            if (ct && ct !== b.title && ct.replace(/\u2026$/, "") !== shownTitle.replace(/\u2026$/, "").slice(0, ct.length)) html += '<div class="mu-grp__h">' + esc(ct) + "</div>";
           }
           if (item.kind === "button") html += buttonRow(item.group);
           else if (item.kind === "media") html += mediaRow(item.field);
@@ -1737,7 +1983,7 @@
         if (b.lists.length) {
           var nItems = b.lists.reduce(function (n, f) { return n + listItemsOf(f).length; }, 0);
           html = '<div class="mu-hint" style="margin:0 0 14px">This section is a collection of ' +
-            nItems + ' slides/items — add, reorder, duplicate or hide them on the ' +
+            nItems + ' items. Add, reorder, duplicate or hide them on the ' +
             '<button type="button" class="mu-mini" data-jump-items>Items ' + nItems + '</button> tab.</div>' + html;
         }
         (b.listsElsewhere || []).forEach(function (lf) {
@@ -1760,10 +2006,11 @@
     var count = sideTab === "all" ? b.all.length + b.details.length
               : sideTab === "buttons" ? b.buttons.length
               : sideTab === "items" ? b.lists.length : b.images.length;
-    body.innerHTML = (count > 5
+    body.innerHTML = (count > 12
       ? '<input type="search" class="mu-filter" placeholder="Search this section…" data-filter>'
       : "") + '<div data-list>' + html + "</div>";
     body.scrollTop = 0;
+    if (switched && M) M.materialize(body.querySelector("[data-list]"), { y: 6, blur: 0, scale: 1, response: 0.22 });
 
     var filter = body.querySelector("[data-filter]");
     if (filter) {
@@ -1982,6 +2229,14 @@
     return null;
   }
 
+  var IC = {
+    up: '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5"/></svg>',
+    down: '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v10M3.5 8.5 8 13l4.5-4.5"/></svg>',
+    eye: '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><path d="M1.5 8S4 3.5 8 3.5 14.5 8 14.5 8 12 12.5 8 12.5 1.5 8 1.5 8Z"/><circle cx="8" cy="8" r="2"/></svg>',
+    eyeOff: '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 2l12 12M6.6 6.7A2 2 0 0 0 9.3 9.4M4.2 4.5C2.5 5.8 1.5 8 1.5 8s2.5 4.5 6.5 4.5c1.2 0 2.3-.4 3.2-1M6.9 3.7c.4-.1.7-.2 1.1-.2 4 0 6.5 4.5 6.5 4.5s-.6 1.1-1.7 2.2"/></svg>',
+    dup: '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M10.5 5.5v-2a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2"/></svg>',
+    trash: '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5h11M6 4.5v-2h4v2M4 4.5l.7 9h6.6l.7-9"/></svg>',
+  };
   function listPanel(f) {
     var items = listItemsOf(f);
     var name = listName(f);
@@ -1998,21 +2253,20 @@
           "</span>" +
         "</div>" +
         '<div class="mu-item__acts">' +
-          '<button type="button" class="mu-ib" data-lact="up" title="Move up">↑</button>' +
-          '<button type="button" class="mu-ib" data-lact="down" title="Move down">↓</button>' +
-          '<button type="button" class="mu-ib" data-lact="hide">' + (it.hidden ? "Show" : "Hide") + "</button>" +
-          '<button type="button" class="mu-ib" data-lact="dup">Duplicate</button>' +
-          (it.cms ? '<button type="button" class="mu-ib mu-ib--danger" data-lact="del">Delete</button>' : "") +
-          (goto_ ? '<button type="button" class="mu-ib" data-goto="' + esc(goto_) + '">Edit text →</button>' : "") +
+          '<button type="button" class="mu-ib" data-lact="up" title="Move up" aria-label="Move up">' + IC.up + "</button>" +
+          '<button type="button" class="mu-ib" data-lact="down" title="Move down" aria-label="Move down">' + IC.down + "</button>" +
+          '<button type="button" class="mu-ib" data-lact="hide" title="' + (it.hidden ? "Show on the page" : "Hide from the page") + '">' + (it.hidden ? IC.eye : IC.eyeOff) + (it.hidden ? " Show" : " Hide") + "</button>" +
+          '<button type="button" class="mu-ib" data-lact="dup" title="Duplicate">' + IC.dup + " Duplicate</button>" +
+          (it.cms ? '<button type="button" class="mu-ib mu-ib--danger" data-lact="del" title="Delete">' + IC.trash + " Delete</button>" : "") +
+          (goto_ ? '<button type="button" class="mu-ib" data-goto="' + esc(goto_) + '" title="Edit this item\u2019s text">Edit \u2192</button>' : "") +
         "</div>" +
       "</div>";
     }).join("");
-    return section(name + " — " + shown + " on the page",
+    return section(name + " \u00b7 " + shown + " on the page",
       rows +
       '<button type="button" class="mu-add" data-ladd="' + esc(f.key) + '">＋ Add ' +
         esc(name.replace(/s$/i, "").toLowerCase() || "item") + "</button>" +
-      '<div class="mu-hint">Reordering and hiding save to your draft immediately. ' +
-      "Built-in items can be hidden, never deleted. Click an item’s name to edit its text.</div>");
+      '<div class="mu-hint">Moves and hiding save to your draft at once. Built-in items can be hidden, not deleted.</div>');
   }
 
   /* A carousel shows one item at a time, and a new one lands at the end,
@@ -2218,7 +2472,7 @@
         ? '<div class="mu-rt">' +
             '<div class="mu-rt__bar">' +
               stylesForBlock(f.key).map(function (h) {
-                return '<button type="button" data-cls="' + esc(h.cls) + '" title="' + esc(h.label + " \u2014 ." + h.cls) + '"' +
+                return '<button type="button" data-cls="' + esc(h.cls) + '" title="' + esc(h.label + " (." + h.cls + ")") + '"' +
                   (h.italic ? ' style="font-family:Fraunces,Georgia,serif;font-style:italic"' : "") +
                   ">" + esc(h.label) + "</button>";
               }).join("") +
@@ -2268,12 +2522,13 @@
         (g.state.options || []).map(function (o) {
           return '<option value="' + esc(o.value) + '"' + (o.value === cur ? " selected" : "") + ">" + esc(o.label) + "</option>";
         }).join("") +
-        (known ? "" : '<option value="' + esc(cur) + '" selected>Custom — ' + esc(cur || "(none)") + "</option>") +
+        (known ? "" : '<option value="' + esc(cur) + '" selected>Custom: ' + esc(cur || "(none)") + "</option>") +
         "</select>";
     }
     return rows + "</div>";
   }
 
+  var PLAY = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>';
   function mediaRow(f) {
     var v = valueOf(f.key);
     var poster = valueOf(f.key + "@poster");
@@ -2286,32 +2541,23 @@
        whole job; there is no image slot to turn into a video */
     var ownPlayer = !!mn && mn.tagName === "VIDEO";
     var vid = ownPlayer || isVideo(v || shown);
-    var head = ownPlayer
-      ? '<div class="mu-card__h">Video \u00b7 ' + esc(f.label || "") + "</div>"
-      : !v && f.label && !/\.(png|jpe?g|webp|svg|gif|avif|mp4|webm)$/i.test(f.label)
-      ? '<div class="mu-card__h">Image \u00b7 ' + esc(f.label) + "</div>" : "";
-    return '<div class="mu-card" data-row="' + esc(f.key) + '">' + head +
+    var what = ownPlayer || vid ? "Video" : "Picture";
+    var name = (f.label || "").replace(/\.(png|jpe?g|webp|svg|gif|avif|mp4|webm)$/i, "").replace(/[-_]+/g, " ");
+    return '<div class="mu-card" data-row="' + esc(f.key) + '">' +
       '<div class="mu-media-row">' +
         '<div class="mu-thumb">' + (shown
-          ? (vid ? '<video src="' + esc(shown) + '" muted playsinline preload="metadata"></video>'
+          ? (vid ? '<video src="' + esc(shown) + '" muted playsinline preload="metadata"></video>' +
+                   '<div class="mu-thumb__play"><span>' + PLAY + '</span></div>'
                  : '<img src="' + esc(shown) + '" alt="" loading="lazy">')
-          : '<span>empty</span>') + "</div>" +
+          : '<span>Empty slot</span>') + "</div>" +
         '<div class="mu-media-fields">' +
-          '<label class="mu-lab"><span>Source</span>' +
+          '<label class="mu-lab"><span>' + esc(what + (name ? " \u00b7 " + name : "")) + "</span>" +
             '<button type="button" class="mu-revert" data-revert="' + esc(f.key) + '" title="Undo this ' + (ownPlayer ? "video" : "image") + '">↺ Undo</button>' +
             '<button type="button" class="mu-reset" data-reset="' + esc(f.key) + '"' + (v ? "" : " hidden") +
-              ' title="Put back the file the site shipped with">Reset to original</button>' +
+              ' title="Put back the file the site shipped with">Original</button>' +
           "</label>" +
           '<input type="text" class="mu-mono" data-f="' + esc(f.key) + '" value="' + esc(v) + '" placeholder="' +
-            (ownPlayer ? "https://… link to an .mp4 or .webm" : "https://…") + '">' +
-          '<div class="mu-hint">' + (ownPlayer
-            ? (v ? "Custom video. Reset puts back the film the site shipped with."
-                 : "Showing the built-in film. Paste an .mp4 or .webm URL to replace it.")
-            : !v && shown
-            ? "Showing the built-in image — paste a URL to replace it, clear to restore."
-            : vid
-            ? "Rendering as a video with the house play button."
-            : "Paste an .mp4 or .webm to turn this into a video.") + "</div>" +
+            (ownPlayer ? "Paste a video URL (.mp4 or .webm)" : "Paste an image or video URL") + '">' +
         "</div>" +
       "</div>" +
       '<div data-poster="' + esc(f.key) + '"' + (vid && !ownPlayer ? "" : ' style="display:none"') + ">" +
@@ -2328,7 +2574,19 @@
       'a[data-c-link="' + sel + '"], [data-c-state="' + sel + '"]');
   }
 
+  function fitThumbs(root) {
+    Array.prototype.forEach.call(root.querySelectorAll(".mu-thumb img"), function (img) {
+      var judge = function () {
+        var w = img.naturalWidth, h = img.naturalHeight;
+        if (!w || !h) return;
+        var a = w / h;
+        img.classList.toggle("is-contain", w < 500 || h < 250 || a < 1.15 || a > 2.6 || /\.svg(\?|$)/i.test(img.currentSrc || img.src));
+      };
+      if (img.complete) judge(); else img.addEventListener("load", judge, { once: true });
+    });
+  }
   function wireSidebar() {
+    fitThumbs(side);
     /* the map between a row and the thing it edits: hovering the row lights
        the element up on the page; clicking the row's label glides to it */
     side.querySelectorAll("[data-row]").forEach(function (row) {
@@ -2471,9 +2729,16 @@
       t.addEventListener("click", function () {
         var box = side.querySelector('[data-aibox="' + CSS.escape(t.dataset.aitoggle) + '"]');
         if (!box) return;
-        box.hidden = !box.hidden;
-        t.classList.toggle("on", !box.hidden);
-        if (!box.hidden) box.querySelector(".mu-ai__ins").focus();
+        if (box.hidden) {
+          box.hidden = false;
+          t.classList.add("on");
+          if (M) M.materialize(box, { y: -4, blur: 6, scale: 0.98, response: 0.24 });
+          box.querySelector(".mu-ai__ins").focus();
+        } else {
+          t.classList.remove("on");
+          var hideBox = function () { box.hidden = true; };
+          if (M) M.dematerialize(box, { y: -4 }).then(hideBox); else hideBox();
+        }
       });
     });
     side.querySelectorAll("[data-ai]").forEach(function (b) {
@@ -2888,7 +3153,7 @@
       (t.textContent && t.textContent.trim().length >= 3);
     if (looksLikeContent && Date.now() - lastNoFieldToast > 3000) {
       lastNoFieldToast = Date.now();
-      toast("This text is computed by the site — it can’t be edited here.", 2600);
+      toast("This text is computed by the site, so it can’t be edited here.", 2600);
     }
   }, true);
 
@@ -2912,7 +3177,7 @@
   async function save() {
     if (!dirty.size) return;
     btnSave.disabled = true;
-    btnSave.innerHTML = '<span class="mu-spin"></span> Saving';
+    setStatus("Saving\u2026", "busy");
     try {
       var changes = {};
       dirty.forEach(function (v, k) { changes[k] = v; });
@@ -2923,9 +3188,9 @@
       });
       dirty.clear();
       Array.prototype.forEach.call(document.querySelectorAll(".mu-dirty"), function (n) { n.classList.remove("mu-dirty"); });
-      toast("Saved " + out.saved + " change" + (out.saved === 1 ? "" : "s") + " as a draft");
-    } catch (e) { toast(e.message, 4000); }
-    finally { btnSave.innerHTML = "Save draft"; refreshCount(); }
+      refreshCount();
+      setStatus("Saved", "ok", 2000);
+    } catch (e) { toast(e.message, 4000); refreshCount(); }
   }
 
   async function publish() {
@@ -2934,13 +3199,15 @@
       await save();
     }
     if (!confirm("Publish all drafts on this page to the live site?")) return;
-    btnPub.innerHTML = '<span class="mu-spin"></span> Publishing';
+    btnPub.disabled = true;
+    setStatus("Publishing\u2026", "busy");
     try {
       var out = await api("/api/pages/" + SLUG + "/publish", { method: "POST" });
+      setStatus(out.published ? "Published" : "Nothing to publish", out.published ? "ok" : "", 2500);
       toast(out.message || (out.published ? "Published " + out.published + " change(s), live now" : "Nothing to publish"), out.message ? 6000 : undefined);
       if (out.published) setTimeout(function () { location.reload(); }, 900);
-    } catch (e) { toast(e.message, 4000); }
-    finally { btnPub.innerHTML = "Publish"; }
+    } catch (e) { toast(e.message, 4000); refreshCount(); }
+    finally { btnPub.disabled = false; }
   }
 
   /* ---------------- arrange ---------------- */

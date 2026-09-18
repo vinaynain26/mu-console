@@ -14,7 +14,7 @@
  * Dependencies are installed once into the clone (node_modules is gitignored
  * there, so a reset never removes them).
  */
-import { spawn } from "node:child_process";
+import { spawn, execFileSync } from "node:child_process";
 import fs from "node:fs";
 import net from "node:net";
 import path from "node:path";
@@ -64,11 +64,30 @@ export function buildable() {
   } catch { return false; }
 }
 
+/* A Lovable export was installed with bun, and bun tolerates the peer
+   clashes npm refuses (react-three/fiber against a newer React). Its
+   bun.lock, though, resolves every package to Lovable's private npm cache,
+   which answers 403 from anywhere else, so the lockfile is set aside and bun
+   resolves the same ranges from the public registry. Without bun: npm, with
+   peers relaxed. */
+let bunSeen = null;
+const hasBun = () => {
+  if (bunSeen === null) { try { execFileSync("bun", ["--version"], { stdio: "ignore" }); bunSeen = true; } catch { bunSeen = false; } }
+  return bunSeen;
+};
+export function installCommand(clone, { bun = hasBun() } = {}) {
+  if (bun && fs.existsSync(path.join(clone, "bun.lock"))) return ["bun", ["install"]];
+  return ["npm", ["install", "--no-audit", "--no-fund", "--no-package-lock", "--legacy-peer-deps", "--loglevel=error"]];
+}
+
 export async function ensureDeps() {
   const clone = repo.cfg().clone;
   if (fs.existsSync(path.join(clone, "node_modules/vite/bin/vite.js"))) return false;
-  console.log("  build: installing the app's dependencies (once)…");
-  await run("npm", ["install", "--no-audit", "--no-fund", "--no-package-lock", "--loglevel=error"], { cwd: clone });
+  const [cmd, args] = installCommand(clone);
+  const lock = path.join(clone, "bun.lock");
+  if (cmd === "bun" && fs.existsSync(lock)) fs.renameSync(lock, lock + ".lovable");   // the next reset puts it back
+  console.log(`  build: installing the app's dependencies with ${cmd} (once)…`);
+  await run(cmd, args, { cwd: clone, timeout: 900e3 });
   return true;
 }
 
@@ -128,7 +147,7 @@ export function rebuild({ sha = null } = {}) {
         applyOverlay(clone, { cmsUrl: CMS_URL, homeSlug: repo.cfg().homeSlug });
         /* the pictures the repo points at but does not carry; public/ is
            gitignored there, so one fetch outlives every reset */
-        const a = await provisionAssets(clone, { from: assetsBase() });
+        const a = await provisionAssets(clone, { from: assetsBase(), timeout: 900e3 });   // a 200MB film needs minutes, not seconds
         if (a.fetched || a.failed.length) {
           console.log(`  assets: ${a.fetched} fetched, ${a.present} present, ${a.failed.length} missing from ${assetsBase()}` +
             (a.failed.length ? "\n" + a.failed.slice(0, 5).map((f) => "    " + f.url + " (" + f.error + ")").join("\n") + (a.failed.length > 5 ? "\n    …" : "") : ""));

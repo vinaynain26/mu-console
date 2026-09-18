@@ -160,6 +160,7 @@
 
     try {
       await load(CMS + "/mu-assets/css/inline-editor.css", true);
+      await load(CMS + "/mu-assets/js/mu-motion.js", false);   // springs, before anything that moves
       await load(CMS + "/mu-assets/js/inline-editor.js", false);
     } catch (e) {
       console.error("[mu-cms] " + e.message);
