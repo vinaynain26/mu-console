@@ -20,6 +20,7 @@ import net from "node:net";
 import path from "node:path";
 import * as repo from "./repo.js";
 import { applyOverlay } from "./overlay.js";
+import { provisionAssets, assetsBase } from "./assets.js";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 export const DIST = process.env.SYNC_DIST_DIR || path.join(ROOT, "data/lab-dist");
@@ -125,6 +126,13 @@ export function rebuild({ sha = null } = {}) {
       await ensureDeps();
       if (isSite()) {
         applyOverlay(clone, { cmsUrl: CMS_URL, homeSlug: repo.cfg().homeSlug });
+        /* the pictures the repo points at but does not carry; public/ is
+           gitignored there, so one fetch outlives every reset */
+        const a = await provisionAssets(clone, { from: assetsBase() });
+        if (a.fetched || a.failed.length) {
+          console.log(`  assets: ${a.fetched} fetched, ${a.present} present, ${a.failed.length} missing from ${assetsBase()}` +
+            (a.failed.length ? "\n" + a.failed.slice(0, 5).map((f) => "    " + f.url + " (" + f.error + ")").join("\n") + (a.failed.length > 5 ? "\n    …" : "") : ""));
+        }
         await run("node", [path.join(clone, "node_modules/vite/bin/vite.js"), "build"], {
           cwd: clone, env: { NITRO_PRESET: "node-server", VITE_MU_CMS_URL: CMS_URL, NODE_ENV: "production" },
         });
