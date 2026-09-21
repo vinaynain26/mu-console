@@ -180,3 +180,18 @@ test("a picture published onto a key that exists as a dormant row revives that r
   assert.equal(row(db, "mu-home", target).value, "https://cdn.example/new-campus.jpg", "the pull after the push keeps it");
   assert.equal(row(db, "mu-home", K("routes-index", "media:/x.png")).retired, 1, "the row it came from is folded away");
 });
+
+test("an emptied picture is never written into the source as src=\"\"; the draft goes back to what the source has", async () => {
+  const { remote, db } = await setup();
+  const key = K("routes-index", "media:/x.png");
+  draft(db, "mu-home", key, "");                       // "Original" on a picture the source names by URL
+  draft(db, "mu-home", K("routes-index", "Find your"), "Find the");   // a real change rides along
+  const out = await pushPage(db, "mu-home", { user: USER });
+  assert.equal(out.pushed, 1, "only the text went to the repo");
+  remote.git(["pull", "-q", "origin", "main"]);
+  const src = fs.readFileSync(path.join(remote.work, "src/routes/index.tsx"), "utf8");
+  assert.ok(src.includes('src="/x.png"'), "the picture line is untouched");
+  assert.ok(!src.includes('src=""'));
+  const r = row(db, "mu-home", key);
+  assert.equal(r.value, "/x.png"); assert.equal(r.draft_value, "/x.png", "no pending draft is left behind"); assert.equal(r.retired, 0);
+});

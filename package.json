@@ -13,7 +13,8 @@
     "voice": "node scripts/extract-voice.mjs",
     "heal": "node scripts/heal-drift.mjs",
     "test": "node --test \"test/*.test.mjs\"",
-    "cms": "node scripts/cms.mjs"
+    "cms": "node scripts/cms.mjs",
+    "mirror": "node scripts/mirror-assets.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.117.1",

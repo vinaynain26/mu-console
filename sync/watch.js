@@ -8,6 +8,36 @@ import { scan } from "./scan.js";
 import { applyScan } from "./apply.js";
 import { getState, setState, logEvent, openConflicts } from "./store.js";
 import { rebuild, buildState, buildable } from "./build.js";
+import { mirrorAssets } from "./mirror.js";
+import { assetsBase } from "./assets.js";
+import * as uploads from "../uploads.js";
+
+/* Pictures the designer adds in Lovable move to UnionStack on the pull that
+   brings them, and the rewritten pointers go back to the repo as one commit.
+   Only pointers still on Lovable are touched, so a pull with nothing new
+   costs nothing. UNIONSTACK_API_KEY turns it on; ASSET_MIRROR=0 turns it off. */
+export const mirrorOn = () => uploads.configured() && process.env.ASSET_MIRROR !== "0";
+export async function mirrorStep(db, clone) {
+  const m = await mirrorAssets(clone, { from: assetsBase(), uploader: { upload: uploads.uploadAny }, db, log: (l) => console.log(l) });
+  const out = { moved: m.moved.length, reused: m.reused, failed: m.failed.length, stopped: m.stopped, sha: null };
+  if (m.moved.length) {
+    const n = m.moved.length;
+    const message = `assets: ${n} picture${n === 1 ? "" : "s"} to UnionStack\n\nMoved from Lovable's storage to files.unionstack.in by MU Console; each pointer keeps its old path as lovableUrl.\n\n` +
+      m.moved.slice(0, 40).map((r) => "  " + r).join("\n") + (n > 40 ? "\n  \u2026" : "");
+    try {
+      const pushed = await repo.serial(() => repo.commitAndPush({ files: m.files, message, author: { name: "MU Console", email: "console@mastersunion.org" } }));
+      out.sha = pushed.sha;
+      logEvent(db, { direction: "push", sha: pushed.sha, summary: `${n} picture${n === 1 ? "" : "s"} moved to UnionStack${m.reused ? ` (${m.reused} reused)` : ""}`, actor: "mirror" });
+    } catch (e) {
+      /* Lovable pushed at the same moment: the pointers are rewritten again
+         next pull from the ledger, without uploading */
+      logEvent(db, { direction: "error", sha: null, summary: "mirror commit failed: " + String(e.message).split("\n")[0].slice(0, 140), actor: "mirror" });
+    }
+  }
+  if (m.failed.length) logEvent(db, { direction: "mirror", sha: null,
+    summary: `${m.failed.length} picture${m.failed.length === 1 ? "" : "s"} still on Lovable: ` + m.failed.slice(0, 3).map((f) => f.rel.split("/").pop() + " (" + f.error + ")").join(", ") + (m.failed.length > 3 ? ", \u2026" : ""), actor: "mirror" });
+  return out;
+}
 
 let pulling = false;
 let failures = 0;        // consecutive, so a flapping network logs once, not forever
@@ -30,11 +60,17 @@ export async function pullNow(db, { reason = "manual", force = false } = {}) {
       if (/^Could not reach/.test(getState(db).last_error || "")) setState(db, { last_error: null });
       return { skipped: true, sha: remote };
     }
-    const sha = await repo.serial(() => repo.resetToRemote());
+    let sha = await repo.serial(() => repo.resetToRemote());
     const result = scan(c.clone, { homeSlug: c.homeSlug });
     const report = applyScan(db, result, { repo: repo.repoName(), branch: c.branch, sha, prefix: c.prefix });
     const now = new Date().toISOString();
     setState(db, { last_remote_sha: sha, last_scan_at: now, last_error: null });   // a good pull clears the last failure
+    let mirror = null;
+    if (mirrorOn()) {
+      mirror = await mirrorStep(db, c.clone);
+      /* our own commit is the head now; the next poll must not re-pull it */
+      if (mirror.sha) { sha = mirror.sha; setState(db, { last_remote_sha: sha, last_push_sha: sha, last_push_at: new Date().toISOString() }); }
+    }
     const totals = report.reduce((a, r) => ({ added: a.added + r.added, kept: a.kept + r.kept, retired: a.retired + r.retired, conflicts: a.conflicts + r.conflicts }),
       { added: 0, kept: 0, retired: 0, conflicts: 0 });
     logEvent(db, { direction: "pull", sha,
@@ -43,7 +79,7 @@ export async function pullNow(db, { reason = "manual", force = false } = {}) {
     /* the page the editor sees is a build of this commit; rebuild now so a
        change made in Lovable shows on the page, not only in the studio */
     let build = null;
-    if (!buildable()) return { sha, report, totals, build };
+    if (!buildable()) return { sha, report, totals, build, mirror };
     try { build = await rebuild({ sha }); }
     catch (e) {
       setState(db, { last_error: "Build failed: " + String(e.message).slice(0, 400) });
@@ -51,7 +87,7 @@ export async function pullNow(db, { reason = "manual", force = false } = {}) {
     }
     if (build) logEvent(db, { direction: "build", sha, summary: `built in ${(build.lastBuildMs / 1000).toFixed(1)}s`, actor: reason });
     failures = 0;
-    return { sha, report, totals, build };
+    return { sha, report, totals, build, mirror };
   } catch (e) {
     const msg = String(e.message).slice(0, 500);
     /* Log a failure the first time it appears, then stay quiet while it

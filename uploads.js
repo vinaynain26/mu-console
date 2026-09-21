@@ -41,6 +41,15 @@ export async function upload({ bytes, filename, mimeType }) {
   return { url: out.url, fileId: out.fileId, filename: name, mimeType: type, size: bytes.length };
 }
 
+/** The site's own pictures, moved by the mirror: no size or type gate, the
+    files are already what the site ships. Same key, same client. */
+export async function uploadAny({ bytes, filename, mimeType }) {
+  if (!configured()) throw fail("unconfigured", "Uploads are not switched on. Set UNIONSTACK_API_KEY in .env and restart.");
+  const name = String(filename || "upload").replace(/[\\/]+/g, "_").slice(0, 180);
+  const out = await getClient().upload(bytes, { filename: name, mimeType: mimeType || "application/octet-stream" });
+  return { url: out.url, fileId: out.fileId, filename: name, mimeType, size: bytes.length };
+}
+
 /** Turns any failure into something an editor can act on. */
 export function explain(err) {
   const code = err && err.code;

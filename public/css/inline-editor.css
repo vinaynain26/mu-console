@@ -67,6 +67,7 @@
 .mu-side__body{ position:relative !important }
 .mu-thumb{ position:relative !important }
 .mu-thumb__play{ position:absolute !important; inset:0 !important }
+.mu-thumb.is-over::after{ position:absolute !important }
 
 /* ---- type ---- */
 .mu-side, .mu-bar, .mu-pill, .mu-toast, .mu-auth, .mu-pop, .mu-menu, .mu-chip{
@@ -99,6 +100,23 @@
 .mu-btn[disabled]{opacity:.4;cursor:default}
 .mu-btn[disabled]:hover{background:transparent}
 .mu-btn.pri[disabled]:hover{background:var(--mu-ink)}
+/* the button shows its own progress and result */
+.mu-btn{position:relative !important}
+.mu-btn.is-busy,.mu-btn.is-busy[disabled]{opacity:1;cursor:progress;color:var(--mu-ink);background:var(--mu-fill-hover)}
+.mu-btn.pri.is-busy,.mu-btn.pri.is-busy[disabled]{background:var(--mu-ink);color:#fff}
+.mu-btn.is-done,.mu-btn.is-done[disabled]{opacity:1;background:#34c759;color:#fff;transition:background-color 220ms ease-out,color 220ms ease-out !important}
+.mu-btn.is-done svg{display:block}
+.mu-btn .mu-spin{width:11px;height:11px;border-width:1.5px}
+/* one light, once around the edge, then gone */
+@property --mu-sweep{syntax:"<angle>";inherits:false;initial-value:0deg}
+.mu-btn.is-done::before{
+  content:"";position:absolute;inset:-3px;border-radius:999px;padding:2px;pointer-events:none;
+  background:conic-gradient(from var(--mu-sweep),transparent 0deg,transparent 250deg,rgba(52,199,89,.35) 300deg,#34c759 360deg);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+  animation:mu-sweep 900ms cubic-bezier(.32,.72,0,1) 1 forwards;
+}
+@keyframes mu-sweep{ 0%{--mu-sweep:0deg;opacity:1} 80%{opacity:1} 100%{--mu-sweep:360deg;opacity:0} }
+@media (prefers-reduced-motion: reduce){ .mu-btn.is-done::before{animation:none;display:none} }
 
 /* segmented control: the selection is a pill that mu-motion springs between options */
 .mu-seg{display:flex;align-items:center;position:relative !important;background:var(--mu-fill);border-radius:999px;padding:3px;gap:0}
@@ -369,13 +387,29 @@ body.mu-editing [data-sec]:hover > .mu-pill--tall,body.mu-editing [data-sec].mu-
   background:rgba(255,255,255,.85);color:var(--mu-ink);box-shadow:var(--mu-shadow-chip);
 }
 .mu-media-fields{min-width:0}
-/* upload: a quiet action in the label row, the preview as the drop zone */
-.mu-upbtn{
-  flex:none;border:0;background:var(--mu-fill);border-radius:999px;height:22px;padding:0 9px;
-  font-family:inherit;font-size:11px;font-weight:600;line-height:1;color:var(--mu-ink);letter-spacing:0;text-transform:none;
+/* upload: the picture carries its own action, a small glass button in the
+   corner; the whole preview takes a dropped file */
+.mu-thumb__up{
+  position:absolute !important;right:10px !important;bottom:10px !important;z-index:2;
+  display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px 0 9px;border:0;border-radius:999px;
+  background:var(--mu-glass-strong);color:var(--mu-ink);
+  -webkit-backdrop-filter:var(--mu-glass-blur);backdrop-filter:var(--mu-glass-blur);
+  box-shadow:var(--mu-shadow-chip),var(--mu-glass-edge),0 0 0 .5px var(--mu-line);
+  font-family:inherit;font-size:12px;font-weight:600;line-height:1;letter-spacing:0;text-transform:none;
+  opacity:.92;transition:opacity 150ms ease-out,background-color 150ms ease-out !important;
 }
-.mu-upbtn:hover{background:var(--mu-fill-hover)}
-.mu-thumb.is-over{box-shadow:inset 0 0 0 2px var(--mu-accent);background:var(--mu-accent-soft)}
+.mu-thumb:hover .mu-thumb__up,.mu-thumb__up:focus-visible{opacity:1}
+.mu-thumb__up:hover{background:#fff}
+.mu-thumb__up svg{display:block}
+.mu-card.is-uploading .mu-thumb__up{display:none}
+.mu-thumb.is-over{box-shadow:inset 0 0 0 2px var(--mu-accent)}
+.mu-thumb.is-over::after{
+  content:"Drop to upload";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  height:28px;display:inline-flex;align-items:center;padding:0 12px;border-radius:999px;
+  background:var(--mu-glass-strong);color:var(--mu-ink);font-size:12px;font-weight:600;
+  box-shadow:var(--mu-shadow-chip),0 0 0 .5px var(--mu-line);pointer-events:none;
+}
+.mu-thumb.is-over > *:not(.mu-up){pointer-events:none}
 .mu-card.is-uploading .mu-thumb img,.mu-card.is-uploading .mu-thumb video{opacity:.55}
 .mu-up{position:absolute !important;inset:auto 0 0 0 !important;padding:8px 10px;background:linear-gradient(to top,rgba(0,0,0,.45),transparent)}
 .mu-up[hidden]{display:none}

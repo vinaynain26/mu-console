@@ -204,6 +204,14 @@
     var f = meta.get(key);
     return f ? f.value : "";
   }
+  /* "Original" puts back the file the site shipped with. That file exists
+     only while the saved value is empty (the source still names its own
+     asset); once the source names a URL there is nothing to go back to, and
+     Undo is the right tool. */
+  function canReset(key) {
+    var f = meta.get(key);
+    return !!f && !String(f.value == null ? "" : f.value).trim();
+  }
 
   /* ---------------- the one place a value changes ---------------- */
   function setField(key, value, opts) {
@@ -435,15 +443,28 @@
   var MORE = '<svg viewBox="0 0 20 20" width="16" height="16" fill="currentColor" aria-hidden="true">' +
     '<circle cx="4" cy="10" r="1.7"/><circle cx="10" cy="10" r="1.7"/><circle cx="16" cy="10" r="1.7"/></svg>';
 
-  /* One line of status: the count is the only bold word. A transient word
-     ("Saving…", "Saved") overrides it for a moment, then the count returns. */
-  var statusHold = null;
-  function setStatus(text, kind, ms) {
-    if (!elCount) return;
-    clearTimeout(statusHold);
-    elCount.className = "mu-count" + (kind ? " is-" + kind : "");
-    elCount.innerHTML = text;
-    if (ms) statusHold = setTimeout(refreshCount, ms);
+  /* The button is where the action happens and where its result shows:
+     "Publishing…" with a spinner inside it, then green with a check while a
+     light sweeps once around its edge, then back to what it was. */
+  var CHECK = '<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.5 6.5 12 13 4.5"/></svg>';
+  function btnBusy(btn, label) {
+    if (!btn) return;
+    btn.disabled = true;
+    btn.classList.add("is-busy"); btn.classList.remove("is-done");
+    btn.innerHTML = '<span class="mu-spin"></span> ' + esc(label);
+  }
+  function btnDone(btn, label, restore, ms) {
+    if (!btn) return;
+    btn.classList.remove("is-busy"); btn.classList.add("is-done");
+    btn.innerHTML = CHECK + " " + esc(label);
+    setTimeout(function () { btnReset(btn, restore); }, ms || 2200);
+  }
+  function btnReset(btn, restore) {
+    if (!btn) return;
+    btn.classList.remove("is-busy", "is-done");
+    btn.innerHTML = esc(restore);
+    btn.disabled = false;
+    refreshCount();
   }
 
   function buildBar() {
@@ -604,7 +625,6 @@
 
   function refreshCount() {
     var n = dirty.size;
-    clearTimeout(statusHold);
     if (elCount) {
       elCount.className = "mu-count";
       elCount.innerHTML = n ? "<b>" + n + "</b> unsaved" : (BOOT.preview ? "Previewing draft" : "No changes");
@@ -1666,7 +1686,7 @@
         ? '<input type="text" class="mu-mono" data-f="' + esc(key) + '" value="' + esc(v) +
             '" placeholder="https://\u2026 paste a link to an image or video">' +
           '<div class="mu-hint">Paste a URL to replace this ' + (isVideoNode(key) ? "video" : "image") + '. ' +
-            '<button type="button" class="mu-reset" data-reset="' + esc(key) + '"' + (v ? "" : " hidden") +
+            '<button type="button" class="mu-reset" data-reset="' + esc(key) + '"' + (v && canReset(key) ? "" : " hidden") +
               ' title="Put back the file the site shipped with">Reset to original</button></div>'
         : '<textarea data-f="' + esc(key) + '" rows="3">' + esc(v) + "</textarea>") +
       (CAN.ai && !isMedia
@@ -2529,6 +2549,7 @@
   }
 
   var PLAY = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l12-7.5z"/></svg>';
+  var UPARROW = '<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12.5v-9M4.5 7 8 3.5 11.5 7M3 13.5h10"/></svg>';
 
   /* ---------------- uploading a picture ----------------
      The file goes to the CMS, which holds the UnionStack key, and the CDN
@@ -2607,17 +2628,17 @@
                    '<div class="mu-thumb__play"><span>' + PLAY + '</span></div>'
                  : '<img src="' + esc(shown) + '" alt="" loading="lazy">')
           : '<span>Empty slot</span>') +
+          (uploadsReady !== false
+            ? '<button type="button" class="mu-thumb__up" data-upload="' + esc(f.key) + '" title="Upload a file from this computer">' + UPARROW + "Upload</button>" +
+              '<input type="file" data-upfile="' + esc(f.key) + '" accept="' + (ownPlayer ? "video/mp4,video/webm" : "image/*,video/mp4,video/webm") + '" hidden>'
+            : "") +
           '<div class="mu-up" hidden><div class="mu-up__bar"></div><div class="mu-up__t">Uploading\u2026</div></div>' +
         "</div>" +
         '<div class="mu-media-fields">' +
           '<label class="mu-lab"><span>' + esc(what + (name ? " \u00b7 " + name : "")) + "</span>" +
             '<button type="button" class="mu-revert" data-revert="' + esc(f.key) + '" title="Undo this ' + (ownPlayer ? "video" : "image") + '">↺ Undo</button>' +
-            '<button type="button" class="mu-reset" data-reset="' + esc(f.key) + '"' + (v ? "" : " hidden") +
+            '<button type="button" class="mu-reset" data-reset="' + esc(f.key) + '"' + (v && canReset(f.key) ? "" : " hidden") +
               ' title="Put back the file the site shipped with">Original</button>' +
-            (uploadsReady !== false
-              ? '<button type="button" class="mu-upbtn" data-upload="' + esc(f.key) + '" title="Upload a file from this computer">Upload</button>' +
-                '<input type="file" data-upfile="' + esc(f.key) + '" accept="' + (ownPlayer ? "video/mp4,video/webm" : "image/*,video/mp4,video/webm") + '" hidden>'
-              : "") +
           "</label>" +
           '<input type="text" class="mu-mono" data-f="' + esc(f.key) + '" value="' + esc(v) + '" placeholder="' +
             (ownPlayer ? "Paste a video URL (.mp4 or .webm)" : "Paste an image or video URL") + '">' +
@@ -2686,7 +2707,7 @@
         var media = side.querySelector('[data-poster="' + CSS.escape(key) + '"]');
         if (media && !isVideoNode(key)) media.style.display = isVideo(input.value) ? "" : "none";
         var rs = side.querySelector('[data-reset="' + CSS.escape(key) + '"]');
-        if (rs) rs.hidden = !input.value;
+        if (rs) rs.hidden = !input.value || !canReset(key);
       });
       input.addEventListener("focus", function () {
         markActiveRow(input.dataset.f);
@@ -3263,8 +3284,7 @@
   /* ---------------- save & publish ---------------- */
   async function save() {
     if (!dirty.size) return;
-    btnSave.disabled = true;
-    setStatus("Saving\u2026", "busy");
+    btnBusy(btnSave, "Saving\u2026");
     try {
       var changes = {};
       dirty.forEach(function (v, k) { changes[k] = v; });
@@ -3275,9 +3295,9 @@
       });
       dirty.clear();
       Array.prototype.forEach.call(document.querySelectorAll(".mu-dirty"), function (n) { n.classList.remove("mu-dirty"); });
-      refreshCount();
-      setStatus("Saved", "ok", 2000);
-    } catch (e) { toast(e.message, 4000); refreshCount(); }
+      refreshCount();                  // the count is true at once; the button keeps its word a moment longer
+      btnDone(btnSave, "Saved", "Save", 1800);
+    } catch (e) { toast(e.message, 4000); btnReset(btnSave, "Save"); }
   }
 
   async function publish() {
@@ -3286,15 +3306,18 @@
       await save();
     }
     if (!confirm("Publish all drafts on this page to the live site?")) return;
-    btnPub.disabled = true;
-    setStatus("Publishing\u2026", "busy");
+    btnBusy(btnPub, "Publishing\u2026");
     try {
       var out = await api("/api/pages/" + SLUG + "/publish", { method: "POST" });
-      setStatus(out.published ? "Published" : "Nothing to publish", out.published ? "ok" : "", 2500);
-      toast(out.message || (out.published ? "Published " + out.published + " change(s), live now" : "Nothing to publish"), out.message ? 6000 : undefined);
-      if (out.published) setTimeout(function () { location.reload(); }, 900);
-    } catch (e) { toast(e.message, 4000); refreshCount(); }
-    finally { btnPub.disabled = false; }
+      if (out.published) {
+        btnDone(btnPub, "Published", "Publish", 2600);
+        toast(out.message || "Published " + out.published + " change" + (out.published === 1 ? "" : "s") + ", live now", out.message ? 6000 : 3000);
+        setTimeout(function () { location.reload(); }, 2600);
+      } else {
+        btnReset(btnPub, "Publish");
+        toast(out.message || "Nothing to publish");
+      }
+    } catch (e) { toast(e.message, 4500); btnReset(btnPub, "Publish"); }
   }
 
   /* ---------------- arrange ---------------- */

@@ -995,7 +995,12 @@ app.post("/api/pages/:slug/publish", auth.require_("publish"), async (req, res) 
     if (!syncRepo.canPush()) return res.status(400).json({ error: "Sync cannot push: set LOVABLE_TOKEN in .env." });
     try {
       const out = await pushPage(db, req.params.slug, { user: req.user });
-      if (out.pushed) await pullNow(db, { reason: "publish" }).catch((e) => console.log("  sync after publish: " + e.message));
+      if (out.pushed) {
+        await pullNow(db, { reason: "publish" }).catch((e) => console.log("  sync after publish: " + e.message));
+        /* the poll may have taken this commit first and still be building it:
+           the page must not reload into the previous build */
+        if (out.sha && labBuild.buildable()) await labBuild.waitForBuild(out.sha);
+      }
       return res.json({
         published: out.published, pushed: out.pushed, local: out.local, sha: out.sha, files: out.files,
         by: req.user.name, at: new Date().toISOString(),

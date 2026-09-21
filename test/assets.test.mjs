@@ -58,3 +58,12 @@ test("an unreachable host fails every pointer and still resolves", async () => {
   const r = await provisionAssets(d, { from: "http://127.0.0.1:9" });
   assert.equal(r.fetched, 0); assert.equal(r.failed.length, 2);
 });
+
+test("a pointer that already names an absolute URL is not fetched: it lives on the CDN now", async () => {
+  const d = tmpDir("assets");
+  fs.mkdirSync(path.join(d, "src/assets"), { recursive: true });
+  fs.writeFileSync(path.join(d, "src/assets/moved.png.asset.json"), JSON.stringify({ url: "https://files.unionstack.in/f/abc", lovableUrl: "/__l5e/assets-v1/aaaa/moved.png" }));
+  assert.equal(assetPointers(d).length, 0, "nothing to provision");
+  const r = await provisionAssets(d, { from: "http://127.0.0.1:9" });
+  assert.deepEqual([r.fetched, r.present, r.failed.length], [0, 0, 0]);
+});

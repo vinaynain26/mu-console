@@ -30,7 +30,9 @@ export function assetPointers(clone) {
       else if (e.name.endsWith(".asset.json")) {
         try {
           const j = JSON.parse(fs.readFileSync(p, "utf8"));
-          if (j.url && !out.has(j.url)) out.set(j.url, { url: j.url, size: j.size || 0, name: j.original_filename || path.basename(j.url) });
+          /* only a path on Lovable's storage is ours to fetch; a pointer the
+             mirror has moved names the CDN by absolute URL and needs nothing */
+          if (j.url && /^\/__l5e\//.test(j.url) && !out.has(j.url)) out.set(j.url, { url: j.url, size: j.size || 0, name: j.original_filename || path.basename(j.url) });
         } catch { /* a malformed pointer is not worth failing the run over */ }
       }
     }

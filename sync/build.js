@@ -34,6 +34,21 @@ let site = null;   // the running site process, mode "site" only
 export const isSite = () => fs.existsSync(path.join(repo.cfg().clone, "src/routes"));
 export const mode = () => (isSite() ? "site" : "spa");
 
+/* A publish is not done until the page the editor sees has been rebuilt at
+   the commit it pushed. Whoever started that build (the poll usually wins
+   the race by a second), this waits for it to land, and gives up rather
+   than hang a publish on a build that never comes. */
+export async function waitForBuild(sha, timeout = 150e3, step = 400) {
+  const t0 = Date.now();
+  while (Date.now() - t0 < timeout) {
+    if (!state.building && state.sha && sha && state.sha.startsWith(sha.slice(0, 7))) return true;
+    await new Promise((r) => setTimeout(r, step));
+  }
+  return false;
+}
+/* tests set the state directly */
+export const _setBuildState = (patch) => { state = { ...state, ...patch }; };
+
 export const buildState = () => ({
   ...state, mode: mode(),
   built: mode() === "site" ? fs.existsSync(path.join(repo.cfg().clone, ".output/server/index.mjs")) : fs.existsSync(path.join(DIST, "index.html")),

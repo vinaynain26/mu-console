@@ -51,8 +51,18 @@ export async function pushPage(db, slug, { user }) {
   const page = db.prepare("SELECT * FROM pages WHERE slug = ?").get(slug);
   if (!page?.repo) throw new Error("This page did not come from the repo, so there is nothing to push.");
   if (!repo.canPush()) throw new Error("Sync cannot push: set LOVABLE_TOKEN in .env.");
-  const all = db.prepare(`SELECT field_key, label, value, draft_value, src_file, type FROM page_content
+  const all0 = db.prepare(`SELECT field_key, label, value, draft_value, src_file, type FROM page_content
     WHERE page_slug = ? AND value <> draft_value AND retired = 0 ORDER BY section_ord, ord`).all(slug);
+  /* A picture or link emptied in the CMS ("Original") has nothing to fall
+     back to once the source names it by URL: writing "" would blank the
+     picture on the site and lose the field. Such a draft is dropped, and
+     the row goes back to what the source has. */
+  const emptied = all0.filter((r) => writable(r) && (r.type === "media" || r.type === "link") && clean(r.draft_value) === "");
+  if (emptied.length) {
+    const back = db.prepare("UPDATE page_content SET draft_value = value WHERE page_slug = ? AND field_key = ?");
+    for (const r of emptied) back.run(slug, r.field_key);
+  }
+  const all = all0.filter((r) => !emptied.includes(r));
   const pending = all.filter(writable), local = all.filter((r) => !writable(r));
   if (!all.length) return { pushed: 0, local: 0, published: 0, sha: null, files: [] };
   if (!pending.length) {
