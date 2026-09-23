@@ -3312,7 +3312,10 @@
       if (out.published) {
         btnDone(btnPub, "Published", "Publish", 2600);
         toast(out.message || "Published " + out.published + " change" + (out.published === 1 ? "" : "s") + ", live now", out.message ? 6000 : 3000);
-        setTimeout(function () { location.reload(); }, 2600);
+        /* reload only into a page that carries this change; otherwise the
+           reload would show the build from before it */
+        if (out.rebuilt !== false) setTimeout(function () { location.reload(); }, 2600);
+        else setTimeout(function () { toast("The preview is still rebuilding. Refresh in a minute to see it here.", 6000); }, 3200);
       } else {
         btnReset(btnPub, "Publish");
         toast(out.message || "Nothing to publish");

@@ -47,10 +47,11 @@ export const mode = () => (isSite() ? "site" : "spa");
    the commit it pushed. Whoever started that build (the poll usually wins
    the race by a second), this waits for it to land, and gives up rather
    than hang a publish on a build that never comes. */
+export const builtAt = (sha) => !state.building && !!state.sha && !!sha && state.sha.startsWith(String(sha).slice(0, 7));
 export async function waitForBuild(sha, timeout = 150e3, step = 400) {
   const t0 = Date.now();
   while (Date.now() - t0 < timeout) {
-    if (!state.building && state.sha && sha && state.sha.startsWith(sha.slice(0, 7))) return true;
+    if (builtAt(sha)) return true;
     await new Promise((r) => setTimeout(r, step));
   }
   return false;

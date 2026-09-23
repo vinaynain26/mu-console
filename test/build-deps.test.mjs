@@ -35,3 +35,14 @@ test("waitForBuild resolves once the connected site has been built at that commi
   _setBuildState({ building: false, sha: "other" });
   assert.equal(await waitForBuild("never", 150, 20), false, "a build that never comes does not hang the publish forever");
 });
+
+test("builtAt says whether the connected site is already built at a commit", async () => {
+  const { builtAt, _setBuildState } = await import("../sync/build.js");
+  _setBuildState({ building: false, sha: "abc1234def" });
+  assert.equal(builtAt("abc1234def"), true);
+  assert.equal(builtAt("abc1234"), true, "a short sha counts");
+  assert.equal(builtAt("other99"), false);
+  assert.equal(builtAt(null), false);
+  _setBuildState({ building: true, sha: "abc1234def" });
+  assert.equal(builtAt("abc1234def"), false, "not while it is still building");
+});

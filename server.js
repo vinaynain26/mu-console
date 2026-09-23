@@ -995,14 +995,21 @@ app.post("/api/pages/:slug/publish", auth.require_("publish"), async (req, res) 
     if (!syncRepo.canPush()) return res.status(400).json({ error: "Sync cannot push: set LOVABLE_TOKEN in .env." });
     try {
       const out = await pushPage(db, req.params.slug, { user: req.user });
+      let rebuilt = true;
       if (out.pushed) {
-        await pullNow(db, { reason: "publish" }).catch((e) => console.log("  sync after publish: " + e.message));
-        /* the poll may have taken this commit first and still be building it:
-           the page must not reload into the previous build */
-        if (out.sha && labBuild.buildable()) await labBuild.waitForBuild(out.sha);
+        /* The page must not reload into the previous build, so wait for the
+           rebuild at this commit, but never hold the editor hostage: a long
+           asset fetch or a queued build answers "published, still building"
+           and the editor leaves the page as it is. */
+        const settle = (async () => {
+          await pullNow(db, { reason: "publish" }).catch((e) => console.log("  sync after publish: " + e.message));
+          if (out.sha && labBuild.buildable()) await labBuild.waitForBuild(out.sha, 170e3);
+        })();
+        await Promise.race([settle, new Promise((r) => setTimeout(r, 180e3))]);
+        rebuilt = !labBuild.buildable() || labBuild.builtAt(out.sha);
       }
       return res.json({
-        published: out.published, pushed: out.pushed, local: out.local, sha: out.sha, files: out.files,
+        published: out.published, pushed: out.pushed, local: out.local, sha: out.sha, files: out.files, rebuilt,
         by: req.user.name, at: new Date().toISOString(),
         /* the one line the editor shows */
         message: out.pushed && out.local
