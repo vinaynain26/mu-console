@@ -115,7 +115,7 @@ export async function mirrorAssets(clone, { from, uploader, db, concurrency = 2,
         let bytes;
         if (fs.existsSync(local) && fs.statSync(local).size > 0) bytes = fs.readFileSync(local);
         else {
-          if (!base) throw new Error("no host to fetch from");
+          if (!base) throw new Error("no Lovable host to fetch from: set LOVABLE_ASSETS_URL to the project's Lovable link");
           const res = await fetch(base + p.json.url, { signal: AbortSignal.timeout(timeout), headers: { "User-Agent": "Mozilla/5.0 (MU Console)", Referer: base + "/" } });
           if (!res.ok) { const e = new Error("HTTP " + res.status + " from Lovable"); if (res.status === 404 || res.status === 410) e.status = 404; throw e; }
           bytes = Buffer.from(await res.arrayBuffer());

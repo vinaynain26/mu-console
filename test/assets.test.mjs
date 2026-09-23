@@ -67,3 +67,19 @@ test("a pointer that already names an absolute URL is not fetched: it lives on t
   const r = await provisionAssets(d, { from: "http://127.0.0.1:9" });
   assert.deepEqual([r.fetched, r.present, r.failed.length], [0, 0, 0]);
 });
+
+test("urls given as already-failed are not asked for again, so one bad file cannot block every later build", async () => {
+  const d = tmpDir("assets");
+  const put = (rel, url) => { fs.mkdirSync(path.dirname(path.join(d, rel)), { recursive: true }); fs.writeFileSync(path.join(d, rel), JSON.stringify({ url })); };
+  put("src/assets/ok.png.asset.json", "/__l5e/assets-v1/aaaa/ok.png");
+  put("src/assets/slow.mp4.asset.json", "/__l5e/assets-v1/bbbb/slow.mp4");
+  const hits = [];
+  const srv = http.createServer((req, res) => { hits.push(req.url); res.writeHead(200, { "content-type": "image/png" }); res.end("BYTES"); });
+  await new Promise((r) => srv.listen(0, "127.0.0.1", r));
+  const base = `http://127.0.0.1:${srv.address().port}`;
+  try {
+    const r = await provisionAssets(d, { from: base, skip: new Set(["/__l5e/assets-v1/bbbb/slow.mp4"]) });
+    assert.deepEqual([r.fetched, r.skipped], [1, 1]);
+    assert.deepEqual(hits, ["/__l5e/assets-v1/aaaa/ok.png"], "the skipped one was never requested");
+  } finally { srv.close(); }
+});

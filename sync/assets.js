@@ -14,10 +14,22 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { repoName } from "./repo.js";
+import { repoName, host } from "./repo.js";
 
-export const assetsBase = () => (process.env.LOVABLE_ASSETS_URL ||
-  `https://${(repoName().split("/")[1] || repoName())}.lovable.app`).replace(/\/+$/, "");
+/**
+ * Where the project's Lovable files are served. A GitHub repo made by
+ * Lovable carries its project name, so the host can be guessed; a GitLab
+ * project's name says nothing about it, so there LOVABLE_ASSETS_URL (the
+ * project's Lovable link, staging or published) has to be given. Empty
+ * means "unknown": the caller says so rather than fetching from nowhere.
+ */
+export const assetsBase = () => {
+  const given = process.env.LOVABLE_ASSETS_URL;
+  if (given) return given.replace(/\/+$/, "");
+  if (host() !== "github") return "";
+  const name = repoName().split("/")[1];
+  return name ? `https://${name}.lovable.app` : "";
+};
 
 /** Every distinct pointer under src: [{ url, size, name }]. */
 export function assetPointers(clone) {
@@ -43,11 +55,19 @@ export function assetPointers(clone) {
 const dest = (clone, url) => path.join(clone, "public", url.replace(/^\/+/, ""));
 const present = (f) => { try { return fs.statSync(f).size > 0; } catch { return false; } };
 
-/** Fetch what is missing. Returns { fetched, present, failed: [{ url, error }] }. */
-export async function provisionAssets(clone, { from, concurrency = 8, timeout = 60e3 } = {}) {
+/**
+ * Fetch what is missing. `skip` holds urls a caller already knows to be
+ * hopeless (a 404, or a file that timed out earlier in this run): asking
+ * again would block every later build on the same download.
+ * Returns { fetched, present, skipped, failed: [{ url, error }] }.
+ */
+export async function provisionAssets(clone, { from, concurrency = 8, timeout = 60e3, skip = new Set() } = {}) {
   const base = String(from).replace(/\/+$/, "");
-  const todo = assetPointers(clone).filter((p) => !present(dest(clone, p.url)));
-  const r = { fetched: 0, present: assetPointers(clone).length - todo.length, failed: [] };
+  const all = assetPointers(clone);
+  const missing = all.filter((p) => !present(dest(clone, p.url)));
+  const todo = missing.filter((p) => !skip.has(p.url));
+  const r = { fetched: 0, present: all.length - missing.length, skipped: missing.length - todo.length, failed: [] };
+  if (!todo.length) return r;
   let i = 0;
   const worker = async () => {
     while (i < todo.length) {

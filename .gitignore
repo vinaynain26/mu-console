@@ -19,3 +19,8 @@ data/lab-dist/
 .env.bak*
 data/cms.pid
 data/cms.log
+
+# testing against the GitLab repo
+data/gitlab-repo/
+data/gitlab-dist/
+data/content.gitlab.db*

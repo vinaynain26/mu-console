@@ -1218,8 +1218,8 @@ app.post("/api/sync/pull", auth.require_("edit"), async (req, res) => {
 
 /* GitHub push webhook. No session; a shared token in the URL when one is set. */
 app.post("/api/sync/webhook", (req, res) => {
-  const secret = syncRepo.cfg().webhookSecret;
-  if (secret && req.query.token !== secret) return res.status(403).json({ error: "Bad token." });
+  /* GitHub signs it in the URL, GitLab in an X-Gitlab-Token header */
+  if (!syncRepo.webhookTokenOk(syncRepo.cfg().webhookSecret, req)) return res.status(403).json({ error: "Bad token." });
   if (!syncRepo.configured()) return res.status(400).json({ error: "Sync is not configured." });
   res.status(202).json({ accepted: true });
   pullNow(db, { reason: "webhook" }).catch((e) => console.log("  sync webhook: " + e.message));

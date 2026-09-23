@@ -20,13 +20,22 @@ import net from "node:net";
 import path from "node:path";
 import * as repo from "./repo.js";
 import { applyOverlay } from "./overlay.js";
-import { provisionAssets, assetsBase } from "./assets.js";
+import { provisionAssets, assetsBase, assetPointers } from "./assets.js";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
-export const DIST = process.env.SYNC_DIST_DIR || path.join(ROOT, "data/lab-dist");
+export const DIST = path.resolve(ROOT, process.env.SYNC_DIST_DIR || "data/lab-dist");
 const SPA_CONFIG = path.join(ROOT, "sync/vite.lab.config.mjs");
 const SITE_PORT = Number(process.env.SITE_PORT || 3000);
 const CMS_URL = (process.env.CMS_PUBLIC_URL || `http://localhost:${process.env.PORT || 4000}`).replace(/\/+$/, "");
+
+/* Urls this run has already failed to fetch, per asset host: a restart, or
+   a change of LOVABLE_ASSETS_URL, gives them another chance. */
+let skipHost = null, skipSet = new Set();
+function provisionSkip() {
+  const h = assetsBase();
+  if (h !== skipHost) { skipHost = h; skipSet = new Set(); }
+  return skipSet;
+}
 
 let state = { building: false, lastBuildAt: null, lastBuildMs: null, lastError: null, sha: null, mode: null };
 let site = null;   // the running site process, mode "site" only
@@ -161,10 +170,17 @@ export function rebuild({ sha = null } = {}) {
       if (isSite()) {
         applyOverlay(clone, { cmsUrl: CMS_URL, homeSlug: repo.cfg().homeSlug });
         /* the pictures the repo points at but does not carry; public/ is
-           gitignored there, so one fetch outlives every reset */
-        const a = await provisionAssets(clone, { from: assetsBase(), timeout: 900e3 });   // a 200MB film needs minutes, not seconds
+           gitignored there, so one fetch outlives every reset. Pointers the
+           mirror has moved name the CDN and need nothing. */
+        const a = assetsBase()
+          ? await provisionAssets(clone, { from: assetsBase(), timeout: 900e3, skip: provisionSkip() })   // a 200MB film needs minutes, not seconds
+          : { fetched: 0, present: 0, skipped: 0, failed: assetPointers(clone).map((p) => ({ url: p.url, error: "no Lovable host: set LOVABLE_ASSETS_URL to the project's Lovable link" })) };
+        /* a file the host would not give us is not asked for again this run:
+           one 100MB timeout must not sit in front of every later build */
+        for (const f of a.failed) provisionSkip().add(f.url);
         if (a.fetched || a.failed.length) {
           console.log(`  assets: ${a.fetched} fetched, ${a.present} present, ${a.failed.length} missing from ${assetsBase()}` +
+            (a.skipped ? `, ${a.skipped} skipped (failed earlier)` : "") +
             (a.failed.length ? "\n" + a.failed.slice(0, 5).map((f) => "    " + f.url + " (" + f.error + ")").join("\n") + (a.failed.length > 5 ? "\n    …" : "") : ""));
         }
         await run("node", [path.join(clone, "node_modules/vite/bin/vite.js"), "build"], {

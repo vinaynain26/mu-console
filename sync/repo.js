@@ -5,8 +5,14 @@
  * in .git/config: it travels as a per-command Authorization header, so a
  * copied clone leaks nothing. One git operation runs at a time.
  *
- *   LOVABLE_REPO        https://github.com/<owner>/<name>.git  (or a local path in tests)
- *   LOVABLE_TOKEN       fine-grained PAT, contents read and write on that repo
+ *   LOVABLE_REPO        https://gitlab.com/<group>/<name>.git, or the GitHub
+ *                       equivalent (or a local path in tests)
+ *   LOVABLE_TOKEN       GitLab: a project access token with write_repository
+ *                       (Maintainer when the branch is protected). GitHub: a
+ *                       fine-grained PAT with contents read and write.
+ *   LOVABLE_GIT_USER    the basic-auth user, when the host wants its own:
+ *                       default "x-access-token" on github.com, "oauth2"
+ *                       everywhere else (GitLab's convention)
  *   LOVABLE_BRANCH      default "main", the branch Lovable syncs
  *   SYNC_CLONE_DIR      default data/lab-repo
  *   SYNC_SLUG_PREFIX    default "lab"
@@ -23,7 +29,10 @@ export const cfg = () => ({
   repo: process.env.LOVABLE_REPO || "",
   token: process.env.LOVABLE_TOKEN || "",
   branch: process.env.LOVABLE_BRANCH || "main",
-  clone: process.env.SYNC_CLONE_DIR || path.join(ROOT, "data/lab-repo"),
+  /* resolved against the project, so a relative SYNC_CLONE_DIR cannot be
+     read twice: git runs with cwd inside the clone, and a relative path
+     would then resolve against itself */
+  clone: path.resolve(ROOT, process.env.SYNC_CLONE_DIR || "data/lab-repo"),
   prefix: process.env.SYNC_SLUG_PREFIX ?? "lab",           // "" means none: pages land on their own slugs
   homeSlug: process.env.SYNC_HOME_SLUG || "home",
   pollSeconds: Number(process.env.SYNC_POLL_SECONDS || 20),
@@ -34,12 +43,23 @@ export const configured = () => Boolean(cfg().repo);
 /* a local path (tests) needs no token; a GitHub URL does */
 export const canPush = () => { const c = cfg(); return Boolean(c.repo) && (Boolean(c.token) || !/^https?:/.test(c.repo)); };
 
-export const repoName = () => cfg().repo.replace(/^https:\/\/github\.com\//, "").replace(/\.git$/, "");
+/** The project without its host: "group/sub/name". A local path is itself. */
+export const repoName = () => {
+  const r = cfg().repo;
+  if (!/^https?:\/\//.test(r)) return r;
+  return r.replace(/^https?:\/\/[^/]+\//, "").replace(/\.git$/, "");
+};
+/** github.com | gitlab (gitlab.com and any self-managed host) | local */
+export const host = () => {
+  const r = cfg().repo;
+  if (!/^https?:\/\//.test(r)) return "local";
+  return /^https?:\/\/(www\.)?github\.com\//.test(r) ? "github" : "gitlab";
+};
 
 export function describe() {
   const c = cfg();
   return {
-    configured: configured(), canPush: canPush(),
+    configured: configured(), canPush: canPush(), host: host(),
     repo: repoName(), repoUrl: /^https?:/.test(c.repo) ? c.repo.replace(/\.git$/, "") : "",
     branch: c.branch, prefix: c.prefix, pollSeconds: c.pollSeconds,
   };
@@ -47,9 +67,25 @@ export function describe() {
 
 /* ---------------- running git ---------------- */
 
-const authArgs = (token) => token
-  ? ["-c", "http.extraheader=AUTHORIZATION: basic " + Buffer.from("x-access-token:" + token).toString("base64")]
-  : [];
+/* The token travels as a per-command Authorization header, never in
+   .git/config. The user half of it is the host's own convention: GitHub
+   wants "x-access-token", GitLab "oauth2". LOVABLE_GIT_USER overrides both,
+   for a host (or a deploy token) that wants a real name. */
+export function authArgs(token, repoUrl = cfg().repo) {
+  if (!token) return [];
+  const user = process.env.LOVABLE_GIT_USER ||
+    (/^https?:\/\/(www\.)?github\.com\//.test(repoUrl) ? "x-access-token" : "oauth2");
+  return ["-c", "http.extraheader=AUTHORIZATION: basic " + Buffer.from(user + ":" + token).toString("base64")];
+}
+
+/** A webhook may carry its secret GitHub's way (in the URL) or GitLab's (in
+    a header). With no secret set, any caller may ask for a pull. */
+export function webhookTokenOk(secret, req) {
+  if (!secret) return true;
+  const q = (req && req.query && req.query.token) || "";
+  const h = (req && req.headers && req.headers["x-gitlab-token"]) || "";
+  return q === secret || h === secret;
+}
 const IDENTITY = ["-c", "user.name=MU Console", "-c", "user.email=console@mastersunion.org"];
 
 export function git(args, { cwd, token, timeout = 120e3 } = {}) {
@@ -87,7 +123,7 @@ export async function ensureClone() {
     const origin = await git(["remote", "get-url", "origin"], { cwd: c.clone }).catch(() => "");
     if (origin.replace(/\.git$/, "") !== c.repo.replace(/\.git$/, "")) {
       fs.rmSync(c.clone, { recursive: true, force: true });
-      fs.rmSync(process.env.SYNC_DIST_DIR || path.join(ROOT, "data/lab-dist"), { recursive: true, force: true });
+      fs.rmSync(path.resolve(ROOT, process.env.SYNC_DIST_DIR || "data/lab-dist"), { recursive: true, force: true });
     }
   }
   if (!fs.existsSync(path.join(c.clone, ".git"))) {
