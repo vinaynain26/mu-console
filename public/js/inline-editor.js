@@ -22,6 +22,10 @@
   if (!BOOT) return;
 
   var CAN = BOOT.can, SLUG = BOOT.slug, TAB = BOOT.tab;
+  /* a page from the Lovable repo is queued for a super admin's approval;
+     a super admin's own publish is queued too, but reads as Publish */
+  var QUEUED = Boolean(BOOT.repo) && !CAN.approve;
+  var PUB_LABEL = QUEUED ? "Submit for approval" : "Publish";
   /* The editor also runs inside an instrumented app on its own origin. There
      the CMS is elsewhere and a SameSite cookie never arrives, so calls carry an
      explicit base URL and a bearer token. Empty base = same-origin studio. */
@@ -517,8 +521,11 @@
       bar.appendChild(btnSave);
     }
     if (CAN.publish) {
-      btnPub = el("button", "mu-btn pri", "Publish");
+      /* a Lovable page goes through the approval queue; only a super admin
+         reads the button as Publish, and even theirs is queued first */
+      btnPub = el("button", "mu-btn pri", PUB_LABEL);
       btnPub.type = "button";
+      btnPub.title = QUEUED ? "Send every draft on this page to a super admin for approval" : "Publish every draft on this page";
       btnPub.addEventListener("click", publish);
       bar.appendChild(btnPub);
     }
@@ -3302,25 +3309,29 @@
 
   async function publish() {
     if (dirty.size) {
-      if (!confirm("You have " + dirty.size + " unsaved change(s). Save them first?\n\nOK saves, then publishes.")) return;
+      if (!confirm("You have " + dirty.size + " unsaved change(s). Save them first?\n\nOK saves, then " + (QUEUED ? "submits." : "publishes."))) return;
       await save();
     }
-    if (!confirm("Publish all drafts on this page to the live site?")) return;
-    btnBusy(btnPub, "Publishing\u2026");
+    if (!confirm(QUEUED ? "Send all drafts on this page for approval?" : "Publish all drafts on this page to the live site?")) return;
+    btnBusy(btnPub, QUEUED ? "Sending\u2026" : "Publishing\u2026");
     try {
       var out = await api("/api/pages/" + SLUG + "/publish", { method: "POST" });
-      if (out.published) {
-        btnDone(btnPub, "Published", "Publish", 2600);
+      if (out.queued) {
+        /* nothing changed on the page yet: no reload, the request waits on a super admin */
+        btnDone(btnPub, "Sent", PUB_LABEL, 2600);
+        toast(out.message || "Sent for approval", 6000);
+      } else if (out.published) {
+        btnDone(btnPub, "Published", PUB_LABEL, 2600);
         toast(out.message || "Published " + out.published + " change" + (out.published === 1 ? "" : "s") + ", live now", out.message ? 6000 : 3000);
         /* reload only into a page that carries this change; otherwise the
            reload would show the build from before it */
         if (out.rebuilt !== false) setTimeout(function () { location.reload(); }, 2600);
         else setTimeout(function () { toast("The preview is still rebuilding. Refresh in a minute to see it here.", 6000); }, 3200);
       } else {
-        btnReset(btnPub, "Publish");
+        btnReset(btnPub, PUB_LABEL);
         toast(out.message || "Nothing to publish");
       }
-    } catch (e) { toast(e.message, 4500); btnReset(btnPub, "Publish"); }
+    } catch (e) { toast(e.message, 4500); btnReset(btnPub, PUB_LABEL); }
   }
 
   /* ---------------- arrange ---------------- */

@@ -15,6 +15,7 @@ export const icon = (name, size = 16) => {
     open: '<path d="M5 11l6-6M6 5h5v5"/>',
     back: '<path d="m9.5 3.5-4.5 4.5 4.5 4.5"/>',
     sync: '<path d="M13.5 6.5A5.5 5.5 0 0 0 3.4 5"/><path d="M3 2v3.5h3.5"/><path d="M2.5 9.5A5.5 5.5 0 0 0 12.6 11"/><path d="M13 14v-3.5H9.5"/>',
+    check: '<path d="M3 8.5 6.5 12 13 4.5"/>',
   };
   return `<svg width="${size}" height="${size}" viewBox="0 0 16 16" fill="none" stroke="currentColor"
     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] || ''}</svg>`;
@@ -41,7 +42,7 @@ export async function api(url, opts = {}) {
   return out;
 }
 
-export const ROLE_TONE = { admin: 'info', editor: 'ok', commenter: '', viewer: '' };
+export const ROLE_TONE = { superadmin: 'crit', admin: 'info', editor: 'ok', commenter: '', viewer: '' };
 
 export async function chrome(active) {
   const acct = await api('/api/account');
@@ -56,7 +57,8 @@ export async function chrome(active) {
         <div class="side-grp">Content</div>
         <a href="/console" class="${active === 'pages' ? 'on' : ''}">${icon('pages')}Pages</a>
         <a href="/console/sync" class="${active === 'sync' ? 'on' : ''}">${icon('sync')}Sync</a>
-        ${u.role === 'admin' ? `<div class="side-grp">Settings</div>
+        ${u.role === 'superadmin' ? `<a href="/console/approvals" class="${active === 'approvals' ? 'on' : ''}">${icon('check')}Approvals${acct.queue && acct.queue.pending ? ` <span class="badge warn" style="margin-left:auto">${acct.queue.pending}</span>` : ''}</a>` : ''}
+        ${['admin','superadmin'].includes(u.role) ? `<div class="side-grp">Settings</div>
         <a href="/console/people" class="${active === 'people' ? 'on' : ''}">${icon('people')}People &amp; roles</a>` : ''}
       </div>
       <div class="side-foot">

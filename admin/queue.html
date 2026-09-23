@@ -1,0 +1,173 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Approvals · MU Console</title>
+<link rel="stylesheet" href="/console-ui/app.css">
+<style>
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 14px}
+  .stat{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--card,transparent);cursor:pointer}
+  .stat.on{border-color:var(--ink);}
+  .stat b{display:block;font-size:22px;font-weight:600;line-height:1.1}
+  .stat span{font-size:12.5px;color:var(--ink-sub)}
+  .req header h2{font-size:15px}
+  .req .who{font-size:13px;color:var(--ink-sub);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .tw{overflow-x:auto;margin:4px 0 10px}
+  table.diff{width:100%;border-collapse:collapse;font-size:13px}
+  .diff th{font-weight:500;color:var(--ink-sub);text-align:left;padding:6px 9px;border-bottom:1px solid var(--line);white-space:nowrap}
+  .diff td{padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top;max-width:360px;word-break:break-word}
+  .diff td.sec{color:var(--ink-sub);white-space:nowrap}
+  .diff td.b{color:var(--ink-sub)}
+  .diff td.b s{opacity:.75}
+  .diff td.a{font-weight:500}
+  .act{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .grow{flex:1}
+  .ok{color:var(--ok,#2a9d5c)} .bad{color:var(--crit,#d64545)}
+  .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+  .prog{flex-basis:100%;margin-top:6px}
+  .prog .bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+  .prog .bar i{display:block;height:100%;border-radius:3px;background:var(--info-ink,#5b8def);transition:width .6s ease}
+  .prog .bar i.slow{background:var(--warn-ink,#c9962b)}
+  .prog .lbl{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--ink-sub);margin-top:5px}
+  @media (max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head><body>
+<div class="shell">
+  <nav class="side"></nav>
+  <main>
+    <div class="phead">
+      <div><h1>Approvals</h1>
+        <div class="sub">Changes editors submitted. Accept commits them to GitLab main, which the live site and Lovable both follow; decline leaves them as drafts for the editor to revise.</div></div>
+      <div class="act"><button class="btn primary" id="all">Accept all pending</button><span class="hint" id="allmsg"></span></div>
+    </div>
+    <div id="lov"></div>
+    <div class="stats" id="stats"></div>
+    <div id="list"><div class="empty">Loading…</div></div>
+  </main>
+</div>
+<script type="module">
+import { chrome, api, esc, ago, $ } from '/console-ui/shell.js';
+const acct = await chrome('approvals');
+if (acct.user.role !== 'superadmin') {
+  document.querySelector('main').innerHTML = '<div class="banner crit">Only a super admin can review changes.</div>';
+  throw new Error('nope');
+}
+
+const TONE = { pending: 'warn', applying: 'info', accepted: 'ok', declined: '', failed: 'crit' };
+const WORD = { pending: 'Pending', applying: 'Sending…', accepted: 'Accepted', declined: 'Declined', failed: 'Failed' };
+let status = 'pending';
+try { status = localStorage.getItem('mu.approvals.tab') || 'pending'; } catch {}
+let busy = false;
+
+const sha7 = (s) => s ? `<span class="mono">${esc(String(s).slice(0, 7))}</span>` : '';
+
+const card = (r) => `
+  <div class="card req" data-id="${r.id}">
+    <header>
+      <h2><a href="/console/page/${esc(r.page_slug)}">${esc(r.page_title || r.page_slug)}</a></h2>
+      <span class="badge ${TONE[r.status] || ''}">${WORD[r.status] || esc(r.status)}</span>
+      <div class="grow"></div>
+      <span class="who"><b>${esc(r.user_name)}</b><span>${esc(r.user_email || '')}</span><span>·</span><span>${r.items.length} change${r.items.length === 1 ? '' : 's'}</span><span>·</span><span title="${esc(r.created_at)}">${ago(r.created_at)}</span><span class="hint">#${r.id}</span></span>
+    </header>
+    <div class="inner">
+      <div class="tw"><table class="diff">
+        <thead><tr><th>Section</th><th>Field</th><th>Before</th><th>After</th></tr></thead>
+        <tbody>${r.items.map(i => `<tr>
+          <td class="sec">${esc(i.section_title || '')}</td>
+          <td>${esc(i.label || i.field_key)}</td>
+          <td class="b"><s>${esc(i.before)}</s></td>
+          <td class="a">${esc(i.after)}</td></tr>`).join('')}</tbody>
+      </table></div>
+      ${r.status === 'failed' ? `<div class="banner crit" style="margin-bottom:10px"><b>Could not send.</b> ${esc(r.error || 'The page changed since this was submitted.')}</div>` : ''}
+      ${['pending', 'failed'].includes(r.status) ? `<div class="act">
+        <button class="btn primary" data-acc="${r.id}">${r.status === 'failed' ? 'Retry' : 'Accept'}</button>
+        <button class="btn" data-dec="${r.id}">Decline</button>
+        <span class="hint" data-msg="${r.id}"></span></div>` : ''}
+      ${r.status === 'applying' ? '<div class="hint">Sending to Lovable…</div>' : ''}
+      ${r.status === 'accepted' ? `<div class="act"><span class="hint">Accepted by <b>${esc(r.decided_by)}</b> ${ago(r.decided_at)} · commit ${sha7(r.sha)}</span>${deployLine(r)}</div>` : ''}
+      ${r.status === 'declined' ? `<div class="hint">Declined by <b>${esc(r.decided_by)}</b> ${ago(r.decided_at)}${r.note ? `: ${esc(r.note)}` : ''}</div>` : ''}
+    </div>
+  </div>`;
+
+let live = { site: null, expectedMinutes: 15, giveUpMinutes: 20 };
+/* time since the accept, against how long Lovable usually takes to rebuild
+   the hosted site from a new commit on GitLab main */
+function progress(r) {
+  const since = (Date.now() - new Date(r.check_since || r.decided_at || r.updated_at).getTime()) / 60000;
+  const exp = live.expectedMinutes || 15;
+  const pct = Math.min(96, Math.round((since / exp) * 100));
+  const mins = Math.max(0, Math.floor(since));
+  const left = Math.max(1, Math.ceil(exp - since));
+  const slow = since > exp;
+  return `<div class="prog"><div class="bar"><i class="${slow ? 'slow' : ''}" style="width:${pct}%"></i></div>
+    <div class="lbl"><span>On GitLab main. Lovable is rebuilding the live site from it; this usually takes about ${exp} minutes.</span>
+    <span>${mins} min elapsed${slow ? ' · taking longer than usual, still checking' : ` · about ${left} min to go`}</span></div></div>`;
+}
+/* what became of the push: the live site is built from GitLab main, and the
+   console watches the page until the new text is there */
+function deployLine(r) {
+  const link = r.deploy_url ? ` <a class="hint" href="${esc(r.deploy_url)}" target="_blank" rel="noopener">${esc(r.deploy_url.replace(/^https?:\/\//, ''))} ↗</a>` : '';
+  if (r.deploy_status === 'live') return `<span class="badge ok">Live</span>${link}<span class="hint">${ago(r.deployed_at)}</span>`;
+  if (r.deploy_status === 'unseen') return `<span class="bad">Not seen on the live site yet${r.deploy_error ? ': ' + esc(r.deploy_error) : ''}</span>${link} <button class="btn" data-recheck="${r.id}">Check again</button>`;
+  if (!live.site) return `<span class="hint">· on GitLab main; the live site deploys from there</span>`;
+  return `<span class="badge info">Deploying…</span>${link}<span class="hint">checking every 30s</span>${progress(r)}`;
+}
+
+async function load() {
+  if (busy) return;
+  let d;
+  try { d = await api('/api/queue?status=' + encodeURIComponent(status)); }
+  catch (e) { $('list').innerHTML = `<div class="banner crit">${esc(e.message)}</div>`; return; }
+  live = d.live || live;
+  $('lov').innerHTML = live.site ? '' : '<div class="banner" style="margin-bottom:12px"><b>Accept pushes to GitLab main and the live site deploys from there.</b> Set LIVE_SITE_URL in .env and this page will also confirm when each change is visible on the site.</div>';
+  const s = d.summary || {};
+  $('stats').innerHTML = ['pending', 'accepted', 'declined', 'failed'].map(k =>
+    `<div class="stat ${status === k ? 'on' : ''}" data-tab="${k}"><b>${s[k] || 0}</b><span>${WORD[k]}</span></div>`).join('');
+  $('stats').querySelectorAll('[data-tab]').forEach(el => el.addEventListener('click', () => {
+    status = el.dataset.tab; try { localStorage.setItem('mu.approvals.tab', status); } catch {} load();
+  }));
+  $('all').disabled = !(s.pending > 0);
+  const rs = d.requests || [];
+  $('list').innerHTML = rs.length ? rs.map(card).join('')
+    : `<div class="card"><div class="inner"><div class="empty">${status === 'pending' ? 'Nothing waiting. When an editor submits a page, it appears here.' : 'Nothing ' + WORD[status].toLowerCase() + ' yet.'}</div></div></div>`;
+
+  $('list').querySelectorAll('[data-acc]').forEach(b => b.addEventListener('click', () => decide(b.dataset.acc, 'accept')));
+  $('list').querySelectorAll('[data-dec]').forEach(b => b.addEventListener('click', () => decide(b.dataset.dec, 'decline')));
+  $('list').querySelectorAll('[data-recheck]').forEach(b => b.addEventListener('click', async () => {
+    b.disabled = true;
+    try { await api(`/api/queue/${b.dataset.recheck}/recheck`, { method: 'POST', body: '{}' }); } catch (e) { alert(e.message); }
+    await load();
+  }));
+}
+
+async function decide(id, what) {
+  const msg = document.querySelector(`[data-msg="${id}"]`);
+  const btns = document.querySelectorAll(`[data-acc="${id}"],[data-dec="${id}"]`);
+  let body = {};
+  if (what === 'decline') {
+    const note = prompt('Reason for declining (optional):');
+    if (note === null) return;
+    body = { note };
+  }
+  busy = true; btns.forEach(b => b.disabled = true);
+  if (msg) msg.textContent = what === 'accept' ? 'Sending to Lovable…' : 'Declining…';
+  try {
+    const out = await api(`/api/queue/${id}/${what}`, { method: 'POST', body: JSON.stringify(body) });
+    if (msg) msg.textContent = out.status === 'accepted' ? `Sent to GitLab as ${String(out.sha || '').slice(0, 7)}. Live in about ${live.expectedMinutes || 15} minutes.` : out.status === 'declined' ? 'Declined' : (out.error || out.status);
+  } catch (e) { if (msg) msg.innerHTML = `<span class="bad">${esc(e.message)}</span>`; }
+  busy = false;
+  await load();
+}
+
+$('all').addEventListener('click', async () => {
+  if (!confirm('Accept every pending request, oldest first? Each becomes its own commit in the Lovable repo.')) return;
+  busy = true; $('all').disabled = true; $('allmsg').textContent = 'Sending…';
+  try {
+    const out = await api('/api/queue/accept-all', { method: 'POST', body: '{}' });
+    $('allmsg').textContent = `${out.accepted} accepted${out.failed ? `, ${out.failed} failed` : ''}`;
+  } catch (e) { $('allmsg').innerHTML = `<span class="bad">${esc(e.message)}</span>`; }
+  busy = false;
+  await load();
+});
+
+await load();
+setInterval(() => { if (document.visibilityState === 'visible') load(); }, 5000);
+</script></body></html>

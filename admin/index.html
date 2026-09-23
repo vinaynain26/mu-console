@@ -69,6 +69,7 @@ try {
           ${p.unpublished > 0
             ? `<span class="dot warn"></span><span class="warn">${p.unpublished} draft${p.unpublished === 1 ? '' : 's'}</span>`
             : `<span class="dot ok"></span><span class="ok">Live</span>`}
+          ${p.pending_requests > 0 ? `<span>·</span><span class="warn" title="Submitted, waiting on a super admin">${p.pending_requests} awaiting approval</span>` : ''}
           <span>·</span><span>${p.fields} fields</span>
           <span>·</span><span title="last published">${p.last_publisher ? esc(p.last_publisher) + ' ' + ago(p.last_published) : 'never published'}</span>
         </div>

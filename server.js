@@ -22,7 +22,7 @@ import * as uploads from "./uploads.js";
 import * as syncRepo from "./sync/repo.js";
 import * as syncStore from "./sync/store.js";
 import { pullNow, startPolling, summary as syncSummary } from "./sync/watch.js";
-import { pushPage, SourceMovedError } from "./sync/push.js";
+import * as queue from "./sync/queue.js";
 import * as labBuild from "./sync/build.js";
 import { ensureContentColumns } from "./sync/apply.js";
 
@@ -396,6 +396,7 @@ app.get("/api/account", (req, res) => {
     ai: ai.configured(),
     aiInfo: ai.describe(),
     sync: syncSummary(db),
+    queue: queue.summary(db),
     consoleUrl: CONSOLE,
     defaultEmail: auth.DEFAULT_EMAIL,
   });
@@ -405,10 +406,17 @@ app.get("/api/account/users", auth.require_("users"), (_req, res) => {
   res.json(db.prepare("SELECT id,email,name,role,created_at,last_seen FROM users ORDER BY role, name").all());
 });
 
+/* Super Admin is granted by a super admin. The one exception is the first
+   one: while nobody holds the role, an admin may promote someone, so a
+   fresh install can be bootstrapped from the People page. */
+const superAdmins = () => db.prepare("SELECT COUNT(*) n FROM users WHERE role='superadmin'").get().n;
+const mayGrantSuper = (user) => user.role === "superadmin" || superAdmins() === 0;
+
 app.post("/api/account/users", auth.require_("users"), (req, res) => {
   const { email, name, role = "editor", password } = req.body || {};
   if (!email || !name || !password) return res.status(400).json({ error: "email, name and password are required." });
   if (!auth.ROLES.includes(role)) return res.status(400).json({ error: "Unknown role." });
+  if (role === "superadmin" && !mayGrantSuper(req.user)) return res.status(403).json({ error: "Only a super admin can grant Super Admin." });
   const { hash, salt } = auth.hashPassword(password);
   try {
     db.prepare(`INSERT INTO users (email,name,role,pass_hash,pass_salt,created_at) VALUES (?,?,?,?,?,?)`)
@@ -424,11 +432,17 @@ app.put("/api/account/users/:id", auth.require_("users"), (req, res) => {
   const id = Number(req.params.id);
   if (role) {
     if (!auth.ROLES.includes(role)) return res.status(400).json({ error: "Unknown role." });
-    // Don't let the last admin demote themselves into a locked-out system.
-    const admins = db.prepare("SELECT COUNT(*) n FROM users WHERE role='admin'").get().n;
     const target = db.prepare("SELECT role FROM users WHERE id = ?").get(id);
-    if (target?.role === "admin" && role !== "admin" && admins <= 1) {
+    if ((role === "superadmin" || target?.role === "superadmin") && role !== target?.role && !mayGrantSuper(req.user)) {
+      return res.status(403).json({ error: "Only a super admin can grant or remove Super Admin." });
+    }
+    // Don't let the last admin demote themselves into a locked-out system.
+    const admins = db.prepare("SELECT COUNT(*) n FROM users WHERE role IN ('admin','superadmin')").get().n;
+    if (["admin", "superadmin"].includes(target?.role) && !["admin", "superadmin"].includes(role) && admins <= 1) {
       return res.status(400).json({ error: "This is the only admin. Promote someone else first." });
+    }
+    if (target?.role === "superadmin" && role !== "superadmin" && superAdmins() <= 1) {
+      return res.status(400).json({ error: "This is the only super admin. Promote someone else first." });
     }
     db.prepare("UPDATE users SET role = ? WHERE id = ?").run(role, id);
   }
@@ -502,12 +516,13 @@ function serveLabPage(req, res, page) {
   let out = html.replace("<head>", `<head>\n<script type="application/json" id="__mu_content">${JSON.stringify(content).replace(/</g, "\\u003c")}</script>`);
   if (req.user && auth.can(req.user.role, "read")) {
     const boot = {
-      slug: page.slug, tab, preview: draft, consoleUrl: CONSOLE,
+      slug: page.slug, tab, preview: draft, consoleUrl: CONSOLE, repo: true,
       user: { name: req.user.name, email: req.user.email, role: req.user.role },
       can: {
         edit: auth.can(req.user.role, "edit"),
         comment: auth.can(req.user.role, "comment"),
-        publish: auth.can(req.user.role, "publish"),
+        publish: auth.can(req.user.role, "publish"),          // submits to the approval queue
+        approve: auth.can(req.user.role, "approve"),
         reorder: false,
         ai: auth.can(req.user.role, "ai") && ai.configured(),
       },
@@ -584,12 +599,13 @@ app.get("/page/:slug", (req, res, next) => {
        byte-for-byte what it was, apart from the data-c anchors. */
     if (editing) {
       const boot = {
-        slug: page.slug, tab, preview: draft, consoleUrl: CONSOLE,
+        slug: page.slug, tab, preview: draft, consoleUrl: CONSOLE, repo: false,
         user: { name: req.user.name, email: req.user.email, role: req.user.role },
         can: {
           edit: auth.can(req.user.role, "edit"),
           comment: auth.can(req.user.role, "comment"),
-          publish: auth.can(req.user.role, "publish"),
+          publish: auth.can(req.user.role, "publish-direct"),   // this page never reaches Lovable
+          approve: auth.can(req.user.role, "approve"),
           reorder: auth.can(req.user.role, "reorder"),
           ai: auth.can(req.user.role, "ai") && ai.configured(),
         },
@@ -684,6 +700,8 @@ app.get("/api/pages", auth.require_("read"), (_req, res) => {
            COUNT(CASE WHEN c.retired = 0 AND c.tag <> 'meta' THEN 1 END) AS fields,
            COUNT(DISTINCT CASE WHEN c.retired = 0 THEN c.section_key END) AS sections,
            SUM(CASE WHEN c.value <> c.draft_value AND c.retired = 0 THEN 1 ELSE 0 END) AS unpublished,
+           (SELECT COUNT(*) FROM change_requests r WHERE r.page_slug = p.slug AND r.status = 'pending') AS pending_requests,
+           (SELECT MAX(decided_at) FROM change_requests r WHERE r.page_slug = p.slug AND r.status = 'declined') AS last_declined,
            (SELECT user_name FROM publishes WHERE page_slug = p.slug ORDER BY id DESC LIMIT 1) AS last_publisher,
            (SELECT published_at FROM publishes WHERE page_slug = p.slug ORDER BY id DESC LIMIT 1) AS last_published
     FROM pages p LEFT JOIN page_content c ON c.page_slug = p.slug
@@ -988,44 +1006,21 @@ app.delete("/api/pages/:slug/lists/:listKey/items/:itemId", auth.require_("edit"
 app.post("/api/pages/:slug/publish", auth.require_("publish"), async (req, res) => {
   const pg = db.prepare("SELECT source, repo FROM pages WHERE slug = ?").get(req.params.slug);
 
-  /* A page that came from the Lovable repo publishes by writing its drafts
-     into the source and pushing. The database re-keys only after the push
-     is verified, so a failed push leaves every draft exactly as it was. */
+  /* A page that came from the Lovable repo does not publish here. Its drafts
+     are filed as a change request for a super admin to accept or decline;
+     only an accepted request is written into the source and pushed. */
   if (pg?.repo) {
-    if (!syncRepo.canPush()) return res.status(400).json({ error: "Sync cannot push: set LOVABLE_TOKEN in .env." });
     try {
-      const out = await pushPage(db, req.params.slug, { user: req.user });
-      let rebuilt = true;
-      if (out.pushed) {
-        /* The page must not reload into the previous build, so wait for the
-           rebuild at this commit, but never hold the editor hostage: a long
-           asset fetch or a queued build answers "published, still building"
-           and the editor leaves the page as it is. */
-        const settle = (async () => {
-          await pullNow(db, { reason: "publish" }).catch((e) => console.log("  sync after publish: " + e.message));
-          if (out.sha && labBuild.buildable()) await labBuild.waitForBuild(out.sha, 170e3);
-        })();
-        await Promise.race([settle, new Promise((r) => setTimeout(r, 180e3))]);
-        rebuilt = !labBuild.buildable() || labBuild.builtAt(out.sha);
-      }
+      const q = queue.submitRequest(db, req.params.slug, { user: req.user });
+      if (!q.id) return res.json({ published: 0, queued: false, message: "Nothing to submit" });
       return res.json({
-        published: out.published, pushed: out.pushed, local: out.local, sha: out.sha, files: out.files, rebuilt,
-        by: req.user.name, at: new Date().toISOString(),
-        /* the one line the editor shows */
-        message: out.pushed && out.local
-          ? `Published ${out.published}: ${out.pushed} sent to GitHub as ${String(out.sha || "").slice(0, 7)}, ${out.local} list/date change${out.local === 1 ? "" : "s"} live in the CMS only`
-          : out.pushed ? `Published ${out.pushed} change${out.pushed === 1 ? "" : "s"}: sent to GitHub as ${String(out.sha || "").slice(0, 7)}`
-          : out.local ? `Published ${out.local} list/date change${out.local === 1 ? "" : "s"}: live in the CMS only (lists do not sync to Lovable yet)`
-          : "Nothing to publish",
+        published: 0, queued: true, request: q, by: req.user.name, at: new Date().toISOString(),
+        message: `Sent for approval: ${q.items} change${q.items === 1 ? "" : "s"}, request #${q.id}${q.replaced ? " (your earlier request was updated)" : ""}`,
       });
-    } catch (e) {
-      if (e instanceof SourceMovedError) {
-        pullNow(db, { reason: "publish", force: true }).catch(() => {});
-        return res.status(409).json({ error: e.message, moved: e.missing });
-      }
-      return res.status(502).json({ error: e.message });
-    }
+    } catch (e) { return res.status(400).json({ error: e.message }); }
   }
+  /* hand-built and instrumented pages never reach Lovable: admins publish them directly */
+  if (!auth.can(req.user.role, "publish-direct")) return res.status(403).json({ error: "An editor cannot publish this page directly. Ask an admin." });
 
   /* Shared copy is edited from the page it appears on, so publishing that page
      has to carry it. The count is reported separately, because a shared change
@@ -1232,6 +1227,64 @@ app.post("/api/sync/webhook", (req, res) => {
   pullNow(db, { reason: "webhook" }).catch((e) => console.log("  sync webhook: " + e.message));
 });
 
+/* ------------------------------------------------------------------ *
+ * the approval queue: what editors submitted, waiting on a super admin
+ * ------------------------------------------------------------------ */
+/* after an accepted push the site rebuilds at the new commit; the approver
+   is not waiting on a page reload, so this runs in the background */
+const settleAfterPush = () => {
+  pullNow(db, { reason: "approve" }).catch((e) => console.log("  sync after approve: " + e.message));
+  /* the live site deploys from the branch on its own; watch it until the
+     new text is there, so the card can say "Live" */
+  queue.watchLive(db, { log: (l) => console.log("  " + l) }).catch((e) => console.log("  live check: " + e.message));
+};
+
+app.get("/api/queue", auth.require_("read"), (req, res) => {
+  res.json({
+    summary: queue.summary(db),
+    live: { site: queue.liveSiteUrl() || null, watching: queue.liveWatching(),
+            /* how long Lovable usually takes to rebuild the hosted site from a new commit */
+            expectedMinutes: Number(process.env.LIVE_EXPECTED_MINUTES || 15), giveUpMinutes: Number(process.env.LIVE_GIVE_UP_MINUTES || 20) },
+    requests: queue.listRequests(db, { status: String(req.query.status || "pending"), limit: Number(req.query.limit) || 100 }),
+  });
+});
+
+app.post("/api/queue/:id/accept", auth.require_("approve"), async (req, res) => {
+  if (!syncRepo.canPush()) return res.status(400).json({ error: "Sync cannot push: set LOVABLE_TOKEN in .env." });
+  try {
+    const out = await queue.acceptRequest(db, Number(req.params.id), { user: req.user });
+    if (out.sha) settleAfterPush();
+    res.status(out.status === "failed" ? 502 : 200).json(out);
+  } catch (e) { res.status(e.status || 500).json({ error: e.message }); }
+});
+
+app.post("/api/queue/:id/decline", auth.require_("approve"), (req, res) => {
+  try { res.json(queue.declineRequest(db, Number(req.params.id), { user: req.user, note: String(req.body?.note || "") })); }
+  catch (e) { res.status(e.status || 500).json({ error: e.message }); }
+});
+
+/* the watcher gave up on this request: look at the live site again */
+app.post("/api/queue/:id/recheck", auth.require_("approve"), (req, res) => {
+  try {
+    const out = queue.recheckLive(db, Number(req.params.id));
+    queue.watchLive(db, { log: (l) => console.log("  " + l) }).catch((e) => console.log("  live check: " + e.message));
+    res.json({ ...out, scheduled: true });
+  } catch (e) { res.status(e.status || 500).json({ error: e.message }); }
+});
+
+/* every pending request, oldest first, one commit each */
+app.post("/api/queue/accept-all", auth.require_("approve"), async (req, res) => {
+  if (!syncRepo.canPush()) return res.status(400).json({ error: "Sync cannot push: set LOVABLE_TOKEN in .env." });
+  const ids = queue.listRequests(db, { status: "pending", limit: 500 }).map((r) => r.id);
+  const results = [];
+  for (const id of ids) {
+    try { results.push(await queue.acceptRequest(db, id, { user: req.user })); }
+    catch (e) { results.push({ id, status: "error", error: e.message }); }
+  }
+  if (results.some((r) => r.sha)) settleAfterPush();
+  res.json({ results, accepted: results.filter((r) => r.status === "accepted").length, failed: results.filter((r) => r.status !== "accepted").length });
+});
+
 app.post("/api/sync/conflicts/:id", auth.require_("edit"), (req, res) => {
   const c = syncStore.getConflict(db, Number(req.params.id));
   if (!c) return res.status(404).json({ error: "No such conflict." });
@@ -1259,6 +1312,7 @@ app.get(CONSOLE + "/login", (req, res) =>
 app.get(CONSOLE, gate, send("index.html"));
 app.get(CONSOLE + "/people", gate, send("people.html"));
 app.get(CONSOLE + "/sync", gate, send("sync.html"));
+app.get(CONSOLE + "/approvals", gate, send("queue.html"));
 app.get(CONSOLE + "/page/:slug", gate, send("edit.html"));
 app.get("/", (_req, res) => res.redirect(CONSOLE));
 /* the old path, so nobody's bookmark dies */

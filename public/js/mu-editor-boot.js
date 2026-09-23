@@ -138,13 +138,15 @@
     var role = user.role;
     var can = function (a) {
       return ({ viewer: ["read"], commenter: ["read", "comment"],
-                editor: ["read", "comment", "edit", "ai"],
-                admin: ["read", "comment", "edit", "ai", "publish", "reorder", "users"] }[role] || []).indexOf(a) >= 0;
+                editor: ["read", "comment", "edit", "ai", "publish"],
+                admin: ["read", "comment", "edit", "ai", "publish", "publish-direct", "reorder", "users"],
+                superadmin: ["read", "comment", "edit", "ai", "publish", "publish-direct", "approve", "reorder", "users"] }[role] || []).indexOf(a) >= 0;
     };
 
     window.__MU_EDITOR__ = {
       slug: slugFor(),
       tab: "_all",
+      repo: true,                // this site is built from the Lovable repo
       preview: false,
       apiBase: CMS,
       token: token,
@@ -152,7 +154,7 @@
       consoleUrl: "/console",
       user: user,
       can: {
-        edit: can("edit"), comment: can("comment"), publish: can("publish"),
+        edit: can("edit"), comment: can("comment"), publish: can("publish"), approve: can("approve"),
         reorder: false,            // sections here are source files, not movable blocks
         ai: can("ai"),
       },

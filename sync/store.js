@@ -1,5 +1,6 @@
 /**
- * Sync bookkeeping: three small tables and three columns on `pages`.
+ * Sync bookkeeping: three small tables and three columns on `pages`, plus
+ * the approval queue (a change request and its before/after items).
  * Everything else about a field stays in page_content, untouched.
  */
 export function ensureSchema(db) {
@@ -19,10 +20,31 @@ export function ensureSchema(db) {
       original TEXT NOT NULL, theirs TEXT, mine TEXT NOT NULL,
       created_at TEXT NOT NULL, resolved_at TEXT, resolution TEXT
     );
+    CREATE TABLE IF NOT EXISTS change_requests (
+      id INTEGER PRIMARY KEY AUTOINCREMENT, page_slug TEXT NOT NULL, page_title TEXT,
+      user_id INTEGER, user_name TEXT NOT NULL, user_email TEXT,
+      status TEXT NOT NULL DEFAULT 'pending', items INTEGER NOT NULL DEFAULT 0,
+      created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
+      decided_by TEXT, decided_at TEXT, note TEXT, sha TEXT, error TEXT
+    );
+    CREATE INDEX IF NOT EXISTS cr_status ON change_requests (status, created_at);
+    CREATE INDEX IF NOT EXISTS cr_page_user ON change_requests (page_slug, user_id, status);
+    CREATE TABLE IF NOT EXISTS change_request_items (
+      id INTEGER PRIMARY KEY AUTOINCREMENT, request_id INTEGER NOT NULL,
+      field_key TEXT NOT NULL, label TEXT, section_title TEXT, type TEXT, src_file TEXT,
+      before TEXT NOT NULL, after TEXT NOT NULL, ord INTEGER NOT NULL DEFAULT 0
+    );
+    CREATE INDEX IF NOT EXISTS cri_request ON change_request_items (request_id);
   `);
   const cols = db.prepare("PRAGMA table_info(pages)").all().map((c) => c.name);
   for (const col of ["repo", "branch", "ingested_sha"]) {
     if (!cols.includes(col)) db.exec(`ALTER TABLE pages ADD COLUMN ${col} TEXT`);
+  }
+  /* what happened on Lovable after an accepted push: null (not published
+     yet), running, completed (live at deploy_url) or error */
+  const rcols = db.prepare("PRAGMA table_info(change_requests)").all().map((c) => c.name);
+  for (const col of ["deploy_status", "deploy_id", "deploy_url", "deploy_error", "deployed_at", "check_since"]) {
+    if (!rcols.includes(col)) db.exec(`ALTER TABLE change_requests ADD COLUMN ${col} TEXT`);
   }
 }
 

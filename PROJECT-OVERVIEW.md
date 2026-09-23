@@ -60,14 +60,29 @@ fields and resolve them. An editor can send a page for review; publishing itself
 an admin action, and every publish is recorded with who, what and when. Publishing
 also keeps a revision of what was replaced.
 
+For a page that comes from the Lovable repo there is one more gate. Pressing
+"Submit for approval" files a change request: who, which page, and a table of
+every field with its text before and after. Nothing moves until a super admin
+opens the Approvals dashboard and accepts it, which writes the snapshot into the
+source and pushes it as one commit authored by the submitter, or declines it,
+which leaves the drafts for the editor to revise. Requests are independent rows
+and accepts run one at a time, so many editors can submit at once and the repo
+still receives ordered commits.
+
 ### Roles
 
-| Role | Read | Comment | Edit | AI writer | Publish | Reorder | Manage people |
-|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| Viewer | yes | | | | | | |
-| Commenter | yes | yes | | | | | |
-| Editor | yes | yes | yes | yes | | | |
-| Admin | yes | yes | yes | yes | yes | yes | yes |
+| Role | Read | Comment | Edit | AI writer | Submit | Publish direct | Approve | Reorder | Manage people |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| Viewer | yes | | | | | | | | |
+| Commenter | yes | yes | | | | | | | |
+| Editor | yes | yes | yes | yes | yes | | | | |
+| Admin | yes | yes | yes | yes | yes | yes | | yes | yes |
+| Super Admin | yes | yes | yes | yes | yes | yes | yes | yes | yes |
+
+"Submit" queues a Lovable page's drafts for approval. "Publish direct" is for the
+hand-built pages that never reach Lovable. "Approve" is the Lovable gate: only a
+super admin sends a change request to the repo or declines it, and only a super
+admin can make another one (an admin may promote the first).
 
 The role is decided by the server from the signed-in session, never from anything
 the browser sends. Nobody can promote themselves by clicking around.

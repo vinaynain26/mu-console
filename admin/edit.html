@@ -105,9 +105,10 @@ acct = await chrome('pages');
 $('backicon').outerHTML = icon('back', 13);
 $('qicon').outerHTML = icon('search');
 const CAN = {
-  edit: ['editor','admin'].includes(acct.user.role),
-  publish: acct.user.role === 'admin',
-  ai: acct.ai && ['editor','admin'].includes(acct.user.role),
+  edit: ['editor','admin','superadmin'].includes(acct.user.role),
+  publish: ['editor','admin','superadmin'].includes(acct.user.role),
+  approve: acct.user.role === 'superadmin',
+  ai: acct.ai && ['editor','admin','superadmin'].includes(acct.user.role),
 };
 
 function bar() {
@@ -119,6 +120,7 @@ function bar() {
 async function load() {
   data = await api(`/api/pages/${slug}/content`);
   $('ttl').textContent = data.page ? data.page.title : slug;
+  if (pubBtn) pubBtn.textContent = isQueued() ? 'Submit for approval' : 'Publish';
   $('sub').innerHTML = data.lastPublish
     ? `Last published by <b>${esc(data.lastPublish.user_name)}</b> — ${data.lastPublish.fields} field(s), ${ago(data.lastPublish.published_at)}`
     : 'Never published from the studio.';
@@ -379,13 +381,18 @@ $('discard').addEventListener('click', async () => {
   changes.clear(); bar(); await load();
 });
 
+/* a Lovable page is queued for a super admin; hand-built pages publish here.
+   The page row arrives with load(), so the label follows it. */
+const isQueued = () => Boolean(data && data.page && data.page.repo) && !CAN.approve;
+let pubBtn = null;
 if (CAN.publish) {
-  const b = document.createElement('button');
+  const b = pubBtn = document.createElement('button');
   b.className = 'btn primary'; b.textContent = 'Publish';
   b.addEventListener('click', async () => {
-    if (changes.size && !confirm('Save your unsaved changes first, then publish?')) return;
+    const queued = isQueued();
+    if (changes.size && !confirm('Save your unsaved changes first, then ' + (queued ? 'submit?' : 'publish?'))) return;
     if (changes.size) $('save').click();
-    if (!confirm('Publish all drafts to the live site?')) return;
+    if (!confirm(queued ? 'Send all drafts on this page for approval?' : 'Publish all drafts to the live site?')) return;
     try {
       const r = await api(`/api/pages/${slug}/publish`, { method: 'POST' });
       await load();

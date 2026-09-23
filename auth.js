@@ -8,26 +8,33 @@
  */
 import crypto from "node:crypto";
 
-export const ROLES = ["viewer", "commenter", "editor", "admin"];
+export const ROLES = ["viewer", "commenter", "editor", "admin", "superadmin"];
 
+/* "publish" submits a Lovable page's drafts for approval (or publishes a
+   hand-built page when the caller also has "publish-direct"). "approve" is
+   the gate in front of Lovable: only a super admin sends a change request
+   to the repo, or declines it. */
 const PERMS = {
-  viewer:    ["read"],
-  commenter: ["read", "comment"],
-  editor:    ["read", "comment", "edit", "ai"],
-  admin:     ["read", "comment", "edit", "ai", "publish", "reorder", "users"],
+  viewer:     ["read"],
+  commenter:  ["read", "comment"],
+  editor:     ["read", "comment", "edit", "ai", "publish"],
+  admin:      ["read", "comment", "edit", "ai", "publish", "publish-direct", "reorder", "users"],
+  superadmin: ["read", "comment", "edit", "ai", "publish", "publish-direct", "approve", "reorder", "users"],
 };
 
 export const ROLE_LABEL = {
-  viewer:    "Viewer",
-  commenter: "Commenter",
-  editor:    "Editor",
-  admin:     "Admin",
+  viewer:     "Viewer",
+  commenter:  "Commenter",
+  editor:     "Editor",
+  admin:      "Admin",
+  superadmin: "Super Admin",
 };
 export const ROLE_BLURB = {
-  viewer:    "Can see drafts and comments. Changes nothing.",
-  commenter: "Can leave notes on any field.",
-  editor:    "Can edit text, use the AI writer, and save drafts.",
-  admin:     "Can publish, reorder sections and manage people.",
+  viewer:     "Can see drafts and comments. Changes nothing.",
+  commenter:  "Can leave notes on any field.",
+  editor:     "Can edit text, use the AI writer, and submit changes for approval.",
+  admin:      "Can publish hand-built pages, reorder sections and manage people. Lovable changes still need a Super Admin.",
+  superadmin: "Approves or declines changes before they go to Lovable. Everything an admin can do.",
 };
 
 export const can = (role, action) => (PERMS[role] || []).includes(action);
@@ -52,6 +59,7 @@ export const DEFAULT_PASSWORD = process.env.ADMIN_PASSWORD || "mastersunion";
 
 const TEAM = [
   { email: DEFAULT_EMAIL,                   name: "Vinay",         role: "admin" },
+  { email: "superadmin@mastersunion.org",   name: "Super Admin",    role: "superadmin" },
   { email: "editor@mastersunion.org",       name: "Content Editor", role: "editor" },
   { email: "reviewer@mastersunion.org",     name: "Reviewer",       role: "commenter" },
   { email: "viewer@mastersunion.org",       name: "Viewer",         role: "viewer" },

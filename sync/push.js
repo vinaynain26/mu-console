@@ -47,10 +47,10 @@ export class SourceMovedError extends Error {
 
 const short = (s, n = 80) => { s = clean(s); return s.length > n ? s.slice(0, n - 1) + "…" : s; };
 
+/** Publish every draft on the page: the rows come from page_content. */
 export async function pushPage(db, slug, { user }) {
   const page = db.prepare("SELECT * FROM pages WHERE slug = ?").get(slug);
   if (!page?.repo) throw new Error("This page did not come from the repo, so there is nothing to push.");
-  if (!repo.canPush()) throw new Error("Sync cannot push: set LOVABLE_TOKEN in .env.");
   const all0 = db.prepare(`SELECT field_key, label, value, draft_value, src_file, type FROM page_content
     WHERE page_slug = ? AND value <> draft_value AND retired = 0 ORDER BY section_ord, ord`).all(slug);
   /* A picture or link emptied in the CMS ("Original") has nothing to fall
@@ -62,7 +62,20 @@ export async function pushPage(db, slug, { user }) {
     const back = db.prepare("UPDATE page_content SET draft_value = value WHERE page_slug = ? AND field_key = ?");
     for (const r of emptied) back.run(slug, r.field_key);
   }
-  const all = all0.filter((r) => !emptied.includes(r));
+  return pushRows(db, slug, all0.filter((r) => !emptied.includes(r)), { user });
+}
+
+/**
+ * Publish these rows, which need not be the page's current drafts: an
+ * approved change request replays the snapshot it was submitted with. Each
+ * row is { field_key, label, value, draft_value, src_file, type } where
+ * `value` is the text the source is expected to hold and `draft_value` the
+ * text it becomes. `author` (default `user`) signs the commit; `message`
+ * overrides the commit subject.
+ */
+export async function pushRows(db, slug, rows, { user, author = user, message: subject = null }) {
+  if (!repo.canPush()) throw new Error("Sync cannot push: set LOVABLE_TOKEN in .env.");
+  const all = rows.filter((r) => !(writable(r) && (r.type === "media" || r.type === "link") && clean(r.draft_value) === ""));
   const pending = all.filter(writable), local = all.filter((r) => !writable(r));
   if (!all.length) return { pushed: 0, local: 0, published: 0, sha: null, files: [] };
   if (!pending.length) {
@@ -82,7 +95,7 @@ export async function pushPage(db, slug, { user }) {
     f.text.set(loc.hash + "#" + loc.ordinal, clean(p.draft_value));
     f.labels.set(loc.hash + "#" + loc.ordinal, p.label);
   }
-  const message = `content(${slug}): ${pending.length} change${pending.length === 1 ? "" : "s"} via MU Console\n\n` +
+  const message = (subject || `content(${slug}): ${pending.length} change${pending.length === 1 ? "" : "s"} via MU Console`) + "\n\n" +
     pending.map((p) => `${short(p.label, 40)}: ${short(p.value)} -> ${short(p.draft_value)}`).join("\n");
 
   const attempt = () => repo.serial(async () => {
@@ -98,7 +111,7 @@ export async function pushPage(db, slug, { user }) {
       files[file] = splice(src, hits, (h) => f.text.get(h.hash + "#" + h.ordinal));
     }
     if (missing.length) throw new SourceMovedError(missing);
-    return repo.commitAndPush({ files, message, author: { name: user.name, email: user.email } });
+    return repo.commitAndPush({ files, message, author: { name: author.name, email: author.email } });
   });
 
   let out;
@@ -116,13 +129,26 @@ export async function pushPage(db, slug, { user }) {
   return { pushed: pending.length, local: local.length, published: pending.length + local.length, sha: out.sha, files: out.changed };
 }
 
+/* The rows may be a snapshot taken a while ago. What the editor has typed
+   since stays their draft: the row's draft moves to the published text only
+   when it still reads as the snapshot's before or after. */
+function draftAfter(db, slug, r, text) {
+  const cur = db.prepare("SELECT draft_value FROM page_content WHERE page_slug = ? AND field_key = ?").get(slug, r.field_key);
+  if (!cur) return text;
+  const d = cur.draft_value;
+  return d === r.draft_value || d === r.value || clean(d) === clean(r.draft_value) ? text : d;
+}
+
 /** Drafts the repo cannot take yet: flip them live here, with a revision. */
 function goLiveLocal(db, slug, rows, user, now = new Date().toISOString()) {
   const rev = db.prepare("INSERT INTO revisions (page_slug, field_key, old_value, new_value, changed_by, changed_at) VALUES (?,?,?,?,?,?)");
-  const live = db.prepare("UPDATE page_content SET value = draft_value, updated_at = ?, updated_by = ? WHERE page_slug = ? AND field_key = ?");
+  const live = db.prepare("UPDATE page_content SET value = ?, draft_value = ?, updated_at = ?, updated_by = ? WHERE page_slug = ? AND field_key = ?");
   db.exec("BEGIN");
   try {
-    for (const r of rows) { rev.run(slug, r.field_key, r.value, r.draft_value, user.name, now); live.run(now, user.name, slug, r.field_key); }
+    for (const r of rows) {
+      rev.run(slug, r.field_key, r.value, r.draft_value, user.name, now);
+      live.run(r.draft_value, draftAfter(db, slug, r, r.draft_value), now, user.name, slug, r.field_key);
+    }
     if (rows.length) db.prepare("INSERT INTO publishes (page_slug, user_id, user_name, user_email, fields, published_at) VALUES (?,?,?,?,?,?)")
       .run(slug, user.id ?? null, user.name, user.email, rows.length, now);
     db.exec("COMMIT");
@@ -133,7 +159,7 @@ function goLiveLocal(db, slug, rows, user, now = new Date().toISOString()) {
    text. Rename the row in place so drafts, comments and revisions follow. */
 function rekey(db, slug, pending, sha, user, files, local = []) {
   const now = new Date().toISOString();
-  const liveLocal = db.prepare("UPDATE page_content SET value = draft_value, updated_at = ?, updated_by = ? WHERE page_slug = ? AND field_key = ?");
+  const liveLocal = db.prepare("UPDATE page_content SET value = ?, draft_value = ?, updated_at = ?, updated_by = ? WHERE page_slug = ? AND field_key = ?");
   const exists = db.prepare("SELECT 1 FROM page_content WHERE page_slug = ? AND field_key = ?");
   const rename = db.prepare(`UPDATE page_content SET field_key = ?, value = ?, draft_value = ?, updated_at = ?, updated_by = ?
     WHERE page_slug = ? AND field_key = ?`);
@@ -152,18 +178,22 @@ function rekey(db, slug, pending, sha, user, files, local = []) {
     for (const p of pending) {
       const text = clean(p.draft_value);
       const newKey = newKeyFor(p.__loc, text, p.type);
+      const keep = draftAfter(db, slug, p, text);
       if (newKey !== p.field_key && exists.get(slug, newKey)) {
         fold.run(slug, p.field_key);               // the editor typed another field's text: one field now
         revive.run(text, text, now, user.name, slug, newKey);
       } else {
-        rename.run(newKey, text, text, now, user.name, slug, p.field_key);
+        rename.run(newKey, text, keep, now, user.name, slug, p.field_key);
         moveRev.run(newKey, slug, p.field_key);
         moveCom.run(newKey, slug, p.field_key);
       }
       rev.run(slug, newKey, p.value, text, user.name, now);
     }
     /* the drafts the repo could not take ride along, live in the CMS */
-    for (const r of local) { rev.run(slug, r.field_key, r.value, r.draft_value, user.name, now); liveLocal.run(now, user.name, slug, r.field_key); }
+    for (const r of local) {
+      rev.run(slug, r.field_key, r.value, r.draft_value, user.name, now);
+      liveLocal.run(r.draft_value, draftAfter(db, slug, r, r.draft_value), now, user.name, slug, r.field_key);
+    }
     db.prepare("UPDATE pages SET ingested_sha = ? WHERE slug = ?").run(sha, slug);
     db.prepare("INSERT INTO publishes (page_slug, user_id, user_name, user_email, fields, published_at) VALUES (?,?,?,?,?,?)")
       .run(slug, user.id ?? null, user.name, user.email, pending.length + local.length, now);
